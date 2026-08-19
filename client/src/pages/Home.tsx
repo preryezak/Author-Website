@@ -206,7 +206,7 @@ export default function Home() {
                 Pastor Eryeza Kalalu
               </h2>
               <p className="font-serif text-lg text-[#4B5563] italic">
-                Pastor, Author, Publishing Consultant, & Co-Founder of Rivers of Life Healing Centre.
+                Pastor, Author, Publishing Consultant, & Pastor at Rivers of Life Healing Centre-Kawuku
               </p>
               <p className="text-sm text-[#6B7280] leading-relaxed font-sans">
                 Operating from Kawuku-Entebbe, Uganda, Pastor Eryeza builds rigorous discipleship systems that scale. Through THE CCN DAILY, he equips Christian professionals to integrate deep theological truth with practical daily execution.
@@ -227,7 +227,7 @@ export default function Home() {
                   </div>
                   <div>
                     <strong className="text-[#1E293B] block font-sans">Devotional Series</strong>
-                    NKJV Verified
+                    Book 1
                   </div>
                 </div>
               </div>
@@ -337,7 +337,7 @@ export default function Home() {
             </div>
           </div>
           <p className="text-xs text-[#64748B] text-center md:text-left font-serif italic">
-            &copy; 2026 Pastor Eryeza Kalalu &bull; Rivers of Life Healing Centre, Entebbe &bull; All Rights Reserved.
+            &copy; 2026 Pastor Eryeza Kalalu &bull; All Rights Reserved.
           </p>
           <div className="text-xs text-[#C5A059] font-medium tracking-wide">
             Grounded in NKJV &bull; Forged for Impact
