@@ -97,19 +97,31 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Cover Mockup in Manuscript Frame */}
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="relative group">
-                <div className="absolute -inset-4 bg-gradient-to-tr from-[#C5A059]/30 via-transparent to-[#1E293B]/20 rounded-3xl blur-xl opacity-70 group-hover:opacity-100 transition duration-1000"></div>
-                <div className="relative bg-[#FAF8F5] p-6 rounded-2xl shadow-2xl border-2 border-[#C5A059]/40 max-w-sm">
-                  <div className="absolute top-3 right-3 text-[#C5A059] font-serif text-xs tracking-widest uppercase font-bold">The Deep Encounter Library VOL. 01</div>
-                  <img 
-                    src="/manus-storage/influence_cover_definitive_master_v2_d28be92f.png" 
-                    alt="The Influential Spirit Book Cover" 
-                    className="w-full h-auto rounded shadow-lg border border-[#E6E0D4] object-cover"
-                  />
-                  <div className="mt-4 text-center space-y-1">
-                    <span className="text-xs text-[#1E293B] font-serif font-bold tracking-widest block uppercase">Definitive Master Edition</span>
+            {/* Right Cover Mockup in Professional Book Display Frame */}
+            <div className="lg:col-span-5 flex justify-center items-center py-6">
+              <div className="relative group perspective-1000">
+                {/* Ambient gold-and-slate glow */}
+                <div className="absolute -inset-6 bg-gradient-to-tr from-[#C5A059]/35 via-[#1E293B]/10 to-transparent rounded-3xl blur-2xl opacity-80 group-hover:opacity-100 transition duration-700"></div>
+                
+                {/* Book Object Container with subtle 3D hover rotation */}
+                <div className="relative bg-[#F3EEE3] p-5 sm:p-7 rounded-2xl shadow-2xl border border-[#C5A059]/40 max-w-sm transform group-hover:-translate-y-1 transition duration-500">
+                  <div className="absolute top-4 right-5 text-[#C5A059] font-serif text-[11px] tracking-[0.2em] uppercase font-semibold">VOL. 01</div>
+                  
+                  {/* High-Resolution Book Cover with realistic spine shadow & depth */}
+                  <div className="relative shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)] rounded-md overflow-hidden border border-[#D4C4A8]">
+                    {/* Left spine shadow overlay for true 3D book depth */}
+                    <div className="absolute inset-y-0 left-0 w-3 bg-gradient-to-r from-black/25 to-transparent pointer-events-none z-10"></div>
+                    <img 
+                      src="/manus-storage/influence_cover_definitive_master_v2_d28be92f.png" 
+                      alt="The Influential Spirit Book Cover by Eryeza Kalalu" 
+                      className="w-full h-auto object-cover transform scale-100 group-hover:scale-[1.02] transition duration-500"
+                      style={{ imageRendering: "auto" }}
+                    />
+                  </div>
+
+                  <div className="mt-5 text-center space-y-1.5 border-t border-[#E6E0D4]/80 pt-4">
+                    <span className="text-xs text-[#1E293B] font-serif font-bold tracking-[0.2em] block uppercase">Definitive Master Edition</span>
+                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">Paperback &bull; Hardcover &bull; Ebook</span>
                   </div>
                 </div>
               </div>
