@@ -7,7 +7,7 @@ export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState<"ebook" | "bundle">("ebook");
 
   return (
-    <div className="min-h-screen bg-[#F7F4EF] text-[#1A1A1A] font-sans selection:bg-[#C5A059] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#F7F4EF] text-[#1A1A1A] font-sans selection:bg-[#C5A059] selection:text-white">
       {/* Top Announcement Bar */}
       <div className="bg-[#1E293B] text-[#F8FAFC] py-2.5 px-4 text-center text-xs tracking-widest font-medium uppercase border-b border-[#C5A059]/30">
         <span className="text-[#C5A059] font-bold">THE DEEP ENCOUNTER LIBRARY</span> &bull; VOL. I &bull; BY PASTOR ERYEZA KALALU
@@ -27,14 +27,14 @@ export default function Home() {
           </div>
           <nav className="hidden md:flex items-center space-x-10 text-sm font-semibold text-[#334155] tracking-wide">
             <a href="#overview" className="hover:text-[#C5A059] transition-colors">Overview</a>
-            <a href="#about-book" className="hover:text-[#C5A059] transition-colors">The 30-Day Path</a>
-            <a href="#author" className="hover:text-[#C5A059] transition-colors">Author</a>
+            <a href="#about-book" className="hover:text-[#C5A059] transition-colors">The 30-Day Journey</a>
+            <a href="#author" className="hover:text-[#C5A059] transition-colors">From the Author</a>
             <a href="#formats" className="hover:text-[#C5A059] transition-colors">Editions</a>
           </nav>
           <div>
             <a href="#formats">
               <Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-6 py-5 shadow-sm transition-all tracking-wide text-sm">
-                Secure Your Copy
+                Acquire Your Copy
               </Button>
             </a>
           </div>
@@ -63,19 +63,19 @@ export default function Home() {
               </p>
               
               <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
-                A daily discipleship engine built for Christian professionals and leaders who refuse to separate spiritual depth from everyday execution. Grounded strictly in Biblical truth and forged in real-world leadership.
+                Friend, if you have ever felt the quiet ache of wanting your daily work to carry eternal weight—without chasing empty titles or superficial applause—this book was written for you. Let’s walk through thirty days of practical, Spirit-led transformation together.
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 pt-2">
                 <a href="#formats">
                   <Button size="lg" className="bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-9 py-7 text-base shadow-xl border border-[#C5A059]/30">
-                    Acquire Master Editions
+                    Get Instant Digital Access ($15)
                     <ChevronRight className="ml-2 w-5 h-5 text-[#C5A059]" />
                   </Button>
                 </a>
                 <a href="#about-book">
                   <Button size="lg" variant="outline" className="border-[#1E293B]/20 hover:bg-[#EFECE6] text-[#1E293B] font-semibold px-8 py-7 text-base">
-                    Explore The 30-Day Blueprint
+                    Discover What Inside
                   </Button>
                 </a>
               </div>
@@ -84,7 +84,7 @@ export default function Home() {
               <div className="pt-8 border-t border-[#E6E0D4] grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-semibold text-[#4B5563]">
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>Scriptural Authority</span>
+                  <span>Grounded in Scripture</span>
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
@@ -92,30 +92,25 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>Secure Checkout</span>
+                  <span>Secure Payhip Checkout</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Cover Mockup in Professional Book Display Frame */}
+            {/* Right Cover Mockup */}
             <div className="lg:col-span-5 flex justify-center items-center py-6">
               <div className="relative group perspective-1000">
-                {/* Ambient gold-and-slate glow */}
                 <div className="absolute -inset-6 bg-gradient-to-tr from-[#C5A059]/35 via-[#1E293B]/10 to-transparent rounded-3xl blur-2xl opacity-80 group-hover:opacity-100 transition duration-700"></div>
                 
-                {/* Book Object Container with subtle 3D hover rotation */}
                 <div className="relative bg-[#F3EEE3] p-5 sm:p-7 rounded-2xl shadow-2xl border border-[#C5A059]/40 max-w-sm transform group-hover:-translate-y-1 transition duration-500">
                   <div className="absolute top-4 right-5 text-[#C5A059] font-serif text-[11px] tracking-[0.2em] uppercase font-semibold">VOL. 01</div>
                   
-                  {/* High-Resolution Book Cover with realistic spine shadow & depth */}
                   <div className="relative shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)] rounded-md overflow-hidden border border-[#D4C4A8]">
-                    {/* Left spine shadow overlay for true 3D book depth */}
                     <div className="absolute inset-y-0 left-0 w-3 bg-gradient-to-r from-black/25 to-transparent pointer-events-none z-10"></div>
                     <img 
                       src="/manus-storage/influence_cover_definitive_master_v2_d28be92f.png" 
                       alt="The Influential Spirit Book Cover by Eryeza Kalalu" 
                       className="w-full h-auto object-cover transform scale-100 group-hover:scale-[1.02] transition duration-500"
-                      style={{ imageRendering: "auto" }}
                     />
                   </div>
 
@@ -140,12 +135,12 @@ export default function Home() {
       <section id="about-book" className="py-24 bg-[#EFECE6] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Architectural Foundation</span>
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Your 30-Day Transformation Path</span>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">
               Three Pillars of Kingdom Influence
             </h2>
             <p className="text-[#4B5563] text-lg leading-relaxed font-serif italic">
-              "True spiritual influence is neither accidental nor borrowed. It is forged when divine authority meets unshakeable character in the daily marketplace."
+              "True spiritual influence is never accidental. It is forged when divine authority meets unshakeable character in the ordinary spaces of your workday."
             </p>
           </div>
 
@@ -159,7 +154,7 @@ export default function Home() {
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Kingdom Authority</h3>
                 <p className="text-sm text-[#4B5563] leading-relaxed font-sans">
-                  Stepping out of spiritual passivity and operating from heavenly governance. You will learn to exercise the authority of Christ over mental strongholds, operational chaos, and spiritual resistance in your sphere.
+                  Step out of spiritual passivity. Learn to operate from heavenly governance, exercising the authority of Christ over mental fatigue, workplace anxiety, and daily friction in your sphere.
                 </p>
                 <div className="pt-4 border-t border-[#E6E0D4] text-xs font-semibold text-[#C5A059] uppercase tracking-wider">
                   &bull; Days 1 to 10 &bull;
@@ -176,7 +171,7 @@ export default function Home() {
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Formed Character</h3>
                 <p className="text-sm text-[#4B5563] leading-relaxed font-sans">
-                  Private integrity that sustains public weight. Discover why testing in the secret place precedes elevation, ensuring your character outlasts your gifting and withstands the pressures of success.
+                  Private integrity that sustains public weight. Discover why testing in the secret place precedes elevation, ensuring your character outlasts your gifting and withstands pressure.
                 </p>
                 <div className="pt-4 border-t border-[#E6E0D4] text-xs font-semibold text-[#C5A059] uppercase tracking-wider">
                   &bull; Days 11 to 20 &bull;
@@ -193,7 +188,7 @@ export default function Home() {
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Marketplace Impact</h3>
                 <p className="text-sm text-[#4B5563] leading-relaxed font-sans">
-                  Bridging the sacred-secular divide. Transform boardrooms, enterprises, and professional communities into altars of godly excellence, ethical leadership, and undeniable wisdom.
+                  Bridge the sacred-secular divide. Transform boardrooms, offices, and professional communities into altars of godly excellence, ethical leadership, and undeniable wisdom.
                 </p>
                 <div className="pt-4 border-t border-[#E6E0D4] text-xs font-semibold text-[#C5A059] uppercase tracking-wider">
                   &bull; Days 21 to 30 &bull;
@@ -212,7 +207,7 @@ export default function Home() {
             <div className="lg:col-span-5 space-y-6">
               <div className="inline-flex items-center space-x-2 text-xs uppercase tracking-[0.2em] text-[#C5A059] font-extrabold">
                 <Sparkles className="w-4 h-4" />
-                <span>Authorial Fingerprint</span>
+                <span>A Personal Word</span>
               </div>
               <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">
                 Pastor Eryeza Kalalu
@@ -221,16 +216,16 @@ export default function Home() {
                 Pastor, Author, Publishing Consultant, & Pastor at Rivers of Life Healing Centre-Kawuku
               </p>
               <p className="text-sm text-[#6B7280] leading-relaxed font-sans">
-                Operating from Kawuku-Entebbe, Uganda, Pastor Eryeza builds rigorous discipleship systems that scale. Through THE CCN DAILY, he equips Christian professionals to integrate deep theological truth with practical daily execution.
+                Operating from Kawuku-Entebbe, Uganda, my burden has always been simple: to help believers stop imitating secular hustle and start carrying the unbroken weight of Kingdom governance into every room they enter.
               </p>
             </div>
 
             <div className="lg:col-span-7 bg-[#FAF8F5] p-8 sm:p-12 rounded-2xl border-2 border-[#E6E0D4] shadow-md relative">
               <div className="absolute top-6 right-6 text-[#C5A059] font-serif text-6xl opacity-20">“</div>
               <div className="space-y-6 relative z-10">
-                <span className="text-xs uppercase tracking-widest text-[#1E293B] font-bold block">The Author's Mandate</span>
+                <span className="text-xs uppercase tracking-widest text-[#1E293B] font-bold block">Why I Wrote This Book</span>
                 <blockquote className="font-serif text-xl sm:text-2xl text-[#1E293B] italic leading-relaxed">
-                  "We are not called to imitate secular hustle with a Bible verse attached. We are called to carry the unbroken weight of Kingdom governance into every room we enter."
+                  "We are not called to whisper our faith in the corner while the world dictates the culture. When your inner life is anchored in Christ, your quiet competence carries more authority than any title ever could."
                 </blockquote>
                 <div className="pt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
                   <div>
