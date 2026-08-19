@@ -110,7 +110,6 @@ export default function Home() {
                   />
                   <div className="mt-4 text-center space-y-1">
                     <span className="text-xs text-[#1E293B] font-serif font-bold tracking-widest block uppercase">Definitive Master Edition</span>
-                    <span className="text-[11px] text-[#6B7280] italic">4K Optimized &bull; Print & Digital Ready</span>
                   </div>
                 </div>
               </div>
