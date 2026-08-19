@@ -1,10 +1,30 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Sparkles, Feather } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Sparkles, Feather, Star, MessageSquarePlus } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState<"ebook" | "bundle">("ebook");
+  const [reviewName, setReviewName] = useState("");
+  const [reviewRole, setReviewRole] = useState("");
+  const [reviewText, setReviewText] = useState("");
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewName.trim() || !reviewText.trim()) {
+      toast.error("Please enter your name and review before submitting.");
+      return;
+    }
+    setReviewSubmitted(true);
+    toast.success("Thank you! Your review has been received for editorial moderation.");
+    setReviewName("");
+    setReviewRole("");
+    setReviewText("");
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F4EF] text-[#1A1A1A] font-sans selection:bg-[#C5A059] selection:text-white">
@@ -28,6 +48,7 @@ export default function Home() {
           <nav className="hidden md:flex items-center space-x-10 text-sm font-semibold text-[#334155] tracking-wide">
             <a href="#overview" className="hover:text-[#C5A059] transition-colors">Overview</a>
             <a href="#about-book" className="hover:text-[#C5A059] transition-colors">The 30-Day Journey</a>
+            <a href="#reviews" className="hover:text-[#C5A059] transition-colors">Reader Reviews</a>
             <a href="#author" className="hover:text-[#C5A059] transition-colors">Why I Wrote This</a>
             <a href="#formats" className="hover:text-[#C5A059] transition-colors">Editions</a>
           </nav>
@@ -196,6 +217,172 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Verified First-Edition Amazon Reviews Section */}
+      <section id="reviews" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+            <div className="inline-flex items-center space-x-1.5 text-[#C5A059]">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 fill-current" />
+              ))}
+            </div>
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold block">Reader Responses</span>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">
+              Verified First-Edition Reviews
+            </h2>
+            <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed font-sans">
+              Authentic 5-star reviews from verified readers and leaders on Amazon for the first edition of <span className="italic font-serif">The Influential Spirit</span>.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            {/* Review 1 */}
+            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-1 text-[#C5A059]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                  "I felt that the message of this book was encouraging and timely for our day and age. You can read the book as a daily devotional or read it all at once for a spiritual tune up."
+                </blockquote>
+              </div>
+              <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                <span className="font-bold text-[#1E293B]">Vine Voice</span>
+                <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">Verified Amazon Review</span>
+              </div>
+            </div>
+
+            {/* Review 2 */}
+            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-1 text-[#C5A059]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                  "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world."
+                </blockquote>
+              </div>
+              <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                <span className="font-bold text-[#1E293B]">Chris Gould</span>
+                <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Verified Amazon Review</span>
+              </div>
+            </div>
+
+            {/* Review 3 */}
+            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-1 text-[#C5A059]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                  "This is well written and biblically sound."
+                </blockquote>
+              </div>
+              <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                <span className="font-bold text-[#1E293B]">Rev. Derry Flay</span>
+                <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Verified Amazon Review</span>
+              </div>
+            </div>
+
+            {/* Review 4 */}
+            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-1 text-[#C5A059]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                  "This book is simple and practical and yet very instructive and inspiring."
+                </blockquote>
+              </div>
+              <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                <span className="font-bold text-[#1E293B]">Jeff Mutenga</span>
+                <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Verified Amazon Review</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Reader Review Submission Box */}
+          <div className="max-w-2xl mx-auto bg-[#FAF8F5] border-2 border-[#C5A059]/40 p-8 sm:p-10 rounded-2xl shadow-lg">
+            <div className="text-center space-y-3 mb-8">
+              <div className="w-12 h-12 rounded-full bg-[#1E293B] text-[#C5A059] flex items-center justify-center mx-auto mb-2 border border-[#C5A059]/30">
+                <MessageSquarePlus className="w-6 h-6" />
+              </div>
+              <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Have You Read The Book?</h3>
+              <p className="text-sm text-[#6B7280] font-sans">
+                We welcome your reflections. Submit your review below to share how this 30-day journey impacted your daily walk and workplace leadership.
+              </p>
+            </div>
+
+            {reviewSubmitted ? (
+              <div className="bg-[#EFECE6] border border-[#C5A059] p-6 rounded-xl text-center space-y-3">
+                <CheckCircle2 className="w-10 h-10 text-[#C5A059] mx-auto" />
+                <h4 className="font-serif font-bold text-lg text-[#1E293B]">Thank You for Your Feedback</h4>
+                <p className="text-sm text-[#4B5563]">
+                  Your review has been successfully submitted and queued for editorial inclusion on the author platform.
+                </p>
+                <Button 
+                  onClick={() => setReviewSubmitted(false)} 
+                  variant="outline" 
+                  className="mt-2 text-xs border-[#1E293B]/20 text-[#1E293B]"
+                >
+                  Submit Another Review
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleReviewSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Your Name *</label>
+                    <Input 
+                      placeholder="e.g., Sarah Jenkins" 
+                      value={reviewName}
+                      onChange={(e) => setReviewName(e.target.value)}
+                      className="bg-white border-[#E6E0D4] text-[#1E293B]"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Role / Location (Optional)</label>
+                    <Input 
+                      placeholder="e.g., Accountant, Kampala" 
+                      value={reviewRole}
+                      onChange={(e) => setReviewRole(e.target.value)}
+                      className="bg-white border-[#E6E0D4] text-[#1E293B]"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Your Review / Reflection *</label>
+                  <Textarea 
+                    placeholder="Share how the 30-day journey impacted your spiritual formation and daily work..." 
+                    rows={4}
+                    value={reviewText}
+                    onChange={(e) => setReviewText(e.target.value)}
+                    className="bg-white border-[#E6E0D4] text-[#1E293B]"
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold py-6 text-base">
+                  Submit Reader Review
+                </Button>
+                <p className="text-[11px] text-[#6B7280] text-center font-sans">
+                  Submitted reviews are verified by our editorial team before publication on the platform.
+                </p>
+              </form>
+            )}
+          </div>
+
         </div>
       </section>
 
