@@ -63,7 +63,7 @@ export default function Home() {
               </p>
               
               <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
-                A daily discipleship engine built for Christian professionals and leaders who refuse to separate spiritual depth from everyday execution. Grounded strictly in the NKJV and forged in real-world leadership.
+                A daily discipleship engine built for Christian professionals and leaders who refuse to separate spiritual depth from everyday execution. Grounded strictly in the Scriptures and forged in real-world leadership.
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 pt-2">
@@ -84,7 +84,7 @@ export default function Home() {
               <div className="pt-8 border-t border-[#E6E0D4] grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-semibold text-[#4B5563]">
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>NKJV Scriptural Authority</span>
+                  <span>Scriptural Authority</span>
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
@@ -92,7 +92,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>Secure Payhip Checkout</span>
+                  <span>Secure Checkout</span>
                 </div>
               </div>
             </div>
@@ -102,7 +102,7 @@ export default function Home() {
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-tr from-[#C5A059]/30 via-transparent to-[#1E293B]/20 rounded-3xl blur-xl opacity-70 group-hover:opacity-100 transition duration-1000"></div>
                 <div className="relative bg-[#FAF8F5] p-6 rounded-2xl shadow-2xl border-2 border-[#C5A059]/40 max-w-sm">
-                  <div className="absolute top-3 right-3 text-[#C5A059] font-serif text-xs tracking-widest uppercase font-bold">VOL. 01</div>
+                  <div className="absolute top-3 right-3 text-[#C5A059] font-serif text-xs tracking-widest uppercase font-bold">The Deep Encounter Library VOL. 01</div>
                   <img 
                     src="/manus-storage/influence_cover_definitive_master_v2_d28be92f.png" 
                     alt="The Influential Spirit Book Cover" 
@@ -210,7 +210,7 @@ export default function Home() {
                 Pastor, Author, Publishing Consultant, & Co-Founder of Rivers of Life Healing Centre.
               </p>
               <p className="text-sm text-[#6B7280] leading-relaxed font-sans">
-                Operating from a lean-resource environment near Entebbe, Uganda, Pastor Eryeza builds rigorous discipleship systems that scale. Through **THE CCN DAILY**, he equips Christian professionals to integrate deep theological truth with practical daily execution.
+                Operating from Kawuku-Entebbe, Uganda, Pastor Eryeza builds rigorous discipleship systems that scale. Through **THE CCN DAILY**, he equips Christian professionals to integrate deep theological truth with practical daily execution.
               </p>
             </div>
 
@@ -269,7 +269,7 @@ export default function Home() {
                 </div>
                 <ul className="space-y-3 text-sm text-[#CBD5E1] pt-2 border-t border-slate-800">
                   <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> 4K Optimized Cover File Included</li>
-                  <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Instant Payhip Secure Download</li>
+                  <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Instant Secure Download</li>
                   <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Formatted for E-Readers & Tablets</li>
                 </ul>
               </div>
@@ -333,7 +333,7 @@ export default function Home() {
               EK
             </div>
             <div>
-              <span className="text-sm font-semibold text-white tracking-wide block">THE CCN DAILY PUBLISHING HOUSE</span>
+              <span className="text-sm font-semibold text-white tracking-wide block">THE CCN DAILY</span>
               <span className="text-[10px] text-[#64748B] block">books.theccndaily.com</span>
             </div>
           </div>
