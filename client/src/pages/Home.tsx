@@ -226,7 +226,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Reader Responses & Reviews Section */}
+      {/* Reader Responses & Verified Amazon Reviews Section */}
       <section id="reviews" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
@@ -235,7 +235,7 @@ export default function Home() {
               Words from Readers &amp; Friends
             </h2>
             <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed font-sans">
-              Reflections from readers on Pastor Eryeza Kalalu's writing, ministry, and daily principles, including first-edition feedback.
+              Reflections on Pastor Eryeza Kalalu's writing and verified Amazon purchase reviews for the first edition.
             </p>
 
             <div className="pt-4">
@@ -308,7 +308,6 @@ export default function Home() {
           <div className="mb-14">
             <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Perspectives on the Author's Work</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Response 1 */}
               <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
@@ -322,7 +321,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Response 2 */}
               <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
@@ -338,11 +336,12 @@ export default function Home() {
             </div>
           </div>
 
-          {/* First-Edition Book Reviews */}
+          {/* Amazon Verified Purchase Reviews */}
           <div>
-            <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">First-Edition Book Reviews</h3>
+            <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Amazon Verified Purchase Reviews (First Edition)</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Review 1 */}
+              
+              {/* Review 1: The Rebecca Review (US) */}
               <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
@@ -350,17 +349,17 @@ export default function Home() {
                       <Star key={i} className="w-4 h-4 fill-current" />
                     ))}
                   </div>
-                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
-                    "I felt that the message of this book was encouraging and timely for our day and age. You can read the book as a daily devotional or read it all at once for a spiritual tune up."
+                  <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
+                    "What truly matters in your life? Eryeza Kalalu points out that we should not neglect God's wisdom as it can lead us into truth. Each devotional in this book is thoughtful and has a conclusion and a short prayer which is meaningful... I felt that the message of this book was encouraging and timely for our day and age."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <span className="font-bold text-[#1E293B]">Vine Voice</span>
-                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">Amazon Review &bull; First Edition</span>
+                  <span className="font-bold text-[#1E293B]">The Rebecca Review</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United States &bull; Amazon Verified Purchase</span>
                 </div>
               </div>
 
-              {/* Review 2 */}
+              {/* Review 2: Jeff Mutenga (UK) */}
               <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
@@ -368,51 +367,70 @@ export default function Home() {
                       <Star key={i} className="w-4 h-4 fill-current" />
                     ))}
                   </div>
-                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
-                    "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world."
-                  </blockquote>
-                </div>
-                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <span className="font-bold text-[#1E293B]">Chris Gould</span>
-                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Amazon Review &bull; First Edition</span>
-                </div>
-              </div>
-
-              {/* Review 3 */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-1 text-[#C5A059]">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
-                  </div>
-                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
-                    "This is well written and biblically sound."
-                  </blockquote>
-                </div>
-                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <span className="font-bold text-[#1E293B]">Rev. Derry Flay</span>
-                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Amazon Review &bull; First Edition</span>
-                </div>
-              </div>
-
-              {/* Review 4 */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-1 text-[#C5A059]">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
-                  </div>
-                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
-                    "This is simple and practical and yet very instructive and inspiring."
+                  <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
+                    "This book is a refreshing articulation of how to become an effective Christian. Christians are called to be influencers of the world especially in these last days when winning souls is an urgent need. This book is simple and practical and yet very instructive and inspiring."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
                   <span className="font-bold text-[#1E293B]">Jeff Mutenga</span>
-                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Amazon Review &bull; First Edition</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United Kingdom &bull; Amazon Verified Purchase</span>
                 </div>
               </div>
+
+              {/* Review 3: Chris Gould (UK) */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-1 text-[#C5A059]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
+                    "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world. Pastor Eryeza identifies the priorities of a Christian, and demonstrates what it means to live this life in a world which is largely against those who seek to take the claims of Christ seriously."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">Chris Gould</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United Kingdom &bull; Amazon Verified Purchase</span>
+                </div>
+              </div>
+
+              {/* Review 4: SP80 (UK) */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-1 text-[#C5A059]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
+                    "This book is well written and biblically sound. If you follow the principals of this book, it will put you on the right path."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">SP80</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United Kingdom &bull; Amazon Verified Purchase</span>
+                </div>
+              </div>
+
+              {/* Review 5: Andrew T (UK) */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between md:col-span-2 max-w-xl mx-auto w-full">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-1 text-[#C5A059]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
+                    "A must read. This is an amazing book. A must read. Your life will be transformed."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">Andrew T</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United Kingdom &bull; Amazon Verified Purchase</span>
+                </div>
+              </div>
+
             </div>
           </div>
 
