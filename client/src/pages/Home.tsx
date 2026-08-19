@@ -10,7 +10,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#F7F4EF] text-[#1A1A1A] font-sans selection:bg-[#C5A059] selection:text-white">
       {/* Top Announcement Bar */}
       <div className="bg-[#1E293B] text-[#F8FAFC] py-2.5 px-4 text-center text-xs tracking-widest font-medium uppercase border-b border-[#C5A059]/30">
-        <span className="text-[#C5A059] font-bold">THE DEEP ENCOUNTER LIBRARY</span> &bull; VOL. I &bull; FOREWORD BY PASTOR ERYEZA KALALU
+        <span className="text-[#C5A059] font-bold">THE DEEP ENCOUNTER LIBRARY</span> &bull; VOL. I &bull; BY PASTOR ERYEZA KALALU
       </div>
 
       {/* Navigation */}
@@ -22,7 +22,7 @@ export default function Home() {
             </div>
             <div>
               <span className="font-serif font-bold text-2xl tracking-tight text-[#1E293B] block leading-none">THE CCN DAILY</span>
-              <span className="text-[10px] tracking-[0.25em] text-[#C5A059] uppercase font-bold block mt-1">Publishing House</span>
+              <span className="text-[10px] tracking-[0.25em] text-[#C5A059] uppercase font-bold block mt-1"></span>
             </div>
           </div>
           <nav className="hidden md:flex items-center space-x-10 text-sm font-semibold text-[#334155] tracking-wide">
@@ -63,7 +63,7 @@ export default function Home() {
               </p>
               
               <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
-                A daily discipleship engine built for Christian professionals and leaders who refuse to separate spiritual depth from everyday execution. Grounded strictly in the Scriptures and forged in real-world leadership.
+                A daily discipleship engine built for Christian professionals and leaders who refuse to separate spiritual depth from everyday execution. Grounded strictly in Biblical truth and forged in real-world leadership.
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 pt-2">
@@ -210,7 +210,7 @@ export default function Home() {
                 Pastor, Author, Publishing Consultant, & Co-Founder of Rivers of Life Healing Centre.
               </p>
               <p className="text-sm text-[#6B7280] leading-relaxed font-sans">
-                Operating from Kawuku-Entebbe, Uganda, Pastor Eryeza builds rigorous discipleship systems that scale. Through **THE CCN DAILY**, he equips Christian professionals to integrate deep theological truth with practical daily execution.
+                Operating from Kawuku-Entebbe, Uganda, Pastor Eryeza builds rigorous discipleship systems that scale. Through THE CCN DAILY, he equips Christian professionals to integrate deep theological truth with practical daily execution.
               </p>
             </div>
 
@@ -227,7 +227,7 @@ export default function Home() {
                     The Deep Encounter Library
                   </div>
                   <div>
-                    <strong className="text-[#1E293B] block font-sans">Primary Text</strong>
+                    <strong className="text-[#1E293B] block font-sans">Devotional Series</strong>
                     NKJV Verified
                   </div>
                 </div>
