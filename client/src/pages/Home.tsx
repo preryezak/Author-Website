@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Sparkles, Feather, Star, MessageSquarePlus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -12,6 +13,7 @@ export default function Home() {
   const [reviewRole, setReviewRole] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,10 @@ export default function Home() {
     setReviewName("");
     setReviewRole("");
     setReviewText("");
+    setTimeout(() => {
+      setIsDialogOpen(false);
+      setReviewSubmitted(false);
+    }, 2500);
   };
 
   return (
@@ -236,9 +242,74 @@ export default function Home() {
             <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed font-sans">
               Authentic 5-star reviews from verified readers and leaders on Amazon for the first edition of <span className="italic font-serif">The Influential Spirit</span>.
             </p>
+
+            <div className="pt-4">
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-8 py-6 text-sm shadow-md border border-[#C5A059]/30">
+                    <MessageSquarePlus className="mr-2 w-4 h-4 text-[#C5A059]" />
+                    Share Your Review
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-[#FAF8F5] border border-[#C5A059]/40 text-[#1E293B] max-w-lg p-6 sm:p-8">
+                  <DialogHeader className="space-y-2">
+                    <DialogTitle className="font-serif text-2xl font-bold text-[#1E293B]">Submit Your Reader Review</DialogTitle>
+                    <DialogDescription className="text-sm text-[#6B7280] font-sans">
+                      Have you journeyed through <span className="italic font-serif">The Influential Spirit</span>? Share your reflection below. Submitted reviews are verified by our editorial team before publication.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  {reviewSubmitted ? (
+                    <div className="bg-[#EFECE6] border border-[#C5A059] p-6 rounded-xl text-center space-y-3 mt-4">
+                      <CheckCircle2 className="w-10 h-10 text-[#C5A059] mx-auto" />
+                      <h4 className="font-serif font-bold text-lg text-[#1E293B]">Thank You for Your Feedback</h4>
+                      <p className="text-sm text-[#4B5563]">
+                        Your review has been successfully submitted and queued for editorial inclusion.
+                      </p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleReviewSubmit} className="space-y-4 mt-4">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Your Name *</label>
+                        <Input 
+                          placeholder="e.g., Sarah Jenkins" 
+                          value={reviewName}
+                          onChange={(e) => setReviewName(e.target.value)}
+                          className="bg-white border-[#E6E0D4] text-[#1E293B]"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Role / Location (Optional)</label>
+                        <Input 
+                          placeholder="e.g., Accountant, Kampala" 
+                          value={reviewRole}
+                          onChange={(e) => setReviewRole(e.target.value)}
+                          className="bg-white border-[#E6E0D4] text-[#1E293B]"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Your Review / Reflection *</label>
+                        <Textarea 
+                          placeholder="Share how the 30-day journey impacted your spiritual formation and daily work..." 
+                          rows={4}
+                          value={reviewText}
+                          onChange={(e) => setReviewText(e.target.value)}
+                          className="bg-white border-[#E6E0D4] text-[#1E293B]"
+                          required
+                        />
+                      </div>
+                      <Button type="submit" className="w-full bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold py-6 text-base mt-2">
+                        Submit Review for Moderation
+                      </Button>
+                    </form>
+                  )}
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Review 1 */}
             <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
               <div className="space-y-4">
@@ -310,77 +381,6 @@ export default function Home() {
                 <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Verified Amazon Review</span>
               </div>
             </div>
-          </div>
-
-          {/* Reader Review Submission Box */}
-          <div className="max-w-2xl mx-auto bg-[#FAF8F5] border-2 border-[#C5A059]/40 p-8 sm:p-10 rounded-2xl shadow-lg">
-            <div className="text-center space-y-3 mb-8">
-              <div className="w-12 h-12 rounded-full bg-[#1E293B] text-[#C5A059] flex items-center justify-center mx-auto mb-2 border border-[#C5A059]/30">
-                <MessageSquarePlus className="w-6 h-6" />
-              </div>
-              <h3 className="font-serif text-2xl font-bold text-[#1E293B]">Have You Read The Book?</h3>
-              <p className="text-sm text-[#6B7280] font-sans">
-                We welcome your reflections. Submit your review below to share how this 30-day journey impacted your daily walk and workplace leadership.
-              </p>
-            </div>
-
-            {reviewSubmitted ? (
-              <div className="bg-[#EFECE6] border border-[#C5A059] p-6 rounded-xl text-center space-y-3">
-                <CheckCircle2 className="w-10 h-10 text-[#C5A059] mx-auto" />
-                <h4 className="font-serif font-bold text-lg text-[#1E293B]">Thank You for Your Feedback</h4>
-                <p className="text-sm text-[#4B5563]">
-                  Your review has been successfully submitted and queued for editorial inclusion on the author platform.
-                </p>
-                <Button 
-                  onClick={() => setReviewSubmitted(false)} 
-                  variant="outline" 
-                  className="mt-2 text-xs border-[#1E293B]/20 text-[#1E293B]"
-                >
-                  Submit Another Review
-                </Button>
-              </div>
-            ) : (
-              <form onSubmit={handleReviewSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Your Name *</label>
-                    <Input 
-                      placeholder="e.g., Sarah Jenkins" 
-                      value={reviewName}
-                      onChange={(e) => setReviewName(e.target.value)}
-                      className="bg-white border-[#E6E0D4] text-[#1E293B]"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Role / Location (Optional)</label>
-                    <Input 
-                      placeholder="e.g., Accountant, Kampala" 
-                      value={reviewRole}
-                      onChange={(e) => setReviewRole(e.target.value)}
-                      className="bg-white border-[#E6E0D4] text-[#1E293B]"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Your Review / Reflection *</label>
-                  <Textarea 
-                    placeholder="Share how the 30-day journey impacted your spiritual formation and daily work..." 
-                    rows={4}
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
-                    className="bg-white border-[#E6E0D4] text-[#1E293B]"
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold py-6 text-base">
-                  Submit Reader Review
-                </Button>
-                <p className="text-[11px] text-[#6B7280] text-center font-sans">
-                  Submitted reviews are verified by our editorial team before publication on the platform.
-                </p>
-              </form>
-            )}
           </div>
 
         </div>
