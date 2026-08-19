@@ -226,7 +226,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Reader Responses Section */}
+      {/* Reader Responses & Reviews Section */}
       <section id="reviews" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
@@ -235,7 +235,7 @@ export default function Home() {
               Words from Readers &amp; Friends
             </h2>
             <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed font-sans">
-              Reflections from readers on Pastor Eryeza Kalalu's writing, ministry, and daily principles.
+              Reflections from readers on Pastor Eryeza Kalalu's writing, ministry, and daily principles, including first-edition feedback.
             </p>
 
             <div className="pt-4">
@@ -304,32 +304,114 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Response 1 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 sm:p-10 rounded-xl shadow-sm relative flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
-                <blockquote className="font-serif text-lg sm:text-xl text-[#1E293B] italic leading-relaxed">
-                  "The principles Pastor Eryeza writes daily can influence a chef on the kitchen table to the judge on the verdict table."
-                </blockquote>
+          {/* Author-Focused Endorsements */}
+          <div className="mb-14">
+            <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Perspectives on the Author's Work</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* Response 1 */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
+                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                    "The principles Pastor Eryeza writes daily can influence a chef on the kitchen table to the judge on the verdict table."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">Martin Nangoli</span>
+                  <span className="bg-[#EFECE6] px-3 py-1 rounded text-[#1E293B] font-semibold">Specialty Coffee Producer</span>
+                </div>
               </div>
-              <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                <span className="font-bold text-[#1E293B]">Martin Nangoli</span>
-                <span className="bg-[#EFECE6] px-3 py-1 rounded text-[#1E293B] font-semibold">Specialty Coffee Producer</span>
+
+              {/* Response 2 */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
+                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                    "In every generation, I believe God chooses to reveal Himself. Pastor Eryeza is one of those that God has set apart to shine a light on His people in these dark, turbulent times. He exudes a lot of charisma, with excellent oratory and writing skills."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">Babirye Agatha</span>
+                  <span className="bg-[#EFECE6] px-3 py-1 rounded text-[#1E293B] font-semibold">Ugandan Reader</span>
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* Response 2 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 sm:p-10 rounded-xl shadow-sm relative flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
-                <blockquote className="font-serif text-lg sm:text-xl text-[#1E293B] italic leading-relaxed">
-                  "In every generation, I believe God chooses to reveal Himself. Pastor Eryeza is one of those that God has set apart to shine a light on His people in these dark, turbulent times. He exudes a lot of charisma, with excellent oratory and writing skills."
-                </blockquote>
+          {/* First-Edition Book Reviews */}
+          <div>
+            <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">First-Edition Book Reviews</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* Review 1 */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-1 text-[#C5A059]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                    "I felt that the message of this book was encouraging and timely for our day and age. You can read the book as a daily devotional or read it all at once for a spiritual tune up."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">Vine Voice</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">Amazon Review &bull; First Edition</span>
+                </div>
               </div>
-              <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                <span className="font-bold text-[#1E293B]">Babirye Agatha</span>
-                <span className="bg-[#EFECE6] px-3 py-1 rounded text-[#1E293B] font-semibold">Ugandan Reader</span>
+
+              {/* Review 2 */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-1 text-[#C5A059]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                    "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">Chris Gould</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Amazon Review &bull; First Edition</span>
+                </div>
+              </div>
+
+              {/* Review 3 */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-1 text-[#C5A059]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                    "This is well written and biblically sound."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">Rev. Derry Flay</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Amazon Review &bull; First Edition</span>
+                </div>
+              </div>
+
+              {/* Review 4 */}
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-1 text-[#C5A059]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
+                    "This is simple and practical and yet very instructive and inspiring."
+                  </blockquote>
+                </div>
+                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
+                  <span className="font-bold text-[#1E293B]">Jeff Mutenga</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">UK &bull; Amazon Review &bull; First Edition</span>
+                </div>
               </div>
             </div>
           </div>
