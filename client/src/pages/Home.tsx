@@ -340,7 +340,7 @@ export default function Home() {
             &copy; 2026 Pastor Eryeza Kalalu &bull; All Rights Reserved.
           </p>
           <div className="text-xs text-[#C5A059] font-medium tracking-wide">
-            Grounded in NKJV &bull; Forged for Impact
+            Grounded in Scripture &bull; Forged for Impact
           </div>
         </div>
       </footer>
