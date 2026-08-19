@@ -121,7 +121,7 @@ export default function Home() {
 
                   <div className="mt-5 text-center space-y-1.5 border-t border-[#E6E0D4]/80 pt-4">
                     <span className="text-xs text-[#1E293B] font-serif font-bold tracking-[0.2em] block uppercase">Definitive Master Edition</span>
-                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">Paperback &bull; Hardcover &bull; Ebook</span>
+                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">Paperback &bull; Hardcover &bull; Ebook &bull; Audiobook</span>
                   </div>
                 </div>
               </div>
