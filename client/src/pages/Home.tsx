@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Sparkles, Feather, Star, MessageSquarePlus } from "lucide-react";
+import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Home() {
@@ -443,8 +443,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
             <div className="lg:col-span-5 space-y-6">
-              <div className="inline-flex items-center space-x-2 text-xs uppercase tracking-[0.2em] text-[#C5A059] font-extrabold">
-                <Sparkles className="w-4 h-4" />
+              <div className="text-xs uppercase tracking-[0.2em] text-[#C5A059] font-extrabold">
                 <span>Author Perspective</span>
               </div>
               <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">
