@@ -459,20 +459,28 @@ export default function Home() {
             </div>
 
             <div className="lg:col-span-7 bg-[#FAF8F5] p-8 sm:p-12 rounded-2xl border-2 border-[#E6E0D4] shadow-md relative">
-              <div className="absolute top-6 right-6 text-[#C5A059] font-serif text-6xl opacity-20">“</div>
-              <div className="space-y-6 relative z-10">
-                <span className="text-xs uppercase tracking-widest text-[#1E293B] font-bold block">Why I Wrote This Book</span>
-                <blockquote className="font-serif text-xl sm:text-2xl text-[#1E293B] italic leading-relaxed">
-                  "We are not called to whisper our faith in the corner while the world dictates the culture. When your inner life is anchored in Christ, your quiet competence carries more authority than any title ever could."
-                </blockquote>
-                <div className="pt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <div>
-                    <strong className="text-[#1E293B] block font-sans">Series Masterplan</strong>
-                    The Deep Encounter Library
-                  </div>
-                  <div>
-                    <strong className="text-[#1E293B] block font-sans">Devotional Series</strong>
-                    Book 1
+              <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
+                <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-[#C5A059]/40 shadow-lg shrink-0 bg-[#EFECE6]">
+                  <img 
+                    src="/manus-storage/Pr_Eryeza_2618a2fc.jpg" 
+                    alt="Pastor Eryeza Kalalu" 
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+                <div className="space-y-4 text-center sm:text-left">
+                  <span className="text-xs uppercase tracking-widest text-[#1E293B] font-bold block">Why I Wrote This Book</span>
+                  <blockquote className="font-serif text-lg sm:text-xl text-[#1E293B] italic leading-relaxed">
+                    "We are not called to whisper our faith in the corner while the world dictates the culture. When your inner life is anchored in Christ, your quiet competence carries more authority than any title ever could."
+                  </blockquote>
+                  <div className="pt-4 border-t border-[#E6E0D4] flex flex-wrap items-center justify-center sm:justify-between text-xs text-[#6B7280] gap-4">
+                    <div>
+                      <strong className="text-[#1E293B] block font-sans">Series Masterplan</strong>
+                      The Deep Encounter Library
+                    </div>
+                    <div>
+                      <strong className="text-[#1E293B] block font-sans">Devotional Series</strong>
+                      Book 1
+                    </div>
                   </div>
                 </div>
               </div>
@@ -545,12 +553,12 @@ export default function Home() {
               EK
             </div>
             <div>
-              <span className="text-sm font-semibold text-white tracking-wide block">THE CCN DAILY</span>
+              <span className="text-sm font-semibold text-white tracking-wide block">ERYEZA KALALU</span>
               <span className="text-[10px] text-[#64748B] block">books.theccndaily.com</span>
             </div>
           </div>
           <p className="text-xs text-[#64748B] text-center md:text-left font-serif italic">
-            &copy; 2026 Pastor Eryeza Kalalu &bull; All Rights Reserved.
+            &copy; 2026 Eryeza Kalalu &bull; All Rights Reserved.
           </p>
           <div className="text-xs text-[#C5A059] font-medium tracking-wide">
             Grounded in Scripture &bull; Forged for Impact
