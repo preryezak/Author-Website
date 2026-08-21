@@ -135,7 +135,7 @@ export default function Home() {
                   <div className="relative shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)] rounded-md overflow-hidden border border-[#D4C4A8]">
                     <div className="absolute inset-y-0 left-0 w-3 bg-gradient-to-r from-black/25 to-transparent pointer-events-none z-10"></div>
                     <img 
-                      src="/manus-storage/influence_cover_definitive_master_v2_d28be92f.png" 
+                      src="/assets/images/cover.jpg" 
                       alt="The Influential Spirit Book Cover by Eryeza Kalalu" 
                       className="w-full h-auto object-cover transform scale-100 group-hover:scale-[1.02] transition duration-500"
                     />
@@ -461,7 +461,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
                 <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-[#C5A059]/40 shadow-lg shrink-0 bg-[#EFECE6]">
                   <img 
-                    src="/manus-storage/Pr_Eryeza_2618a2fc.jpg" 
+                    src="/assets/images/author.jpg" 
                     alt="Pastor Eryeza Kalalu" 
                     className="w-full h-full object-cover object-top"
                   />
