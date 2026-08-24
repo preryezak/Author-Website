@@ -1,0 +1,43 @@
+MASTER: unedited-christmas-candidate-05-v4.jpg
+  exists=True bytes=4801098
+  format=JPEG size=(2048, 3072) mode=RGB
+  expected_size=(2048, 3072) pass=True
+  aspect=0.66666667
+
+THUMBNAIL: unedited-christmas-candidate-05-v4-thumbnail-98x147.jpg
+  exists=True bytes=12664
+  format=JPEG size=(98, 147) mode=RGB
+  expected_size=(98, 147) pass=True
+  aspect=0.66666667
+
+GRAYSCALE: unedited-christmas-candidate-05-v4-grayscale.jpg
+  exists=True bytes=2768617
+  format=JPEG size=(2048, 3072) mode=L
+  expected_size=(2048, 3072) pass=True
+  aspect=0.66666667
+
+RGB master pass=True
+No alpha channel pass=True
+Digital front-cover aspect pass=True (2:3 portrait)
+Square audiobook output not claimed by this audit; it requires a separate 1:1 recomposition.
+
+TEXT GEOMETRY
+  Unedited_bbox=(-600, 200, 602, 445) width=1202 height=245
+  Christmas_bbox=(-713, 496, 713, 759) width=1426 height=263
+  title_line_gap_pixels=51
+  subtitle_font_size=92px (actual glyph size, not tracking)
+  subtitle_line_1_width=1674.3px natural_tracking=0px
+  subtitle_line_2_width=1507.4px natural_tracking=0px
+  subtitle_line_1_within_safe_width=True
+  subtitle_line_2_within_safe_width=True
+  author_width_with_tracking=972.5px font=96 tracking=22 y=2740
+
+INSET BORDER / ORNAMENT PROXY
+  warm-gold edge-pixel bbox=(118,66,1962,2995)
+  nearest_edge_distances=(left=118, top=66, right=85, bottom=76)
+  This is an art-pixel proxy, not a print trim or bleed specification.
+
+AUDIT CONCLUSION
+  Candidate 5 V4 passes the requested actual-font-size correction and natural subtitle typesetting check.
+  The exact subtitle wording is preserved with no forced subtitle tracking.
+  Candidate 5 V4 does not certify a CMYK print PDF, spine, bleed, barcode, or audiobook square; those remain separate production deliverables.

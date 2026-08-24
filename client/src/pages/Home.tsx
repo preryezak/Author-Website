@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,24 @@ export default function Home() {
   const [reviewText, setReviewText] = useState("");
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const kitFormRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = kitFormRef.current;
+    if (!container || container.dataset.kitLoaded === "true") return;
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.dataset.uid = "6fecaf7182";
+    script.src = "https://eryeza-kalalu.kit.com/6fecaf7182/index.js";
+    container.appendChild(script);
+    container.dataset.kitLoaded = "true";
+
+    return () => {
+      container.innerHTML = "";
+      delete container.dataset.kitLoaded;
+    };
+  }, []);
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,7 +96,7 @@ export default function Home() {
             <div className="lg:col-span-7 space-y-8 text-left">
               <div className="inline-flex items-center space-x-2 bg-[#EFECE6] border border-[#C5A059]/40 rounded-full px-5 py-2 text-xs font-bold text-[#1E293B] tracking-widest uppercase">
                 <Feather className="w-3.5 h-3.5 text-[#C5A059]" />
-                <span>Flagship Devotional Release &bull; Book 1</span>
+                <span>Book 1 &bull; Digital Launch 15 September 2026</span>
               </div>
               
               <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#1E293B] leading-[1.08]">
@@ -90,19 +108,19 @@ export default function Home() {
               </p>
               
               <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
-                Friend, if you have ever felt the quiet ache of wanting your daily work to carry eternal weight without chasing empty titles or superficial applause, this book was written for you. Let us walk through thirty days of practical, scriptural transformation together.
+                Friend, influence is not the problem. Unformed influence is. This book is for the person who wants to keep showing up, leading, working, serving, and making a difference while allowing Christ to form the person behind the influence.
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 pt-2">
                 <a href="#formats">
                   <Button size="lg" className="bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-9 py-7 text-base shadow-xl border border-[#C5A059]/30">
-                    Get Instant Digital Access ($15)
+                    Choose Your Edition
                     <ChevronRight className="ml-2 w-5 h-5 text-[#C5A059]" />
                   </Button>
                 </a>
-                <a href="#about-book">
+                  <a href="#influence-circle">
                   <Button size="lg" variant="outline" className="border-[#1E293B]/20 hover:bg-[#EFECE6] text-[#1E293B] font-semibold px-8 py-7 text-base">
-                    See What You'll Practice
+                    Join the Influence Circle
                   </Button>
                 </a>
               </div>
@@ -153,9 +171,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ornamental Divider */}
-      <div className="py-6 bg-[#EFECE6] border-b border-[#E6E0D4] text-center text-[#C5A059] font-serif tracking-[0.3em] text-sm uppercase">
-        &bull; &bull; &bull; THE DEEP ENCOUNTER FRAMEWORK &bull; &bull; &bull;
+      {/* Library Divider */}
+      <div className="py-5 bg-[#EFECE6] border-b border-[#E6E0D4] text-center text-[#C5A059]">
+        <div className="flex items-center justify-center gap-4 text-[10px] font-sans tracking-[0.28em] uppercase">
+          <span className="h-px w-16 bg-[#C5A059]/60"></span>
+          <span className="inline-flex h-7 w-7 items-center justify-center border border-[#C5A059] font-serif font-bold tracking-normal text-[#1E293B]">EK</span>
+          <span className="text-[#1E293B]">The Deep Encounter Library &bull; Volume I</span>
+          <span className="h-px w-16 bg-[#C5A059]/60"></span>
+        </div>
       </div>
 
       {/* The 3 Pillars Section */}
@@ -173,7 +196,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -190,7 +213,7 @@ export default function Home() {
             </div>
 
             {/* Pillar 2 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -207,7 +230,7 @@ export default function Home() {
             </div>
 
             {/* Pillar 3 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -221,6 +244,39 @@ export default function Home() {
                   &bull; Days 21 to 30 &bull;
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Influence Circle Capture */}
+      <section id="influence-circle" className="py-24 bg-[#1E293B] text-[#F8FAFC] border-b border-[#C5A059]/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:28px_28px] opacity-10 pointer-events-none"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+            <div className="lg:col-span-7 space-y-6">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Launch Community</span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Join the Influence Circle</h2>
+              <p className="text-[#CBD5E1] text-lg leading-relaxed max-w-2xl font-sans">
+                Get a preview of <span className="font-serif italic text-white">The Influential Spirit</span>, launch updates, access to the 30-day journey resources, and first notice of new releases from The Deep Encounter Library.
+              </p>
+              <div className="flex items-center gap-3 pt-4 border-t border-[#C5A059]/30">
+                <span className="inline-flex h-9 w-9 items-center justify-center border border-[#C5A059] text-[#C5A059] font-serif font-bold text-sm">EK</span>
+                <span className="text-xs uppercase tracking-[0.18em] text-[#94A3B8]">Formation Before Platform</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6">
+                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">01</span><strong className="block text-white font-serif">Preview</strong><span className="text-xs text-[#94A3B8]">A first look inside the book.</span></div>
+                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">02</span><strong className="block text-white font-serif">Journey</strong><span className="text-xs text-[#94A3B8]">Resources for the 30 days.</span></div>
+                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">03</span><strong className="block text-white font-serif">Library</strong><span className="text-xs text-[#94A3B8]">News of what comes next.</span></div>
+              </div>
+            </div>
+            <div className="lg:col-span-5 bg-[#F7F4EF] text-[#1E293B] p-6 sm:p-8 rounded-md border border-[#C5A059]/50 shadow-2xl">
+              <div className="border-b border-[#C5A059]/40 pb-4 mb-5">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Library Dispatch</span>
+                <h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-1">A word before launch day.</h3>
+              </div>
+              <div ref={kitFormRef} className="min-h-[112px]" aria-label="Influence Circle signup form"></div>
+                  <p className="text-[11px] text-[#6B7280] leading-relaxed mt-4 border-t border-[#C5A059]/30 pt-4">By joining, you are signing up for Influence Circle launch and library communications. THE CCN DAILY weekly newsletter remains on Substack.</p>
             </div>
           </div>
         </div>
@@ -255,7 +311,7 @@ export default function Home() {
                   </DialogHeader>
 
                   {reviewSubmitted ? (
-                    <div className="bg-[#EFECE6] border border-[#C5A059] p-6 rounded-xl text-center space-y-3 mt-4">
+                    <div className="bg-[#EFECE6] border border-[#C5A059] p-6 rounded-md text-center space-y-3 mt-4">
                       <CheckCircle2 className="w-10 h-10 text-[#C5A059] mx-auto" />
                       <h4 className="font-serif font-bold text-lg text-[#1E293B]">Thank You for Your Feedback</h4>
                       <p className="text-sm text-[#4B5563]">
@@ -308,7 +364,7 @@ export default function Home() {
           <div className="mb-14">
             <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Perspectives on the Author's Work</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
                   <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
@@ -321,7 +377,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
                   <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
@@ -342,7 +398,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
               {/* Review 1: The Rebecca Review (US) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -360,7 +416,7 @@ export default function Home() {
               </div>
 
               {/* Review 2: Jeff Mutenga (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -378,7 +434,7 @@ export default function Home() {
               </div>
 
               {/* Review 3: Chris Gould (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -396,7 +452,7 @@ export default function Home() {
               </div>
 
               {/* Review 4: SP80 (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -414,7 +470,7 @@ export default function Home() {
               </div>
 
               {/* Review 5: Andrew T (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between md:col-span-2 max-w-xl mx-auto w-full">
+              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between md:col-span-2 max-w-xl mx-auto w-full">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -489,57 +545,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Formats & Payhip Integration Section */}
+      {/* Editions & Regional Routes */}
       <section id="formats" className="py-24 bg-[#1E293B] text-[#F8FAFC] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Digital Edition Release</span>
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">
-              Choose Your Edition
-            </h2>
-            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">
-              Acquire the definitive digital master files instantly. Print and audiobook editions are currently in preparation.
-            </p>
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Digital Launch &bull; 15 September 2026</span>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Choose Your Edition</h2>
+            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">The digital edition is available now in PDF and EPUB. Print and audiobook editions are in preparation.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 max-w-xl mx-auto">
-            
-            {/* Option 1: Digital Ebook */}
-            <div className="bg-[#0F172A] rounded-2xl p-8 sm:p-10 border-2 border-[#C5A059] transition-all flex flex-col justify-between shadow-2xl relative">
-              <div className="absolute top-0 right-0 bg-[#C5A059] text-white text-[10px] font-bold uppercase tracking-widest px-5 py-1.5 rounded-bl-xl shadow-sm">
-                Available Now
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="bg-[#0F172A] rounded-md p-8 sm:p-10 border border-[#C5A059]/50 shadow-2xl flex flex-col justify-between">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Uganda &amp; Africa</Badge><span className="font-serif text-3xl font-bold text-white">UGX 45,000</span></div>
+                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Buy on Selar</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the regional route for local pricing and payment convenience. The Selar product link will be added here before launch.</p></div>
+                <p className="text-sm text-[#CBD5E1] border-t border-slate-800 pt-4">Want to help others discover the book? Become an affiliate through the Selar pathway.</p>
               </div>
-              <div className="space-y-6 pt-2">
-                <div className="flex items-center justify-between">
-                  <Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Instant Access</Badge>
-                  <span className="font-serif text-3xl font-bold text-white">$15.00</span>
-                </div>
-                <div>
-                  <h3 className="font-serif text-2xl font-bold text-white mb-2">Digital Master Ebook</h3>
-                  <p className="text-sm text-[#94A3B8] leading-relaxed">
-                    Complete 30-day devotional in high-resolution PDF and EPUB formats, optimized for Kindle, Apple Books, tablets, and reading apps.
-                  </p>
-                </div>
-                <ul className="space-y-3 text-sm text-[#CBD5E1] pt-2 border-t border-slate-800">
-                  <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Complete 30-Day Devotional (PDF &amp; EPUB)</li>
-                  <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Instant Secure Download via Payhip</li>
-                  <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Formatted for All Major E-Readers</li>
-                </ul>
-              </div>
-
-              <div className="pt-8 mt-6 border-t border-slate-800">
-                <div className="space-y-3 text-center">
-                  <a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block">
-                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base shadow-lg transition-transform active:scale-[0.98]">
-                      Acquire Ebook ($15.00)
-                    </Button>
-                  </a>
-                  <p className="text-[11px] text-[#64748B]">Secured via Payhip &bull; Automatic Download Delivery</p>
-                </div>
-              </div>
+              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="https://selar.co/" target="_blank" rel="noopener noreferrer" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Take the Selar route <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Regional route • Product link pending final listing</p></div>
             </div>
 
+            <div className="bg-[#0F172A] rounded-md p-8 sm:p-10 border-2 border-[#C5A059] shadow-2xl flex flex-col justify-between">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">International</Badge><span className="font-serif text-3xl font-bold text-white">US$15</span></div>
+                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Buy on Payhip</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Get the complete 30-day devotional in high-resolution PDF and EPUB formats with secure digital delivery.</p></div>
+                <ul className="space-y-3 text-sm text-[#CBD5E1] border-t border-slate-800 pt-4"><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> PDF and EPUB digital edition</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Automatic download delivery</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Print and audiobook editions forthcoming</li></ul>
+              </div>
+              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Receive the digital edition <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">International route • Secure Payhip checkout</p></div>
+            </div>
           </div>
         </div>
       </section>

@@ -1,0 +1,40 @@
+MASTER: unedited-christmas-candidate-05-v3.jpg
+  exists=True bytes=4793211
+  format=JPEG size=(2048, 3072) mode=RGB
+  expected_size=(2048, 3072) pass=True
+  aspect=0.66666667
+
+THUMBNAIL: unedited-christmas-candidate-05-v3-thumbnail-98x147.jpg
+  exists=True bytes=12502
+  format=JPEG size=(98, 147) mode=RGB
+  expected_size=(98, 147) pass=True
+  aspect=0.66666667
+
+GRAYSCALE: unedited-christmas-candidate-05-v3-grayscale.jpg
+  exists=True bytes=2760321
+  format=JPEG size=(2048, 3072) mode=L
+  expected_size=(2048, 3072) pass=True
+  aspect=0.66666667
+
+RGB master pass=True
+No alpha channel pass=True
+Digital front-cover aspect pass=True (2:3 portrait)
+Square audiobook output not claimed by this audit; it requires a separate 1:1 recomposition.
+
+TEXT GEOMETRY
+  Unedited_bbox=(-600, 200, 602, 445) width=1202 height=245
+  Christmas_bbox=(-713, 496, 713, 759) width=1426 height=263
+  title_line_gap_pixels=51
+  subtitle_line_1_base_width=1322.5px target_width=1560px tracking=6.42px
+  subtitle_line_2_base_width=1191.3px target_width=1560px tracking=11.89px
+  subtitle_alignment_pass=True
+  author_width_with_tracking=972.5px font=96 tracking=22 y=2740
+
+INSET BORDER / ORNAMENT PROXY
+  warm-gold edge-pixel bbox=(118,66,1962,2995)
+  nearest_edge_distances=(left=118, top=66, right=85, bottom=76)
+  This is an art-pixel proxy, not a print trim or bleed specification.
+
+AUDIT CONCLUSION
+  Candidate 5 V3 passes the requested in-place hierarchy correction and digital-front-cover file checks.
+  Candidate 5 V3 does not certify a CMYK print PDF, spine, bleed, barcode, or audiobook square; those remain separate production deliverables.

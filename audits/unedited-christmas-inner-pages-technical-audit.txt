@@ -1,0 +1,13 @@
+Unedited Christmas Inner Pages — Technical Audit
+
+Option A PNG: (2048, 3072) mode=RGB format=PNG bytes=129580 size_pass=True rgb_pass=True dpi=(299.9994, 299.9994) dpi_pass=True
+Option A JPG: (2048, 3072) mode=RGB format=JPEG bytes=324614 size_pass=True rgb_pass=True dpi=(300, 300) dpi_pass=True
+Option B PNG: (2048, 3072) mode=RGB format=PNG bytes=4626103 size_pass=True rgb_pass=True dpi=(299.9994, 299.9994) dpi_pass=True
+Option B JPG: (2048, 3072) mode=RGB format=JPEG bytes=2724567 size_pass=True rgb_pass=True dpi=(300, 300) dpi_pass=True
+Option A light-paper corners=[249, 249, 249, 249] white_corner_pass=True
+Option B grayscale mean=16.60 dark_field_pass=True
+Exact wording source verification: PASS
+Option A treatment: no emblem, icons, decorative border, or divider; text-only light paper field.
+Option B treatment: full grayscale conversion of approved sentence-case cover, retaining emblem, border, ornaments, textile field, local subtitle backing field, and text.
+Print intent: 2048×3072 RGB raster at 300 DPI metadata. Final interior placement must still follow the chosen trim size, bleed, and printer template.
+Technical conclusion: all four requested PNG/JPG files pass dimensions and RGB checks; both options are ready for user selection, not yet locked as the final interior page.
