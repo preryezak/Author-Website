@@ -133,7 +133,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>Instant PDF & EPUB Delivery</span>
+                  <span>PDF &amp; EPUB on Launch</span>
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
@@ -552,17 +552,17 @@ export default function Home() {
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Digital Launch &bull; 15 September 2026</span>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Choose Your Edition</h2>
-            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">The digital edition is available now in PDF and EPUB. Print and audiobook editions are in preparation.</p>
+            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">The digital edition launches on 15 September 2026 in PDF and EPUB. Print and audiobook editions are in preparation.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="bg-[#0F172A] rounded-md p-8 sm:p-10 border border-[#C5A059]/50 shadow-2xl flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Uganda &amp; Africa</Badge><span className="font-serif text-3xl font-bold text-white">UGX 45,000</span></div>
-                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Buy on Selar</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the regional route for local pricing and payment convenience. The Selar product link will be added here before launch.</p></div>
+                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Selar route</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the regional route for local pricing and payment convenience. The Selar product link will be added here before launch.</p></div>
                 <p className="text-sm text-[#CBD5E1] border-t border-slate-800 pt-4">Want to help others discover the book? Become an affiliate through the Selar pathway.</p>
               </div>
-              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="https://selar.co/" target="_blank" rel="noopener noreferrer" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Take the Selar route <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Regional route • Product link pending final listing</p></div>
+              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="#influence-circle" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Get Selar launch notice <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Regional route • Selar product link will be added before launch</p></div>
             </div>
 
             <div className="bg-[#0F172A] rounded-md p-8 sm:p-10 border-2 border-[#C5A059] shadow-2xl flex flex-col justify-between">
