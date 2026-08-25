@@ -1,19 +1,72 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus, Menu, X, BookOpen, MessageCircle, UsersRound, Footprints, HeartHandshake, Crown, Flame, Gauge, HandHeart, BriefcaseBusiness, House, GraduationCap, Eye } from "lucide-react";
 import { toast } from "sonner";
 
+const bundleOptions = [
+  { name: "Reader Edition", usd: 15, ugx: 45000, description: "Designed digital reading edition with reflowable EPUB and PDF delivery.", popular: false },
+  { name: "Formation Bundle", usd: 29, ugx: 90000, description: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and 30-Day Reading Plan & Challenge.", popular: true },
+  { name: "Complete Formation", usd: 49, ugx: 150000, description: "Everything in Formation, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", popular: false },
+] as const;
+
 export default function Home() {
-  const [selectedFormat, setSelectedFormat] = useState<"ebook" | "bundle">("ebook");
+  const [marketRoute, setMarketRoute] = useState<"international" | "africa">("international");
   const [reviewName, setReviewName] = useState("");
   const [reviewRole, setReviewRole] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const kitFormRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => setHasScrolled(window.scrollY > 12);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+    revealItems.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
+
+  useEffect(() => {
+    const container = kitFormRef.current;
+    if (!container || container.dataset.kitLoaded === "true") return;
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.dataset.uid = "6fecaf7182";
+    script.src = "https://eryeza-kalalu.kit.com/6fecaf7182/index.js";
+    container.appendChild(script);
+    container.dataset.kitLoaded = "true";
+
+    return () => {
+      container.innerHTML = "";
+      delete container.dataset.kitLoaded;
+    };
+  }, []);
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,11 +93,12 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <header className="sticky top-0 z-50 bg-[#F7F4EF]/95 backdrop-blur-md border-b border-[#E6E0D4]">
+      <header className={`sticky top-0 z-50 relative transition-shadow duration-300 ${hasScrolled ? "bg-[#F7F4EF]/98 shadow-[0_12px_30px_rgba(30,41,59,0.08)]" : "bg-[#F7F4EF]/95"} backdrop-blur-md border-b border-[#E6E0D4]`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] font-serif font-bold text-2xl shadow-md border-2 border-[#C5A059]/40">
-              EK
+            <div className="seal-hover w-12 h-12 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border-2 border-[#C5A059]/40 relative" aria-label="Eryeza Kalalu publishing seal">
+              <Crown className="absolute w-4 h-4 top-1.5" />
+              <span className="font-serif font-bold text-lg mt-2">EK</span>
             </div>
             <div>
               <span className="font-serif font-bold text-2xl tracking-tight text-[#1E293B] block leading-none">Eryeza Kalalu</span>
@@ -52,24 +106,28 @@ export default function Home() {
             </div>
           </div>
           <nav className="hidden md:flex items-center space-x-10 text-sm font-semibold text-[#334155] tracking-wide">
-            <a href="#overview" className="hover:text-[#C5A059] transition-colors">Overview</a>
-            <a href="#about-book" className="hover:text-[#C5A059] transition-colors">The 30-Day Journey</a>
-            <a href="#reviews" className="hover:text-[#C5A059] transition-colors">Reader Responses</a>
-            <a href="#author" className="hover:text-[#C5A059] transition-colors">Why I Wrote This</a>
-            <a href="#formats" className="hover:text-[#C5A059] transition-colors">Editions</a>
+            <a href="#overview" className="nav-link">Overview</a>
+            <a href="#about-book" className="nav-link">The 30-Day Journey</a>
+            <a href="#reviews" className="nav-link">Reader Responses</a>
+            <a href="#author" className="nav-link">Why I Wrote This</a>
+            <a href="#formats" className="nav-link">Editions</a>
           </nav>
-          <div>
+          <div className="flex items-center gap-2">
+            <button type="button" className="md:hidden inline-flex h-11 w-11 items-center justify-center border border-[#C5A059]/40 text-[#1E293B] transition-colors hover:bg-[#EFECE6]" aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}>
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
             <a href="#formats">
-              <Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-6 py-5 shadow-sm transition-all tracking-wide text-sm">
-                Acquire Your Copy
+              <Button data-slot="button" className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-5 sm:px-6 py-5 shadow-sm transition-all tracking-wide text-sm">
+                <span className="hidden sm:inline">Pre-Order</span><span className="sm:hidden">Order</span>
               </Button>
             </a>
           </div>
+          {mobileMenuOpen && <nav className="absolute left-0 right-0 top-full border-b border-[#E6E0D4] bg-[#F7F4EF] p-4 shadow-xl md:hidden"><div className="flex flex-col gap-1 text-sm font-semibold text-[#334155]"><a href="#overview" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Overview</a><a href="#about-book" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>The 30-Day Journey</a><a href="#reviews" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Reader Responses</a><a href="#author" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Why I Wrote This</a><a href="#formats" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Editions</a></div></nav>}
         </div>
       </header>
 
       {/* Hero Section */}
-      <section id="overview" className="relative pt-16 pb-24 md:pt-24 md:pb-36 overflow-hidden border-b border-[#E6E0D4]">
+      <section id="overview" data-reveal="hero" className="relative pt-16 pb-24 md:pt-24 md:pb-36 overflow-hidden border-b border-[#E6E0D4]">
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -89,20 +147,29 @@ export default function Home() {
                 30 Days to a Life of Kingdom Authority, Character, and Marketplace Impact.
               </p>
               
+              <p className="text-sm uppercase tracking-[0.18em] text-[#C5A059] font-bold">A devotional about the formation of the person behind the influence.</p>
               <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
-                Friend, if you have ever desired your daily work to carry eternal weight without chasing empty titles or superficial applause, this book was written for you. Let us walk through thirty days of practical, scriptural transformation together.
+                Friend, if you have ever wanted your daily work to carry eternal weight, not empty titles, not applause you can screenshot, this book was written for you.
               </p>
+              <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
+                You are asking God for a bigger platform. A wider reach. A seat at a table you have not sat at yet. Here is a harder question, and it will not let you go once you ask it honestly.
+              </p>
+              <p className="font-serif italic text-xl sm:text-2xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5 max-w-2xl">Who are you becoming while you become visible?</p>
+              <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
+                The Influential Spirit is a 30-day devotional for the part of you nobody applauds, the part Christ is shaping while you wait for the door to open. Character. Dependence on the Spirit. The kind of competence that holds up when no one is watching. Let us walk through it together, thirty days at a time.
+              </p>
+              <p className="font-serif text-lg font-bold text-[#1E293B]">Formation Before Platform.</p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 pt-2">
                 <a href="#formats">
                   <Button size="lg" className="bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-9 py-7 text-base shadow-xl border border-[#C5A059]/30">
-                    Get Instant Digital Access ($15)
+                    Pre-Order Your Edition
                     <ChevronRight className="ml-2 w-5 h-5 text-[#C5A059]" />
                   </Button>
                 </a>
-                <a href="#about-book">
+                  <a href="#preview">
                   <Button size="lg" variant="outline" className="border-[#1E293B]/20 hover:bg-[#EFECE6] text-[#1E293B] font-semibold px-8 py-7 text-base">
-                    See What You'll Practice
+                    See What You’ll Practice
                   </Button>
                 </a>
               </div>
@@ -115,11 +182,11 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>Instant PDF & EPUB Delivery</span>
+                  <span>PDF &amp; EPUB on 15 September</span>
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>Secure Payhip Checkout</span>
+                  <span>Payhip &amp; Selar Pre-order Routes</span>
                 </div>
               </div>
             </div>
@@ -129,7 +196,7 @@ export default function Home() {
               <div className="relative group perspective-1000">
                 <div className="absolute -inset-6 bg-gradient-to-tr from-[#C5A059]/35 via-[#1E293B]/10 to-transparent rounded-3xl blur-2xl opacity-80 group-hover:opacity-100 transition duration-700"></div>
                 
-                <div className="relative bg-[#F3EEE3] p-5 sm:p-7 rounded-2xl shadow-2xl border border-[#C5A059]/40 max-w-sm transform group-hover:-translate-y-1 transition duration-500">
+                <div className="book-object relative bg-[#F3EEE3] p-5 sm:p-7 rounded-2xl shadow-2xl border border-[#C5A059]/40 max-w-sm transform group-hover:-translate-y-1 transition duration-500">
                   <div className="absolute top-4 right-5 text-[#C5A059] font-serif text-[11px] tracking-[0.2em] uppercase font-semibold">VOL. 01</div>
                   
                   <div className="relative shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)] rounded-md overflow-hidden border border-[#D4C4A8]">
@@ -137,13 +204,17 @@ export default function Home() {
                     <img 
                       src="/assets/images/cover.jpg" 
                       alt="The Influential Spirit Book Cover by Eryeza Kalalu" 
+                      width={1400}
+                      height={2100}
+                      loading="eager"
+                      decoding="async"
                       className="w-full h-auto object-cover transform scale-100 group-hover:scale-[1.02] transition duration-500"
                     />
                   </div>
 
                   <div className="mt-5 text-center space-y-1.5 border-t border-[#E6E0D4]/80 pt-4">
-                    <span className="text-xs text-[#1E293B] font-serif font-bold tracking-[0.2em] block uppercase">Digital Master Edition</span>
-                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">PDF &amp; EPUB Available Now &bull; Print &amp; Audio Forthcoming</span>
+                    <span className="text-xs text-[#1E293B] font-serif font-bold tracking-[0.2em] block uppercase">Digital Pre-order Edition</span>
+                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">PDF &amp; EPUB delivered 15 September &bull; Audiobook in Formation bundles</span>
                   </div>
                 </div>
               </div>
@@ -153,13 +224,64 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ornamental Divider */}
-      <div className="py-6 bg-[#EFECE6] border-b border-[#E6E0D4] text-center text-[#C5A059] font-serif tracking-[0.3em] text-sm uppercase">
-        &bull; &bull; &bull; THE DEEP ENCOUNTER FRAMEWORK &bull; &bull; &bull;
+      <section id="preview" data-reveal="preview" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+            <div className="lg:col-span-5 space-y-5">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">A First Look Inside</span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">See what you’ll practice.</h2>
+              <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">Before you decide to pre-order, spend a few quiet minutes with the journey. The opening pages will give you a feel for the voice, pace, and work this devotional invites.</p>
+              <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">“Who are you becoming while you become visible?”</p>
+            </div>
+            <div className="rule-glow lg:col-span-7 bg-[#EFECE6] border border-[#C5A059]/40 p-7 sm:p-10 relative">
+              <div className="absolute top-0 left-0 w-20 h-1 bg-[#C5A059]"></div>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="seal-hover inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#C5A059] text-[#C5A059] font-serif font-bold"><Eye className="w-4 h-4" /></span>
+                <div><span className="block text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">A quiet first look</span><span className="text-xs text-[#6B7280] font-semibold">Read before you decide</span></div>
+              </div>
+              <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-3">A sample reading from the 30-day devotional</h3>
+              <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed max-w-2xl">The first pages will open here before launch, designed for an easy read on your phone and a simple return when you need to sit with a thought again.</p>
+              <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="preview-feature"><BookOpen className="w-4 h-4 text-[#C5A059]" /><span>Read a few pages</span></div>
+                <div className="preview-feature"><MessageCircle className="w-4 h-4 text-[#C5A059]" /><span>Hear the invitation</span></div>
+                <div className="preview-feature"><HeartHandshake className="w-4 h-4 text-[#C5A059]" /><span>Begin with honesty</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Canonical positioning sections: influence is formed before it is seen. */}
+      <section data-reveal="positioning" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+          <div className="space-y-5">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Influence Begins Deeper Than Visibility</span>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Who you are matters before anyone sees what you can do.</h2>
+            <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">We live in a world that mistakes visibility for influence. Titles. Followers. Recognition. A promotion. Applause you can screenshot.</p>
+            <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">A platform can put someone in front of a crowd without doing a single thing to their character. God is not just handing out platforms. He is shaping the people who will stand on them, because unformed hands break what they hold.</p>
+            <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">That is the tension this book lives inside: not whether you should be visible, but who you are before, and while, you become that way.</p>
+          </div>
+          <div className="rule-glow space-y-5 border-t-2 border-[#C5A059] pt-6">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Person Behind the Influence</span>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Christ forms the person.</h2>
+            <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The Spirit does the empowering. Everything you actually want, credibility, weight, a voice people trust, grows out of that, never the other way around.</p>
+            <p className="font-serif text-xl leading-relaxed text-[#1E293B]">These pages will not teach you how to get noticed. They walk with you toward becoming someone worth following.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Library Divider */}
+      <div className="py-5 bg-[#EFECE6] border-b border-[#E6E0D4] text-center text-[#C5A059]">
+        <div className="flex items-center justify-center gap-4 text-[10px] font-sans tracking-[0.28em] uppercase">
+          <span className="h-px w-16 bg-[#C5A059]/60"></span>
+          <span className="seal-hover inline-flex h-7 w-7 items-center justify-center border border-[#C5A059] font-serif font-bold tracking-normal text-[#1E293B]">EK</span>
+          <span className="text-[#1E293B]">The Deep Encounter Framework &bull; Volume I</span>
+          <span className="h-px w-16 bg-[#C5A059]/60"></span>
+        </div>
       </div>
 
       {/* The 3 Pillars Section */}
-      <section id="about-book" className="py-24 bg-[#EFECE6] border-b border-[#E6E0D4]">
+      <section id="about-book" data-reveal="pillars" className="py-24 bg-[#EFECE6] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Your 30-Day Transformation Path</span>
@@ -173,7 +295,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="lift-card bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -190,7 +312,7 @@ export default function Home() {
             </div>
 
             {/* Pillar 2 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="lift-card bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -207,7 +329,7 @@ export default function Home() {
             </div>
 
             {/* Pillar 3 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="lift-card bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -226,8 +348,77 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Formation pathway: the supplied copy’s 30-day journey and audience fit. */}
+      <section data-reveal="formation" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+            <div className="lg:col-span-5 space-y-6">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">A 30-Day Journey of Formation</span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">The work begins before the platform.</h2>
+              <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The journey starts with Jesus, not a platform. Through prayer, obedience, service, dependence, and pressure, Christ forms the person who can carry influence without being carried away by it.</p>
+              <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">Your workplace, your home, your church, and your street are already places where your life is speaking.</p>
+            </div>
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="journey-card"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Days 1–5</span><Footprints className="w-5 h-5 text-[#C5A059]" /></div><span className="block text-[10px] uppercase tracking-[0.15em] text-[#6B7280] font-semibold mt-4">The Invitation</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Come close before you lead.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">The journey begins with Jesus, not a platform.</p></div>
+              <div className="journey-card"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Days 6–15</span><Flame className="w-5 h-5 text-[#C5A059]" /></div><span className="block text-[10px] uppercase tracking-[0.15em] text-[#6B7280] font-semibold mt-4">The Transformation</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Let Christ reshape you.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Character, prayer, obedience, service, and dependence become the work.</p></div>
+              <div className="journey-card"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Days 16–20</span><Gauge className="w-5 h-5 text-[#C5A059]" /></div><span className="block text-[10px] uppercase tracking-[0.15em] text-[#6B7280] font-semibold mt-4">The Crucible</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Pressure reveals what visibility hides.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Offense, praise, delay, and difficulty expose what has been formed.</p></div>
+              <div className="journey-card"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Days 21–30</span><HandHeart className="w-5 h-5 text-[#C5A059]" /></div><span className="block text-[10px] uppercase tracking-[0.15em] text-[#6B7280] font-semibold mt-4">The Multiplication</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Turn what you've been given outward.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Influence becomes stewardship.</p></div>
+            </div>
+          </div>
+          <div className="mt-20 pt-10 border-t border-[#E6E0D4] grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            <div className="lg:col-span-4"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">This Book Is for You If…</span><h3 className="font-serif text-3xl font-bold text-[#1E293B] mt-3">You are already influencing someone.</h3></div>
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-[#4B5563] leading-relaxed"><div className="audience-item"><BriefcaseBusiness className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You sense God has called you toward influence and want to be ready for what it asks of you.</span></div><div className="audience-item"><House className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You are trying to live faithfully at your desk, not only on Sunday.</span></div><div className="audience-item"><UsersRound className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You are building a business, ministry, or family, and it is already shaping other people.</span></div><div className="audience-item"><GraduationCap className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You disciple people who will go on to lead.</span></div><div className="audience-item"><Flame className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You are young, ambitious, and wondering how faith should shape that ambition.</span></div><div className="audience-item"><Eye className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You are already visible and beginning to feel what visibility costs.</span></div><div className="audience-item"><HeartHandshake className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You want your ordinary life to carry the weight of Christ’s name well.</span></div><div className="audience-item"><Footprints className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You do not need a title to begin. Your workplace, your home, your church, and your street are already places where your life is speaking.</span></div></div>
+          </div>
+          <div className="mt-20 pt-10 border-t border-[#E6E0D4] grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+            <div className="space-y-4">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">From Sunday to Monday</span>
+              <h3 className="font-serif text-3xl font-bold text-[#1E293B]">Your faith does not get smaller when you leave the building.</h3>
+              <p className="text-[#6B7280] text-base leading-relaxed">The desk. The classroom. The clinic. The boardroom. The market stall. The ministry office. The kitchen table.</p>
+              <p className="text-[#6B7280] text-base leading-relaxed">These are the places where your character actually shows. Your work can be worship. Your competence can be a form of love for the people you serve. Your character, more than your sermon, is what your coworkers will actually remember.</p>
+            </div>
+              <div className="space-y-4">
+                <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">What You Will Explore</span>
+                <div className="explore-panel grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-[#4B5563] leading-relaxed"><div className="explore-item"><Crown className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Character</strong> · who you are when no one's watching.</span></div><div className="explore-item"><BookOpen className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Prayer</strong> · whether your public life stays tethered to a private one.</span></div><div className="explore-item"><Flame className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">The Holy Spirit</strong> · what dependence on God looks like outside the dramatic moments.</span></div><div className="explore-item"><Gauge className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Competence</strong> · how excellence and reliance on God work together, not against each other.</span></div><div className="explore-item"><UsersRound className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Leadership</strong> · whether you can lead before anyone hands you a title.</span></div><div className="explore-item"><Shield className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Pressure</strong> · what difficulty reveals about who you've actually become.</span></div><div className="explore-item"><HandHeart className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Service</strong> · what happens when influence turns into lifting someone else.</span></div><div className="explore-item"><Award className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Legacy</strong> · what's left standing after the applause stops.</span></div></div>
+              </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Influence Circle Capture */}
+      <section id="influence-circle" data-reveal="circle" className="py-24 bg-[#1E293B] text-[#F8FAFC] border-b border-[#C5A059]/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:28px_28px] opacity-10 pointer-events-none"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+            <div className="lg:col-span-7 space-y-6">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Launch Community</span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Join the Influence Circle</h2>
+              <p className="text-[#CBD5E1] text-lg leading-relaxed max-w-2xl font-sans">
+                Get a preview of <span className="font-serif italic text-white">The Influential Spirit</span>, launch updates, access to the 30-day journey resources, and first notice of new releases from The Deep Encounter Library.
+              </p>
+              <div className="rule-glow flex items-center gap-3 pt-4 border-t border-[#C5A059]/30">
+                <span className="seal-hover inline-flex h-9 w-9 items-center justify-center border border-[#C5A059] text-[#C5A059] font-serif font-bold text-sm">EK</span>
+                <span className="text-xs uppercase tracking-[0.18em] text-[#94A3B8]">Formation Before Platform</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6">
+                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">01</span><strong className="block text-white font-serif">Preview</strong><span className="text-xs text-[#94A3B8]">A first look inside the book.</span></div>
+                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">02</span><strong className="block text-white font-serif">Journey</strong><span className="text-xs text-[#94A3B8]">Resources for the 30 days.</span></div>
+                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">03</span><strong className="block text-white font-serif">Library</strong><span className="text-xs text-[#94A3B8]">News of what comes next.</span></div>
+              </div>
+            </div>
+            <div className="lift-card lg:col-span-5 bg-[#F7F4EF] text-[#1E293B] p-6 sm:p-8 rounded-md border border-[#C5A059]/50 shadow-2xl">
+              <div className="border-b border-[#C5A059]/40 pb-4 mb-5">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Library Dispatch</span>
+                <h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-1">Stay close to the journey.</h3>
+              </div>
+              <div ref={kitFormRef} className="min-h-[112px]" aria-label="Influence Circle signup form"></div>
+                  <p className="text-[11px] text-[#6B7280] leading-relaxed mt-4 border-t border-[#C5A059]/30 pt-4">By joining, you are signing up for Influence Circle launch and library communications. THE CCN DAILY weekly newsletter remains on Substack.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Reader Responses & Verified Amazon Reviews Section */}
-      <section id="reviews" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+      <section id="reviews" data-reveal="reviews" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold block">Reader Responses</span>
@@ -255,7 +446,7 @@ export default function Home() {
                   </DialogHeader>
 
                   {reviewSubmitted ? (
-                    <div className="bg-[#EFECE6] border border-[#C5A059] p-6 rounded-xl text-center space-y-3 mt-4">
+                    <div className="bg-[#EFECE6] border border-[#C5A059] p-6 rounded-md text-center space-y-3 mt-4">
                       <CheckCircle2 className="w-10 h-10 text-[#C5A059] mx-auto" />
                       <h4 className="font-serif font-bold text-lg text-[#1E293B]">Thank You for Your Feedback</h4>
                       <p className="text-sm text-[#4B5563]">
@@ -308,9 +499,9 @@ export default function Home() {
           <div className="mb-14">
             <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Perspectives on the Author's Work</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
+                  <div className="quote-mark">“</div>
                   <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
                     "The principles Pastor Eryeza writes daily can influence a chef on the kitchen table to the judge on the verdict table."
                   </blockquote>
@@ -321,9 +512,9 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
+                  <div className="quote-mark">“</div>
                   <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
                     "In every generation, I believe God chooses to reveal Himself. Pastor Eryeza is one of those that God has set apart to shine a light on His people in these dark, turbulent times. He exudes a lot of charisma, with excellent oratory and writing skills."
                   </blockquote>
@@ -338,11 +529,12 @@ export default function Home() {
 
           {/* Amazon Verified Purchase Reviews */}
           <div>
-            <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Amazon Verified Purchase Reviews (First Edition)</h3>
+            <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-3 text-center">What Readers Said About the First Edition</h3>
+            <p className="text-center text-sm text-[#6B7280] max-w-2xl mx-auto mb-6">Becoming an Influence, the book this devotional grew from and expanded, earned these responses:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
               {/* Review 1: The Rebecca Review (US) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -350,7 +542,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "What truly matters in your life? Eryeza Kalalu points out that we should not neglect God's wisdom as it can lead us into truth. Each devotional in this book is thoughtful and has a conclusion and a short prayer which is meaningful... I felt that the message of this book was encouraging and timely for our day and age."
+                    "Each devotional in this book is thoughtful and has a conclusion and a short prayer which is meaningful. I felt that the message of this book was encouraging and timely for our day and age."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -360,7 +552,7 @@ export default function Home() {
               </div>
 
               {/* Review 2: Jeff Mutenga (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -368,7 +560,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "This book is a refreshing articulation of how to become an effective Christian. Christians are called to be influencers of the world especially in these last days when winning souls is an urgent need. This book is simple and practical and yet very instructive and inspiring."
+                    "This book is simple and practical and yet very instructive and inspiring."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -378,7 +570,7 @@ export default function Home() {
               </div>
 
               {/* Review 3: Chris Gould (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -386,7 +578,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world. Pastor Eryeza identifies the priorities of a Christian, and demonstrates what it means to live this life in a world which is largely against those who seek to take the claims of Christ seriously."
+                    "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -396,7 +588,7 @@ export default function Home() {
               </div>
 
               {/* Review 4: SP80 (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -404,7 +596,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "This book is well written and biblically sound. If you follow the principals of this book, it will put you on the right path."
+                    "This book is well written and biblically sound. If you follow the principles of this book, it will put you on the right path."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -414,7 +606,7 @@ export default function Home() {
               </div>
 
               {/* Review 5: Andrew T (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-xl shadow-sm relative flex flex-col justify-between md:col-span-2 max-w-xl mx-auto w-full">
+              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between md:col-span-2 max-w-xl mx-auto w-full">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -422,7 +614,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "A must read. This is an amazing book. A must read. Your life will be transformed."
+                    "A must read. This is an amazing book. Your life will be transformed."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -438,7 +630,7 @@ export default function Home() {
       </section>
 
       {/* Author Section */}
-      <section id="author" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+      <section id="author" data-reveal="author" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
@@ -450,19 +642,23 @@ export default function Home() {
                 Pastor Eryeza Kalalu
               </h2>
               <p className="font-serif text-lg text-[#4B5563] italic">
-                Pastor at Rivers of Life Healing Centre-Kawuku, Author, & Publishing Consultant
+                Pastor at Rivers of Life Healing Centre, Kawuku · Author
               </p>
               <p className="text-sm text-[#6B7280] leading-relaxed font-sans">
-                Operating from Kawuku-Entebbe, Uganda, my burden is straightforward: to help believers stop managing their faith at the surface and start carrying the genuine weight of scriptural discipleship into every room they enter.
+                Operating from Kawuku-Entebbe, Uganda, his burden is simple: help believers stop managing their faith at the surface and start carrying the real weight of scriptural discipleship into every room they enter.
               </p>
             </div>
 
-            <div className="lg:col-span-7 bg-[#FAF8F5] p-8 sm:p-12 rounded-2xl border-2 border-[#E6E0D4] shadow-md relative">
+            <div className="lg:col-span-7 bg-[#FAF8F5] p-8 sm:p-12 rounded-none border-l-2 border-t border-[#C5A059] shadow-none relative">
               <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
                 <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-[#C5A059]/40 shadow-lg shrink-0 bg-[#EFECE6]">
                   <img 
                     src="/assets/images/author.jpg" 
                     alt="Pastor Eryeza Kalalu" 
+                    width={667}
+                    height={1000}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top"
                   />
                 </div>
@@ -471,16 +667,6 @@ export default function Home() {
                   <blockquote className="font-serif text-lg sm:text-xl text-[#1E293B] italic leading-relaxed">
                     "We are not called to whisper our faith in the corner while the world dictates the culture. When your inner life is anchored in Christ, your quiet competence carries more authority than any title ever could."
                   </blockquote>
-                  <div className="pt-4 border-t border-[#E6E0D4] flex flex-wrap items-center justify-center sm:justify-between text-xs text-[#6B7280] gap-4">
-                    <div>
-                      <strong className="text-[#1E293B] block font-sans">Series Masterplan</strong>
-                      The Deep Encounter Library
-                    </div>
-                    <div>
-                      <strong className="text-[#1E293B] block font-sans">Devotional Series</strong>
-                      Book 1
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -489,67 +675,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Formats & Payhip Integration Section */}
-      <section id="formats" className="py-24 bg-[#1E293B] text-[#F8FAFC] relative overflow-hidden">
+      <section data-reveal="experience" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="max-w-3xl space-y-5 mb-12"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The 30-Day Experience Doesn't End With the Last Page</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Day 30 is not the finish line. It's a hand-off.</h2><p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The devotional opens a path you can keep walking. Each resource gives the lesson another place to take root.</p></div><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><div className="experience-card"><BookOpen className="w-5 h-5 text-[#C5A059]" /><strong>Read</strong><span>the complete 30-day devotional.</span></div><div className="experience-card"><MessageCircle className="w-5 h-5 text-[#C5A059]" /><strong>Listen</strong><span>narrated in the author's own voice.</span></div><div className="experience-card"><Eye className="w-5 h-5 text-[#C5A059]" /><strong>Reflect</strong><span>with the companion Journal.</span></div><div className="experience-card"><UsersRound className="w-5 h-5 text-[#C5A059]" /><strong>Gather</strong><span>with the six-session Group Study Guide.</span></div><div className="experience-card"><Footprints className="w-5 h-5 text-[#C5A059]" /><strong>Practice</strong><span>with the Reading Plan and Challenge.</span></div><div className="experience-card"><MessageCircle className="w-5 h-5 text-[#C5A059]" /><strong>Continue</strong><span>through a 30-day WhatsApp journey.</span></div><div className="experience-card"><Compass className="w-5 h-5 text-[#C5A059]" /><strong>Go Deeper</strong><span>through the devotional app.</span></div></div></div></section>
+
+      {/* Editions & Regional Routes */}
+      <section id="formats" data-reveal="formats" className="py-24 bg-[#1E293B] text-[#F8FAFC] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Digital Edition Release</span>
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">
-              Choose Your Edition
-            </h2>
-            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">
-              Acquire the definitive digital master files instantly. Print and audiobook editions are currently in preparation.
-            </p>
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Pre-order now &bull; Digital delivery 15 September 2026</span>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Choose How You Want to Enter the Journey</h2>
+            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">Choose the package that fits your season. Pre-order through the route that serves you best; the digital files will be delivered on 15 September 2026.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 max-w-xl mx-auto">
-            
-            {/* Option 1: Digital Ebook */}
-            <div className="bg-[#0F172A] rounded-2xl p-8 sm:p-10 border-2 border-[#C5A059] transition-all flex flex-col justify-between shadow-2xl relative">
-              <div className="absolute top-0 right-0 bg-[#C5A059] text-white text-[10px] font-bold uppercase tracking-widest px-5 py-1.5 rounded-bl-xl shadow-sm">
-                Available Now
-              </div>
-              <div className="space-y-6 pt-2">
-                <div className="flex items-center justify-between">
-                  <Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Instant Access</Badge>
-                  <span className="font-serif text-3xl font-bold text-white">$15.00</span>
-                </div>
-                <div>
-                  <h3 className="font-serif text-2xl font-bold text-white mb-2">Digital Master Ebook</h3>
-                  <p className="text-sm text-[#94A3B8] leading-relaxed">
-                    Complete 30-day devotional in high-resolution PDF and EPUB formats, optimized for Kindle, Apple Books, tablets, and reading apps.
-                  </p>
-                </div>
-                <ul className="space-y-3 text-sm text-[#CBD5E1] pt-2 border-t border-slate-800">
-                  <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Complete 30-Day Devotional (PDF &amp; EPUB)</li>
-                  <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Instant Secure Download via Payhip</li>
-                  <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Formatted for All Major E-Readers</li>
-                </ul>
-              </div>
-
-              <div className="pt-8 mt-6 border-t border-slate-800">
-                <div className="space-y-3 text-center">
-                  <a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block">
-                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base shadow-lg transition-transform active:scale-[0.98]">
-                      Acquire Ebook ($15.00)
-                    </Button>
-                  </a>
-                  <p className="text-[11px] text-[#64748B]">Secured via Payhip &bull; Automatic Download Delivery</p>
-                </div>
-              </div>
-            </div>
-
+          <div className="flex flex-col sm:flex-row gap-3 max-w-3xl mx-auto mb-10" role="tablist" aria-label="Choose your buying route">
+            <button type="button" role="tab" aria-selected={marketRoute === "international"} onClick={() => setMarketRoute("international")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "international" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">International</span><span className="font-serif text-xl text-white font-bold">International</span><span className="block text-xs text-[#94A3B8] mt-1">Payhip · secure digital checkout</span></button>
+            <button type="button" role="tab" aria-selected={marketRoute === "africa"} onClick={() => setMarketRoute("africa")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "africa" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Africa</span><span className="font-serif text-xl text-white font-bold">Africa</span><span className="block text-xs text-[#94A3B8] mt-1">Selar · mobile money and card payment</span></button>
           </div>
+
+          <div className="route-note max-w-6xl mx-auto mb-8"><div className="flex items-center gap-3"><span className="seal-hover inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#C5A059] text-[#C5A059] font-serif font-bold"><Crown className="w-4 h-4" /></span><span>{marketRoute === "africa" ? "Selar checkout supports mobile money and card payment across Africa." : "Payhip provides secure international checkout and digital delivery."}</span></div></div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
+            {bundleOptions.map((bundle) => <div key={bundle.name} className={`lift-card bundle-card border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative flex flex-col`}><div className="flex items-start justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Library edition</span><span className="block text-xs text-[#94A3B8] mt-1">Volume I · Digital formation</span></div><span className="edition-seal" aria-hidden="true"><Crown className="w-4 h-4" /></span></div>{bundle.popular && <span className="self-start mt-4 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<span className="block font-serif text-lg text-[#C5A059] mt-4">{bundle.name}</span><h3 className="font-serif text-2xl text-white font-bold mt-3">{marketRoute === "international" ? `US$${bundle.usd}` : `UGX ${bundle.ugx.toLocaleString("en-UG")}`}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3 flex-1">{bundle.description}</p><a href={marketRoute === "international" ? "https://payhip.com/ccndaily" : "#influence-circle"} target={marketRoute === "international" ? "_blank" : undefined} rel={marketRoute === "international" ? "noopener noreferrer" : undefined} className="inline-flex items-center justify-center gap-2 mt-6 border border-[#C5A059]/60 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#C5A059] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]">{marketRoute === "international" ? "Pre-order via Payhip" : "Pre-order via Selar"}<ChevronRight className="w-4 h-4 text-[#C5A059]" /></a></div>)}
+          </div>
+
         </div>
       </section>
+
+      {/* Canonical library roadmap, FAQ, and closing invitation. */}
+      <section data-reveal="library" className="py-24 bg-[#EFECE6] border-t border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl space-y-5 mb-14"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Deep Encounter Library</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">One library. Different doors into the same encounter with God.</h2></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20"><div className="lift-card border-t-2 border-[#C5A059] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Now</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">The Influential Spirit</h3><p className="text-sm text-[#6B7280] mt-2">Formation before platform.</p></div><div className="lift-card border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming next</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">Unedited Christmas</h3><p className="text-sm text-[#6B7280] mt-2">A fresh encounter with the mystery of the incarnation.</p></div><div className="lift-card border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming 2027</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Holy Week Every Week · Prayer Craft · Discerning God's Whisper · The Spiritual Health Solution</p></div></div>
+          <div className="max-w-4xl"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Frequently Asked Questions</span><h2 className="font-serif text-4xl font-bold text-[#1E293B] mt-3 mb-8">Questions readers are already asking.</h2><Accordion type="single" collapsible className="faq-shell"><AccordionItem value="leadership" className="faq-item"><AccordionTrigger className="faq-trigger">Is this a leadership book?</AccordionTrigger><AccordionContent className="faq-content">It's more than that. The Influential Spirit is a devotional about spiritual formation. Leadership, work, and influence are where that formation gets tested.</AccordionContent></AccordionItem><AccordionItem value="platforms" className="faq-item"><AccordionTrigger className="faq-trigger">Is the book against platforms?</AccordionTrigger><AccordionContent className="faq-content">No. Ambition, visibility, leadership, none of that is the target here. The question underneath the whole book is simpler and harder: who are you becoming while you become visible?</AccordionContent></AccordionItem><AccordionItem value="leader" className="faq-item"><AccordionTrigger className="faq-trigger">Do I need to be a leader to read it?</AccordionTrigger><AccordionContent className="faq-content">No. Influence here has nothing to do with a title. It's about ordinary responsibility, character, and the people who are already watching your life.</AccordionContent></AccordionItem><AccordionItem value="pastors" className="faq-item"><AccordionTrigger className="faq-trigger">Is it only for pastors?</AccordionTrigger><AccordionContent className="faq-content">No. It's written for professionals, entrepreneurs, ministry leaders, young adults, and anyone trying to live out their faith where they actually spend their week.</AccordionContent></AccordionItem><AccordionItem value="group" className="faq-item"><AccordionTrigger className="faq-trigger">Can I use it with a group?</AccordionTrigger><AccordionContent className="faq-content">Yes. The Formation Bundle and Complete Formation Edition both include the six-session Group Study Guide.</AccordionContent></AccordionItem><AccordionItem value="audio" className="faq-item"><AccordionTrigger className="faq-trigger">Can I listen instead of read?</AccordionTrigger><AccordionContent className="faq-content">Yes. The Formation Bundle includes the author-narrated audiobook.</AccordionContent></AccordionItem><AccordionItem value="journal" className="faq-item"><AccordionTrigger className="faq-trigger">Is there a journal?</AccordionTrigger><AccordionContent className="faq-content">Yes, in the Complete Formation Edition.</AccordionContent></AccordionItem></Accordion></div>
+        </div>
+      </section>
+
+      <section data-reveal="final" className="py-24 bg-[#1E293B] text-white text-center border-t border-[#C5A059]/30"><div className="max-w-3xl mx-auto px-4 sm:px-6"><h2 className="font-serif text-4xl sm:text-5xl font-bold">Your influence does not start when you get the platform.</h2><p className="text-[#CBD5E1] text-lg leading-relaxed mt-5">It starts with who you're becoming right now, before anyone's watching.</p><div className="flex flex-col sm:flex-row justify-center gap-4 mt-8"><a href="#formats"><Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-8 py-6">Begin the 30-Day Journey <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><a href="#influence-circle"><Button variant="outline" className="border-[#C5A059]/60 text-white hover:bg-white/10 font-semibold px-8 py-6">Join the Influence Circle</Button></a></div><p className="text-xs uppercase tracking-[0.22em] text-[#C5A059] mt-8">Grounded in Scripture · Forged for Impact</p></div></section>
 
       {/* Footer */}
       <footer className="bg-[#111827] text-[#94A3B8] py-14 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] font-serif font-bold text-lg border border-[#C5A059]/40">
-              EK
+            <div className="seal-hover w-10 h-10 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] border border-[#C5A059]/40 relative" aria-label="Eryeza Kalalu publishing seal">
+              <Crown className="absolute w-3 h-3 top-1" />
+              <span className="font-serif font-bold text-sm mt-2">EK</span>
             </div>
             <div>
               <span className="text-sm font-semibold text-white tracking-wide block">ERYEZA KALALU</span>

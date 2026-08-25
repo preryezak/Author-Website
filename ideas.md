@@ -37,3 +37,22 @@
   - *Example 2*: "Your daily work is an offering of worship."
 - **Wordmark & Logo**: A refined monogram ("EK" crown emblem) in Kingdom Gold on a transparent mark.
 - **Signature Brand Color**: Kingdom Gold (`#C5A059`) and Deep Slate Navy (`#1E293B`).
+
+
+## Style Decisions: UI/UX Upgrade
+
+**Motion direction:** Motion should feel like turning a page, not launching a product. Gold details guide attention without becoming decoration. Editorial hierarchy must breathe between dense copy blocks. Every interaction should clarify the next faithful step: read, practice, join, or pre-order.
+
+**Interaction rules:** Links and buttons use a short lift, color shift, and visible focus ring. Section reveals are subtle and one-time. Reduced-motion users receive the same hierarchy without movement. The embedded Kit form remains outside the animation system so third-party resizing is not disturbed.
+
+**Animation rules:** Use opacity and transform only. Enter sections with a soft vertical rise over 560ms using a custom ease-out, staggered by 70ms where content is grouped. Keep button response under 180ms. Use slow ambient movement only for non-informational decorative marks. Never animate layout dimensions or copy.
+
+**System-wide visual rules:** Every major section should carry at least one Neo-Monastic signature: gold rulework, an EK seal, manuscript framing, or a restrained illuminated detail. Commerce must feel like a premium bookshop edition choice, not a SaaS pricing table. Typography hierarchy remains serif-led, with sans-serif reserved for navigation, labels, metadata, and utility text.
+
+## Style Decisions — Editor Comment Resolution
+
+- Every major section should carry a manuscript signature through an EK seal, gold rulework, illuminated initial, marginal note, or framed parchment panel.
+- The commerce area must read as a premium devotional bookshop. Edition cards should feel like collectible volumes or boxed formation sets, never SaaS pricing tiers.
+- The EK crown monogram is the recurring publisher seal and should be visible as a primary brand artifact in the header, section dividers, commerce area, and footer.
+- Customer-facing copy must not expose internal planning notes, pending-link notes, route labels, or implementation commentary.
+- The Africa route should be presented simply as Africa, with mobile money and card payment language. Currency planning estimates remain internal until Selar prices are fixed.
