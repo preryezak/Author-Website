@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus, Menu, X, BookOpen, MessageCircle, UsersRound, Footprints, HeartHandshake, Crown, Flame, Gauge, HandHeart, BriefcaseBusiness, House, GraduationCap, Eye } from "lucide-react";
-import { toast } from "sonner";
+import { Award, Shield, Compass, ChevronRight, Feather, Star, Menu, X, BookOpen, MessageCircle, UsersRound, Footprints, HeartHandshake, Crown, Flame, Gauge, HandHeart, BriefcaseBusiness, House, GraduationCap, Eye } from "lucide-react";
 
 const bundleOptions = [
   { name: "Reader Edition", usd: 15, ugx: 45000, description: "Designed digital reading edition with reflowable EPUB and PDF delivery.", popular: false },
@@ -16,11 +12,6 @@ const bundleOptions = [
 
 export default function Home() {
   const [marketRoute, setMarketRoute] = useState<"international" | "africa">("international");
-  const [reviewName, setReviewName] = useState("");
-  const [reviewRole, setReviewRole] = useState("");
-  const [reviewText, setReviewText] = useState("");
-  const [reviewSubmitted, setReviewSubmitted] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const kitFormRef = useRef<HTMLDivElement | null>(null);
@@ -68,22 +59,6 @@ export default function Home() {
     };
   }, []);
 
-  const handleReviewSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!reviewName.trim() || !reviewText.trim()) {
-      toast.error("Please enter your name and review before submitting.");
-      return;
-    }
-    setReviewSubmitted(true);
-    toast.success("Thank you! Your review has been received for editorial moderation.");
-    setReviewName("");
-    setReviewRole("");
-    setReviewText("");
-    setTimeout(() => {
-      setIsDialogOpen(false);
-      setReviewSubmitted(false);
-    }, 2500);
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F4EF] text-[#1A1A1A] font-sans selection:bg-[#C5A059] selection:text-white">
@@ -430,68 +405,13 @@ export default function Home() {
             </p>
 
             <div className="pt-4">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-8 py-6 text-sm shadow-md border border-[#C5A059]/30">
-                    <MessageSquarePlus className="mr-2 w-4 h-4 text-[#C5A059]" />
-                    Share Your Review
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-[#FAF8F5] border border-[#C5A059]/40 text-[#1E293B] max-w-lg p-6 sm:p-8">
-                  <DialogHeader className="space-y-2">
-                    <DialogTitle className="font-serif text-2xl font-bold text-[#1E293B]">Submit Your Reader Review</DialogTitle>
-                    <DialogDescription className="text-sm text-[#6B7280] font-sans">
-                      Have you journeyed through <span className="italic font-serif">The Influential Spirit</span> or followed Pastor Eryeza's daily writing? Share your reflection below. Submitted reviews are verified by our editorial team before publication.
-                    </DialogDescription>
-                  </DialogHeader>
-
-                  {reviewSubmitted ? (
-                    <div className="bg-[#EFECE6] border border-[#C5A059] p-6 rounded-md text-center space-y-3 mt-4">
-                      <CheckCircle2 className="w-10 h-10 text-[#C5A059] mx-auto" />
-                      <h4 className="font-serif font-bold text-lg text-[#1E293B]">Thank You for Your Feedback</h4>
-                      <p className="text-sm text-[#4B5563]">
-                        Your review has been successfully submitted and queued for editorial inclusion.
-                      </p>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleReviewSubmit} className="space-y-4 mt-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Your Name *</label>
-                        <Input 
-                          placeholder="e.g., Sarah Jenkins" 
-                          value={reviewName}
-                          onChange={(e) => setReviewName(e.target.value)}
-                          className="bg-white border-[#E6E0D4] text-[#1E293B]"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Role / Location (Optional)</label>
-                        <Input 
-                          placeholder="e.g., Accountant, Kampala" 
-                          value={reviewRole}
-                          onChange={(e) => setReviewRole(e.target.value)}
-                          className="bg-white border-[#E6E0D4] text-[#1E293B]"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Your Review / Reflection *</label>
-                        <Textarea 
-                          placeholder="Share how the 30-day journey impacted your spiritual formation and daily work..." 
-                          rows={4}
-                          value={reviewText}
-                          onChange={(e) => setReviewText(e.target.value)}
-                          className="bg-white border-[#E6E0D4] text-[#1E293B]"
-                          required
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold py-6 text-base mt-2">
-                        Submit Review for Moderation
-                      </Button>
-                    </form>
-                  )}
-                </DialogContent>
-              </Dialog>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSddMgY2w4tZhIwLXIVWtyPQ8mRFAzdAGlE4YwYb0U02_zXHCw/viewform" target="_blank" rel="noreferrer">
+                <Button className="bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-8 py-6 text-sm shadow-md border border-[#C5A059]/30">
+                  Share Your Reflection
+                  <ChevronRight className="ml-2 w-4 h-4 text-[#C5A059]" />
+                </Button>
+              </a>
+              <p className="text-xs text-[#6B7280] mt-3 max-w-md">The form opens in a new tab. Every submission is reviewed privately before any reflection is considered for publication.</p>
             </div>
           </div>
 
