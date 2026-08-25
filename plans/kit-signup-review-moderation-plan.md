@@ -91,4 +91,6 @@ Kit’s verified sending-domain guidance states that SPF, DKIM, and DMARC authen
 
 ## Authenticated Kit Check
 
-The authenticated Kit dashboard is available. The account shows one subscriber, `eryezawrites@gmail.com`, associated with `Influence Circle — The Influential Spirit Launch`. The Landing Pages & Forms list is accessible at `https://app.kit.com/forms`; the specific form row is visible after the page loads, but its builder/settings have not yet been opened.
+The authenticated Kit dashboard is available. The account shows one subscriber, `eryezawrites@gmail.com`, associated with `Influence Circle — The Influential Spirit Launch`. The branded confirmation redirect is saved on the Kit form as `https://theccndaily.com`.
+
+The Google moderation form is published at `https://docs.google.com/forms/d/e/1FAIpQLSddMgY2w4tZhIwLXIVWtyPQ8mRFAzdAGlE4YwYb0U02_zXHCw/viewform` and is linked to the private spreadsheet `https://docs.google.com/spreadsheets/d/1Fae1keWAF-EMImVCrCPrZFzIajJjb81NItofYPjqv88/edit`. The linked response tab is `Form Responses 1`; moderation columns `Status`, `Editorial notes`, and `Publication date` have been added without inserting test data. The owner is `pastor.eryeza@gmail.com`, and the response destination is not public.
