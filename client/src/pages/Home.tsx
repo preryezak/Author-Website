@@ -151,9 +151,18 @@ export default function Home() {
                 30 Days to a Life of Kingdom Authority, Character, and Marketplace Impact.
               </p>
               
+              <p className="text-sm uppercase tracking-[0.18em] text-[#C5A059] font-bold">A devotional about the formation of the person behind the influence.</p>
               <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
-                Friend, if you have ever wanted your daily work to carry eternal weight, not empty titles, not applause you can screenshot, this book was written for you. The Influential Spirit is a devotional for the part of you nobody applauds, the part Christ is shaping while you wait for the door to open.
+                Friend, if you have ever wanted your daily work to carry eternal weight, not empty titles, not applause you can screenshot, this book was written for you.
               </p>
+              <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
+                You are asking God for a bigger platform. A wider reach. A seat at a table you have not sat at yet. Here is a harder question, and it will not let you go once you ask it honestly.
+              </p>
+              <p className="font-serif italic text-xl sm:text-2xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5 max-w-2xl">Who are you becoming while you become visible?</p>
+              <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
+                The Influential Spirit is a 30-day devotional for the part of you nobody applauds, the part Christ is shaping while you wait for the door to open. Character. Dependence on the Spirit. The kind of competence that holds up when no one is watching. Let us walk through it together, thirty days at a time.
+              </p>
+              <p className="font-serif text-lg font-bold text-[#1E293B]">Formation Before Platform.</p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 pt-2">
                 <a href="#formats">
@@ -239,12 +248,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Canonical positioning sections: influence is formed before it is seen. */}
+      <section className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+          <div className="space-y-5">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Influence Begins Deeper Than Visibility</span>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Who you are matters before anyone sees what you can do.</h2>
+            <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">We live in a world that mistakes visibility for influence. Titles. Followers. Recognition. A promotion. Applause you can screenshot.</p>
+            <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">A platform can put someone in front of a crowd without doing a single thing to their character. God is not just handing out platforms. He is shaping the people who will stand on them, because unformed hands break what they hold.</p>
+            <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">That is the tension this book lives inside: not whether you should be visible, but who you are before, and while, you become that way.</p>
+          </div>
+          <div className="space-y-5 border-t-2 border-[#C5A059] pt-6">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Person Behind the Influence</span>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Christ forms the person.</h2>
+            <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The Spirit does the empowering. Everything you actually want, credibility, weight, a voice people trust, grows out of that, never the other way around.</p>
+            <p className="font-serif text-xl leading-relaxed text-[#1E293B]">These pages will not teach you how to get noticed. They walk with you toward becoming someone worth following.</p>
+          </div>
+        </div>
+      </section>
+
       {/* Library Divider */}
       <div className="py-5 bg-[#EFECE6] border-b border-[#E6E0D4] text-center text-[#C5A059]">
         <div className="flex items-center justify-center gap-4 text-[10px] font-sans tracking-[0.28em] uppercase">
           <span className="h-px w-16 bg-[#C5A059]/60"></span>
           <span className="inline-flex h-7 w-7 items-center justify-center border border-[#C5A059] font-serif font-bold tracking-normal text-[#1E293B]">EK</span>
-          <span className="text-[#1E293B]">The Deep Encounter Library &bull; Volume I</span>
+          <span className="text-[#1E293B]">The Deep Encounter Framework &bull; Volume I</span>
           <span className="h-px w-16 bg-[#C5A059]/60"></span>
         </div>
       </div>
@@ -258,7 +286,7 @@ export default function Home() {
               Three Pillars of Kingdom Influence
             </h2>
             <p className="text-[#4B5563] text-lg leading-relaxed font-serif italic">
-              "True spiritual influence is never accidental. It is forged when divine authority meets steady character in the ordinary spaces of your workday."
+              "Christlike influence is forged when divine authority meets steady character in the ordinary spaces of your workday."
             </p>
           </div>
 
@@ -331,12 +359,24 @@ export default function Home() {
               <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Invitation · Days 1–5</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Come close before you lead.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">The journey begins with Jesus, not a platform.</p></div>
               <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Transformation · Days 6–15</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Let Christ reshape you.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Character, prayer, obedience, service, and dependence become the work.</p></div>
               <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Crucible · Days 16–20</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Pressure reveals what visibility hides.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Offense, praise, delay, and difficulty expose what has been formed.</p></div>
-              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Multiplication · Days 21–30</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Turn what you have received outward.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Influence becomes stewardship when it lifts someone else.</p></div>
+              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Multiplication · Days 21–30</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Turn what you've been given outward.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Influence becomes stewardship.</p></div>
             </div>
           </div>
           <div className="mt-20 pt-10 border-t border-[#E6E0D4] grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             <div className="lg:col-span-4"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">This Book Is for You If…</span><h3 className="font-serif text-3xl font-bold text-[#1E293B] mt-3">You are already influencing someone.</h3></div>
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-[#4B5563] leading-relaxed"><p>• You sense God has called you toward influence and want to be ready for what it asks of you.</p><p>• You are trying to live faithfully at your desk, not only on Sunday.</p><p>• You are building a business, ministry, or family, and it is shaping other people.</p><p>• You are young, ambitious, and wondering how faith should shape that ambition.</p><p>• You are already visible and beginning to feel what visibility costs.</p><p>• You want your ordinary life to carry the weight of Christ’s name well.</p></div>
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-[#4B5563] leading-relaxed"><p>• You sense God has called you toward influence and want to be ready for what it asks of you.</p><p>• You are trying to live faithfully at your desk, not only on Sunday.</p><p>• You are building a business, ministry, or family, and it is already shaping other people.</p><p>• You disciple people who will go on to lead.</p><p>• You are young, ambitious, and wondering how faith should shape that ambition.</p><p>• You are already visible and beginning to feel what visibility costs.</p><p>• You want your ordinary life to carry the weight of Christ’s name well.</p><p>• You do not need a title to begin. Your workplace, your home, your church, and your street are already places where your life is speaking.</p></div>
+          </div>
+          <div className="mt-20 pt-10 border-t border-[#E6E0D4] grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+            <div className="space-y-4">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">From Sunday to Monday</span>
+              <h3 className="font-serif text-3xl font-bold text-[#1E293B]">Your faith does not get smaller when you leave the building.</h3>
+              <p className="text-[#6B7280] text-base leading-relaxed">The desk. The classroom. The clinic. The boardroom. The market stall. The ministry office. The kitchen table.</p>
+              <p className="text-[#6B7280] text-base leading-relaxed">These are the places where your character actually shows. Your work can be worship. Your competence can be a form of love for the people you serve. Your character, more than your sermon, is what your coworkers will actually remember.</p>
+            </div>
+            <div className="space-y-4">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">What You Will Explore</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm text-[#4B5563] leading-relaxed"><p><strong className="text-[#1E293B]">Character</strong> · who you are when no one's watching.</p><p><strong className="text-[#1E293B]">Prayer</strong> · whether your public life stays tethered to a private one.</p><p><strong className="text-[#1E293B]">The Holy Spirit</strong> · what dependence on God looks like outside the dramatic moments.</p><p><strong className="text-[#1E293B]">Competence</strong> · how excellence and reliance on God work together, not against each other.</p><p><strong className="text-[#1E293B]">Leadership</strong> · whether you can lead before anyone hands you a title.</p><p><strong className="text-[#1E293B]">Pressure</strong> · what difficulty reveals about who you've actually become.</p><p><strong className="text-[#1E293B]">Service</strong> · what happens when influence turns into lifting someone else.</p><p><strong className="text-[#1E293B]">Legacy</strong> · what's left standing after the applause stops.</p></div>
+            </div>
           </div>
         </div>
       </section>
@@ -486,7 +526,8 @@ export default function Home() {
 
           {/* Amazon Verified Purchase Reviews */}
           <div>
-            <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Amazon Verified Purchase Reviews (First Edition)</h3>
+            <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-3 text-center">What Readers Said About the First Edition</h3>
+            <p className="text-center text-sm text-[#6B7280] max-w-2xl mx-auto mb-6">Becoming an Influence, the book this devotional grew from and expanded, earned these responses:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
               {/* Review 1: The Rebecca Review (US) */}
@@ -498,7 +539,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "What truly matters in your life? Eryeza Kalalu points out that we should not neglect God's wisdom as it can lead us into truth. Each devotional in this book is thoughtful and has a conclusion and a short prayer which is meaningful... I felt that the message of this book was encouraging and timely for our day and age."
+                    "Each devotional in this book is thoughtful and has a conclusion and a short prayer which is meaningful. I felt that the message of this book was encouraging and timely for our day and age."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -516,7 +557,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "This book is a refreshing articulation of how to become an effective Christian. Christians are called to be influencers of the world especially in these last days when winning souls is an urgent need. This book is simple and practical and yet very instructive and inspiring."
+                    "This book is simple and practical and yet very instructive and inspiring."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -534,7 +575,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world. Pastor Eryeza identifies the priorities of a Christian, and demonstrates what it means to live this life in a world which is largely against those who seek to take the claims of Christ seriously."
+                    "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -552,11 +593,11 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "This book is well written and biblically sound. If you follow the principals of this book, it will put you on the right path."
+                    "This book is well written and biblically sound. If you follow the principles of this book, it will put you on the right path."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <span className="font-bold text-[#1E293B]">SP80</span>
+                  <span className="font-bold text-[#1E293B]">SPBO</span>
                   <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United Kingdom &bull; Amazon Verified Purchase</span>
                 </div>
               </div>
@@ -570,7 +611,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "A must read. This is an amazing book. A must read. Your life will be transformed."
+                    "A must read. This is an amazing book. Your life will be transformed."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
@@ -598,10 +639,10 @@ export default function Home() {
                 Pastor Eryeza Kalalu
               </h2>
               <p className="font-serif text-lg text-[#4B5563] italic">
-                Pastor at Rivers of Life Healing Centre-Kawuku, Author, & Publishing Consultant
+                Pastor at Rivers of Life Healing Centre, Kawuku · Author
               </p>
               <p className="text-sm text-[#6B7280] leading-relaxed font-sans">
-                Operating from Kawuku-Entebbe, Uganda, my burden is simple: to help believers stop managing their faith at the surface and start carrying the real weight of scriptural discipleship into every room they enter.
+                Operating from Kawuku-Entebbe, Uganda, his burden is simple: help believers stop managing their faith at the surface and start carrying the real weight of scriptural discipleship into every room they enter.
               </p>
             </div>
 
@@ -637,13 +678,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Canonical product experience section: the journey continues beyond the final devotional page. */}
+      <section className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="max-w-3xl space-y-5 mb-10"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The 30-Day Experience Doesn't End With the Last Page</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Day 30 is not the finish line. It's a hand-off.</h2></div><div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 text-sm text-[#4B5563]"><div><strong className="block font-serif text-lg text-[#1E293B]">Read</strong><span>the complete 30-day devotional.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Listen</strong><span>narrated in the author's own voice.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Reflect</strong><span>the companion Journal.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Gather</strong><span>the six-session Group Study Guide.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Practice</strong><span>the Reading Plan and Challenge.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Continue</strong><span>a 30-day WhatsApp journey.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Go Deeper</strong><span>the devotional app.</span></div></div></div></section>
+
       {/* Editions & Regional Routes */}
       <section id="formats" className="py-24 bg-[#1E293B] text-[#F8FAFC] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Pre-order now &bull; Digital delivery 15 September 2026</span>
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Choose Your Edition</h2>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Choose How You Want to Enter the Journey</h2>
             <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">Choose the package that fits your season. Pre-order through the route that serves you best; the digital files will be delivered on 15 September 2026.</p>
           </div>
 
@@ -661,6 +705,17 @@ export default function Home() {
           <div className="max-w-5xl mx-auto border-t border-[#C5A059]/30 pt-10"><div className="bg-[#0F172A] rounded-none p-8 sm:p-10 border-l-2 border-t-2 border-[#C5A059] shadow-2xl flex flex-col lg:flex-row lg:items-end justify-between gap-8"><div className="space-y-5 max-w-2xl">{marketRoute === "africa" ? <><div className="flex items-center gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Uganda &amp; Africa · Selar</Badge><span className="font-serif text-3xl font-bold text-white">{africaCurrency === "UGX" ? "UGX 45,000" : formatCurrencyEstimate(africaCurrency, 45000 * activeAfricanRate)}</span></div><div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order through Selar</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Choose the currency that matches your Selar checkout. The selector gives you a rounded estimate from the UGX anchor price; Selar remains the final source of truth for the fixed amount.</p></div><p className="text-sm text-[#CBD5E1] border-t border-slate-800 pt-4">Want to help others discover the book? Become an affiliate through the Selar pathway.</p></> : <><div className="flex items-center gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">International · Payhip</Badge><span className="font-serif text-3xl font-bold text-white">US$15</span></div><div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order through Payhip</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the international route for USD pricing and secure digital delivery. Payhip’s pre-order setup will deliver the final PDF and EPUB on 15 September 2026.</p></div><ul className="space-y-3 text-sm text-[#CBD5E1] border-t border-slate-800 pt-4"><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> PDF and EPUB digital edition</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Automatic download delivery</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Author-narrated audiobook in Formation and Complete bundles; print forthcoming</li></ul></>}</div><div className="lg:w-72 shrink-0 space-y-3">{marketRoute === "africa" ? <><a href="#influence-circle" className="block"><Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Join for the Selar link <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Final Selar product URL pending listing</p></> : <><a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block"><Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Open Payhip pre-order <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">USD route · final product URL should replace the store homepage</p></>}</div></div></div>
         </div>
       </section>
+
+      {/* Canonical library roadmap, FAQ, and closing invitation. */}
+      <section className="py-24 bg-[#EFECE6] border-t border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl space-y-5 mb-14"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Deep Encounter Library</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">One library. Different doors into the same encounter with God.</h2></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20"><div className="border-t-2 border-[#C5A059] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Now</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">The Influential Spirit</h3><p className="text-sm text-[#6B7280] mt-2">Formation before platform.</p></div><div className="border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming next</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">Unedited Christmas</h3><p className="text-sm text-[#6B7280] mt-2">A fresh encounter with the mystery of the incarnation.</p></div><div className="border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming 2027</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Holy Week Every Week · Prayer Craft · Discerning God's Whisper · The Spiritual Health Solution</p></div></div>
+          <div className="max-w-4xl"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Frequently Asked Questions</span><h2 className="font-serif text-4xl font-bold text-[#1E293B] mt-3 mb-8">Questions readers are already asking.</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-[#4B5563]"><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is this a leadership book?</h3><p className="mt-2">It's more than that. The Influential Spirit is a devotional about spiritual formation. Leadership, work, and influence are where that formation gets tested.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is the book against platforms?</h3><p className="mt-2">No. Ambition, visibility, leadership, none of that is the target here. The question underneath the whole book is simpler and harder: who are you becoming while you become visible?</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Do I need to be a leader to read it?</h3><p className="mt-2">No. Influence here has nothing to do with a title. It's about ordinary responsibility, character, and the people who are already watching your life.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is it only for pastors?</h3><p className="mt-2">No. It's written for professionals, entrepreneurs, ministry leaders, young adults, and anyone trying to live out their faith where they actually spend their week.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Can I use it with a group?</h3><p className="mt-2">Yes. The Formation Bundle and Complete Formation Edition both include the six-session Group Study Guide.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Can I listen instead of read?</h3><p className="mt-2">Yes. The Formation Bundle includes the author-narrated audiobook.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is there a journal?</h3><p className="mt-2">Yes, in the Complete Formation Edition.</p></div></div></div>
+        </div>
+      </section>
+
+      <section className="py-24 bg-[#1E293B] text-white text-center border-t border-[#C5A059]/30"><div className="max-w-3xl mx-auto px-4 sm:px-6"><h2 className="font-serif text-4xl sm:text-5xl font-bold">Your influence does not start when you get the platform.</h2><p className="text-[#CBD5E1] text-lg leading-relaxed mt-5">It starts with who you're becoming right now, before anyone's watching.</p><div className="flex flex-col sm:flex-row justify-center gap-4 mt-8"><a href="#formats"><Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-8 py-6">Begin the 30-Day Journey <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><a href="#influence-circle"><Button variant="outline" className="border-[#C5A059]/60 text-white hover:bg-white/10 font-semibold px-8 py-6">Join the Influence Circle</Button></a></div><p className="text-xs uppercase tracking-[0.22em] text-[#C5A059] mt-8">Grounded in Scripture · Forged for Impact</p></div></section>
 
       {/* Footer */}
       <footer className="bg-[#111827] text-[#94A3B8] py-14 border-t border-slate-800">

@@ -186,3 +186,13 @@
 - [ ] Build, test, visually verify, and checkpoint the completed revision.
 
 ## End Current Request
+
+## Current Request: Canonical Landing-Page Copy Audit
+
+- [x] Extract the attached canonical landing-page copy and section sequence.
+- [x] Compare the canonical copy against `client/src/pages/Home.tsx`.
+- [x] Preserve approved route-first and pre-order decisions while restoring missing or drifted copy.
+- [x] Run a clean production build and inspect desktop/mobile rendering.
+- [x] Save a new checkpoint and deliver the corrected version.
+
+## End Current Request
