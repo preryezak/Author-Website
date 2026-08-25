@@ -150,3 +150,26 @@
 - [ ] Report accurately what was configured in Kit, what remains draft, and any user approvals still required.
 
 ## End Current Request
+
+## Current Request: Influential Spirit Pre-Order Landing Page Revision
+
+- [ ] Read and use InfluentialSpiritLandingpagecopy.docx as the landing-page copy source of truth.
+- [ ] Treat Payhip and Selar pre-orders as confirmed capabilities, subject to exact product URLs and delivery terms.
+- [ ] Revise the page sequence so email capture, preview access, pre-order, and launch-day access are clearly distinguished.
+- [ ] Add a clear preview placement and recommend the best preview format.
+- [ ] Preserve accurate pricing, package contents, regional routing, and future-release capture logic.
+- [ ] Audit the revised copy against humanize-ai-text, authentic-human-writer, and Pastor Eryeza’s pastoral voice before delivery.
+- [ ] Verify the revised page responsively and save a new checkpoint after approval.
+
+## End Current Request
+
+## Current Request: Confirmed Bundle Contents and 16-Page Preview
+
+- [ ] Treat the author-narrated audiobook and all listed Formation and Complete bundle resources as available for delivery on 15 September 2026.
+- [ ] Replace the temporary preview placeholder with a clear 16-page PDF preview entry point when the source PDF is supplied or created.
+- [ ] Use an in-page PDF viewer for instant preview, with a fallback open/download link for browsers that do not render embedded PDFs.
+- [ ] Update the pre-order landing-page copy and edition cards from the supplied document.
+- [ ] Keep the actual Payhip and Selar product URLs as explicit inputs before activating the purchase buttons.
+- [ ] Audit all updated copy for factual accuracy, theological integrity, and Pastor Eryeza’s voice before delivery.
+
+## End Current Request

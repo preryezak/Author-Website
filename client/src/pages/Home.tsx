@@ -79,7 +79,7 @@ export default function Home() {
           <div>
             <a href="#formats">
               <Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-6 py-5 shadow-sm transition-all tracking-wide text-sm">
-                Acquire Your Copy
+                    Pre-Order
               </Button>
             </a>
           </div>
@@ -96,7 +96,7 @@ export default function Home() {
             <div className="lg:col-span-7 space-y-8 text-left">
               <div className="inline-flex items-center space-x-2 bg-[#EFECE6] border border-[#C5A059]/40 rounded-full px-5 py-2 text-xs font-bold text-[#1E293B] tracking-widest uppercase">
                 <Feather className="w-3.5 h-3.5 text-[#C5A059]" />
-                <span>Book 1 &bull; Digital Launch 15 September 2026</span>
+                <span>Flagship Devotional Release &bull; Book 1</span>
               </div>
               
               <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#1E293B] leading-[1.08]">
@@ -108,19 +108,19 @@ export default function Home() {
               </p>
               
               <p className="text-base sm:text-lg text-[#6B7280] leading-relaxed max-w-2xl font-sans">
-                Friend, influence is not the problem. Unformed influence is. This book is for the person who wants to keep showing up, leading, working, serving, and making a difference while allowing Christ to form the person behind the influence.
+                Friend, if you have ever wanted your daily work to carry eternal weight, not empty titles, not applause you can screenshot, this book was written for you. The Influential Spirit is a devotional for the part of you nobody applauds, the part Christ is shaping while you wait for the door to open.
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 pt-2">
                 <a href="#formats">
                   <Button size="lg" className="bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-9 py-7 text-base shadow-xl border border-[#C5A059]/30">
-                    Choose Your Edition
+                    Pre-Order Your Edition
                     <ChevronRight className="ml-2 w-5 h-5 text-[#C5A059]" />
                   </Button>
                 </a>
-                  <a href="#influence-circle">
+                  <a href="#preview">
                   <Button size="lg" variant="outline" className="border-[#1E293B]/20 hover:bg-[#EFECE6] text-[#1E293B] font-semibold px-8 py-7 text-base">
-                    Join the Influence Circle
+                    See What You’ll Practice
                   </Button>
                 </a>
               </div>
@@ -133,11 +133,11 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>PDF &amp; EPUB on Launch</span>
+                  <span>PDF &amp; EPUB on 15 September</span>
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>Secure Payhip Checkout</span>
+                  <span>Payhip &amp; Selar Pre-order Routes</span>
                 </div>
               </div>
             </div>
@@ -160,13 +160,37 @@ export default function Home() {
                   </div>
 
                   <div className="mt-5 text-center space-y-1.5 border-t border-[#E6E0D4]/80 pt-4">
-                    <span className="text-xs text-[#1E293B] font-serif font-bold tracking-[0.2em] block uppercase">Digital Master Edition</span>
-                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">PDF &amp; EPUB Available Now &bull; Print &amp; Audio Forthcoming</span>
+                    <span className="text-xs text-[#1E293B] font-serif font-bold tracking-[0.2em] block uppercase">Digital Pre-order Edition</span>
+                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">PDF &amp; EPUB delivered 15 September &bull; Audiobook in Formation bundles</span>
                   </div>
                 </div>
               </div>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* Preview placement: reserve this editorial module for the approved sample PDF or HTML excerpt. */}
+      <section id="preview" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+            <div className="lg:col-span-5 space-y-5">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">A First Look Inside</span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">See what you’ll practice.</h2>
+              <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The preview will give you a few pages of the journey before you decide to pre-order. It will sit here as a quiet reading experience, not a sales interruption.</p>
+              <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">“Who are you becoming while you become visible?”</p>
+            </div>
+            <div className="lg:col-span-7 bg-[#EFECE6] border border-[#C5A059]/40 p-7 sm:p-10 relative">
+              <div className="absolute top-0 left-0 w-20 h-1 bg-[#C5A059]"></div>
+              <div className="flex items-center justify-between gap-4 mb-6">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Preview module</span>
+                <span className="text-[10px] uppercase tracking-[0.18em] text-[#6B7280] font-semibold">5–7 pages recommended</span>
+              </div>
+              <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-3">A sample reading from the 30-day devotional</h3>
+              <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed max-w-2xl">Recommended format: a mobile-friendly HTML reading view with an optional lightweight PDF download. HTML keeps the first encounter readable on a phone; the PDF gives readers a simple file to save and print.</p>
+              <div className="mt-7 pt-5 border-t border-[#C5A059]/30 text-xs uppercase tracking-[0.18em] text-[#6B7280] font-semibold">Preview file will be added before the pre-order campaign opens</div>
+            </div>
           </div>
         </div>
       </section>
@@ -196,7 +220,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -213,7 +237,7 @@ export default function Home() {
             </div>
 
             {/* Pillar 2 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -230,7 +254,7 @@ export default function Home() {
             </div>
 
             {/* Pillar 3 */}
-            <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm hover:border-[#C5A059] transition-all relative overflow-hidden group">
+            <div className="bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -245,6 +269,30 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Formation pathway: the supplied copy’s 30-day journey and audience fit. */}
+      <section className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+            <div className="lg:col-span-5 space-y-6">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">A 30-Day Journey of Formation</span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">The work begins before the platform.</h2>
+              <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The journey starts with Jesus, not a platform. Through prayer, obedience, service, dependence, and pressure, Christ forms the person who can carry influence without being carried away by it.</p>
+              <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">Your workplace, your home, your church, and your street are already places where your life is speaking.</p>
+            </div>
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7">
+              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Invitation · Days 1–5</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Come close before you lead.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">The journey begins with Jesus, not a platform.</p></div>
+              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Transformation · Days 6–15</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Let Christ reshape you.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Character, prayer, obedience, service, and dependence become the work.</p></div>
+              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Crucible · Days 16–20</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Pressure reveals what visibility hides.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Offense, praise, delay, and difficulty expose what has been formed.</p></div>
+              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Multiplication · Days 21–30</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Turn what you have received outward.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Influence becomes stewardship when it lifts someone else.</p></div>
+            </div>
+          </div>
+          <div className="mt-20 pt-10 border-t border-[#E6E0D4] grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            <div className="lg:col-span-4"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">This Book Is for You If…</span><h3 className="font-serif text-3xl font-bold text-[#1E293B] mt-3">You are already influencing someone.</h3></div>
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-[#4B5563] leading-relaxed"><p>• You sense God has called you toward influence and want to be ready for what it asks of you.</p><p>• You are trying to live faithfully at your desk, not only on Sunday.</p><p>• You are building a business, ministry, or family, and it is shaping other people.</p><p>• You are young, ambitious, and wondering how faith should shape that ambition.</p><p>• You are already visible and beginning to feel what visibility costs.</p><p>• You want your ordinary life to carry the weight of Christ’s name well.</p></div>
           </div>
         </div>
       </section>
@@ -364,7 +412,7 @@ export default function Home() {
           <div className="mb-14">
             <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Perspectives on the Author's Work</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
                   <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
@@ -377,7 +425,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
                   <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
@@ -398,7 +446,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
               {/* Review 1: The Rebecca Review (US) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -416,7 +464,7 @@ export default function Home() {
               </div>
 
               {/* Review 2: Jeff Mutenga (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -434,7 +482,7 @@ export default function Home() {
               </div>
 
               {/* Review 3: Chris Gould (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -452,7 +500,7 @@ export default function Home() {
               </div>
 
               {/* Review 4: SP80 (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between">
+              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -470,7 +518,7 @@ export default function Home() {
               </div>
 
               {/* Review 5: Andrew T (UK) */}
-              <div className="bg-[#FAF8F5] border-2 border-[#E6E0D4] p-8 rounded-md shadow-sm relative flex flex-col justify-between md:col-span-2 max-w-xl mx-auto w-full">
+              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between md:col-span-2 max-w-xl mx-auto w-full">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -509,11 +557,11 @@ export default function Home() {
                 Pastor at Rivers of Life Healing Centre-Kawuku, Author, & Publishing Consultant
               </p>
               <p className="text-sm text-[#6B7280] leading-relaxed font-sans">
-                Operating from Kawuku-Entebbe, Uganda, my burden is straightforward: to help believers stop managing their faith at the surface and start carrying the genuine weight of scriptural discipleship into every room they enter.
+                Operating from Kawuku-Entebbe, Uganda, my burden is simple: to help believers stop managing their faith at the surface and start carrying the real weight of scriptural discipleship into every room they enter.
               </p>
             </div>
 
-            <div className="lg:col-span-7 bg-[#FAF8F5] p-8 sm:p-12 rounded-2xl border-2 border-[#E6E0D4] shadow-md relative">
+            <div className="lg:col-span-7 bg-[#FAF8F5] p-8 sm:p-12 rounded-none border-l-2 border-t border-[#C5A059] shadow-none relative">
               <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-8">
                 <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-[#C5A059]/40 shadow-lg shrink-0 bg-[#EFECE6]">
                   <img 
@@ -550,28 +598,33 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Digital Launch &bull; 15 September 2026</span>
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Pre-order now &bull; Digital delivery 15 September 2026</span>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Choose Your Edition</h2>
-            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">The digital edition launches on 15 September 2026 in PDF and EPUB. Print and audiobook editions are in preparation.</p>
+            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">Choose the package that fits your season. Pre-order through the route that serves you best; the digital files will be delivered on 15 September 2026.</p>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
+            <div className="border border-[#C5A059]/40 bg-[#0F172A]/70 p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Reader Edition</span><h3 className="font-serif text-2xl text-white font-bold mt-2">US$15 / UGX 45,000</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">Designed digital reading edition with reflowable EPUB and PDF delivery.</p></div>
+            <div className="border-2 border-[#C5A059] bg-[#0F172A] p-6 relative"><span className="absolute -top-3 left-5 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Formation Bundle</span><h3 className="font-serif text-2xl text-white font-bold mt-2">US$29 / UGX 90,000</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">Digital edition, author-narrated audiobook, six-session Group Study Guide, and 30-Day Reading Plan &amp; Challenge.</p></div>
+            <div className="border border-[#C5A059]/40 bg-[#0F172A]/70 p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Complete Formation</span><h3 className="font-serif text-2xl text-white font-bold mt-2">US$49 / UGX 150,000</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">Everything in Formation, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.</p></div>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="bg-[#0F172A] rounded-md p-8 sm:p-10 border border-[#C5A059]/50 shadow-2xl flex flex-col justify-between">
+            <div className="bg-[#0F172A] rounded-none p-8 sm:p-10 border-l-2 border-t border-[#C5A059]/50 shadow-2xl flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Uganda &amp; Africa</Badge><span className="font-serif text-3xl font-bold text-white">UGX 45,000</span></div>
-                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Selar route</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the regional route for local pricing and payment convenience. The Selar product link will be added here before launch.</p></div>
+                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order on Selar</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the Uganda and Africa route for local pricing and payment convenience. The final Selar pre-order link will be added before the campaign opens.</p></div>
                 <p className="text-sm text-[#CBD5E1] border-t border-slate-800 pt-4">Want to help others discover the book? Become an affiliate through the Selar pathway.</p>
               </div>
-              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="#influence-circle" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Get Selar launch notice <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Regional route • Selar product link will be added before launch</p></div>
+              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="#influence-circle" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Get Selar pre-order link <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Uganda &amp; Africa • Selar pre-order link pending final listing</p></div>
             </div>
 
-            <div className="bg-[#0F172A] rounded-md p-8 sm:p-10 border-2 border-[#C5A059] shadow-2xl flex flex-col justify-between">
+            <div className="bg-[#0F172A] rounded-none p-8 sm:p-10 border-l-2 border-t-2 border-[#C5A059] shadow-2xl flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">International</Badge><span className="font-serif text-3xl font-bold text-white">US$15</span></div>
-                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Buy on Payhip</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Get the complete 30-day devotional in high-resolution PDF and EPUB formats with secure digital delivery.</p></div>
-                <ul className="space-y-3 text-sm text-[#CBD5E1] border-t border-slate-800 pt-4"><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> PDF and EPUB digital edition</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Automatic download delivery</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Print and audiobook editions forthcoming</li></ul>
+                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order on Payhip</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the international route for USD pricing and secure digital delivery. Payhip’s pre-order setup will deliver the final PDF and EPUB on 15 September 2026.</p></div>
+                <ul className="space-y-3 text-sm text-[#CBD5E1] border-t border-slate-800 pt-4"><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> PDF and EPUB digital edition</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Automatic download delivery</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Author-narrated audiobook in Formation and Complete bundles; print forthcoming</li></ul>
               </div>
-              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Receive the digital edition <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">International route • Secure Payhip checkout</p></div>
+              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Open Payhip pre-order <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">International • Payhip pre-order route</p></div>
             </div>
           </div>
         </div>
