@@ -224,3 +224,22 @@
 - [x] Save and deliver the hardened checkpoint.
 
 ## End Current Request
+
+## Current Request: Shipping Verification
+
+- [x] Sync the shared project and inspect the latest version.
+- [x] Confirm the latest source changes and checkpoint are built successfully.
+- [x] Verify the published preview reflects the latest shipped version.
+- [x] Report whether anything remains unshipped.
+
+## End Current Request
+
+## Current Request: Visual-Editor Comment Resolution
+
+- [x] Map all 19 editor comments to current source and decide the safe customer-facing implementation.
+- [x] Remove internal commentary and stale implementation notes from rendered UI.
+- [x] Resolve navigation, route labels, payment wording, bundle CTAs, and final CTA destinations.
+- [x] Upgrade plain-text blocks, review contrast, the experience section, and FAQ into polished interactive UI.
+- [x] Build, test, inspect desktop/mobile, and save a checkpoint.
+
+## End Current Request

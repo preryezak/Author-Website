@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus, Menu, X } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus, Menu, X, BookOpen, MessageCircle, UsersRound, Footprints, HeartHandshake, Crown, Flame, Gauge, HandHeart, BriefcaseBusiness, House, GraduationCap, Eye } from "lucide-react";
 import { toast } from "sonner";
 
 const bundleOptions = [
@@ -13,33 +14,8 @@ const bundleOptions = [
   { name: "Complete Formation", usd: 49, ugx: 150000, description: "Everything in Formation, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", popular: false },
 ] as const;
 
-const selarAfricanCurrencies = ["UGX", "NGN", "KES", "GHS", "TZS", "XOF", "XAF", "ZMW", "RWF", "ZAR"] as const;
-
-const currencyLocales: Record<string, string> = {
-  UGX: "en-UG", NGN: "en-NG", KES: "en-KE", GHS: "en-GH", TZS: "sw-TZ", XOF: "fr-SN", XAF: "fr-CM", ZMW: "en-ZM", RWF: "rw-RW", ZAR: "en-ZA",
-};
-
-const roundForCurrency = (currency: string, amount: number) => {
-  const increments: Record<string, number> = { UGX: 5000, NGN: 500, KES: 100, GHS: 10, TZS: 1000, XOF: 500, XAF: 500, ZMW: 10, RWF: 500, ZAR: 10 };
-  const increment = increments[currency] ?? 1;
-  return Math.max(increment, Math.round(amount / increment) * increment);
-};
-
-const formatCurrencyEstimate = (currency: string, amount: number) => new Intl.NumberFormat(currencyLocales[currency] ?? "en", { style: "currency", currency, maximumFractionDigits: 0 }).format(roundForCurrency(currency, amount));
-
-const inferAfricanCurrency = () => {
-  if (typeof navigator === "undefined") return "UGX" as const;
-  const locale = navigator.language.toLowerCase();
-  const localeCurrency: Record<string, (typeof selarAfricanCurrencies)[number]> = { ng: "NGN", ke: "KES", gh: "GHS", tz: "TZS", sn: "XOF", ci: "XOF", cm: "XAF", zm: "ZMW", rw: "RWF", za: "ZAR", ug: "UGX" };
-  const country = locale.split("-")[1] ?? "";
-  return localeCurrency[country] ?? "UGX";
-};
-
 export default function Home() {
-  const [selectedFormat, setSelectedFormat] = useState<"ebook" | "bundle">("ebook");
   const [marketRoute, setMarketRoute] = useState<"international" | "africa">("international");
-  const [africaCurrency, setAfricaCurrency] = useState<(typeof selarAfricanCurrencies)[number]>(() => inferAfricanCurrency());
-  const [ugxRates, setUgxRates] = useState<Record<string, number>>({ UGX: 1 });
   const [reviewName, setReviewName] = useState("");
   const [reviewRole, setReviewRole] = useState("");
   const [reviewText, setReviewText] = useState("");
@@ -48,17 +24,6 @@ export default function Home() {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const kitFormRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("https://open.er-api.com/v6/latest/UGX")
-      .then((response) => response.ok ? response.json() : Promise.reject(new Error("Rate service unavailable")))
-      .then((payload: { rates?: Record<string, number> }) => {
-        if (!cancelled && payload.rates) setUgxRates({ UGX: 1, ...payload.rates });
-      })
-      .catch(() => undefined);
-    return () => { cancelled = true; };
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => setHasScrolled(window.scrollY > 12);
@@ -120,8 +85,6 @@ export default function Home() {
     }, 2500);
   };
 
-  const activeAfricanRate = ugxRates[africaCurrency] ?? 1;
-
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F4EF] text-[#1A1A1A] font-sans selection:bg-[#C5A059] selection:text-white">
       {/* Top Announcement Bar */}
@@ -133,8 +96,9 @@ export default function Home() {
       <header className={`sticky top-0 z-50 relative transition-shadow duration-300 ${hasScrolled ? "bg-[#F7F4EF]/98 shadow-[0_12px_30px_rgba(30,41,59,0.08)]" : "bg-[#F7F4EF]/95"} backdrop-blur-md border-b border-[#E6E0D4]`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="seal-hover w-12 h-12 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] font-serif font-bold text-2xl shadow-md border-2 border-[#C5A059]/40">
-              EK
+            <div className="seal-hover w-12 h-12 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border-2 border-[#C5A059]/40 relative" aria-label="Eryeza Kalalu publishing seal">
+              <Crown className="absolute w-4 h-4 top-1.5" />
+              <span className="font-serif font-bold text-lg mt-2">EK</span>
             </div>
             <div>
               <span className="font-serif font-bold text-2xl tracking-tight text-[#1E293B] block leading-none">Eryeza Kalalu</span>
@@ -260,25 +224,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Preview placement: reserve this editorial module for the approved sample PDF or HTML excerpt. */}
       <section id="preview" data-reveal="preview" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             <div className="lg:col-span-5 space-y-5">
               <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">A First Look Inside</span>
               <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">See what you’ll practice.</h2>
-              <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The preview will give you a few pages of the journey before you decide to pre-order. It will sit here as a quiet reading experience, not a sales interruption.</p>
+              <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">Before you decide to pre-order, spend a few quiet minutes with the journey. The opening pages will give you a feel for the voice, pace, and work this devotional invites.</p>
               <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">“Who are you becoming while you become visible?”</p>
             </div>
             <div className="rule-glow lg:col-span-7 bg-[#EFECE6] border border-[#C5A059]/40 p-7 sm:p-10 relative">
               <div className="absolute top-0 left-0 w-20 h-1 bg-[#C5A059]"></div>
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Preview module</span>
-                <span className="text-[10px] uppercase tracking-[0.18em] text-[#6B7280] font-semibold">5–7 pages recommended</span>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="seal-hover inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#C5A059] text-[#C5A059] font-serif font-bold"><Eye className="w-4 h-4" /></span>
+                <div><span className="block text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">A quiet first look</span><span className="text-xs text-[#6B7280] font-semibold">Read before you decide</span></div>
               </div>
               <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-3">A sample reading from the 30-day devotional</h3>
-              <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed max-w-2xl">Recommended format: a mobile-friendly HTML reading view with an optional lightweight PDF download. HTML keeps the first encounter readable on a phone; the PDF gives readers a simple file to save and print.</p>
-              <div className="mt-7 pt-5 border-t border-[#C5A059]/30 text-xs uppercase tracking-[0.18em] text-[#6B7280] font-semibold">Preview file will be added before the pre-order campaign opens</div>
+              <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed max-w-2xl">The first pages will open here before launch, designed for an easy read on your phone and a simple return when you need to sit with a thought again.</p>
+              <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="preview-feature"><BookOpen className="w-4 h-4 text-[#C5A059]" /><span>Read a few pages</span></div>
+                <div className="preview-feature"><MessageCircle className="w-4 h-4 text-[#C5A059]" /><span>Hear the invitation</span></div>
+                <div className="preview-feature"><HeartHandshake className="w-4 h-4 text-[#C5A059]" /><span>Begin with honesty</span></div>
+              </div>
             </div>
           </div>
         </div>
@@ -391,16 +358,16 @@ export default function Home() {
               <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The journey starts with Jesus, not a platform. Through prayer, obedience, service, dependence, and pressure, Christ forms the person who can carry influence without being carried away by it.</p>
               <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">Your workplace, your home, your church, and your street are already places where your life is speaking.</p>
             </div>
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7">
-              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Invitation · Days 1–5</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Come close before you lead.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">The journey begins with Jesus, not a platform.</p></div>
-              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Transformation · Days 6–15</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Let Christ reshape you.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Character, prayer, obedience, service, and dependence become the work.</p></div>
-              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Crucible · Days 16–20</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Pressure reveals what visibility hides.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Offense, praise, delay, and difficulty expose what has been formed.</p></div>
-              <div className="border-t border-[#C5A059] pt-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">The Multiplication · Days 21–30</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Turn what you've been given outward.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Influence becomes stewardship.</p></div>
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="journey-card"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Days 1–5</span><Footprints className="w-5 h-5 text-[#C5A059]" /></div><span className="block text-[10px] uppercase tracking-[0.15em] text-[#6B7280] font-semibold mt-4">The Invitation</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Come close before you lead.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">The journey begins with Jesus, not a platform.</p></div>
+              <div className="journey-card"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Days 6–15</span><Flame className="w-5 h-5 text-[#C5A059]" /></div><span className="block text-[10px] uppercase tracking-[0.15em] text-[#6B7280] font-semibold mt-4">The Transformation</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Let Christ reshape you.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Character, prayer, obedience, service, and dependence become the work.</p></div>
+              <div className="journey-card"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Days 16–20</span><Gauge className="w-5 h-5 text-[#C5A059]" /></div><span className="block text-[10px] uppercase tracking-[0.15em] text-[#6B7280] font-semibold mt-4">The Crucible</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Pressure reveals what visibility hides.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Offense, praise, delay, and difficulty expose what has been formed.</p></div>
+              <div className="journey-card"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Days 21–30</span><HandHeart className="w-5 h-5 text-[#C5A059]" /></div><span className="block text-[10px] uppercase tracking-[0.15em] text-[#6B7280] font-semibold mt-4">The Multiplication</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Turn what you've been given outward.</p><p className="text-sm text-[#6B7280] leading-relaxed mt-2">Influence becomes stewardship.</p></div>
             </div>
           </div>
           <div className="mt-20 pt-10 border-t border-[#E6E0D4] grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             <div className="lg:col-span-4"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">This Book Is for You If…</span><h3 className="font-serif text-3xl font-bold text-[#1E293B] mt-3">You are already influencing someone.</h3></div>
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-[#4B5563] leading-relaxed"><p>• You sense God has called you toward influence and want to be ready for what it asks of you.</p><p>• You are trying to live faithfully at your desk, not only on Sunday.</p><p>• You are building a business, ministry, or family, and it is already shaping other people.</p><p>• You disciple people who will go on to lead.</p><p>• You are young, ambitious, and wondering how faith should shape that ambition.</p><p>• You are already visible and beginning to feel what visibility costs.</p><p>• You want your ordinary life to carry the weight of Christ’s name well.</p><p>• You do not need a title to begin. Your workplace, your home, your church, and your street are already places where your life is speaking.</p></div>
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-[#4B5563] leading-relaxed"><div className="audience-item"><BriefcaseBusiness className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You sense God has called you toward influence and want to be ready for what it asks of you.</span></div><div className="audience-item"><House className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You are trying to live faithfully at your desk, not only on Sunday.</span></div><div className="audience-item"><UsersRound className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You are building a business, ministry, or family, and it is already shaping other people.</span></div><div className="audience-item"><GraduationCap className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You disciple people who will go on to lead.</span></div><div className="audience-item"><Flame className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You are young, ambitious, and wondering how faith should shape that ambition.</span></div><div className="audience-item"><Eye className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You are already visible and beginning to feel what visibility costs.</span></div><div className="audience-item"><HeartHandshake className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You want your ordinary life to carry the weight of Christ’s name well.</span></div><div className="audience-item"><Footprints className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span>You do not need a title to begin. Your workplace, your home, your church, and your street are already places where your life is speaking.</span></div></div>
           </div>
           <div className="mt-20 pt-10 border-t border-[#E6E0D4] grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
             <div className="space-y-4">
@@ -409,10 +376,10 @@ export default function Home() {
               <p className="text-[#6B7280] text-base leading-relaxed">The desk. The classroom. The clinic. The boardroom. The market stall. The ministry office. The kitchen table.</p>
               <p className="text-[#6B7280] text-base leading-relaxed">These are the places where your character actually shows. Your work can be worship. Your competence can be a form of love for the people you serve. Your character, more than your sermon, is what your coworkers will actually remember.</p>
             </div>
-            <div className="space-y-4">
-              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">What You Will Explore</span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm text-[#4B5563] leading-relaxed"><p><strong className="text-[#1E293B]">Character</strong> · who you are when no one's watching.</p><p><strong className="text-[#1E293B]">Prayer</strong> · whether your public life stays tethered to a private one.</p><p><strong className="text-[#1E293B]">The Holy Spirit</strong> · what dependence on God looks like outside the dramatic moments.</p><p><strong className="text-[#1E293B]">Competence</strong> · how excellence and reliance on God work together, not against each other.</p><p><strong className="text-[#1E293B]">Leadership</strong> · whether you can lead before anyone hands you a title.</p><p><strong className="text-[#1E293B]">Pressure</strong> · what difficulty reveals about who you've actually become.</p><p><strong className="text-[#1E293B]">Service</strong> · what happens when influence turns into lifting someone else.</p><p><strong className="text-[#1E293B]">Legacy</strong> · what's left standing after the applause stops.</p></div>
-            </div>
+              <div className="space-y-4">
+                <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">What You Will Explore</span>
+                <div className="explore-panel grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-[#4B5563] leading-relaxed"><div className="explore-item"><Crown className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Character</strong> · who you are when no one's watching.</span></div><div className="explore-item"><BookOpen className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Prayer</strong> · whether your public life stays tethered to a private one.</span></div><div className="explore-item"><Flame className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">The Holy Spirit</strong> · what dependence on God looks like outside the dramatic moments.</span></div><div className="explore-item"><Gauge className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Competence</strong> · how excellence and reliance on God work together, not against each other.</span></div><div className="explore-item"><UsersRound className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Leadership</strong> · whether you can lead before anyone hands you a title.</span></div><div className="explore-item"><Shield className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Pressure</strong> · what difficulty reveals about who you've actually become.</span></div><div className="explore-item"><HandHeart className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Service</strong> · what happens when influence turns into lifting someone else.</span></div><div className="explore-item"><Award className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" /><span><strong className="text-[#1E293B]">Legacy</strong> · what's left standing after the applause stops.</span></div></div>
+              </div>
           </div>
         </div>
       </section>
@@ -441,7 +408,7 @@ export default function Home() {
             <div className="lift-card lg:col-span-5 bg-[#F7F4EF] text-[#1E293B] p-6 sm:p-8 rounded-md border border-[#C5A059]/50 shadow-2xl">
               <div className="border-b border-[#C5A059]/40 pb-4 mb-5">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Library Dispatch</span>
-                <h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-1">A word before launch day.</h3>
+                <h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-1">Stay close to the journey.</h3>
               </div>
               <div ref={kitFormRef} className="min-h-[112px]" aria-label="Influence Circle signup form"></div>
                   <p className="text-[11px] text-[#6B7280] leading-relaxed mt-4 border-t border-[#C5A059]/30 pt-4">By joining, you are signing up for Influence Circle launch and library communications. THE CCN DAILY weekly newsletter remains on Substack.</p>
@@ -532,9 +499,9 @@ export default function Home() {
           <div className="mb-14">
             <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-6 text-center">Perspectives on the Author's Work</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
+                  <div className="quote-mark">“</div>
                   <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
                     "The principles Pastor Eryeza writes daily can influence a chef on the kitchen table to the judge on the verdict table."
                   </blockquote>
@@ -545,9 +512,9 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="text-[#C5A059] font-serif text-5xl opacity-30 leading-none">“</div>
+                  <div className="quote-mark">“</div>
                   <blockquote className="font-serif text-lg text-[#1E293B] italic leading-relaxed">
                     "In every generation, I believe God chooses to reveal Himself. Pastor Eryeza is one of those that God has set apart to shine a light on His people in these dark, turbulent times. He exudes a lot of charisma, with excellent oratory and writing skills."
                   </blockquote>
@@ -567,7 +534,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
               {/* Review 1: The Rebecca Review (US) */}
-              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -585,7 +552,7 @@ export default function Home() {
               </div>
 
               {/* Review 2: Jeff Mutenga (UK) */}
-              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -603,7 +570,7 @@ export default function Home() {
               </div>
 
               {/* Review 3: Chris Gould (UK) */}
-              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -621,7 +588,7 @@ export default function Home() {
               </div>
 
               {/* Review 4: SP80 (UK) */}
-              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between">
+              <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
                     {[...Array(5)].map((_, i) => (
@@ -633,7 +600,7 @@ export default function Home() {
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <span className="font-bold text-[#1E293B]">SPBO</span>
+                  <span className="font-bold text-[#1E293B]">SP80</span>
                   <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United Kingdom &bull; Amazon Verified Purchase</span>
                 </div>
               </div>
@@ -700,16 +667,6 @@ export default function Home() {
                   <blockquote className="font-serif text-lg sm:text-xl text-[#1E293B] italic leading-relaxed">
                     "We are not called to whisper our faith in the corner while the world dictates the culture. When your inner life is anchored in Christ, your quiet competence carries more authority than any title ever could."
                   </blockquote>
-                  <div className="pt-4 border-t border-[#E6E0D4] flex flex-wrap items-center justify-center sm:justify-between text-xs text-[#6B7280] gap-4">
-                    <div>
-                      <strong className="text-[#1E293B] block font-sans">Series Masterplan</strong>
-                      The Deep Encounter Library
-                    </div>
-                    <div>
-                      <strong className="text-[#1E293B] block font-sans">Devotional Series</strong>
-                      Book 1
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -718,8 +675,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Canonical product experience section: the journey continues beyond the final devotional page. */}
-      <section data-reveal="experience" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="max-w-3xl space-y-5 mb-10"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The 30-Day Experience Doesn't End With the Last Page</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Day 30 is not the finish line. It's a hand-off.</h2></div><div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 text-sm text-[#4B5563]"><div><strong className="block font-serif text-lg text-[#1E293B]">Read</strong><span>the complete 30-day devotional.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Listen</strong><span>narrated in the author's own voice.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Reflect</strong><span>the companion Journal.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Gather</strong><span>the six-session Group Study Guide.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Practice</strong><span>the Reading Plan and Challenge.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Continue</strong><span>a 30-day WhatsApp journey.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Go Deeper</strong><span>the devotional app.</span></div></div></div></section>
+      <section data-reveal="experience" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="max-w-3xl space-y-5 mb-12"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The 30-Day Experience Doesn't End With the Last Page</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Day 30 is not the finish line. It's a hand-off.</h2><p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The devotional opens a path you can keep walking. Each resource gives the lesson another place to take root.</p></div><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><div className="experience-card"><BookOpen className="w-5 h-5 text-[#C5A059]" /><strong>Read</strong><span>the complete 30-day devotional.</span></div><div className="experience-card"><MessageCircle className="w-5 h-5 text-[#C5A059]" /><strong>Listen</strong><span>narrated in the author's own voice.</span></div><div className="experience-card"><Eye className="w-5 h-5 text-[#C5A059]" /><strong>Reflect</strong><span>with the companion Journal.</span></div><div className="experience-card"><UsersRound className="w-5 h-5 text-[#C5A059]" /><strong>Gather</strong><span>with the six-session Group Study Guide.</span></div><div className="experience-card"><Footprints className="w-5 h-5 text-[#C5A059]" /><strong>Practice</strong><span>with the Reading Plan and Challenge.</span></div><div className="experience-card"><MessageCircle className="w-5 h-5 text-[#C5A059]" /><strong>Continue</strong><span>through a 30-day WhatsApp journey.</span></div><div className="experience-card"><Compass className="w-5 h-5 text-[#C5A059]" /><strong>Go Deeper</strong><span>through the devotional app.</span></div></div></div></section>
 
       {/* Editions & Regional Routes */}
       <section id="formats" data-reveal="formats" className="py-24 bg-[#1E293B] text-[#F8FAFC] relative overflow-hidden">
@@ -732,17 +688,16 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 max-w-3xl mx-auto mb-10" role="tablist" aria-label="Choose your buying route">
-            <button type="button" role="tab" aria-selected={marketRoute === "international"} onClick={() => setMarketRoute("international")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "international" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Route I</span><span className="font-serif text-xl text-white font-bold">International</span><span className="block text-xs text-[#94A3B8] mt-1">Payhip · USD pricing</span></button>
-            <button type="button" role="tab" aria-selected={marketRoute === "africa"} onClick={() => setMarketRoute("africa")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "africa" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Route II</span><span className="font-serif text-xl text-white font-bold">Uganda &amp; Africa</span><span className="block text-xs text-[#94A3B8] mt-1">Selar · local currency pricing</span></button>
+            <button type="button" role="tab" aria-selected={marketRoute === "international"} onClick={() => setMarketRoute("international")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "international" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">International</span><span className="font-serif text-xl text-white font-bold">International</span><span className="block text-xs text-[#94A3B8] mt-1">Payhip · secure digital checkout</span></button>
+            <button type="button" role="tab" aria-selected={marketRoute === "africa"} onClick={() => setMarketRoute("africa")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "africa" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Africa</span><span className="font-serif text-xl text-white font-bold">Africa</span><span className="block text-xs text-[#94A3B8] mt-1">Selar · mobile money and card payment</span></button>
           </div>
 
-          {marketRoute === "africa" && <div className="max-w-6xl mx-auto mb-8 border-y border-[#C5A059]/30 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Selar currency view</span><span className="text-sm text-[#CBD5E1]">UGX is the anchor price. Other amounts are rounded planning estimates until fixed in Selar.</span></div><label className="text-sm text-white flex items-center gap-3">Show currency<select value={africaCurrency} onChange={(event) => setAfricaCurrency(event.target.value as (typeof selarAfricanCurrencies)[number])} className="bg-[#0F172A] border border-[#C5A059]/60 text-white px-3 py-2 text-sm"><option value="UGX">UGX · Uganda shilling</option>{selarAfricanCurrencies.filter((currency) => currency !== "UGX").map((currency) => <option key={currency} value={currency}>{currency}</option>)}</select></label></div>}
+          <div className="route-note max-w-6xl mx-auto mb-8"><div className="flex items-center gap-3"><span className="seal-hover inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#C5A059] text-[#C5A059] font-serif font-bold"><Crown className="w-4 h-4" /></span><span>{marketRoute === "africa" ? "Selar checkout supports mobile money and card payment across Africa." : "Payhip provides secure international checkout and digital delivery."}</span></div></div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
-            {bundleOptions.map((bundle) => <div key={bundle.name} className={`lift-card border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">{bundle.name}</span>{bundle.popular && <span className="absolute -top-3 left-5 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<h3 className="font-serif text-2xl text-white font-bold mt-2">{marketRoute === "international" ? `US$${bundle.usd}` : africaCurrency === "UGX" ? `UGX ${bundle.ugx.toLocaleString("en-UG")}` : formatCurrencyEstimate(africaCurrency, bundle.ugx * activeAfricanRate)}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">{bundle.description}</p></div>)}
+            {bundleOptions.map((bundle) => <div key={bundle.name} className={`lift-card bundle-card border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative flex flex-col`}><div className="flex items-start justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Library edition</span><span className="block text-xs text-[#94A3B8] mt-1">Volume I · Digital formation</span></div><span className="edition-seal" aria-hidden="true"><Crown className="w-4 h-4" /></span></div>{bundle.popular && <span className="self-start mt-4 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<span className="block font-serif text-lg text-[#C5A059] mt-4">{bundle.name}</span><h3 className="font-serif text-2xl text-white font-bold mt-3">{marketRoute === "international" ? `US$${bundle.usd}` : `UGX ${bundle.ugx.toLocaleString("en-UG")}`}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3 flex-1">{bundle.description}</p><a href={marketRoute === "international" ? "https://payhip.com/ccndaily" : "#influence-circle"} target={marketRoute === "international" ? "_blank" : undefined} rel={marketRoute === "international" ? "noopener noreferrer" : undefined} className="inline-flex items-center justify-center gap-2 mt-6 border border-[#C5A059]/60 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#C5A059] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]">{marketRoute === "international" ? "Pre-order via Payhip" : "Pre-order via Selar"}<ChevronRight className="w-4 h-4 text-[#C5A059]" /></a></div>)}
           </div>
 
-          <div className="max-w-5xl mx-auto border-t border-[#C5A059]/30 pt-10"><div className="bg-[#0F172A] rounded-none p-8 sm:p-10 border-l-2 border-t-2 border-[#C5A059] shadow-2xl flex flex-col lg:flex-row lg:items-end justify-between gap-8"><div className="space-y-5 max-w-2xl">{marketRoute === "africa" ? <><div className="flex items-center gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Uganda &amp; Africa · Selar</Badge><span className="font-serif text-3xl font-bold text-white">{africaCurrency === "UGX" ? "UGX 45,000" : formatCurrencyEstimate(africaCurrency, 45000 * activeAfricanRate)}</span></div><div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order through Selar</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Choose the currency that matches your Selar checkout. The selector gives you a rounded estimate from the UGX anchor price; Selar remains the final source of truth for the fixed amount.</p></div><p className="text-sm text-[#CBD5E1] border-t border-slate-800 pt-4">Want to help others discover the book? Become an affiliate through the Selar pathway.</p></> : <><div className="flex items-center gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">International · Payhip</Badge><span className="font-serif text-3xl font-bold text-white">US$15</span></div><div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order through Payhip</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the international route for USD pricing and secure digital delivery. Payhip’s pre-order setup will deliver the final PDF and EPUB on 15 September 2026.</p></div><ul className="space-y-3 text-sm text-[#CBD5E1] border-t border-slate-800 pt-4"><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> PDF and EPUB digital edition</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Automatic download delivery</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Author-narrated audiobook in Formation and Complete bundles; print forthcoming</li></ul></>}</div><div className="lg:w-72 shrink-0 space-y-3">{marketRoute === "africa" ? <><a href="#influence-circle" className="block"><Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Join for the Selar link <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Final Selar product URL pending listing</p></> : <><a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block"><Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Open Payhip pre-order <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">USD route · final product URL should replace the store homepage</p></>}</div></div></div>
         </div>
       </section>
 
@@ -751,7 +706,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-5 mb-14"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Deep Encounter Library</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">One library. Different doors into the same encounter with God.</h2></div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20"><div className="lift-card border-t-2 border-[#C5A059] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Now</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">The Influential Spirit</h3><p className="text-sm text-[#6B7280] mt-2">Formation before platform.</p></div><div className="lift-card border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming next</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">Unedited Christmas</h3><p className="text-sm text-[#6B7280] mt-2">A fresh encounter with the mystery of the incarnation.</p></div><div className="lift-card border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming 2027</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Holy Week Every Week · Prayer Craft · Discerning God's Whisper · The Spiritual Health Solution</p></div></div>
-          <div className="max-w-4xl"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Frequently Asked Questions</span><h2 className="font-serif text-4xl font-bold text-[#1E293B] mt-3 mb-8">Questions readers are already asking.</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-[#4B5563]"><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is this a leadership book?</h3><p className="mt-2">It's more than that. The Influential Spirit is a devotional about spiritual formation. Leadership, work, and influence are where that formation gets tested.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is the book against platforms?</h3><p className="mt-2">No. Ambition, visibility, leadership, none of that is the target here. The question underneath the whole book is simpler and harder: who are you becoming while you become visible?</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Do I need to be a leader to read it?</h3><p className="mt-2">No. Influence here has nothing to do with a title. It's about ordinary responsibility, character, and the people who are already watching your life.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is it only for pastors?</h3><p className="mt-2">No. It's written for professionals, entrepreneurs, ministry leaders, young adults, and anyone trying to live out their faith where they actually spend their week.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Can I use it with a group?</h3><p className="mt-2">Yes. The Formation Bundle and Complete Formation Edition both include the six-session Group Study Guide.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Can I listen instead of read?</h3><p className="mt-2">Yes. The Formation Bundle includes the author-narrated audiobook.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is there a journal?</h3><p className="mt-2">Yes, in the Complete Formation Edition.</p></div></div></div>
+          <div className="max-w-4xl"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Frequently Asked Questions</span><h2 className="font-serif text-4xl font-bold text-[#1E293B] mt-3 mb-8">Questions readers are already asking.</h2><Accordion type="single" collapsible className="faq-shell"><AccordionItem value="leadership" className="faq-item"><AccordionTrigger className="faq-trigger">Is this a leadership book?</AccordionTrigger><AccordionContent className="faq-content">It's more than that. The Influential Spirit is a devotional about spiritual formation. Leadership, work, and influence are where that formation gets tested.</AccordionContent></AccordionItem><AccordionItem value="platforms" className="faq-item"><AccordionTrigger className="faq-trigger">Is the book against platforms?</AccordionTrigger><AccordionContent className="faq-content">No. Ambition, visibility, leadership, none of that is the target here. The question underneath the whole book is simpler and harder: who are you becoming while you become visible?</AccordionContent></AccordionItem><AccordionItem value="leader" className="faq-item"><AccordionTrigger className="faq-trigger">Do I need to be a leader to read it?</AccordionTrigger><AccordionContent className="faq-content">No. Influence here has nothing to do with a title. It's about ordinary responsibility, character, and the people who are already watching your life.</AccordionContent></AccordionItem><AccordionItem value="pastors" className="faq-item"><AccordionTrigger className="faq-trigger">Is it only for pastors?</AccordionTrigger><AccordionContent className="faq-content">No. It's written for professionals, entrepreneurs, ministry leaders, young adults, and anyone trying to live out their faith where they actually spend their week.</AccordionContent></AccordionItem><AccordionItem value="group" className="faq-item"><AccordionTrigger className="faq-trigger">Can I use it with a group?</AccordionTrigger><AccordionContent className="faq-content">Yes. The Formation Bundle and Complete Formation Edition both include the six-session Group Study Guide.</AccordionContent></AccordionItem><AccordionItem value="audio" className="faq-item"><AccordionTrigger className="faq-trigger">Can I listen instead of read?</AccordionTrigger><AccordionContent className="faq-content">Yes. The Formation Bundle includes the author-narrated audiobook.</AccordionContent></AccordionItem><AccordionItem value="journal" className="faq-item"><AccordionTrigger className="faq-trigger">Is there a journal?</AccordionTrigger><AccordionContent className="faq-content">Yes, in the Complete Formation Edition.</AccordionContent></AccordionItem></Accordion></div>
         </div>
       </section>
 
@@ -761,8 +716,9 @@ export default function Home() {
       <footer className="bg-[#111827] text-[#94A3B8] py-14 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
           <div className="flex items-center space-x-3">
-            <div className="seal-hover w-10 h-10 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] font-serif font-bold text-lg border border-[#C5A059]/40">
-              EK
+            <div className="seal-hover w-10 h-10 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] border border-[#C5A059]/40 relative" aria-label="Eryeza Kalalu publishing seal">
+              <Crown className="absolute w-3 h-3 top-1" />
+              <span className="font-serif font-bold text-sm mt-2">EK</span>
             </div>
             <div>
               <span className="text-sm font-semibold text-white tracking-wide block">ERYEZA KALALU</span>
