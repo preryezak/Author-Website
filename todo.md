@@ -243,3 +243,11 @@
 - [x] Build, test, inspect desktop/mobile, and save a checkpoint.
 
 ## End Current Request
+
+## Current Request: Influence Circle CTA Correction
+
+- [x] Inspect the reported button and confirm the intended Kit-form destination.
+- [x] Link the button directly to `#influence-circle` without changing unrelated copy or commerce logic. (Already present; no source change required.)
+- [x] Build, verify the target, and save a checkpoint.
+
+## End Current Request
