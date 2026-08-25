@@ -411,7 +411,7 @@ export default function Home() {
                 <h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-1">Stay close to the journey.</h3>
               </div>
               <div ref={kitFormRef} className="min-h-[112px]" aria-label="Influence Circle signup form"></div>
-                  <p className="text-[11px] text-[#6B7280] leading-relaxed mt-4 border-t border-[#C5A059]/30 pt-4">By joining, you are signing up for Influence Circle launch and library communications. THE CCN DAILY weekly newsletter remains on Substack.</p>
+                  <p className="text-[11px] text-[#6B7280] leading-relaxed mt-4 border-t border-[#C5A059]/30 pt-4">By joining, you are signing up for Influence Circle launch and library communications. Find the Devotional newsletter and other resources at <a href="https://theccndaily.com" target="_blank" rel="noreferrer" className="text-[#1E293B] underline underline-offset-2 hover:text-[#C5A059]">theccndaily.com</a>.</p>
             </div>
           </div>
         </div>
