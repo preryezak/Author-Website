@@ -1,0 +1,21 @@
+{
+  "domain": "influential-js8xf5fd.manus.space",
+  "results": {
+    "global_rank": {
+      "code": "failed_precondition",
+      "message": "Credit check passed but current user has insufficient Manus credits. Request was stooped before API call."
+    },
+    "visits_total": {
+      "code": "failed_precondition",
+      "message": "Credit check passed but current user has insufficient Manus credits. Request was stooped before API call."
+    },
+    "bounce_rate": {
+      "code": "failed_precondition",
+      "message": "Credit check passed but current user has insufficient Manus credits. Request was stooped before API call."
+    },
+    "traffic_by_country": {
+      "code": "failed_precondition",
+      "message": "Credit check passed but current user has insufficient Manus credits. Request was stooped before API call."
+    }
+  }
+}

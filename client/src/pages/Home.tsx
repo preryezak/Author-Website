@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus } from "lucide-react";
+import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus, Menu, X } from "lucide-react";
 import { toast } from "sonner";
 
 const bundleOptions = [
@@ -45,6 +45,8 @@ export default function Home() {
   const [reviewText, setReviewText] = useState("");
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const kitFormRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -56,6 +58,31 @@ export default function Home() {
       })
       .catch(() => undefined);
     return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setHasScrolled(window.scrollY > 12);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+    revealItems.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -114,10 +141,10 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <header className="sticky top-0 z-50 bg-[#F7F4EF]/95 backdrop-blur-md border-b border-[#E6E0D4]">
+      <header className={`sticky top-0 z-50 relative transition-shadow duration-300 ${hasScrolled ? "bg-[#F7F4EF]/98 shadow-[0_12px_30px_rgba(30,41,59,0.08)]" : "bg-[#F7F4EF]/95"} backdrop-blur-md border-b border-[#E6E0D4]`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] font-serif font-bold text-2xl shadow-md border-2 border-[#C5A059]/40">
+            <div className="seal-hover w-12 h-12 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] font-serif font-bold text-2xl shadow-md border-2 border-[#C5A059]/40">
               EK
             </div>
             <div>
@@ -126,24 +153,28 @@ export default function Home() {
             </div>
           </div>
           <nav className="hidden md:flex items-center space-x-10 text-sm font-semibold text-[#334155] tracking-wide">
-            <a href="#overview" className="hover:text-[#C5A059] transition-colors">Overview</a>
-            <a href="#about-book" className="hover:text-[#C5A059] transition-colors">The 30-Day Journey</a>
-            <a href="#reviews" className="hover:text-[#C5A059] transition-colors">Reader Responses</a>
-            <a href="#author" className="hover:text-[#C5A059] transition-colors">Why I Wrote This</a>
-            <a href="#formats" className="hover:text-[#C5A059] transition-colors">Editions</a>
+            <a href="#overview" className="nav-link">Overview</a>
+            <a href="#about-book" className="nav-link">The 30-Day Journey</a>
+            <a href="#reviews" className="nav-link">Reader Responses</a>
+            <a href="#author" className="nav-link">Why I Wrote This</a>
+            <a href="#formats" className="nav-link">Editions</a>
           </nav>
-          <div>
+          <div className="flex items-center gap-2">
+            <button type="button" className="md:hidden inline-flex h-11 w-11 items-center justify-center border border-[#C5A059]/40 text-[#1E293B] transition-colors hover:bg-[#EFECE6]" aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}>
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
             <a href="#formats">
-              <Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-6 py-5 shadow-sm transition-all tracking-wide text-sm">
-                    Pre-Order
+              <Button data-slot="button" className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-5 sm:px-6 py-5 shadow-sm transition-all tracking-wide text-sm">
+                <span className="hidden sm:inline">Pre-Order</span><span className="sm:hidden">Order</span>
               </Button>
             </a>
           </div>
+          {mobileMenuOpen && <nav className="absolute left-0 right-0 top-full border-b border-[#E6E0D4] bg-[#F7F4EF] p-4 shadow-xl md:hidden"><div className="flex flex-col gap-1 text-sm font-semibold text-[#334155]"><a href="#overview" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Overview</a><a href="#about-book" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>The 30-Day Journey</a><a href="#reviews" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Reader Responses</a><a href="#author" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Why I Wrote This</a><a href="#formats" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Editions</a></div></nav>}
         </div>
       </header>
 
       {/* Hero Section */}
-      <section id="overview" className="relative pt-16 pb-24 md:pt-24 md:pb-36 overflow-hidden border-b border-[#E6E0D4]">
+      <section id="overview" data-reveal="hero" className="relative pt-16 pb-24 md:pt-24 md:pb-36 overflow-hidden border-b border-[#E6E0D4]">
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -212,7 +243,7 @@ export default function Home() {
               <div className="relative group perspective-1000">
                 <div className="absolute -inset-6 bg-gradient-to-tr from-[#C5A059]/35 via-[#1E293B]/10 to-transparent rounded-3xl blur-2xl opacity-80 group-hover:opacity-100 transition duration-700"></div>
                 
-                <div className="relative bg-[#F3EEE3] p-5 sm:p-7 rounded-2xl shadow-2xl border border-[#C5A059]/40 max-w-sm transform group-hover:-translate-y-1 transition duration-500">
+                <div className="book-object relative bg-[#F3EEE3] p-5 sm:p-7 rounded-2xl shadow-2xl border border-[#C5A059]/40 max-w-sm transform group-hover:-translate-y-1 transition duration-500">
                   <div className="absolute top-4 right-5 text-[#C5A059] font-serif text-[11px] tracking-[0.2em] uppercase font-semibold">VOL. 01</div>
                   
                   <div className="relative shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)] rounded-md overflow-hidden border border-[#D4C4A8]">
@@ -241,7 +272,7 @@ export default function Home() {
       </section>
 
       {/* Preview placement: reserve this editorial module for the approved sample PDF or HTML excerpt. */}
-      <section id="preview" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+      <section id="preview" data-reveal="preview" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             <div className="lg:col-span-5 space-y-5">
@@ -250,7 +281,7 @@ export default function Home() {
               <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The preview will give you a few pages of the journey before you decide to pre-order. It will sit here as a quiet reading experience, not a sales interruption.</p>
               <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">“Who are you becoming while you become visible?”</p>
             </div>
-            <div className="lg:col-span-7 bg-[#EFECE6] border border-[#C5A059]/40 p-7 sm:p-10 relative">
+            <div className="rule-glow lg:col-span-7 bg-[#EFECE6] border border-[#C5A059]/40 p-7 sm:p-10 relative">
               <div className="absolute top-0 left-0 w-20 h-1 bg-[#C5A059]"></div>
               <div className="flex items-center justify-between gap-4 mb-6">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Preview module</span>
@@ -265,7 +296,7 @@ export default function Home() {
       </section>
 
       {/* Canonical positioning sections: influence is formed before it is seen. */}
-      <section className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+      <section data-reveal="positioning" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           <div className="space-y-5">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Influence Begins Deeper Than Visibility</span>
@@ -274,7 +305,7 @@ export default function Home() {
             <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">A platform can put someone in front of a crowd without doing a single thing to their character. God is not just handing out platforms. He is shaping the people who will stand on them, because unformed hands break what they hold.</p>
             <p className="font-serif italic text-xl leading-relaxed text-[#1E293B] border-l-2 border-[#C5A059] pl-5">That is the tension this book lives inside: not whether you should be visible, but who you are before, and while, you become that way.</p>
           </div>
-          <div className="space-y-5 border-t-2 border-[#C5A059] pt-6">
+          <div className="rule-glow space-y-5 border-t-2 border-[#C5A059] pt-6">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Person Behind the Influence</span>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Christ forms the person.</h2>
             <p className="text-[#6B7280] text-base sm:text-lg leading-relaxed">The Spirit does the empowering. Everything you actually want, credibility, weight, a voice people trust, grows out of that, never the other way around.</p>
@@ -287,14 +318,14 @@ export default function Home() {
       <div className="py-5 bg-[#EFECE6] border-b border-[#E6E0D4] text-center text-[#C5A059]">
         <div className="flex items-center justify-center gap-4 text-[10px] font-sans tracking-[0.28em] uppercase">
           <span className="h-px w-16 bg-[#C5A059]/60"></span>
-          <span className="inline-flex h-7 w-7 items-center justify-center border border-[#C5A059] font-serif font-bold tracking-normal text-[#1E293B]">EK</span>
+          <span className="seal-hover inline-flex h-7 w-7 items-center justify-center border border-[#C5A059] font-serif font-bold tracking-normal text-[#1E293B]">EK</span>
           <span className="text-[#1E293B]">The Deep Encounter Framework &bull; Volume I</span>
           <span className="h-px w-16 bg-[#C5A059]/60"></span>
         </div>
       </div>
 
       {/* The 3 Pillars Section */}
-      <section id="about-book" className="py-24 bg-[#EFECE6] border-b border-[#E6E0D4]">
+      <section id="about-book" data-reveal="pillars" className="py-24 bg-[#EFECE6] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Your 30-Day Transformation Path</span>
@@ -308,7 +339,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
+            <div className="lift-card bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -325,7 +356,7 @@ export default function Home() {
             </div>
 
             {/* Pillar 2 */}
-            <div className="bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
+            <div className="lift-card bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -342,7 +373,7 @@ export default function Home() {
             </div>
 
             {/* Pillar 3 */}
-            <div className="bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
+            <div className="lift-card bg-[#FAF8F5]/60 border-y border-[#C5A059]/40 p-8 sm:p-10 rounded-none shadow-none hover:bg-[#F7F4EF] transition-all relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#C5A059]/5 rounded-bl-full pointer-events-none transition-all group-hover:bg-[#C5A059]/10"></div>
               <div className="space-y-6 relative z-10">
                 <div className="w-14 h-14 rounded-lg bg-[#1E293B] flex items-center justify-center text-[#C5A059] shadow-md border border-[#C5A059]/40 font-serif font-bold text-xl">
@@ -362,7 +393,7 @@ export default function Home() {
       </section>
 
       {/* Formation pathway: the supplied copy’s 30-day journey and audience fit. */}
-      <section className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+      <section data-reveal="formation" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             <div className="lg:col-span-5 space-y-6">
@@ -398,7 +429,7 @@ export default function Home() {
       </section>
 
       {/* Influence Circle Capture */}
-      <section id="influence-circle" className="py-24 bg-[#1E293B] text-[#F8FAFC] border-b border-[#C5A059]/30 relative overflow-hidden">
+      <section id="influence-circle" data-reveal="circle" className="py-24 bg-[#1E293B] text-[#F8FAFC] border-b border-[#C5A059]/30 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:28px_28px] opacity-10 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
@@ -408,8 +439,8 @@ export default function Home() {
               <p className="text-[#CBD5E1] text-lg leading-relaxed max-w-2xl font-sans">
                 Get a preview of <span className="font-serif italic text-white">The Influential Spirit</span>, launch updates, access to the 30-day journey resources, and first notice of new releases from The Deep Encounter Library.
               </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-[#C5A059]/30">
-                <span className="inline-flex h-9 w-9 items-center justify-center border border-[#C5A059] text-[#C5A059] font-serif font-bold text-sm">EK</span>
+              <div className="rule-glow flex items-center gap-3 pt-4 border-t border-[#C5A059]/30">
+                <span className="seal-hover inline-flex h-9 w-9 items-center justify-center border border-[#C5A059] text-[#C5A059] font-serif font-bold text-sm">EK</span>
                 <span className="text-xs uppercase tracking-[0.18em] text-[#94A3B8]">Formation Before Platform</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6">
@@ -418,7 +449,7 @@ export default function Home() {
                 <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">03</span><strong className="block text-white font-serif">Library</strong><span className="text-xs text-[#94A3B8]">News of what comes next.</span></div>
               </div>
             </div>
-            <div className="lg:col-span-5 bg-[#F7F4EF] text-[#1E293B] p-6 sm:p-8 rounded-md border border-[#C5A059]/50 shadow-2xl">
+            <div className="lift-card lg:col-span-5 bg-[#F7F4EF] text-[#1E293B] p-6 sm:p-8 rounded-md border border-[#C5A059]/50 shadow-2xl">
               <div className="border-b border-[#C5A059]/40 pb-4 mb-5">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Library Dispatch</span>
                 <h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-1">A word before launch day.</h3>
@@ -431,7 +462,7 @@ export default function Home() {
       </section>
 
       {/* Reader Responses & Verified Amazon Reviews Section */}
-      <section id="reviews" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+      <section id="reviews" data-reveal="reviews" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold block">Reader Responses</span>
@@ -643,7 +674,7 @@ export default function Home() {
       </section>
 
       {/* Author Section */}
-      <section id="author" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
+      <section id="author" data-reveal="author" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
@@ -699,10 +730,10 @@ export default function Home() {
       </section>
 
       {/* Canonical product experience section: the journey continues beyond the final devotional page. */}
-      <section className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="max-w-3xl space-y-5 mb-10"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The 30-Day Experience Doesn't End With the Last Page</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Day 30 is not the finish line. It's a hand-off.</h2></div><div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 text-sm text-[#4B5563]"><div><strong className="block font-serif text-lg text-[#1E293B]">Read</strong><span>the complete 30-day devotional.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Listen</strong><span>narrated in the author's own voice.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Reflect</strong><span>the companion Journal.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Gather</strong><span>the six-session Group Study Guide.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Practice</strong><span>the Reading Plan and Challenge.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Continue</strong><span>a 30-day WhatsApp journey.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Go Deeper</strong><span>the devotional app.</span></div></div></div></section>
+      <section data-reveal="experience" className="py-20 bg-[#F7F4EF] border-b border-[#E6E0D4]"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="max-w-3xl space-y-5 mb-10"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The 30-Day Experience Doesn't End With the Last Page</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">Day 30 is not the finish line. It's a hand-off.</h2></div><div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 text-sm text-[#4B5563]"><div><strong className="block font-serif text-lg text-[#1E293B]">Read</strong><span>the complete 30-day devotional.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Listen</strong><span>narrated in the author's own voice.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Reflect</strong><span>the companion Journal.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Gather</strong><span>the six-session Group Study Guide.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Practice</strong><span>the Reading Plan and Challenge.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Continue</strong><span>a 30-day WhatsApp journey.</span></div><div><strong className="block font-serif text-lg text-[#1E293B]">Go Deeper</strong><span>the devotional app.</span></div></div></div></section>
 
       {/* Editions & Regional Routes */}
-      <section id="formats" className="py-24 bg-[#1E293B] text-[#F8FAFC] relative overflow-hidden">
+      <section id="formats" data-reveal="formats" className="py-24 bg-[#1E293B] text-[#F8FAFC] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
@@ -719,7 +750,7 @@ export default function Home() {
           {marketRoute === "africa" && <div className="max-w-6xl mx-auto mb-8 border-y border-[#C5A059]/30 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Selar currency view</span><span className="text-sm text-[#CBD5E1]">UGX is the anchor price. Other amounts are rounded planning estimates until fixed in Selar.</span></div><label className="text-sm text-white flex items-center gap-3">Show currency<select value={africaCurrency} onChange={(event) => setAfricaCurrency(event.target.value as (typeof selarAfricanCurrencies)[number])} className="bg-[#0F172A] border border-[#C5A059]/60 text-white px-3 py-2 text-sm"><option value="UGX">UGX · Uganda shilling</option>{selarAfricanCurrencies.filter((currency) => currency !== "UGX").map((currency) => <option key={currency} value={currency}>{currency}</option>)}</select></label></div>}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
-            {bundleOptions.map((bundle) => <div key={bundle.name} className={`border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">{bundle.name}</span>{bundle.popular && <span className="absolute -top-3 left-5 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<h3 className="font-serif text-2xl text-white font-bold mt-2">{marketRoute === "international" ? `US$${bundle.usd}` : africaCurrency === "UGX" ? `UGX ${bundle.ugx.toLocaleString("en-UG")}` : formatCurrencyEstimate(africaCurrency, bundle.ugx * activeAfricanRate)}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">{bundle.description}</p></div>)}
+            {bundleOptions.map((bundle) => <div key={bundle.name} className={`lift-card border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">{bundle.name}</span>{bundle.popular && <span className="absolute -top-3 left-5 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<h3 className="font-serif text-2xl text-white font-bold mt-2">{marketRoute === "international" ? `US$${bundle.usd}` : africaCurrency === "UGX" ? `UGX ${bundle.ugx.toLocaleString("en-UG")}` : formatCurrencyEstimate(africaCurrency, bundle.ugx * activeAfricanRate)}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">{bundle.description}</p></div>)}
           </div>
 
           <div className="max-w-5xl mx-auto border-t border-[#C5A059]/30 pt-10"><div className="bg-[#0F172A] rounded-none p-8 sm:p-10 border-l-2 border-t-2 border-[#C5A059] shadow-2xl flex flex-col lg:flex-row lg:items-end justify-between gap-8"><div className="space-y-5 max-w-2xl">{marketRoute === "africa" ? <><div className="flex items-center gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Uganda &amp; Africa · Selar</Badge><span className="font-serif text-3xl font-bold text-white">{africaCurrency === "UGX" ? "UGX 45,000" : formatCurrencyEstimate(africaCurrency, 45000 * activeAfricanRate)}</span></div><div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order through Selar</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Choose the currency that matches your Selar checkout. The selector gives you a rounded estimate from the UGX anchor price; Selar remains the final source of truth for the fixed amount.</p></div><p className="text-sm text-[#CBD5E1] border-t border-slate-800 pt-4">Want to help others discover the book? Become an affiliate through the Selar pathway.</p></> : <><div className="flex items-center gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">International · Payhip</Badge><span className="font-serif text-3xl font-bold text-white">US$15</span></div><div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order through Payhip</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the international route for USD pricing and secure digital delivery. Payhip’s pre-order setup will deliver the final PDF and EPUB on 15 September 2026.</p></div><ul className="space-y-3 text-sm text-[#CBD5E1] border-t border-slate-800 pt-4"><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> PDF and EPUB digital edition</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Automatic download delivery</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Author-narrated audiobook in Formation and Complete bundles; print forthcoming</li></ul></>}</div><div className="lg:w-72 shrink-0 space-y-3">{marketRoute === "africa" ? <><a href="#influence-circle" className="block"><Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Join for the Selar link <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Final Selar product URL pending listing</p></> : <><a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block"><Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Open Payhip pre-order <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">USD route · final product URL should replace the store homepage</p></>}</div></div></div>
@@ -727,21 +758,21 @@ export default function Home() {
       </section>
 
       {/* Canonical library roadmap, FAQ, and closing invitation. */}
-      <section className="py-24 bg-[#EFECE6] border-t border-[#E6E0D4]">
+      <section data-reveal="library" className="py-24 bg-[#EFECE6] border-t border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-5 mb-14"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Deep Encounter Library</span><h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#1E293B]">One library. Different doors into the same encounter with God.</h2></div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20"><div className="border-t-2 border-[#C5A059] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Now</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">The Influential Spirit</h3><p className="text-sm text-[#6B7280] mt-2">Formation before platform.</p></div><div className="border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming next</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">Unedited Christmas</h3><p className="text-sm text-[#6B7280] mt-2">A fresh encounter with the mystery of the incarnation.</p></div><div className="border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming 2027</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Holy Week Every Week · Prayer Craft · Discerning God's Whisper · The Spiritual Health Solution</p></div></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20"><div className="lift-card border-t-2 border-[#C5A059] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Now</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">The Influential Spirit</h3><p className="text-sm text-[#6B7280] mt-2">Formation before platform.</p></div><div className="lift-card border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming next</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-2">Unedited Christmas</h3><p className="text-sm text-[#6B7280] mt-2">A fresh encounter with the mystery of the incarnation.</p></div><div className="lift-card border-t-2 border-[#1E293B] bg-[#F7F4EF] p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Coming 2027</span><p className="font-serif text-xl font-bold text-[#1E293B] mt-2">Holy Week Every Week · Prayer Craft · Discerning God's Whisper · The Spiritual Health Solution</p></div></div>
           <div className="max-w-4xl"><span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">Frequently Asked Questions</span><h2 className="font-serif text-4xl font-bold text-[#1E293B] mt-3 mb-8">Questions readers are already asking.</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-[#4B5563]"><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is this a leadership book?</h3><p className="mt-2">It's more than that. The Influential Spirit is a devotional about spiritual formation. Leadership, work, and influence are where that formation gets tested.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is the book against platforms?</h3><p className="mt-2">No. Ambition, visibility, leadership, none of that is the target here. The question underneath the whole book is simpler and harder: who are you becoming while you become visible?</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Do I need to be a leader to read it?</h3><p className="mt-2">No. Influence here has nothing to do with a title. It's about ordinary responsibility, character, and the people who are already watching your life.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is it only for pastors?</h3><p className="mt-2">No. It's written for professionals, entrepreneurs, ministry leaders, young adults, and anyone trying to live out their faith where they actually spend their week.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Can I use it with a group?</h3><p className="mt-2">Yes. The Formation Bundle and Complete Formation Edition both include the six-session Group Study Guide.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Can I listen instead of read?</h3><p className="mt-2">Yes. The Formation Bundle includes the author-narrated audiobook.</p></div><div><h3 className="font-serif text-xl font-bold text-[#1E293B]">Is there a journal?</h3><p className="mt-2">Yes, in the Complete Formation Edition.</p></div></div></div>
         </div>
       </section>
 
-      <section className="py-24 bg-[#1E293B] text-white text-center border-t border-[#C5A059]/30"><div className="max-w-3xl mx-auto px-4 sm:px-6"><h2 className="font-serif text-4xl sm:text-5xl font-bold">Your influence does not start when you get the platform.</h2><p className="text-[#CBD5E1] text-lg leading-relaxed mt-5">It starts with who you're becoming right now, before anyone's watching.</p><div className="flex flex-col sm:flex-row justify-center gap-4 mt-8"><a href="#formats"><Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-8 py-6">Begin the 30-Day Journey <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><a href="#influence-circle"><Button variant="outline" className="border-[#C5A059]/60 text-white hover:bg-white/10 font-semibold px-8 py-6">Join the Influence Circle</Button></a></div><p className="text-xs uppercase tracking-[0.22em] text-[#C5A059] mt-8">Grounded in Scripture · Forged for Impact</p></div></section>
+      <section data-reveal="final" className="py-24 bg-[#1E293B] text-white text-center border-t border-[#C5A059]/30"><div className="max-w-3xl mx-auto px-4 sm:px-6"><h2 className="font-serif text-4xl sm:text-5xl font-bold">Your influence does not start when you get the platform.</h2><p className="text-[#CBD5E1] text-lg leading-relaxed mt-5">It starts with who you're becoming right now, before anyone's watching.</p><div className="flex flex-col sm:flex-row justify-center gap-4 mt-8"><a href="#formats"><Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-8 py-6">Begin the 30-Day Journey <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><a href="#influence-circle"><Button variant="outline" className="border-[#C5A059]/60 text-white hover:bg-white/10 font-semibold px-8 py-6">Join the Influence Circle</Button></a></div><p className="text-xs uppercase tracking-[0.22em] text-[#C5A059] mt-8">Grounded in Scripture · Forged for Impact</p></div></section>
 
       {/* Footer */}
       <footer className="bg-[#111827] text-[#94A3B8] py-14 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] font-serif font-bold text-lg border border-[#C5A059]/40">
+            <div className="seal-hover w-10 h-10 rounded-full bg-[#1E293B] flex items-center justify-center text-[#C5A059] font-serif font-bold text-lg border border-[#C5A059]/40">
               EK
             </div>
             <div>

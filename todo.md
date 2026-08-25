@@ -205,3 +205,13 @@
 - [x] Save and deliver a stable checkpoint.
 
 ## End Current Request
+
+## Current Request: Neo-Monastic UI/UX Upgrade
+
+- [x] Audit the current visual hierarchy, motion, interaction states, mobile behavior, and console health.
+- [x] Define a restrained motion system that reinforces the Neo-Monastic editorial direction.
+- [x] Implement scroll reveals, hover/focus/active states, navigation polish, and responsive refinements without changing approved copy or commerce logic.
+- [x] Build, visually inspect representative desktop/mobile states, and check accessibility-sensitive behavior.
+- [x] Save and deliver the refined website version.
+
+## End Current Request
