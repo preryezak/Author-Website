@@ -251,3 +251,13 @@
 - [x] Build, verify the target, and save a checkpoint.
 
 ## End Current Request
+
+## Current Request: Branded Kit Sender and Confirmation Redirect
+
+- [ ] Inspect the authenticated Kit form and current sender/confirmation settings.
+- [ ] Configure `admin@theccndaily.com` as the Kit sender or operations identity where supported; reserve `contact@theccndaily.com` for reader enquiries.
+- [ ] Set `https://theccndaily.com` as the post-confirmation redirect and update the public success copy to point to devotional newsletters and resources there.
+- [ ] Verify the public form and redirect without creating unnecessary duplicate test subscribers.
+- [ ] Save and deliver the verified workflow update.
+
+## End Current Request
