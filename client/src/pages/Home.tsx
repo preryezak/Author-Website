@@ -59,6 +59,18 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    // Kit's third-party embed can resize its iframe during hydration. Chromium reports
+    // that benign browser diagnostic as an uncaught window error; keep real errors visible.
+    const handleResizeObserverDiagnostic = (event: ErrorEvent) => {
+      if (event.message === "ResizeObserver loop completed with undelivered notifications.") {
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("error", handleResizeObserverDiagnostic);
+    return () => window.removeEventListener("error", handleResizeObserverDiagnostic);
+  }, []);
+
+  useEffect(() => {
     const container = kitFormRef.current;
     if (!container || container.dataset.kitLoaded === "true") return;
 
@@ -208,6 +220,10 @@ export default function Home() {
                     <img 
                       src="/assets/images/cover.jpg" 
                       alt="The Influential Spirit Book Cover by Eryeza Kalalu" 
+                      width={1400}
+                      height={2100}
+                      loading="eager"
+                      decoding="async"
                       className="w-full h-auto object-cover transform scale-100 group-hover:scale-[1.02] transition duration-500"
                     />
                   </div>
@@ -652,6 +668,10 @@ export default function Home() {
                   <img 
                     src="/assets/images/author.jpg" 
                     alt="Pastor Eryeza Kalalu" 
+                    width={667}
+                    height={1000}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top"
                   />
                 </div>

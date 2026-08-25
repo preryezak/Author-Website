@@ -196,3 +196,12 @@
 - [x] Save a new checkpoint and deliver the corrected version.
 
 ## End Current Request
+
+## Current Request: ResizeObserver Warning
+
+- [x] Inspect the browser console and page source for observer-triggering layout patterns, especially the embedded Kit form and responsive image/layout changes.
+- [x] Apply the smallest safe fix without hiding unrelated runtime errors.
+- [x] Build and verify desktop/mobile previews and console behavior.
+- [x] Save and deliver a stable checkpoint.
+
+## End Current Request
