@@ -215,3 +215,12 @@
 - [x] Save and deliver the refined website version.
 
 ## End Current Request
+
+## Current Request: ResizeObserver Recurrence
+
+- [x] Inspect the latest warning timestamp and previous handler implementation.
+- [x] Harden capture-phase handling for only the exact benign diagnostic.
+- [x] Build, restart, and re-test the preview and browser console.
+- [x] Save and deliver the hardened checkpoint.
+
+## End Current Request

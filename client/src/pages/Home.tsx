@@ -85,17 +85,6 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    // Kit's third-party embed can resize its iframe during hydration. Chromium reports
-    // that benign browser diagnostic as an uncaught window error; keep real errors visible.
-    const handleResizeObserverDiagnostic = (event: ErrorEvent) => {
-      if (event.message === "ResizeObserver loop completed with undelivered notifications.") {
-        event.preventDefault();
-      }
-    };
-    window.addEventListener("error", handleResizeObserverDiagnostic);
-    return () => window.removeEventListener("error", handleResizeObserverDiagnostic);
-  }, []);
 
   useEffect(() => {
     const container = kitFormRef.current;
