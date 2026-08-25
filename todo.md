@@ -173,3 +173,16 @@
 - [ ] Audit all updated copy for factual accuracy, theological integrity, and Pastor Eryeza’s voice before delivery.
 
 ## End Current Request
+
+## Current Request: Route-First Editions and African Currency Display
+
+- [ ] Inspect why the visual-editor comment did not change Home.tsx and verify the current editions markup.
+- [ ] Reorganize the editions section so visitors choose International or Africa first, then see the relevant bundles.
+- [ ] Keep USD amounts only in the international Payhip route.
+- [ ] Keep UGX amounts in the Selar Africa route.
+- [ ] Add a currency selector for Selar-supported African currencies and location-aware default display.
+- [ ] Use rounded display values as estimates and avoid presenting converted values as exact Selar prices until confirmed.
+- [ ] Preserve each bundle category and its contents from the approved landing-page copy.
+- [ ] Build, test, visually verify, and checkpoint the completed revision.
+
+## End Current Request

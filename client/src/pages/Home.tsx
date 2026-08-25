@@ -7,14 +7,56 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { BookOpen, Award, Shield, Compass, ChevronRight, CheckCircle2, Feather, Star, MessageSquarePlus } from "lucide-react";
 import { toast } from "sonner";
 
+const bundleOptions = [
+  { name: "Reader Edition", usd: 15, ugx: 45000, description: "Designed digital reading edition with reflowable EPUB and PDF delivery.", popular: false },
+  { name: "Formation Bundle", usd: 29, ugx: 90000, description: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and 30-Day Reading Plan & Challenge.", popular: true },
+  { name: "Complete Formation", usd: 49, ugx: 150000, description: "Everything in Formation, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", popular: false },
+] as const;
+
+const selarAfricanCurrencies = ["UGX", "NGN", "KES", "GHS", "TZS", "XOF", "XAF", "ZMW", "RWF", "ZAR"] as const;
+
+const currencyLocales: Record<string, string> = {
+  UGX: "en-UG", NGN: "en-NG", KES: "en-KE", GHS: "en-GH", TZS: "sw-TZ", XOF: "fr-SN", XAF: "fr-CM", ZMW: "en-ZM", RWF: "rw-RW", ZAR: "en-ZA",
+};
+
+const roundForCurrency = (currency: string, amount: number) => {
+  const increments: Record<string, number> = { UGX: 5000, NGN: 500, KES: 100, GHS: 10, TZS: 1000, XOF: 500, XAF: 500, ZMW: 10, RWF: 500, ZAR: 10 };
+  const increment = increments[currency] ?? 1;
+  return Math.max(increment, Math.round(amount / increment) * increment);
+};
+
+const formatCurrencyEstimate = (currency: string, amount: number) => new Intl.NumberFormat(currencyLocales[currency] ?? "en", { style: "currency", currency, maximumFractionDigits: 0 }).format(roundForCurrency(currency, amount));
+
+const inferAfricanCurrency = () => {
+  if (typeof navigator === "undefined") return "UGX" as const;
+  const locale = navigator.language.toLowerCase();
+  const localeCurrency: Record<string, (typeof selarAfricanCurrencies)[number]> = { ng: "NGN", ke: "KES", gh: "GHS", tz: "TZS", sn: "XOF", ci: "XOF", cm: "XAF", zm: "ZMW", rw: "RWF", za: "ZAR", ug: "UGX" };
+  const country = locale.split("-")[1] ?? "";
+  return localeCurrency[country] ?? "UGX";
+};
+
 export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState<"ebook" | "bundle">("ebook");
+  const [marketRoute, setMarketRoute] = useState<"international" | "africa">("international");
+  const [africaCurrency, setAfricaCurrency] = useState<(typeof selarAfricanCurrencies)[number]>(() => inferAfricanCurrency());
+  const [ugxRates, setUgxRates] = useState<Record<string, number>>({ UGX: 1 });
   const [reviewName, setReviewName] = useState("");
   const [reviewRole, setReviewRole] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const kitFormRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("https://open.er-api.com/v6/latest/UGX")
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("Rate service unavailable")))
+      .then((payload: { rates?: Record<string, number> }) => {
+        if (!cancelled && payload.rates) setUgxRates({ UGX: 1, ...payload.rates });
+      })
+      .catch(() => undefined);
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     const container = kitFormRef.current;
@@ -49,6 +91,8 @@ export default function Home() {
       setReviewSubmitted(false);
     }, 2500);
   };
+
+  const activeAfricanRate = ugxRates[africaCurrency] ?? 1;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F4EF] text-[#1A1A1A] font-sans selection:bg-[#C5A059] selection:text-white">
@@ -603,30 +647,18 @@ export default function Home() {
             <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">Choose the package that fits your season. Pre-order through the route that serves you best; the digital files will be delivered on 15 September 2026.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
-            <div className="border border-[#C5A059]/40 bg-[#0F172A]/70 p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Reader Edition</span><h3 className="font-serif text-2xl text-white font-bold mt-2">US$15 / UGX 45,000</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">Designed digital reading edition with reflowable EPUB and PDF delivery.</p></div>
-            <div className="border-2 border-[#C5A059] bg-[#0F172A] p-6 relative"><span className="absolute -top-3 left-5 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Formation Bundle</span><h3 className="font-serif text-2xl text-white font-bold mt-2">US$29 / UGX 90,000</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">Digital edition, author-narrated audiobook, six-session Group Study Guide, and 30-Day Reading Plan &amp; Challenge.</p></div>
-            <div className="border border-[#C5A059]/40 bg-[#0F172A]/70 p-6"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Complete Formation</span><h3 className="font-serif text-2xl text-white font-bold mt-2">US$49 / UGX 150,000</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">Everything in Formation, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.</p></div>
+          <div className="flex flex-col sm:flex-row gap-3 max-w-3xl mx-auto mb-10" role="tablist" aria-label="Choose your buying route">
+            <button type="button" role="tab" aria-selected={marketRoute === "international"} onClick={() => setMarketRoute("international")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "international" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Route I</span><span className="font-serif text-xl text-white font-bold">International</span><span className="block text-xs text-[#94A3B8] mt-1">Payhip · USD pricing</span></button>
+            <button type="button" role="tab" aria-selected={marketRoute === "africa"} onClick={() => setMarketRoute("africa")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "africa" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Route II</span><span className="font-serif text-xl text-white font-bold">Uganda &amp; Africa</span><span className="block text-xs text-[#94A3B8] mt-1">Selar · local currency pricing</span></button>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="bg-[#0F172A] rounded-none p-8 sm:p-10 border-l-2 border-t border-[#C5A059]/50 shadow-2xl flex flex-col justify-between">
-              <div className="space-y-6">
-                <div className="flex items-center justify-between gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Uganda &amp; Africa</Badge><span className="font-serif text-3xl font-bold text-white">UGX 45,000</span></div>
-                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order on Selar</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the Uganda and Africa route for local pricing and payment convenience. The final Selar pre-order link will be added before the campaign opens.</p></div>
-                <p className="text-sm text-[#CBD5E1] border-t border-slate-800 pt-4">Want to help others discover the book? Become an affiliate through the Selar pathway.</p>
-              </div>
-              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="#influence-circle" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Get Selar pre-order link <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Uganda &amp; Africa • Selar pre-order link pending final listing</p></div>
-            </div>
 
-            <div className="bg-[#0F172A] rounded-none p-8 sm:p-10 border-l-2 border-t-2 border-[#C5A059] shadow-2xl flex flex-col justify-between">
-              <div className="space-y-6">
-                <div className="flex items-center justify-between gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">International</Badge><span className="font-serif text-3xl font-bold text-white">US$15</span></div>
-                <div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order on Payhip</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the international route for USD pricing and secure digital delivery. Payhip’s pre-order setup will deliver the final PDF and EPUB on 15 September 2026.</p></div>
-                <ul className="space-y-3 text-sm text-[#CBD5E1] border-t border-slate-800 pt-4"><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> PDF and EPUB digital edition</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Automatic download delivery</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Author-narrated audiobook in Formation and Complete bundles; print forthcoming</li></ul>
-              </div>
-              <div className="pt-8 mt-8 border-t border-slate-800 space-y-3"><a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block">                    <Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Open Payhip pre-order <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">International • Payhip pre-order route</p></div>
-            </div>
+          {marketRoute === "africa" && <div className="max-w-6xl mx-auto mb-8 border-y border-[#C5A059]/30 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Selar currency view</span><span className="text-sm text-[#CBD5E1]">UGX is the anchor price. Other amounts are rounded planning estimates until fixed in Selar.</span></div><label className="text-sm text-white flex items-center gap-3">Show currency<select value={africaCurrency} onChange={(event) => setAfricaCurrency(event.target.value as (typeof selarAfricanCurrencies)[number])} className="bg-[#0F172A] border border-[#C5A059]/60 text-white px-3 py-2 text-sm"><option value="UGX">UGX · Uganda shilling</option>{selarAfricanCurrencies.filter((currency) => currency !== "UGX").map((currency) => <option key={currency} value={currency}>{currency}</option>)}</select></label></div>}
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
+            {bundleOptions.map((bundle) => <div key={bundle.name} className={`border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">{bundle.name}</span>{bundle.popular && <span className="absolute -top-3 left-5 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<h3 className="font-serif text-2xl text-white font-bold mt-2">{marketRoute === "international" ? `US$${bundle.usd}` : africaCurrency === "UGX" ? `UGX ${bundle.ugx.toLocaleString("en-UG")}` : formatCurrencyEstimate(africaCurrency, bundle.ugx * activeAfricanRate)}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3">{bundle.description}</p></div>)}
           </div>
+
+          <div className="max-w-5xl mx-auto border-t border-[#C5A059]/30 pt-10"><div className="bg-[#0F172A] rounded-none p-8 sm:p-10 border-l-2 border-t-2 border-[#C5A059] shadow-2xl flex flex-col lg:flex-row lg:items-end justify-between gap-8"><div className="space-y-5 max-w-2xl">{marketRoute === "africa" ? <><div className="flex items-center gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">Uganda &amp; Africa · Selar</Badge><span className="font-serif text-3xl font-bold text-white">{africaCurrency === "UGX" ? "UGX 45,000" : formatCurrencyEstimate(africaCurrency, 45000 * activeAfricanRate)}</span></div><div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order through Selar</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Choose the currency that matches your Selar checkout. The selector gives you a rounded estimate from the UGX anchor price; Selar remains the final source of truth for the fixed amount.</p></div><p className="text-sm text-[#CBD5E1] border-t border-slate-800 pt-4">Want to help others discover the book? Become an affiliate through the Selar pathway.</p></> : <><div className="flex items-center gap-4"><Badge className="bg-[#C5A059] text-white font-semibold px-3 py-1">International · Payhip</Badge><span className="font-serif text-3xl font-bold text-white">US$15</span></div><div><h3 className="font-serif text-2xl font-bold text-white mb-2">Pre-order through Payhip</h3><p className="text-sm text-[#94A3B8] leading-relaxed">Use the international route for USD pricing and secure digital delivery. Payhip’s pre-order setup will deliver the final PDF and EPUB on 15 September 2026.</p></div><ul className="space-y-3 text-sm text-[#CBD5E1] border-t border-slate-800 pt-4"><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> PDF and EPUB digital edition</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Automatic download delivery</li><li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C5A059] mr-3 shrink-0" /> Author-narrated audiobook in Formation and Complete bundles; print forthcoming</li></ul></>}</div><div className="lg:w-72 shrink-0 space-y-3">{marketRoute === "africa" ? <><a href="#influence-circle" className="block"><Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Join for the Selar link <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">Final Selar product URL pending listing</p></> : <><a href="https://payhip.com/ccndaily" target="_blank" rel="noopener noreferrer" className="block"><Button className="w-full bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold py-7 text-base">Open Payhip pre-order <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><p className="text-[11px] text-[#64748B] text-center">USD route · final product URL should replace the store homepage</p></>}</div></div></div>
         </div>
       </section>
 
