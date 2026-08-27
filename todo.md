@@ -268,29 +268,38 @@
 
 ## Current Request: Canonical Domain, Sitemap, and Live Commerce Verification
 
+## Current Request: Final Website Integrity Check and GitHub Commit
+
+- [ ] Verify production build and TypeScript status.
+- [ ] Verify live canonical metadata, sitemap, robots, Google file, and Bing file.
+- [ ] Check current GitHub branch divergence and uncommitted changes.
+- [ ] Commit and push all remaining changes to GitHub main.
+- [ ] Record the final commit and any remaining Payhip iframe verification note.
+
+
 ## Current Request: Google Search Console HTML Verification
 
 ## Current Request: Bing Webmaster Tools XML Verification
 
-- [ ] Copy the exact user-provided BingSiteAuth.xml into the website public root.
-- [ ] Build and publish the Bing verification file.
-- [ ] Confirm https://books.theccndaily.com/BingSiteAuth.xml serves the exact uploaded contents.
-- [ ] Ask the user to click Verify in Bing Webmaster Tools and submit the sitemap.
-- [ ] Keep the verification file permanently available.
+- [x] Copy the exact user-provided BingSiteAuth.xml into the website public root.
+- [x] Build and publish the Bing verification file.
+- [x] Confirm https://books.theccndaily.com/BingSiteAuth.xml serves the exact uploaded contents.
+- [x] Ask the user to click Verify in Bing Webmaster Tools and submit the sitemap.
+- [x] Keep the verification file permanently available.
 
 
-- [ ] Copy the exact user-provided Google verification file into the website public root.
-- [ ] Build and publish the verification file.
-- [ ] Confirm the verification URL returns the exact file contents.
-- [ ] Ask the user to click Verify in Google Search Console, then submit the sitemap.
-- [ ] Keep the verification file permanently available.
+- [x] Copy the exact user-provided Google verification file into the website public root.
+- [x] Build and publish the verification file.
+- [x] Confirm the verification URL returns the exact file contents.
+- [x] Ask the user to click Verify in Google Search Console, then submit the sitemap.
+- [x] Keep the verification file permanently available.
 
 
 - [x] Verify whether `books.theccndaily.com` resolves and serves the intended author page.
 - [x] Verify the public canonical tag and sitemap endpoint. Custom domain returns HTTP 200 for the page and sitemap; the page contains the canonical URL and SEO metadata.
 - [ ] Test the Payhip embed and International/Africa route behavior on the public site. Custom-domain browser view confirms the International route, Payhip fallback link, and both route labels; third-party iframe content is not exposed in the browser text capture, so checkout rendering still needs a normal-browser confirmation.
-- [ ] Submit the sitemap in authenticated Google Search Console if the property is available. Current Google session opens the Welcome page and shows no verified property for books.theccndaily.com.
-- [ ] Submit the sitemap in authenticated Bing Webmaster Tools if the property is available. Current browser session is not signed in to Bing Webmaster Tools.
+- [x] Submit the sitemap in authenticated Google Search Console; the user confirmed successful submission.
+- [x] Submit the sitemap in authenticated Bing Webmaster Tools; the user confirmed successful submission.
 - [x] Record any unresolved custom-domain or account-access dependency. The custom domain and sitemap resolve with HTTP 200; webmaster-tool submission requires property verification or sign-in.
 
 
