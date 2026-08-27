@@ -1,0 +1,7 @@
+total_rows: 345
+rows_with_sales: 1
+total_sales: 1
+total_views: 942
+active_rows: 345
+deactivated_rows: 0
+status_counts: {'active': 345}

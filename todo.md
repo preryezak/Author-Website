@@ -276,6 +276,62 @@
 
 ## Corrected Scope: Selar Preorder and Affiliate Activation
 
+## Selar Affiliate Prioritization Update
+
+## Approved Selar Activation Parameters
+
+## Selar Cover Upload Constraint
+
+## Selar Bundle Draft and UGX Pricing Anchor
+
+## Promotional Asset Expansion
+
+## Remaining Selar Configuration and Asset Production
+
+- [ ] Inspect the filled bundle form and identify all remaining empty or default fields.
+- [ ] Calculate fixed currency amounts from the approved UGX tier prices; do not rely on live estimates as the source of truth.
+- [ ] Audit advanced settings, delivery behavior, email tags, checkout fields, preorder controls, and affiliate scope.
+- [ ] Prepare square promotional assets under 7 MB and document the requested motion/video production route.
+- [ ] Present the complete Selar draft for final submission approval.
+
+
+- [ ] Define a square-first promotional asset system with every image under Selar’s 7 MB limit.
+- [ ] Plan additional square product tiles, bundle graphics, quote cards, author/book assets, and social derivatives using approved artwork and factual copy.
+- [ ] Assess a short promotional motion/video asset and identify the correct production route and export constraints.
+- [ ] Keep promotional planning separate from the Selar product submission so no unfinished asset is presented as included product content.
+
+
+- [ ] Inspect the new Selar product-bundle draft and confirm the uploaded cover is selected.
+- [ ] Use confirmed UGX tier prices as the source of truth for all displayed currency estimates.
+- [ ] Configure the bundle description, included files, preorder date, and buyer delivery behavior.
+- [ ] Verify affiliate scope remains All Products with 25% commission, without activating affiliates prematurely.
+- [ ] Pause before final product creation and obtain confirmation.
+
+
+- [ ] Inspect the approved portrait cover dimensions and current file size.
+- [ ] Create a high-quality JPEG derivative below 7 MB without altering the original or 4K master.
+- [ ] Validate dimensions, file size, color, and legibility of the derivative.
+- [ ] Upload and select the derivative in the open Selar preorder draft.
+
+
+- [x] Retain the existing 25% affiliate commission.
+- [x] Attach selected affiliates to All Products, which currently means The Influential Spirit because prior products are deactivated.
+- [x] Select one affiliate with a verified sale plus the next 39 highest-view active affiliates.
+- [ ] Apply the approved settings in Selar and pause immediately before final activation submission.
+
+
+- [ ] Analyze the uploaded `affiliates_report_2026_08_27_08_29.csv` as the authoritative affiliate roster.
+- [ ] Identify and rank affiliates with recorded sales first.
+- [ ] Rank remaining candidates by demonstrated views, status, and eligibility to fill capacity up to 40.
+- [ ] Present the ranked selection and proposed commission for approval before activation.
+
+
+- [ ] Inspect affiliate performance data and identify affiliates with recorded sales first.
+- [ ] Rank eligible affiliates by demonstrated sales before filling the free-plan capacity of 40.
+- [ ] Check whether the 40-affiliate limit applies to active product access, marketplace visibility, or both.
+- [ ] Present the ranked selection and proposed commission for approval before activation.
+
+
 - [ ] Commit and verify the latest website changes before Selar work.
 - [ ] Research current Selar preorder, free-plan, payment, delivery, and affiliate requirements.
 - [ ] Inspect the existing Selar preorder product and complete only missing setup fields.
@@ -372,5 +428,75 @@
 - [x] Verify the parent title, description, variant copy, visibility, and delivery wording.
 - [x] Set the delivery date to 15 September 2026 and avoid promising unfinished audiobook files as immediate downloads.
 - [x] Validate variant selection, checkout pricing, content descriptions, visibility, and public URL before reporting completion.
+
+## End Current Request
+
+
+### Verified Selar draft findings — 27 August 2026
+
+- The draft is a Bundle product with category `Faith and Spirituality` and subcategory `Christian Living` selected.
+- Reader Edition UGX anchor is 45,000; fixed rounded display values entered are NGN 18,000, USD 12, GBP 9, GHS 130, KES 1,600, ZAR 220, TZS 30,000, XAF 7,000, XOF 7,000, and RWF 18,000.
+- Reader Edition includes `The_Influential_Spirit_Official_Preview.pdf.pdf` (3.7 MB) marked Non-downloadable, appropriate for a sample preview.
+- Advanced Options inspected: customer approval is off and unavailable on the free plan; CTA is `Pre-order now`; duplicate-purchase restriction is off; shipping-address collection is off.
+- Email Marketing Tags has no connected tag available; leave empty unless a Selar email integration is connected.
+- Custom Checkout Form has no custom questions; leave empty because this is a digital preorder.
+- The external redirect was corrected from the typo `https://theccndaiy.com/join` to `https://theccndaily.com`.
+- The draft has not been submitted. Remaining work is to apply the same conversion table to Formation (UGX 90,000) and Complete Formation (UGX 150,000), then audit all tier files and advanced settings before asking for final submission approval.
+
+### Conversion display table to apply
+
+| Tier | UGX | NGN | USD | GBP | GHS | KES | ZAR | TZS | XAF | XOF | RWF |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Reader Edition | 45,000 | 18,000 | 12 | 9 | 130 | 1,600 | 220 | 30,000 | 7,000 | 7,000 | 18,000 |
+| Formation Bundle | 90,000 | 36,000 | 24 | 18 | 260 | 3,200 | 450 | 60,000 | 14,000 | 14,000 | 35,000 |
+| Complete Formation Edition | 150,000 | 60,000 | 40 | 27 | 430 | 5,200 | 750 | 100,000 | 23,000 | 23,000 | 58,000 |
+
+These are fixed rounded display prices anchored to the approved UGX amounts, not a claim of a guaranteed live FX rate.
+
+## Remaining Selar Configuration and Asset Production
+
+- [x] Apply the conversion table to Formation and Complete tiers.
+- [x] Audit all tier files, availability toggles, settings, and redirect without submitting the product.
+- [x] Build square promotional assets from approved cover and author assets; every Selar-compatible image must be at least 300×300 px and under 7 MB.
+- [x] Create quote-card, bundle-tier, ebook, audiobook, print-edition, preorder, and author/book launch assets with exact approved copy only.
+- [ ] Produce a short 9:16 social video blueprint first; obtain user confirmation before video execution because the video workflow requires an explicit Phase 1 stop.
+- [x] Keep all asset variants individually downloadable and label source, dimensions, format, and file size.
+
+
+## Audiobook square correction — user-confirmed sources
+
+- [x] Treat the attached 2048×2048 unmarked square audiobook master as the earlier audiobook composition the author means, not the previously selected framed variant.
+- [x] Treat the attached 1920×1920 artwork with `AUDIOBOOK EDITION` and headphones as the newer marked audiobook version.
+- [x] Create two distinct JPEG derivatives from those exact source compositions, each comfortably below 7 MB.
+- [x] Verify both outputs technically without reopening the attached images visually.
+- [x] Deliver both files separately with explicit Selar upload recommendations; do not alter the live listing in this pass.## Live Selar correction pass — user confirmed proceed
+- [x] Compress the newly uploaded unmarked square audiobook cover from the provided source and keep the composition unchanged.
+- [x] Replace the live Selar main image with the verified sub-7 MB unmarked audiobook square.
+- [x] Locate and correct the separate product-level base amount that produces the stray USh450,000 checkout figure.
+- [x] Enable strike-through pricing and enter the approved original and 20% sale prices for all three tiers and supported currencies.
+- [x] Verify the public Selar page in UGX and another currency after saving.
+- [x] Do not send affiliate invitations in this pass; report the separate affiliate action after storefront verification.
+## Current Request: Oversized Audiobook Cover Correction
+- [x] Identify the exact newly uploaded audiobook source that remains above 7 MB.
+- [x] Create a fresh JPEG derivative from that exact source without changing its composition.
+- [x] Verify the output is square and comfortably below 7 MB.
+- [x] Deliver the new file separately and leave the live Selar listing unchanged until the author uploads it.
+.
+
+## End Current Request## Current Request: Audiobook Thumbnail Safety-Margin Reduction
+- [x] Reconfirm the exact thumbnail source and previous delivered file size discrepancy.
+- [x] Generate a substantially smaller square JPEG, targeting well under 5 MB rather than near Selar’s 7 MB ceiling.
+- [x] Verify exact byte size and dimensions before delivery; do not change the live Selar listing.
+## End Current Requestt
+
+
+## Current Request: Connect Verified Selar Shop to Author Website
+
+- [x] Confirm the verified Selar storefront URL and the designated Africa commerce area.
+- [x] Replace the temporary Influence Circle placeholder on the Africa/Selar bundle CTAs with `https://selar.com/8818840887`.
+- [x] Preserve the default International Payhip route and separate Influence Circle capture flow.
+- [x] Add safe external-link attributes for the Selar storefront.
+- [x] Run TypeScript validation and production build.
+- [x] Inspect desktop and mobile previews and document the result.
 
 ## End Current Request
