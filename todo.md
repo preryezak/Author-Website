@@ -266,12 +266,12 @@
 
 ## Current Request: Author-Page SEO and GitHub Synchronization
 
-- [ ] Inspect current author-page metadata, structured content, robots/sitemap files, and repository status.
-- [ ] Implement factual author/book SEO metadata, canonical URL handling, Open Graph/Twitter cards, and JSON-LD structured data.
-- [ ] Add or verify crawl guidance such as robots.txt and sitemap support without fabricating author credentials or availability claims.
-- [ ] Build and audit the responsive page and metadata output.
-- [ ] Commit all outstanding website changes to the connected GitHub repository.
-- [ ] Report the commit and any live-hosting synchronization requirements.
+- [x] Inspect current author-page metadata, structured content, robots/sitemap files, and repository status.
+- [x] Implement factual author/book SEO metadata, canonical URL handling, Open Graph/Twitter cards, and JSON-LD structured data.
+- [x] Add or verify crawl guidance such as robots.txt and sitemap support without fabricating author credentials or availability claims.
+- [x] Build and audit the responsive page and metadata output.
+- [x] Commit all outstanding website changes to the connected GitHub repository.
+- [x] Report the commit and any live-hosting synchronization requirements.
 
 
 - [x] Inspect the current editions route logic and project instructions.
