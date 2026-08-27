@@ -32,6 +32,7 @@ export default function Home() {
   const [marketRoute, setMarketRoute] = useState<"international" | "africa">("international");
   const [hasScrolled, setHasScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showInfluenceCircle, setShowInfluenceCircle] = useState(false);
   const kitFormRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -61,6 +62,7 @@ export default function Home() {
 
 
   useEffect(() => {
+    if (!showInfluenceCircle) return;
     const container = kitFormRef.current;
     if (!container || container.dataset.kitLoaded === "true") return;
 
@@ -75,7 +77,14 @@ export default function Home() {
       container.innerHTML = "";
       delete container.dataset.kitLoaded;
     };
-  }, []);
+  }, [showInfluenceCircle]);
+
+  useEffect(() => {
+    if (!showInfluenceCircle) return;
+    window.requestAnimationFrame(() => {
+      document.getElementById("influence-circle")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [showInfluenceCircle]);
 
 
   return (
@@ -377,39 +386,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Influence Circle Capture */}
-      <section id="influence-circle" data-reveal="circle" className="py-24 bg-[#1E293B] text-[#F8FAFC] border-b border-[#C5A059]/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:28px_28px] opacity-10 pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-            <div className="lg:col-span-7 space-y-6">
-              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Launch Community</span>
-              <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Join the Influence Circle</h2>
-              <p className="text-[#CBD5E1] text-lg leading-relaxed max-w-2xl font-sans">
-                Get a preview of <span className="font-serif italic text-white">The Influential Spirit</span>, launch updates, access to the 30-day journey resources, and first notice of new releases from The Deep Encounter Library.
-              </p>
-              <div className="rule-glow flex items-center gap-3 pt-4 border-t border-[#C5A059]/30">
-                <span className="seal-hover inline-flex h-9 w-9 items-center justify-center border border-[#C5A059] text-[#C5A059] font-serif font-bold text-sm">EK</span>
-                <span className="text-xs uppercase tracking-[0.18em] text-[#94A3B8]">Formation Before Platform</span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6">
-                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">01</span><strong className="block text-white font-serif">Preview</strong><span className="text-xs text-[#94A3B8]">A first look inside the book.</span></div>
-                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">02</span><strong className="block text-white font-serif">Journey</strong><span className="text-xs text-[#94A3B8]">Resources for the 30 days.</span></div>
-                <div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">03</span><strong className="block text-white font-serif">Library</strong><span className="text-xs text-[#94A3B8]">News of what comes next.</span></div>
-              </div>
-            </div>
-            <div className="lift-card lg:col-span-5 bg-[#F7F4EF] text-[#1E293B] p-6 sm:p-8 rounded-md border border-[#C5A059]/50 shadow-2xl">
-              <div className="border-b border-[#C5A059]/40 pb-4 mb-5">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Library Dispatch</span>
-                <h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-1">Stay close to the journey.</h3>
-              </div>
-              <div ref={kitFormRef} className="min-h-[112px]" aria-label="Influence Circle signup form"></div>
-                  <p className="text-[11px] text-[#6B7280] leading-relaxed mt-4 border-t border-[#C5A059]/30 pt-4">By joining, you are signing up for Influence Circle launch and library communications. Find the Devotional newsletter and other resources at <a href="https://theccndaily.com" target="_blank" rel="noreferrer" className="text-[#1E293B] underline underline-offset-2 hover:text-[#C5A059]">theccndaily.com</a>.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Reader Responses & Verified Amazon Reviews Section */}
       <section id="reviews" data-reveal="reviews" className="py-24 bg-[#F7F4EF] border-b border-[#E6E0D4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -657,7 +633,23 @@ export default function Home() {
         </div>
       </section>
 
-      <section data-reveal="final" className="py-24 bg-[#1E293B] text-white text-center border-t border-[#C5A059]/30"><div className="max-w-3xl mx-auto px-4 sm:px-6"><h2 className="font-serif text-4xl sm:text-5xl font-bold">Your influence does not start when you get the platform.</h2><p className="text-[#CBD5E1] text-lg leading-relaxed mt-5">It starts with who you're becoming right now, before anyone's watching.</p><div className="flex flex-col sm:flex-row justify-center gap-4 mt-8"><a href="#formats"><Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-8 py-6">Begin the 30-Day Journey <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><a href="#influence-circle"><Button variant="outline" className="border-[#C5A059]/60 text-white hover:bg-white/10 font-semibold px-8 py-6">Join the Influence Circle</Button></a></div><p className="text-xs uppercase tracking-[0.22em] text-[#C5A059] mt-8">Grounded in Scripture · Forged for Impact</p></div></section>
+      <section data-reveal="final" className="py-24 bg-[#1E293B] text-white text-center border-t border-[#C5A059]/30"><div className="max-w-3xl mx-auto px-4 sm:px-6"><h2 className="font-serif text-4xl sm:text-5xl font-bold">Your influence does not start when you get the platform.</h2><p className="text-[#CBD5E1] text-lg leading-relaxed mt-5">It starts with who you're becoming right now, before anyone's watching.</p><div className="flex flex-col sm:flex-row justify-center gap-4 mt-8"><a href="#formats"><Button className="bg-[#C5A059] hover:bg-[#B38F4D] text-white font-semibold px-8 py-6">Begin the 30-Day Journey <ChevronRight className="ml-2 w-5 h-5 inline" /></Button></a><Button type="button" variant="outline" aria-controls="influence-circle" aria-expanded={showInfluenceCircle} onClick={() => setShowInfluenceCircle(true)} className="border-[#C5A059]/60 text-white hover:bg-white/10 font-semibold px-8 py-6">{showInfluenceCircle ? "Influence Circle below" : "Join the Influence Circle"}</Button></div><p className="text-xs uppercase tracking-[0.22em] text-[#C5A059] mt-8">Grounded in Scripture · Forged for Impact</p></div></section>
+
+      {showInfluenceCircle && <section id="influence-circle" data-reveal="circle" className="is-visible py-24 bg-[#0F172A] text-[#F8FAFC] border-t border-[#C5A059]/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:28px_28px] opacity-10 pointer-events-none"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+            <div className="lg:col-span-7 space-y-6">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Launch Community</span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Join the Influence Circle</h2>
+              <p className="text-[#CBD5E1] text-lg leading-relaxed max-w-2xl font-sans">Get a preview of <span className="font-serif italic text-white">The Influential Spirit</span>, launch updates, access to the 30-day journey resources, and first notice of new releases from The Deep Encounter Library.</p>
+              <div className="rule-glow flex items-center gap-3 pt-4 border-t border-[#C5A059]/30"><span className="seal-hover inline-flex h-9 w-9 items-center justify-center border border-[#C5A059] text-[#C5A059] font-serif font-bold text-sm">EK</span><span className="text-xs uppercase tracking-[0.18em] text-[#94A3B8]">Formation Before Platform</span></div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6"><div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">01</span><strong className="block text-white font-serif">Preview</strong><span className="text-xs text-[#94A3B8]">A first look inside the book.</span></div><div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">02</span><strong className="block text-white font-serif">Journey</strong><span className="text-xs text-[#94A3B8]">Resources for the 30 days.</span></div><div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">03</span><strong className="block text-white font-serif">Library</strong><span className="text-xs text-[#94A3B8]">News of what comes next.</span></div></div>
+            </div>
+            <div className="lift-card lg:col-span-5 bg-[#F7F4EF] text-[#1E293B] p-6 sm:p-8 rounded-md border border-[#C5A059]/50 shadow-2xl"><div className="border-b border-[#C5A059]/40 pb-4 mb-5"><span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">Library Dispatch</span><h3 className="font-serif text-2xl font-bold text-[#1E293B] mt-1">Stay close to the journey.</h3></div><div ref={kitFormRef} className="min-h-[112px]" aria-label="Influence Circle signup form"></div><p className="text-[11px] text-[#6B7280] leading-relaxed mt-4 border-t border-[#C5A059]/30 pt-4">By joining, you are signing up for Influence Circle launch and library communications. Find the Devotional newsletter and other resources at <a href="https://theccndaily.com" target="_blank" rel="noreferrer" className="text-[#1E293B] underline underline-offset-2 hover:text-[#C5A059]">theccndaily.com</a>.</p></div>
+          </div>
+        </div>
+      </section>}
 
       {/* Footer */}
       <footer className="bg-[#111827] text-[#94A3B8] py-14 border-t border-slate-800">

@@ -56,3 +56,5 @@
 - The EK crown monogram is the recurring publisher seal and should be visible as a primary brand artifact in the header, section dividers, commerce area, and footer.
 - Customer-facing copy must not expose internal planning notes, pending-link notes, route labels, or implementation commentary.
 - The Africa route should be presented simply as Africa, with mobile money and card payment language. Currency planning estimates remain internal until Selar prices are fixed.
+- The final CTA and revealed Influence Circle form should read as a deliberate manuscript closing leaf: distinct navy tonal layers, gold rulework, and a visible EK seal.
+- Commerce should feel like selecting a devotional edition or formation volume; regional routing remains clear but secondary to the bookshop metaphor.

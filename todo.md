@@ -270,6 +270,17 @@
 
 ## Current Request: Final Website Integrity Check and GitHub Commit
 
+## Current Request: Relocate and Conditionally Reveal Influence Circle
+
+- [x] Inspect the current Influence Circle section and interaction state.
+- [x] Move and conditionally reveal the invitation and signup form at the final CTA.
+- [x] Preserve a distinct navy contrast layer and accessible expanded-state attributes.
+- [x] Run production build and TypeScript validation; both passed.
+- [x] Complete a desktop full-page visual audit; initial hidden state and final CTA contrast are intact.
+- [ ] Complete a direct interactive button test in the browser; the browser extension timed out during the attempt.
+- [ ] Save a verified checkpoint for the relocation.
+
+
 - [ ] Verify production build and TypeScript status.
 - [ ] Verify live canonical metadata, sitemap, robots, Google file, and Bing file.
 - [ ] Check current GitHub branch divergence and uncommitted changes.
