@@ -264,6 +264,16 @@
 
 ## Current Request: Live Payhip Embed and Route-First Website Commerce
 
+## Current Request: Author-Page SEO and GitHub Synchronization
+
+- [ ] Inspect current author-page metadata, structured content, robots/sitemap files, and repository status.
+- [ ] Implement factual author/book SEO metadata, canonical URL handling, Open Graph/Twitter cards, and JSON-LD structured data.
+- [ ] Add or verify crawl guidance such as robots.txt and sitemap support without fabricating author credentials or availability claims.
+- [ ] Build and audit the responsive page and metadata output.
+- [ ] Commit all outstanding website changes to the connected GitHub repository.
+- [ ] Report the commit and any live-hosting synchronization requirements.
+
+
 - [x] Inspect the current editions route logic and project instructions.
 - [ ] Add the live Payhip embed page for product `CidbX` as the default International route content. Current screenshot shows the styled embed shell but no loaded Payhip product content; debug the third-party script mount before checkpointing.
 - [x] Keep Selar content hidden until the Uganda & Africa route is selected.
