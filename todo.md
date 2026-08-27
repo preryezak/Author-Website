@@ -270,6 +270,15 @@
 
 ## Current Request: Google Search Console HTML Verification
 
+## Current Request: Bing Webmaster Tools XML Verification
+
+- [ ] Copy the exact user-provided BingSiteAuth.xml into the website public root.
+- [ ] Build and publish the Bing verification file.
+- [ ] Confirm https://books.theccndaily.com/BingSiteAuth.xml serves the exact uploaded contents.
+- [ ] Ask the user to click Verify in Bing Webmaster Tools and submit the sitemap.
+- [ ] Keep the verification file permanently available.
+
+
 - [ ] Copy the exact user-provided Google verification file into the website public root.
 - [ ] Build and publish the verification file.
 - [ ] Confirm the verification URL returns the exact file contents.
