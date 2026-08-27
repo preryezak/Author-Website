@@ -266,6 +266,25 @@
 
 ## Current Request: Author-Page SEO and GitHub Synchronization
 
+## Current Request: Canonical Domain, Sitemap, and Live Commerce Verification
+
+## Current Request: Google Search Console HTML Verification
+
+- [ ] Copy the exact user-provided Google verification file into the website public root.
+- [ ] Build and publish the verification file.
+- [ ] Confirm the verification URL returns the exact file contents.
+- [ ] Ask the user to click Verify in Google Search Console, then submit the sitemap.
+- [ ] Keep the verification file permanently available.
+
+
+- [x] Verify whether `books.theccndaily.com` resolves and serves the intended author page.
+- [x] Verify the public canonical tag and sitemap endpoint. Custom domain returns HTTP 200 for the page and sitemap; the page contains the canonical URL and SEO metadata.
+- [ ] Test the Payhip embed and International/Africa route behavior on the public site. Custom-domain browser view confirms the International route, Payhip fallback link, and both route labels; third-party iframe content is not exposed in the browser text capture, so checkout rendering still needs a normal-browser confirmation.
+- [ ] Submit the sitemap in authenticated Google Search Console if the property is available. Current Google session opens the Welcome page and shows no verified property for books.theccndaily.com.
+- [ ] Submit the sitemap in authenticated Bing Webmaster Tools if the property is available. Current browser session is not signed in to Bing Webmaster Tools.
+- [x] Record any unresolved custom-domain or account-access dependency. The custom domain and sitemap resolve with HTTP 200; webmaster-tool submission requires property verification or sign-in.
+
+
 - [x] Inspect current author-page metadata, structured content, robots/sitemap files, and repository status.
 - [x] Implement factual author/book SEO metadata, canonical URL handling, Open Graph/Twitter cards, and JSON-LD structured data.
 - [x] Add or verify crawl guidance such as robots.txt and sitemap support without fabricating author credentials or availability claims.
