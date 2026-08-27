@@ -260,4 +260,38 @@
 - [ ] Verify the public form and redirect without creating unnecessary duplicate test subscribers.
 - [ ] Save and deliver the verified workflow update.
 
+## Current Request: Payhip Preorder Product — Product Variants + Beta Content Editor
+
+## Current Request: Live Payhip Embed and Route-First Website Commerce
+
+- [x] Inspect the current editions route logic and project instructions.
+- [ ] Add the live Payhip embed page for product `CidbX` as the default International route content. Current screenshot shows the styled embed shell but no loaded Payhip product content; debug the third-party script mount before checkpointing.
+- [x] Keep Selar content hidden until the Uganda & Africa route is selected.
+- [x] Preserve approved copy, pricing, route labels, and accessibility behavior.
+- [ ] Build and test desktop/mobile embed rendering and route switching. The managed preview confirms the International route is default and the Payhip iframe area mounts, but the third-party iframe content is not exposed in the screenshot/text capture and needs live-domain confirmation.
+- [ ] Save a verified checkpoint and report the live website result.
+
+
+- [x] Inspect the available Payhip product, Category & Tags, and SEO/discoverability guidance.
+- [x] Prepare the spacing-safe Payhip description with headings and tier bullets.
+- [x] Prepare accurate Payhip marketplace tags without keyword stuffing or unsupported claims.
+- [x] Prepare factual search and AI-readable metadata while preserving the approved product offer.
+- [ ] Decide between Payhip’s available categories: Self-improvement (Spirituality) and Writing & Publishing (Resource), based on truthful product fit.
+- [ ] Apply the prepared description and metadata in the authenticated Payhip editor.
+- [ ] Recheck the public storefront after saving the description and discoverability revision.
+
+- [x] Recover a reliable live view of the authenticated Payhip draft.
+- [x] Inspect the complete page in real time before submission.
+- [x] Format the parent product description with clear headings, paragraphs, spacing, and restrained emphasis.
+- [x] Format and review each variant’s Beta Content Editor message for readable download-page presentation.
+- [x] Confirm Product Variants supports one product page with three selectable package tiers.
+- [x] Configure Reader Edition — USD 15 / UGX 45,000 reference price.
+- [x] Configure Formation Bundle — USD 29 / UGX 90,000 reference price.
+- [x] Configure Complete Formation Edition — USD 49 / UGX 150,000 reference price.
+- [x] Use Beta Content Editor rather than the placeholder-file option.
+- [x] Verify cover image and Official Preview PDF uploads.
+- [x] Verify the parent title, description, variant copy, visibility, and delivery wording.
+- [x] Set the delivery date to 15 September 2026 and avoid promising unfinished audiobook files as immediate downloads.
+- [x] Validate variant selection, checkout pricing, content descriptions, visibility, and public URL before reporting completion.
+
 ## End Current Request

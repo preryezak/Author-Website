@@ -4,11 +4,29 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Award, Shield, Compass, ChevronRight, Feather, Star, Menu, X, BookOpen, MessageCircle, UsersRound, Footprints, HeartHandshake, Crown, Flame, Gauge, HandHeart, BriefcaseBusiness, House, GraduationCap, Eye } from "lucide-react";
 
+// Neo-Monastic commerce reminder: keep the International Payhip experience calm, direct, and visible by default; reveal Selar only through an explicit regional choice.
 const bundleOptions = [
   { name: "Reader Edition", usd: 15, ugx: 45000, description: "Designed digital reading edition with reflowable EPUB and PDF delivery.", popular: false },
   { name: "Formation Bundle", usd: 29, ugx: 90000, description: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and 30-Day Reading Plan & Challenge.", popular: true },
   { name: "Complete Formation", usd: 49, ugx: 150000, description: "Everything in Formation, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", popular: false },
 ] as const;
+
+function PayhipEmbed() {
+  // Neo-Monastic commerce reminder: keep the live edition table visible, spacious, and easy to trust rather than hiding checkout behind a button.
+  return (
+    <div className="payhip-embed-shell mx-auto max-w-5xl bg-[#F7F4EF] border border-[#C5A059]/40 p-3 sm:p-5 lg:p-7 shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
+      <iframe
+        title="The Influential Spirit Payhip product and preorder checkout"
+        src="https://payhip.com/b/CidbX?is_embed_page=1"
+        loading="lazy"
+        className="block min-h-[1120px] w-full border-0 bg-[#F7F4EF]"
+      />
+      <p className="mt-4 text-center text-xs text-[#6B7280]">
+        If the product panel does not load, <a className="font-semibold text-[#1E293B] underline underline-offset-4" href="https://payhip.com/b/CidbX" target="_blank" rel="noopener noreferrer">open the Payhip product page directly</a>.
+      </p>
+    </div>
+  );
+}
 
 export default function Home() {
   const [marketRoute, setMarketRoute] = useState<"international" | "africa">("international");
@@ -612,11 +630,20 @@ export default function Home() {
             <button type="button" role="tab" aria-selected={marketRoute === "africa"} onClick={() => setMarketRoute("africa")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "africa" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Africa</span><span className="font-serif text-xl text-white font-bold">Africa</span><span className="block text-xs text-[#94A3B8] mt-1">Selar · mobile money and card payment</span></button>
           </div>
 
-          <div className="route-note max-w-6xl mx-auto mb-8"><div className="flex items-center gap-3"><span className="seal-hover inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#C5A059] text-[#C5A059] font-serif font-bold"><Crown className="w-4 h-4" /></span><span>{marketRoute === "africa" ? "Selar checkout supports mobile money and card payment across Africa." : "Payhip provides secure international checkout and digital delivery."}</span></div></div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
-            {bundleOptions.map((bundle) => <div key={bundle.name} className={`lift-card bundle-card border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative flex flex-col`}><div className="flex items-start justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Library edition</span><span className="block text-xs text-[#94A3B8] mt-1">Volume I · Digital formation</span></div><span className="edition-seal" aria-hidden="true"><Crown className="w-4 h-4" /></span></div>{bundle.popular && <span className="self-start mt-4 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<span className="block font-serif text-lg text-[#C5A059] mt-4">{bundle.name}</span><h3 className="font-serif text-2xl text-white font-bold mt-3">{marketRoute === "international" ? `US$${bundle.usd}` : `UGX ${bundle.ugx.toLocaleString("en-UG")}`}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3 flex-1">{bundle.description}</p><a href={marketRoute === "international" ? "https://payhip.com/ccndaily" : "#influence-circle"} target={marketRoute === "international" ? "_blank" : undefined} rel={marketRoute === "international" ? "noopener noreferrer" : undefined} className="inline-flex items-center justify-center gap-2 mt-6 border border-[#C5A059]/60 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#C5A059] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]">{marketRoute === "international" ? "Pre-order via Payhip" : "Pre-order via Selar"}<ChevronRight className="w-4 h-4 text-[#C5A059]" /></a></div>)}
-          </div>
+          {marketRoute === "international" ? (
+            <div data-reveal="payhip" className="mb-10 space-y-4">
+              <div className="max-w-3xl mx-auto text-center space-y-2">
+                <span className="text-xs uppercase tracking-[0.22em] text-[#C5A059] font-bold">International checkout</span>
+                <h3 className="font-serif text-3xl sm:text-4xl text-white font-bold">Choose your edition on Payhip.</h3>
+                <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">The live Payhip product page is ready below with all three digital formation editions and secure checkout.</p>
+              </div>
+              <PayhipEmbed />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
+              {bundleOptions.map((bundle) => <div key={bundle.name} className={`lift-card bundle-card border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative flex flex-col`}><div className="flex items-start justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Library edition</span><span className="block text-xs text-[#94A3B8] mt-1">Volume I · Digital formation</span></div><span className="edition-seal" aria-hidden="true"><Crown className="w-4 h-4" /></span></div>{bundle.popular && <span className="self-start mt-4 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<span className="block font-serif text-lg text-[#C5A059] mt-4">{bundle.name}</span><h3 className="font-serif text-2xl text-white font-bold mt-3">UGX {bundle.ugx.toLocaleString("en-UG")}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3 flex-1">{bundle.description}</p><a href="#influence-circle" className="inline-flex items-center justify-center gap-2 mt-6 border border-[#C5A059]/60 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#C5A059] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]">Pre-order via Selar<ChevronRight className="w-4 h-4 text-[#C5A059]" /></a></div>)}
+            </div>
+          )}
 
         </div>
       </section>
