@@ -272,6 +272,27 @@
 
 ## Current Request: Relocate and Conditionally Reveal Influence Circle
 
+## Current Request: Payhip Free-Plan Preorder and Selar Affiliate Activation
+
+## Corrected Scope: Selar Preorder and Affiliate Activation
+
+- [ ] Commit and verify the latest website changes before Selar work.
+- [ ] Research current Selar preorder, free-plan, payment, delivery, and affiliate requirements.
+- [ ] Inspect the existing Selar preorder product and complete only missing setup fields.
+- [ ] Inspect the 40 existing affiliates and identify pending, active, or approval-required states.
+- [ ] Confirm commission terms before any affiliate activation.
+- [ ] Activate affiliates only after explicit confirmation of the final terms.
+
+
+- [ ] Commit and verify the latest website changes.
+- [ ] Research current Payhip preorder, variants, delivery, payment, and free-plan requirements.
+- [ ] Inspect the existing Payhip product `CidbX` and complete only the missing preorder settings.
+- [ ] Confirm Payhip checkout, file-delivery, preview, and customer-notification settings.
+- [ ] Inspect the Selar affiliate area and the existing 40 affiliate records.
+- [ ] Identify the exact bulk-activation action, commission terms, and approval requirement.
+- [ ] Obtain confirmation before activating affiliates or changing commission/financial settings.
+
+
 - [x] Inspect the current Influence Circle section and interaction state.
 - [x] Move and conditionally reveal the invitation and signup form at the final CTA.
 - [x] Preserve a distinct navy contrast layer and accessible expanded-state attributes.
