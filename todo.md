@@ -510,3 +510,25 @@ These are fixed rounded display prices anchored to the approved UGX amounts, not
 - [x] Verify the remote commit and clean working tree.
 
 ## End Current Request
+
+
+## Current Request: Cloudflare Security and Routing Configuration
+
+- [ ] Confirm the authenticated Cloudflare account, both domains, and current rule inventory.
+- [ ] Create only missing theccndaily.com rate-limit, WAF, and cache rules; do not guess unspecified bad ASNs.
+- [ ] Create or reconcile eryezakalalu.com cache and approved redirect rules without duplicating existing rules.
+- [ ] Verify rule expressions, actions, ordering, and enabled status.
+- [ ] Document completed rules, skipped items, and any remaining manual inputs.
+
+## End Current Request
+
+
+## Current Request: Preview Embed Buy Button
+
+- [x] Reproduce the Buy-button loading behavior in the rendered preview.
+- [x] Inspect the Payhip embed URL, fallback link, and browser/network errors.
+- [x] Apply the smallest reliable correction without changing approved commerce routes.
+- [x] Build and retest desktop/mobile checkout entry behavior.
+- [x] Document whether the issue is website-side or third-party checkout-side.
+
+## End Current Request

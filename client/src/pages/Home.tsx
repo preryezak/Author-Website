@@ -12,18 +12,29 @@ const bundleOptions = [
 ] as const;
 
 function PayhipEmbed() {
-  // Neo-Monastic commerce reminder: keep the live edition table visible, spacious, and easy to trust rather than hiding checkout behind a button.
+  // Neo-Monastic commerce reminder: make the checkout hand-off calm, explicit, and dependable; Payhip’s tiered product page remains the source of truth for edition selection.
   return (
-    <div className="payhip-embed-shell mx-auto max-w-5xl bg-[#F7F4EF] border border-[#C5A059]/40 p-3 sm:p-5 lg:p-7 shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
-      <iframe
-        title="The Influential Spirit Payhip product and preorder checkout"
-        src="https://payhip.com/b/CidbX?is_embed_page=1"
-        loading="lazy"
-        className="block min-h-[1120px] w-full border-0 bg-[#F7F4EF]"
-      />
-      <p className="mt-4 text-center text-xs text-[#6B7280]">
-        If the product panel does not load, <a className="font-semibold text-[#1E293B] underline underline-offset-4" href="https://payhip.com/b/CidbX" target="_blank" rel="noopener noreferrer">open the Payhip product page directly</a>.
-      </p>
+    <div className="payhip-embed-shell mx-auto max-w-5xl bg-[#F7F4EF] border border-[#C5A059]/40 p-6 sm:p-10 lg:p-14 shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-center">
+        <div className="space-y-5">
+          <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#C5A059] font-extrabold"><span className="inline-block h-2 w-2 rounded-full bg-[#C5A059]" /> Payhip preorder</span>
+          <h4 className="font-serif text-3xl sm:text-4xl text-[#1E293B] font-bold leading-tight">Choose the edition that fits your season.</h4>
+          <p className="text-[#6B7280] text-base leading-relaxed">The Payhip product page will open in a new tab, where you can select the Reader, Formation, or Complete edition and finish your preorder.</p>
+          <a href="https://payhip.com/b/CidbX" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-7 py-4 text-sm shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]">
+            Open Payhip checkout
+            <ChevronRight className="w-4 h-4 text-[#C5A059]" />
+          </a>
+          <p className="text-xs text-[#6B7280]">The product page handles the edition choice and payment securely.</p>
+        </div>
+        <div className="border-l-2 border-[#C5A059] pl-6 sm:pl-8 space-y-5">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Inside the listing</span>
+          <div className="space-y-4">
+            <div><strong className="block font-serif text-xl text-[#1E293B]">Reader Edition</strong><span className="text-sm text-[#6B7280]">The complete digital reading experience.</span></div>
+            <div><strong className="block font-serif text-xl text-[#1E293B]">Formation Bundle</strong><span className="text-sm text-[#6B7280]">Digital edition, audiobook, and group-study resources.</span></div>
+            <div><strong className="block font-serif text-xl text-[#1E293B]">Complete Formation</strong><span className="text-sm text-[#6B7280]">The full companion resource library.</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
