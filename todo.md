@@ -532,3 +532,14 @@ These are fixed rounded display prices anchored to the approved UGX amounts, not
 - [x] Document whether the issue is website-side or third-party checkout-side.
 
 ## End Current Request
+
+
+## Current Request: Native International Pricing Selector
+
+- [ ] Confirm the approved Reader, Formation, and Complete prices and preserve the Africa/Selar route.
+- [ ] Replace the static Payhip hand-off panel with an interactive native price selector.
+- [ ] Show the selected edition, amount, and bundle contents before the Payhip hand-off.
+- [ ] Validate keyboard access, responsive layout, direct Payhip URL, and production build.
+- [ ] Save and publish the verified website checkpoint.
+
+## End Current Request

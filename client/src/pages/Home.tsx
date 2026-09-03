@@ -12,27 +12,49 @@ const bundleOptions = [
 ] as const;
 
 function PayhipEmbed() {
-  // Neo-Monastic commerce reminder: make the checkout hand-off calm, explicit, and dependable; Payhip’s tiered product page remains the source of truth for edition selection.
+  // Neo-Monastic commerce reminder: let the reader compare the full formation path clearly, then make the Payhip hand-off calm and explicit.
+  const [selectedName, setSelectedName] = useState<(typeof bundleOptions)[number]["name"]>("Formation Bundle");
+  const selectedBundle = bundleOptions.find((bundle) => bundle.name === selectedName) ?? bundleOptions[1];
+
   return (
-    <div className="payhip-embed-shell mx-auto max-w-5xl bg-[#F7F4EF] border border-[#C5A059]/40 p-6 sm:p-10 lg:p-14 shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
-      <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-center">
-        <div className="space-y-5">
+    <div className="payhip-embed-shell mx-auto max-w-5xl bg-[#F7F4EF] border border-[#C5A059]/40 p-5 sm:p-8 lg:p-10 shadow-[0_18px_50px_rgba(15,23,42,0.18)]">
+      <div className="space-y-8">
+        <div className="max-w-3xl space-y-4">
           <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#C5A059] font-extrabold"><span className="inline-block h-2 w-2 rounded-full bg-[#C5A059]" /> Payhip preorder</span>
           <h4 className="font-serif text-3xl sm:text-4xl text-[#1E293B] font-bold leading-tight">Choose the edition that fits your season.</h4>
-          <p className="text-[#6B7280] text-base leading-relaxed">The Payhip product page will open in a new tab, where you can select the Reader, Formation, or Complete edition and finish your preorder.</p>
+          <p className="text-[#6B7280] text-base leading-relaxed">Compare the three editions here, then continue to Payhip to confirm your choice and complete your preorder.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" role="group" aria-label="Payhip edition prices">
+          {bundleOptions.map((bundle) => {
+            const isSelected = bundle.name === selectedName;
+            return (
+              <button
+                key={bundle.name}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() => setSelectedName(bundle.name)}
+                className={`text-left p-5 border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059] ${isSelected ? "border-2 border-[#C5A059] bg-[#FFFDF9] shadow-[0_12px_28px_rgba(30,41,59,0.12)]" : "border-[#D8CCB9] bg-[#EFECE6]/60 hover:border-[#C5A059]/70 hover:bg-[#FFFDF9]"}`}
+              >
+                <span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">{isSelected ? "Selected edition" : "Digital edition"}</span>
+                <strong className="block font-serif text-xl text-[#1E293B] mt-3">{bundle.name}</strong>
+                <span className="block font-serif text-3xl text-[#1E293B] font-bold mt-3">${bundle.usd}</span>
+                <span className="block text-xs text-[#6B7280] leading-relaxed mt-3">{bundle.description}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 border-t border-[#D8CCB9] pt-6">
+          <div>
+            <span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Your selection</span>
+            <strong className="block font-serif text-2xl text-[#1E293B] mt-1">{selectedBundle.name} · ${selectedBundle.usd}</strong>
+            <span className="block text-xs text-[#6B7280] mt-1">Payhip will ask you to confirm this edition on its product page.</span>
+          </div>
           <a href="https://payhip.com/b/CidbX" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#1E293B] hover:bg-[#0F172A] text-white font-semibold px-7 py-4 text-sm shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]">
-            Open Payhip checkout
+            Continue with {selectedBundle.name}
             <ChevronRight className="w-4 h-4 text-[#C5A059]" />
           </a>
-          <p className="text-xs text-[#6B7280]">The product page handles the edition choice and payment securely.</p>
-        </div>
-        <div className="border-l-2 border-[#C5A059] pl-6 sm:pl-8 space-y-5">
-          <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Inside the listing</span>
-          <div className="space-y-4">
-            <div><strong className="block font-serif text-xl text-[#1E293B]">Reader Edition</strong><span className="text-sm text-[#6B7280]">The complete digital reading experience.</span></div>
-            <div><strong className="block font-serif text-xl text-[#1E293B]">Formation Bundle</strong><span className="text-sm text-[#6B7280]">Digital edition, audiobook, and group-study resources.</span></div>
-            <div><strong className="block font-serif text-xl text-[#1E293B]">Complete Formation</strong><span className="text-sm text-[#6B7280]">The full companion resource library.</span></div>
-          </div>
         </div>
       </div>
     </div>
