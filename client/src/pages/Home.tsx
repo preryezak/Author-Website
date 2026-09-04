@@ -62,7 +62,7 @@ function PayhipEmbed() {
 }
 
 export default function Home() {
-  const [marketRoute, setMarketRoute] = useState<"international" | "africa">("international");
+  const [marketRoute, setMarketRoute] = useState<"international" | "africa" | "">("international");
   const [hasScrolled, setHasScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showInfluenceCircle, setShowInfluenceCircle] = useState(false);
@@ -634,25 +634,34 @@ export default function Home() {
             <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">Choose the package that fits your season. Pre-order through the route that serves you best; the digital files will be delivered on 15 September 2026.</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 max-w-3xl mx-auto mb-10" role="tablist" aria-label="Choose your buying route">
-            <button type="button" role="tab" aria-selected={marketRoute === "international"} onClick={() => setMarketRoute("international")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "international" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">International</span><span className="font-serif text-xl text-white font-bold">International</span><span className="block text-xs text-[#94A3B8] mt-1">Payhip · secure digital checkout</span></button>
-            <button type="button" role="tab" aria-selected={marketRoute === "africa"} onClick={() => setMarketRoute("africa")} className={`flex-1 border px-5 py-4 text-left transition-colors ${marketRoute === "africa" ? "border-[#C5A059] bg-[#0F172A]" : "border-[#C5A059]/30 bg-[#0F172A]/40 hover:border-[#C5A059]/70"}`}><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Africa</span><span className="font-serif text-xl text-white font-bold">Africa</span><span className="block text-xs text-[#94A3B8] mt-1">Selar · mobile money and card payment</span></button>
-          </div>
+          <Accordion type="single" collapsible value={marketRoute} onValueChange={(value) => setMarketRoute(value === "international" || value === "africa" ? value : "")} className="max-w-6xl mx-auto space-y-3" aria-label="Choose your buying route">
+            <AccordionItem value="international" className="border border-[#C5A059]/40 bg-[#0F172A]/55 overflow-hidden">
+              <AccordionTrigger className="px-5 py-5 text-left hover:no-underline [&>svg]:text-[#C5A059]">
+                <span><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">International</span><span className="font-serif text-xl text-white font-bold">Payhip</span><span className="block text-xs text-[#94A3B8] mt-1">Secure digital checkout · compare editions below</span></span>
+              </AccordionTrigger>
+              <AccordionContent className="px-4 pb-5 pt-0 sm:px-5">
+                <div data-reveal="payhip" className="space-y-4">
+                  <div className="max-w-3xl mx-auto text-center space-y-2">
+                    <span className="text-xs uppercase tracking-[0.22em] text-[#C5A059] font-bold">International checkout</span>
+                    <h3 className="font-serif text-3xl sm:text-4xl text-white font-bold">Choose your edition on Payhip.</h3>
+                    <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">The live Payhip product page is ready below with all three digital formation editions and secure checkout.</p>
+                  </div>
+                  <PayhipEmbed />
+                </div>
+              </AccordionContent>
+            </AccordionItem>
 
-          {marketRoute === "international" ? (
-            <div data-reveal="payhip" className="mb-10 space-y-4">
-              <div className="max-w-3xl mx-auto text-center space-y-2">
-                <span className="text-xs uppercase tracking-[0.22em] text-[#C5A059] font-bold">International checkout</span>
-                <h3 className="font-serif text-3xl sm:text-4xl text-white font-bold">Choose your edition on Payhip.</h3>
-                <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">The live Payhip product page is ready below with all three digital formation editions and secure checkout.</p>
-              </div>
-              <PayhipEmbed />
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto mb-10">
-              {bundleOptions.map((bundle) => <div key={bundle.name} className={`lift-card bundle-card border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative flex flex-col`}><div className="flex items-start justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Library edition</span><span className="block text-xs text-[#94A3B8] mt-1">Volume I · Digital formation</span></div><span className="edition-seal" aria-hidden="true"><Crown className="w-4 h-4" /></span></div>{bundle.popular && <span className="self-start mt-4 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<span className="block font-serif text-lg text-[#C5A059] mt-4">{bundle.name}</span><h3 className="font-serif text-2xl text-white font-bold mt-3">UGX {bundle.ugx.toLocaleString("en-UG")}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3 flex-1">{bundle.description}</p><a href="https://selar.com/8818840887" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 mt-6 border border-[#C5A059]/60 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#C5A059] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]">Pre-order via Selar<ChevronRight className="w-4 h-4 text-[#C5A059]" /></a></div>)}
-            </div>
-          )}
+            <AccordionItem value="africa" className="border border-[#C5A059]/40 bg-[#0F172A]/55 overflow-hidden">
+              <AccordionTrigger className="px-5 py-5 text-left hover:no-underline [&>svg]:text-[#C5A059]">
+                <span><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Africa</span><span className="font-serif text-xl text-white font-bold">Selar</span><span className="block text-xs text-[#94A3B8] mt-1">Mobile money and card payment · UGX pricing</span></span>
+              </AccordionTrigger>
+              <AccordionContent className="px-4 pb-5 pt-0 sm:px-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
+                  {bundleOptions.map((bundle) => <div key={bundle.name} className={`lift-card bundle-card border ${bundle.popular ? "border-2 border-[#C5A059]" : "border-[#C5A059]/40"} bg-[#0F172A] p-6 relative flex flex-col`}><div className="flex items-start justify-between gap-4"><div><span className="block text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-bold">Library edition</span><span className="block text-xs text-[#94A3B8] mt-1">Volume I · Digital formation</span></div><span className="edition-seal" aria-hidden="true"><Crown className="w-4 h-4" /></span></div>{bundle.popular && <span className="self-start mt-4 bg-[#C5A059] text-white text-[10px] uppercase tracking-[0.18em] px-3 py-1 font-bold">Most popular</span>}<span className="block font-serif text-lg text-[#C5A059] mt-4">{bundle.name}</span><h3 className="font-serif text-2xl text-white font-bold mt-3">UGX {bundle.ugx.toLocaleString("en-UG")}</h3><p className="text-sm text-[#CBD5E1] leading-relaxed mt-3 flex-1">{bundle.description}</p><a href="https://selar.com/8818840887" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 mt-6 border border-[#C5A059]/60 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#C5A059] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]">Pre-order via Selar<ChevronRight className="w-4 h-4 text-[#C5A059]" /></a></div>)}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
         </div>
       </section>

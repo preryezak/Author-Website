@@ -536,10 +536,32 @@ These are fixed rounded display prices anchored to the approved UGX amounts, not
 
 ## Current Request: Native International Pricing Selector
 
-- [ ] Confirm the approved Reader, Formation, and Complete prices and preserve the Africa/Selar route.
-- [ ] Replace the static Payhip hand-off panel with an interactive native price selector.
-- [ ] Show the selected edition, amount, and bundle contents before the Payhip hand-off.
-- [ ] Validate keyboard access, responsive layout, direct Payhip URL, and production build.
-- [ ] Save and publish the verified website checkpoint.
+- [x] Confirm the approved Reader, Formation, and Complete prices and preserve the Africa/Selar route.
+- [x] Replace the static Payhip hand-off panel with an interactive native price selector.
+- [x] Show the selected edition, amount, and bundle contents before the Payhip hand-off.
+- [x] Validate keyboard access, responsive layout, direct Payhip URL, and production build.
+- [x] Save and publish the verified website checkpoint.
+
+## End Current Request
+
+
+## Current Request: Commit Latest Website Changes to Repository
+
+- [ ] Inspect repository status, branch, remotes, and pending files.
+- [ ] Review the pending diff for the native pricing-selector implementation and related audit/ledger updates.
+- [ ] Commit and push the intended changes to the connected GitHub repository.
+- [ ] Verify the remote branch and clean local working tree.
+
+## End Current Request
+
+
+## Current Request: Collapsible Pre-Order Routes and Repository Sync
+
+- [x] Inspect the current route selector and pending GitHub divergence.
+- [x] Make International and Africa separate collapsible sections with both headers always visible.
+- [x] Keep one route open at a time, allow the open route to collapse, and preserve all existing checkout links and pricing.
+- [x] Build and visually verify desktop and mobile behavior.
+- [ ] Commit all pending changes and push the current main branch to GitHub.
+- [ ] Verify GitHub synchronization and a clean working tree.
 
 ## End Current Request
