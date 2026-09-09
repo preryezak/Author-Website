@@ -565,3 +565,13 @@ These are fixed rounded display prices anchored to the approved UGX amounts, not
 - [ ] Verify GitHub synchronization and a clean working tree.
 
 ## End Current Request
+
+
+## Current Request: Correct Live Footer Domain
+
+- [x] Trace every books.theccndaily.com footer and canonical-domain reference in the current source and deployment.
+- [x] Confirm the intended author-domain destination and update stale footer references.
+- [x] Build and verify the footer in the managed preview and live deployment.
+- [ ] Commit and push the correction to GitHub, then save a new live checkpoint.
+
+## End Current Request

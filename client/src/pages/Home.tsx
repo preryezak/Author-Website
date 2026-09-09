@@ -703,7 +703,7 @@ export default function Home() {
             </div>
             <div>
               <span className="text-sm font-semibold text-white tracking-wide block">ERYEZA KALALU</span>
-              <span className="text-[10px] text-[#64748B] block">books.theccndaily.com</span>
+              <span className="text-[10px] text-[#64748B] block">eryezakalalu.com</span>
             </div>
           </div>
           <p className="text-xs text-[#64748B] text-center md:text-left font-serif italic">
