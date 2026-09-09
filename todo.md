@@ -575,3 +575,13 @@ These are fixed rounded display prices anchored to the approved UGX amounts, not
 - [ ] Commit and push the correction to GitHub, then save a new live checkpoint.
 
 ## End Current Request
+
+
+## Current Request: Verify Author Domain Binding and SEO Alignment
+
+- [x] Verify whether eryezakalalu.com resolves to this author site and is bound in the active hosting configuration.
+- [x] Audit all books.theccndaily.com references in visible copy and SEO metadata.
+- [x] If binding is confirmed, update canonical, Open Graph, Twitter, and structured-data URLs consistently.
+- [ ] Build, verify live responses, commit, push, and publish the corrected domain references.
+
+## End Current Request
