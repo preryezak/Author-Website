@@ -217,7 +217,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
-                  <span>PDF &amp; EPUB on 15 September</span>
+                  <span>PDF &amp; EPUB on 30 September</span>
                 </div>
                 <div className="flex items-center space-x-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#C5A059]/20 flex items-center justify-center text-[#C5A059]">✓</div>
@@ -249,7 +249,7 @@ export default function Home() {
 
                   <div className="mt-5 text-center space-y-1.5 border-t border-[#E6E0D4]/80 pt-4">
                     <span className="text-xs text-[#1E293B] font-serif font-bold tracking-[0.2em] block uppercase">Digital Pre-order Edition</span>
-                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">PDF &amp; EPUB delivered 15 September &bull; Audiobook in Formation bundles</span>
+                    <span className="text-[11px] text-[#6B7280] font-sans font-medium">PDF &amp; EPUB delivered 30 September &bull; Audiobook in Formation bundles</span>
                   </div>
                 </div>
               </div>
@@ -612,9 +612,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Pre-order now &bull; Digital delivery 15 September 2026</span>
+            <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-bold">Pre-order now &bull; Digital delivery 30 September 2026</span>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Choose How You Want to Enter the Journey</h2>
-            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">Choose the package that fits your season. Pre-order through the route that serves you best; the digital files will be delivered on 15 September 2026.</p>
+            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed font-sans">Choose the package that fits your season. Pre-order through the route that serves you best; the digital files will be delivered on 30 September 2026.</p>
           </div>
 
           <Accordion type="single" collapsible value={marketRoute} onValueChange={(value) => setMarketRoute(value === "international" || value === "africa" ? value : "")} className="max-w-6xl mx-auto space-y-3" aria-label="Choose your buying route">

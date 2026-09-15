@@ -141,7 +141,7 @@
 
 - [ ] Use the supplied Influential Spirit strategy/manuscript pack as the source of truth for the website upgrade.
 - [ ] Preserve the existing Unedited Christmas release slot and assign it to the next book release once the next title is identified.
-- [ ] Set and document the Influential Spirit digital launch date of 15 September 2026, with prelaunch beginning 24 August 2026.
+- [ ] Set and document the Influential Spirit digital launch date of 30 September 2026, with prelaunch beginning 24 August 2026.
 - [ ] Keep Substack as THE CCN DAILY weekly newsletter and Kit as the launch/CRM lifecycle layer.
 - [ ] Configure Kit using one subscriber database, the published Influence Circle form, durable tags, and targeted segments.
 - [ ] Draft the six-email welcome sequence and launch-week broadcasts without activating or sending them until approved.
@@ -165,7 +165,7 @@
 
 ## Current Request: Confirmed Bundle Contents and 16-Page Preview
 
-- [ ] Treat the author-narrated audiobook and all listed Formation and Complete bundle resources as available for delivery on 15 September 2026.
+- [ ] Treat the author-narrated audiobook and all listed Formation and Complete bundle resources as available for delivery on 30 September 2026.
 - [ ] Replace the temporary preview placeholder with a clear 16-page PDF preview entry point when the source PDF is supplied or created.
 - [ ] Use an in-page PDF viewer for instant preview, with a fallback open/download link for browsers that do not render embedded PDFs.
 - [ ] Update the pre-order landing-page copy and edition cards from the supplied document.
@@ -426,7 +426,7 @@
 - [x] Use Beta Content Editor rather than the placeholder-file option.
 - [x] Verify cover image and Official Preview PDF uploads.
 - [x] Verify the parent title, description, variant copy, visibility, and delivery wording.
-- [x] Set the delivery date to 15 September 2026 and avoid promising unfinished audiobook files as immediate downloads.
+- [x] Set the delivery date to 30 September 2026 and avoid promising unfinished audiobook files as immediate downloads.
 - [x] Validate variant selection, checkout pricing, content descriptions, visibility, and public URL before reporting completion.
 
 ## End Current Request
