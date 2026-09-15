@@ -137,7 +137,7 @@ export default function Home() {
             </div>
             <div>
               <span className="font-serif font-bold text-2xl tracking-tight text-[#1E293B] block leading-none">Eryeza Kalalu</span>
-              <span className="text-[10px] tracking-[0.25em] text-[#C5A059] uppercase font-bold block mt-1">Author &amp; Pastor</span>
+              <span className="text-[10px] tracking-[0.18em] text-[#C5A059] uppercase font-bold block mt-1">Author · Pastor · Christian Communicator · Publishing Consultant</span>
             </div>
           </div>
           <nav className="hidden md:flex items-center space-x-10 text-sm font-semibold text-[#334155] tracking-wide">
@@ -275,12 +275,13 @@ export default function Home() {
                 <div><span className="block text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold">A quiet first look</span><span className="text-xs text-[#6B7280] font-semibold">Read before you decide</span></div>
               </div>
               <h3 className="font-serif text-2xl font-bold text-[#1E293B] mb-3">A sample reading from the 30-day devotional</h3>
-              <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed max-w-2xl">The first pages will open here before launch, designed for an easy read on your phone and a simple return when you need to sit with a thought again.</p>
+              <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed max-w-2xl">Receive a carefully chosen sample from the opening of the devotional by email. It is designed for an easy read on your phone and a simple return when you need to sit with a thought again.</p>
               <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="preview-feature"><BookOpen className="w-4 h-4 text-[#C5A059]" /><span>Read a few pages</span></div>
-                <div className="preview-feature"><MessageCircle className="w-4 h-4 text-[#C5A059]" /><span>Hear the invitation</span></div>
+                <div className="preview-feature"><BookOpen className="w-4 h-4 text-[#C5A059]" /><span>Get the sample</span></div>
+                <div className="preview-feature"><MessageCircle className="w-4 h-4 text-[#C5A059]" /><span>Receive it by email</span></div>
                 <div className="preview-feature"><HeartHandshake className="w-4 h-4 text-[#C5A059]" /><span>Begin with honesty</span></div>
               </div>
+              <a href="#influence-circle" className="inline-flex items-center gap-2 mt-7 text-sm font-bold text-[#1E293B] underline decoration-[#C5A059] decoration-2 underline-offset-4 hover:text-[#8D6D2F]">Send me the sample <ChevronRight className="w-4 h-4 text-[#C5A059]" /></a>
             </div>
           </div>
         </div>
@@ -480,7 +481,7 @@ export default function Home() {
             <p className="text-center text-sm text-[#6B7280] max-w-2xl mx-auto mb-6">Becoming an Influence, the book this devotional grew from and expanded, earned these responses:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
-              {/* Review 1: The Rebecca Review (US) */}
+              {/* Review 1: Vine Voice */}
               <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
@@ -489,12 +490,12 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "Each devotional in this book is thoughtful and has a conclusion and a short prayer which is meaningful. I felt that the message of this book was encouraging and timely for our day and age."
+                    "I felt that the message of this book was encouraging and timely for our day and age. You can read the book as a daily devotional or read it all at once for a spiritual tune up."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <span className="font-bold text-[#1E293B]">The Rebecca Review</span>
-                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United States &bull; Amazon Verified Purchase</span>
+                  <span className="font-bold text-[#1E293B]">Vine Voice</span>
+                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">Amazon Verified Purchase</span>
                 </div>
               </div>
 
@@ -534,7 +535,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Review 4: SP80 (UK) */}
+              {/* Review 4: Rev. Derry Flay (UK) */}
               <div className="review-card relative flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-1 text-[#C5A059]">
@@ -543,29 +544,11 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "This book is well written and biblically sound. If you follow the principles of this book, it will put you on the right path."
+                    "This book is well written and biblically sound."
                   </blockquote>
                 </div>
                 <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <span className="font-bold text-[#1E293B]">SP80</span>
-                  <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United Kingdom &bull; Amazon Verified Purchase</span>
-                </div>
-              </div>
-
-              {/* Review 5: Andrew T (UK) */}
-              <div className="bg-[#FAF8F5]/70 border-t border-[#C5A059]/70 p-8 rounded-none shadow-none relative flex flex-col justify-between md:col-span-2 max-w-xl mx-auto w-full">
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-1 text-[#C5A059]">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
-                  </div>
-                  <blockquote className="font-serif text-base text-[#1E293B] italic leading-relaxed">
-                    "A must read. This is an amazing book. Your life will be transformed."
-                  </blockquote>
-                </div>
-                <div className="pt-6 mt-6 border-t border-[#E6E0D4] flex items-center justify-between text-xs text-[#6B7280]">
-                  <span className="font-bold text-[#1E293B]">Andrew T</span>
+                  <span className="font-bold text-[#1E293B]">Rev. Derry Flay</span>
                   <span className="bg-[#EFECE6] px-2.5 py-1 rounded text-[#1E293B] font-semibold">United Kingdom &bull; Amazon Verified Purchase</span>
                 </div>
               </div>
@@ -589,10 +572,10 @@ export default function Home() {
                 Pastor Eryeza Kalalu
               </h2>
               <p className="font-serif text-lg text-[#4B5563] italic">
-                Pastor at Rivers of Life Healing Centre, Kawuku · Author
+                Pastor · Author · Christian Communicator · Publishing Consultant
               </p>
               <p className="text-sm text-[#6B7280] leading-relaxed font-sans">
-                Operating from Kawuku-Entebbe, Uganda, his burden is simple: help believers stop managing their faith at the surface and start carrying the real weight of scriptural discipleship into every room they enter.
+                Pastor Eryeza Kalalu is passionate about helping people follow Christ faithfully and live with purpose in every season of life. Through his writing, teaching, and podcast, he explores faith, spiritual formation, leadership, calling, and the practical realities of walking with God. He is the host of <em>Devotion In Season</em> and founder of THE CCN DAILY, a devotional ministry creating resources that help people cultivate a deeper, more meaningful life with Christ.
               </p>
             </div>
 
@@ -684,7 +667,7 @@ export default function Home() {
             <div className="lg:col-span-7 space-y-6">
               <span className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-extrabold">The Launch Community</span>
               <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">Join the Influence Circle</h2>
-              <p className="text-[#CBD5E1] text-lg leading-relaxed max-w-2xl font-sans">Get a preview of <span className="font-serif italic text-white">The Influential Spirit</span>, launch updates, access to the 30-day journey resources, and first notice of new releases from The Deep Encounter Library.</p>
+              <p className="text-[#CBD5E1] text-lg leading-relaxed max-w-2xl font-sans">Get a downloadable sample from <span className="font-serif italic text-white">The Influential Spirit</span>, launch updates, access to the 30-day journey resources, and first notice of new releases from The Deep Encounter Library.</p>
               <div className="rule-glow flex items-center gap-3 pt-4 border-t border-[#C5A059]/30"><span className="seal-hover inline-flex h-9 w-9 items-center justify-center border border-[#C5A059] text-[#C5A059] font-serif font-bold text-sm">EK</span><span className="text-xs uppercase tracking-[0.18em] text-[#94A3B8]">Formation Before Platform</span></div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6"><div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">01</span><strong className="block text-white font-serif">Preview</strong><span className="text-xs text-[#94A3B8]">A first look inside the book.</span></div><div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">02</span><strong className="block text-white font-serif">Journey</strong><span className="text-xs text-[#94A3B8]">Resources for the 30 days.</span></div><div className="border-l-2 border-[#C5A059] pl-4"><span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059]">03</span><strong className="block text-white font-serif">Library</strong><span className="text-xs text-[#94A3B8]">News of what comes next.</span></div></div>
             </div>
@@ -702,8 +685,8 @@ export default function Home() {
               <span className="font-serif font-bold text-sm mt-2">EK</span>
             </div>
             <div>
-              <span className="text-sm font-semibold text-white tracking-wide block">ERYEZA KALALU</span>
-              <span className="text-[10px] text-[#64748B] block">eryezakalalu.com</span>
+              <span className="font-serif text-lg font-bold text-white tracking-tight block">Eryeza Kalalu</span>
+              <span className="font-serif text-[11px] text-[#94A3B8] block">eryezakalalu.com</span>
             </div>
           </div>
           <p className="text-xs text-[#64748B] text-center md:text-left font-serif italic">
@@ -714,6 +697,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      <a href="#formats" className="fixed bottom-4 left-4 right-4 z-40 md:hidden inline-flex items-center justify-center gap-2 bg-[#C5A059] text-white font-bold px-5 py-3.5 shadow-[0_12px_30px_rgba(15,23,42,0.24)] border border-[#F7F4EF]/60" aria-label="View editions and preorder options">
+        View Editions <ChevronRight className="w-4 h-4" />
+      </a>
     </div>
   );
 }

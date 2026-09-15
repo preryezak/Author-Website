@@ -585,3 +585,14 @@ These are fixed rounded display prices anchored to the approved UGX amounts, not
 - [ ] Build, verify live responses, commit, push, and publish the corrected domain references.
 
 ## End Current Request
+
+
+## Current Request: Migrate Search Console and Bing Properties
+
+- [ ] Confirm the existing old-domain properties and the new-domain verification assets.
+- [ ] Add and verify eryezakalalu.com in Google Search Console and Bing Webmaster Tools.
+- [ ] Submit the new sitemap and update URL-inspection or monitoring workflows.
+- [ ] Keep the old property for historical data and monitor the transition before retiring it.
+- [ ] Document the final property and sitemap URLs.
+
+## End Current Request
