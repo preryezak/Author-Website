@@ -54,3 +54,6 @@ server.log
 /db/
 /Caddyfile
 /.zscripts/
+/download/
+/handoff/
+/worklog.md
