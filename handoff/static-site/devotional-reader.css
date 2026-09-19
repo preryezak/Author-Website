@@ -1,0 +1,447 @@
+/* ==================================================================
+   DEVOTIONAL READER — magazine-grade inline day / chapter reader
+   ==================================================================
+   Reusable across every day of The Deep Encounter Library. Depends
+   on shared-styles.css (or any file that imports colors_and_type.css)
+   for the paper / ink / oxblood / gold token ramp.
+
+   Structure at a glance:
+     .reader-section       → outer surface wrapper (paper-100 by default)
+     .reader-lede          → intro copy that precedes the reader (optional)
+     .reader                → the "book" frame
+       .reader__chrome     → running head (book, day, library)
+       .reader__progress   → hairline reading-progress bar
+       .reader__page       → scrollable inset holding the prose
+         .reader__page-inner → the actual page contents
+       .reader__foot       → footer chrome hint ("scroll to keep reading")
+
+   Reader page contents (inside .reader__page-inner):
+     .reader__eyebrow                        DAY N eyebrow
+     .reader__title                          Day title
+     .reader__scripture > p + cite           Scripture block
+     .reader__prose                          Body prose paragraph
+     .reader__prose--lead                    First paragraph (has drop-cap)
+     .reader__prose--closer                  Italic display closing line
+     .reader__subhead                        In-day subhead (with § mark)
+     .reader__subhead--section               Section marker (sans small-caps)
+     .reader__rule                           Decorative gold hairline
+     .reader__callout                        Neutral callout (paper-100)
+     .reader__callout--prayer                Prayer callout (oxblood-50)
+     .reader__callout--declaration           Declaration callout (dark ink)
+     .reader__callout-key                    Callout label ("Daily Reflection")
+     .reader__further                        "Further Reading" line
+     .reader__further-key                    "Further Reading" label
+     .reader__end                            End-of-day handoff block
+       .reader__end-orn                      Gold rules + § ornament
+       .reader__end-title                    Italic display farewell
+       .reader__end-body                     Short paragraph
+       .reader__end-cta                      Ink primary CTA button
+
+   Progress hairline is driven by a small script in devotional-reader.js.
+================================================================== */
+
+/* ---- Section wrapper ------------------------------------------- */
+.reader-section {
+  padding-top: 88px;
+  padding-bottom: 88px;
+}
+.reader-lede {
+  max-width: 640px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+.reader-lede .body { color: var(--ink-500); }
+
+/* ---- The book frame -------------------------------------------- */
+.reader {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  background: var(--paper-200);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-3);
+}
+.reader::before,
+.reader::after {
+  content: "";
+  position: absolute;
+  left: 12px; right: 12px;
+  height: 6px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(30,26,22,0.06), transparent);
+}
+.reader::before { top: 0; }
+.reader::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(30,26,22,0.06), transparent);
+}
+
+/* ---- Running head chrome --------------------------------------- */
+.reader__chrome {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  font-weight: 500;
+}
+.reader__chrome .reader__book {
+  color: var(--ink-700);
+  font-weight: 600;
+}
+.reader__chrome .reader__sep { color: var(--gold-400); }
+.reader__chrome .reader__where { color: var(--oxblood-400); }
+.reader__chrome .reader__spacer { flex: 1; }
+.reader__chrome .reader__library { color: var(--ink-300); }
+@media (max-width: 720px) {
+  .reader__chrome { flex-wrap: wrap; padding: 14px 20px; font-size: 10px; }
+  .reader__chrome .reader__library { flex-basis: 100%; margin-top: 6px; }
+  .reader__chrome .reader__spacer { display: none; }
+}
+
+/* ---- Progress hairline ---------------------------------------- */
+.reader__progress {
+  position: relative;
+  height: 2px;
+  background: var(--paper-300);
+  overflow: hidden;
+}
+.reader__progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(to right, var(--gold-300), var(--oxblood-400));
+  transition: width 60ms linear;
+}
+/* Peek-ahead cue (T1.3): on first hover over the reader frame, a
+   1px gold gleam sweeps left-to-right across the progress bar so
+   the reader realises the pane is scrollable. Not a loop — one pass,
+   ~900ms, only on hover. Sits behind the progress fill so once the
+   reader has scrolled a little, the fill covers the hint entirely. */
+.reader__progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent 45%,
+    var(--gold-200) 50%,
+    transparent 55%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.reader:hover .reader__progress::after {
+  animation: readerHintSweep 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 200ms 1;
+  opacity: 1;
+}
+@keyframes readerHintSweep {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reader:hover .reader__progress::after { animation: none; opacity: 0; }
+}
+
+/* ---- Scrollable page inset ------------------------------------ */
+.reader__page {
+  position: relative;
+  max-height: 640px;
+  overflow-y: auto;
+  background: var(--paper-50);
+  scrollbar-width: thin;
+  scrollbar-color: var(--paper-500) transparent;
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+          mask-image: linear-gradient(to bottom,
+    transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+}
+.reader__page::-webkit-scrollbar { width: 8px; }
+.reader__page::-webkit-scrollbar-track { background: transparent; }
+.reader__page::-webkit-scrollbar-thumb {
+  background: var(--paper-500);
+  border-radius: 4px;
+  border: 2px solid var(--paper-50);
+}
+.reader__page-inner {
+  padding: 56px 72px 64px;
+  max-width: 68ch;
+  margin: 0 auto;
+}
+@media (max-width: 720px) {
+  .reader__page { max-height: 560px; }
+  .reader__page-inner { padding: 40px 28px 48px; }
+}
+
+/* ---- Day intro ------------------------------------------------- */
+.reader__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-400);
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+.reader__title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.05;
+  color: var(--ink-700);
+  letter-spacing: -0.01em;
+  margin: 0 0 32px 0;
+  font-weight: 400;
+}
+
+/* ---- Scripture block ------------------------------------------ */
+.reader__scripture {
+  margin: 0 0 40px 0;
+  padding: 24px 0 24px 24px;
+  border-left: 2px solid var(--oxblood-400);
+}
+.reader__scripture p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.45;
+  color: var(--ink-700);
+  margin: 0 0 12px 0;
+  text-wrap: balance;
+}
+.reader__scripture cite {
+  font-style: normal;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  font-weight: 600;
+}
+
+/* ---- Body prose ------------------------------------------------ */
+.reader__prose {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--ink-500);
+  margin: 0 0 20px 0;
+  text-wrap: pretty;
+  hanging-punctuation: first last;
+}
+.reader__prose--lead::first-letter {
+  font-family: var(--font-display);
+  float: left;
+  font-size: 68px;
+  line-height: 0.9;
+  padding: 6px 14px 0 0;
+  color: var(--oxblood-400);
+  font-style: italic;
+  font-weight: 400;
+}
+.reader__prose--closer {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--ink-700);
+  margin-top: 32px;
+  text-wrap: balance;
+}
+
+/* ---- Section subheads ----------------------------------------- */
+.reader__subhead {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 24px;
+  color: var(--ink-700);
+  margin: 40px 0 20px 0;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  position: relative;
+  padding-left: 28px;
+}
+.reader__subhead::before {
+  content: "§";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  color: var(--gold-400);
+  font-size: 20px;
+  font-style: italic;
+}
+.reader__subhead--section {
+  font-style: normal;
+  font-size: 13px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  padding-left: 0;
+  margin: 8px 0 24px 0;
+}
+.reader__subhead--section::before { display: none; }
+
+/* ---- Section rule --------------------------------------------- */
+.reader__rule {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right,
+    transparent 0, var(--gold-300) 20%, var(--gold-300) 80%, transparent 100%);
+  margin: 48px 0 32px;
+}
+
+/* ---- Callouts ------------------------------------------------- */
+.reader__callout {
+  background: var(--paper-100);
+  border-left: 3px solid var(--gold-300);
+  padding: 20px 24px;
+  margin: 0 0 20px 0;
+}
+.reader__callout .reader__prose {
+  font-size: 17px;
+  margin-bottom: 0;
+}
+.reader__callout-key {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  font-weight: 600;
+  margin: 0 0 10px 0;
+}
+.reader__callout--prayer {
+  background: var(--oxblood-50);
+  border-left-color: var(--oxblood-400);
+}
+.reader__callout--prayer .reader__prose {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--ink-700);
+  font-size: 18px;
+  line-height: 1.55;
+}
+.reader__callout--prayer .reader__callout-key { color: var(--oxblood-400); }
+.reader__callout--declaration {
+  background: var(--ink-700);
+  border-left-color: var(--gold-300);
+}
+.reader__callout--declaration .reader__callout-key { color: var(--gold-200); }
+.reader__callout--declaration .reader__prose {
+  color: var(--paper-100);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+/* ---- Further reading ------------------------------------------ */
+.reader__further {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  margin: 32px 0 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.reader__further-key {
+  display: inline-block;
+  margin-right: 12px;
+  color: var(--oxblood-400);
+  font-weight: 600;
+}
+
+/* ---- End-of-day handoff --------------------------------------- */
+.reader__end {
+  margin-top: 56px;
+  text-align: center;
+  padding: 40px 0 8px;
+}
+.reader__end-orn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.reader__end-orn .reader__end-rule {
+  height: 1px; width: 80px;
+  background: var(--gold-300);
+}
+.reader__end-orn .reader__end-mark {
+  color: var(--gold-400);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 28px;
+  line-height: 1;
+}
+.reader__end-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 26px;
+  color: var(--ink-700);
+  margin: 0 0 12px 0;
+}
+.reader__end-body {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-500);
+  max-width: 52ch;
+  margin: 0 auto 24px;
+  text-wrap: pretty;
+}
+.reader__end-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink-700);
+  color: var(--paper-50);
+  padding: 14px 22px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background-color 200ms ease, transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reader__end-cta:hover {
+  background: var(--ink-500);
+  transform: translateY(-1px);
+}
+.reader__end-cta svg { color: var(--gold-200); }
+
+/* ---- Reader footer chrome ------------------------------------ */
+.reader__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 28px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  background: var(--paper-100);
+}
+@media (max-width: 720px) {
+  .reader__foot { padding: 12px 20px; font-size: 10px; }
+}
+
+/* ---- Reduced motion honors the design-system rule -------------- */
+@media (prefers-reduced-motion: reduce) {
+  .reader__progress-fill { transition: none; }
+  .reader__end-cta { transition: none; }
+}

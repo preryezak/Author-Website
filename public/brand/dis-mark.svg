@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <rect width="160" height="160" rx="4" fill="#3A4A3F"/>
+  <circle cx="80" cy="80" r="58" stroke="#B8925A" stroke-width="0.75"/>
+  <circle cx="80" cy="80" r="48" stroke="#B8925A" stroke-width="0.5" stroke-dasharray="1 2"/>
+  <text x="80" y="76" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" fill="#B8925A" letter-spacing="3">DEVOTION</text>
+  <text x="80" y="90" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-size="16" fill="#F5F0E8">in Season</text>
+  <text x="80" y="108" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="7" font-weight="500" fill="#B8925A" letter-spacing="2">— PODCAST —</text>
+</svg>

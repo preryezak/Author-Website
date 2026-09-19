@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- outer circle (ink) -->
+  <circle cx="100" cy="100" r="96" stroke="#1E1A16" stroke-width="1.25"/>
+  <!-- gold hairline ring -->
+  <circle cx="100" cy="100" r="86" stroke="#B8925A" stroke-width="0.6"/>
+  <!-- dashed inner ring -->
+  <circle cx="100" cy="100" r="80" stroke="#B8925A" stroke-width="0.4" stroke-dasharray="0.5 3"/>
+
+  <!-- top ornament: fleuron trio -->
+  <g transform="translate(100 22)" fill="#B8925A">
+    <circle cx="-10" cy="0" r="1"/>
+    <circle cx="0"   cy="0" r="1.4"/>
+    <circle cx="10"  cy="0" r="1"/>
+  </g>
+
+  <!-- bottom ornament: nib tick (subtle writing symbol) -->
+  <g transform="translate(100 178)" stroke="#B8925A" stroke-width="0.9" fill="none" stroke-linecap="round">
+    <path d="M-6 0 L0 6 L6 0"/>
+    <line x1="0" y1="0" x2="0" y2="6"/>
+  </g>
+
+  <!-- ============================================
+       E — three horizontals + spine (58 → 142 tall)
+       Matched to parent EK monogram stroke system.
+       ============================================ -->
+  <g stroke="#1E1A16" stroke-linecap="square" fill="none">
+    <path d="M52 58 L52 142" stroke-width="4"/>       <!-- E spine -->
+    <path d="M52 58 L94 58"  stroke-width="4"/>       <!-- top bar -->
+    <path d="M52 100 L86 100" stroke-width="3"/>      <!-- middle bar (shorter) -->
+    <path d="M52 142 L94 142" stroke-width="4"/>      <!-- bottom bar -->
+  </g>
+
+  <!-- ============================================
+       W — four diagonals, sharing the E's baseline & cap
+       Built from three vertices on the top edge and two on the baseline.
+       Top corners at (106,58) & (148,58); baseline pits at (117,142) & (137,142);
+       peak at (127,58).
+       ============================================ -->
+  <g stroke="#1E1A16" stroke-linecap="square" fill="none">
+    <path d="M106 58 L117 142" stroke-width="4"/>     <!-- W outer-left leg -->
+    <path d="M117 142 L127 58" stroke-width="3.4"/>   <!-- W inner-left leg -->
+    <path d="M127 58 L137 142" stroke-width="3.4"/>   <!-- W inner-right leg -->
+    <path d="M137 142 L148 58" stroke-width="4"/>     <!-- W outer-right leg -->
+  </g>
+
+  <!-- gold hairline nib beneath — replaces the parent's oxblood pivot dot -->
+  <line x1="94" y1="152" x2="108" y2="152" stroke="#B8925A" stroke-width="1"/>
+</svg>

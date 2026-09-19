@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- filled oxblood roundel — "author's stamp" -->
+  <circle cx="100" cy="100" r="96" fill="#7B3F2E"/>
+  <circle cx="100" cy="100" r="88" stroke="#B8925A" stroke-width="0.6"/>
+  <circle cx="100" cy="100" r="82" stroke="#B8925A" stroke-width="0.4" stroke-dasharray="0.5 3"/>
+
+  <!-- micro-type ring -->
+  <defs>
+    <path id="ring" d="M 100,100 m -74,0 a 74,74 0 1,1 148,0 a 74,74 0 1,1 -148,0"/>
+  </defs>
+  <text fill="#B8925A" font-family="DM Sans, sans-serif" font-size="7.2" letter-spacing="4">
+    <textPath href="#ring" startOffset="0">PASTOR · AUTHOR · DEVOTION IN SEASON · EK · </textPath>
+  </text>
+
+  <!-- E — three horizontals + spine -->
+  <g stroke="#F5F0E8" stroke-linecap="square" fill="none">
+    <path d="M58 58 L58 142" stroke-width="4"/>
+    <path d="M58 58 L100 58" stroke-width="4"/>
+    <path d="M58 100 L92 100" stroke-width="3"/>
+    <path d="M58 142 L100 142" stroke-width="4"/>
+
+    <!-- K — spine + two legs from a single vertex -->
+    <path d="M116 58 L116 142" stroke-width="4"/>
+    <path d="M116 100 L150 58"  stroke-width="4"/>
+    <path d="M116 100 L150 142" stroke-width="4"/>
+  </g>
+  <circle cx="116" cy="100" r="2.6" fill="#B8925A"/>
+</svg>

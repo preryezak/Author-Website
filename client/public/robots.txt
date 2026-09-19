@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /__manus__/
-
-Sitemap: https://books.theccndaily.com/sitemap.xml

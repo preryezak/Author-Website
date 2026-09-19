@@ -1,0 +1,34 @@
+name = "eryeza-speaking"
+main = "speaking.ts"
+compatibility_date = "2024-12-01"
+
+# ── Public vars (set in the dashboard or here) ──────────────────────
+# The inbox that receives every speaking invitation.
+[vars]
+SPEAKING_EMAIL = "speaking@eryezakalalu.com"
+# Until eryezakalalu.com is verified on Resend, mail sends from Resend's
+# shared onboarding address. After verification, set this to
+# speaking@eryezakalalu.com (or any address on your verified domain).
+RESEND_FROM = "onboarding@resend.dev"
+ALLOWED_ORIGIN = "https://eryezakalalu.com"
+
+# ── Secrets (set via `wrangler secret put`) ──────────────────────────
+# RESEND_API_KEY  ->  run:  wrangler secret put RESEND_API_KEY
+# (Never commit the key. It's stored encrypted in Cloudflare.)
+
+# ── Optional D1 storage (uncomment after creating the D1 database) ─
+# Create the DB:   wrangler d1 create eryeza-speaking-db
+# Run the schema:   wrangler d1 execute eryeza-speaking-db --file=schema.sql --remote
+# Then uncomment:
+#
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "eryeza-speaking-db"
+# database_id = "<the id wrangler printed when you created it>"
+
+# ── Optional custom route (instead of the *.workers.dev URL) ────────
+# Once you want the Worker at eryezakalalu.com/worker/speaking (so the
+# Next.js site can post to a same-origin URL), add a route in the
+# Cloudflare dashboard: eryezakalalu.com/worker/speaking* -> this Worker.
+# Then set NEXT_PUBLIC_SPEAKING_ENDPOINT=https://eryezakalalu.com/worker/speaking
+# in the Cloudflare Pages env vars.

@@ -1,0 +1,765 @@
+/* =========================================================
+   Eryeza Kalalu Author Site — shared HTML review styles
+   Kalalu Design System (paper / ink / oxblood / forest / gold)
+   Newsreader · Source Serif 4 · DM Sans
+   ========================================================= */
+
+@import url("site-build/colors_and_type.css");
+
+/* ---------- Reset / base ---------- */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--paper-100);
+  color: var(--ink-500);
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--oxblood-400); color: var(--paper-50); }
+
+/* ---------- Layout ---------- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media (min-width: 640px) { .container { padding: 0 32px; } }
+@media (min-width: 1024px) { .container { padding: 0 40px; } }
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 32px;
+}
+.col-4  { grid-column: span 4; }
+.col-5  { grid-column: span 5; }
+.col-6  { grid-column: span 6; }
+.col-7  { grid-column: span 7; }
+.col-8  { grid-column: span 8; }
+.col-12 { grid-column: 1 / -1; }
+@media (max-width: 900px) {
+  .grid-12 { grid-template-columns: 1fr; gap: 32px; }
+  .col-4, .col-5, .col-6, .col-7, .col-8 { grid-column: 1; }
+}
+
+/* ---------- Tonal surfaces (rotates the ramp) ---------- */
+.surface-50    { background: var(--paper-50); }
+.surface-100   { background: var(--paper-100); }
+.surface-200   { background: var(--paper-200); }
+.surface-300   { background: var(--paper-300); }
+.surface-ink   { background: var(--ink-700); color: var(--paper-100); }
+.surface-ink   .eyebrow { color: var(--gold-200); }
+.surface-ink   .display { color: var(--paper-50); }
+.surface-ink   .body    { color: var(--paper-200); }
+.surface-forest { background: var(--forest-400); color: var(--paper-100); }
+.surface-forest .eyebrow { color: var(--gold-200); }
+.surface-forest .display { color: var(--paper-50); }
+.surface-forest .body    { color: var(--paper-200); }
+
+.section {
+  padding: 72px 0;
+  border-bottom: 1px solid var(--border);
+}
+.section.tight { padding: 56px 0; }
+.section.loose { padding: 96px 0; }
+@media (min-width: 900px) {
+  .section       { padding: 96px 0; }
+  .section.tight { padding: 72px 0; }
+  .section.loose { padding: 128px 0; }
+}
+
+/* ---------- Type ---------- */
+/* .eyebrow — small-caps metadata label. Default color is oxblood-400 for
+   WCAG-AA-safe contrast on every paper surface in the ramp (paper-50/100/
+   200/300 all clear 4.5:1). Gold is reserved for ornament and for the ink
+   / forest surfaces below where its lighter step (--gold-200) has enough
+   luminance separation. Any page-local override should stay oxblood or
+   ink-family — do not reintroduce gold on paper. */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--oxblood-400);
+  margin: 0;
+}
+.display, h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--ink-700);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.06;
+  text-wrap: balance;
+  margin: 0;
+}
+.display em, h1 em, h2 em, h3 em, h4 em {
+  font-style: italic;
+  color: var(--oxblood-400);
+}
+.h-hero    { font-size: clamp(44px, 6.4vw, 92px); }
+.h-1       { font-size: clamp(36px, 4.5vw, 64px); font-weight: 500; }
+.h-2       { font-size: clamp(28px, 3.4vw, 44px); font-weight: 500; line-height: 1.1; }
+.h-3       { font-size: clamp(22px, 2.6vw, 30px); font-weight: 500; line-height: 1.2; }
+.h-4       { font-size: clamp(18px, 2vw, 22px); font-weight: 500; line-height: 1.25; }
+
+.body {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-500);
+  text-wrap: pretty;
+  margin: 0;
+}
+.body-lg { font-size: 19px; line-height: 1.65; }
+.body-sm { font-size: 15px; line-height: 1.6; }
+.caption {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink-300);
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+.pullquote, .editorial-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.4;
+  color: var(--ink-700);
+  border-left: 2px solid var(--gold-300);
+  padding: 4px 0 4px 20px;
+  margin: 0;
+  text-wrap: balance;
+}
+.surface-ink .pullquote,
+.surface-forest .pullquote { color: var(--gold-200); }
+
+.smallcaps {
+  font-family: var(--font-sans);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+.scripture {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--ink-700);
+}
+.scripture-ref {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-200);
+}
+
+.stack > * + * { margin-top: 16px; }
+.stack-sm > * + * { margin-top: 8px; }
+.stack-lg > * + * { margin-top: 24px; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(245, 240, 232, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.site-header .row {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px;
+}
+.site-header .brand {
+  display: inline-flex; align-items: center; gap: 12px;
+  color: var(--ink-700);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.005em;
+}
+.site-header .brand img { width: 40px; height: 40px; }
+.site-header nav {
+  display: none;
+  gap: 28px;
+}
+@media (min-width: 1024px) {
+  .site-header nav { display: flex; }
+}
+.site-header nav a {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-500);
+  padding: 6px 0;
+  border-bottom: 1px solid transparent;
+  transition: color 200ms ease, border-color 300ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.site-header nav a:hover { color: var(--oxblood-400); border-bottom-color: var(--gold-300); }
+.site-header nav a[aria-current="page"] { color: var(--oxblood-400); border-bottom-color: var(--oxblood-400); }
+
+.site-header .header-actions {
+  display: flex; align-items: center; gap: 12px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 14px 22px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  cursor: pointer;
+}
+.btn-sm { padding: 10px 16px; font-size: 11px; }
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-1); }
+.btn:active { transform: translateY(0); box-shadow: none; }
+
+.btn-primary  { background: var(--ink-700); color: var(--paper-50); }
+.btn-primary:hover { background: var(--ink-500); }
+.btn-accent   { background: var(--oxblood-400); color: var(--paper-50); }
+.btn-accent:hover { background: var(--oxblood-500); }
+.btn-gold     { background: var(--gold-300); color: var(--ink-700); }
+.btn-gold:hover { background: var(--gold-200); }
+.btn-ghost    { background: transparent; color: var(--ink-700); border-color: var(--border-strong); }
+.btn-ghost:hover { background: var(--paper-200); }
+.surface-ink .btn-ghost, .surface-forest .btn-ghost {
+  color: var(--paper-50);
+  border-color: rgba(184, 146, 90, 0.5);
+}
+.surface-ink .btn-ghost:hover, .surface-forest .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------- Cards / plates ---------- */
+.plate {
+  background: var(--paper-50);
+  border: 1px solid var(--border);
+  padding: 24px;
+}
+@media (min-width: 640px) { .plate { padding: 32px; } }
+.plate-raised {
+  background: var(--paper-200);
+  border: 1px solid var(--border);
+  padding: 24px;
+}
+@media (min-width: 640px) { .plate-raised { padding: 32px; } }
+
+/* Hairline rule with center ornament */
+.rule-ornament {
+  display: flex; align-items: center; gap: 16px;
+  color: var(--gold-400);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  margin: 0;
+}
+.rule-ornament::before,
+.rule-ornament::after {
+  content: ""; flex: 1; height: 1px; background: var(--border);
+}
+.surface-ink .rule-ornament::before,
+.surface-ink .rule-ornament::after,
+.surface-forest .rule-ornament::before,
+.surface-forest .rule-ornament::after {
+  background: rgba(184, 146, 90, 0.35);
+}
+.surface-ink .rule-ornament,
+.surface-forest .rule-ornament { color: var(--gold-200); }
+
+/* ---------- Placeholders (only where real assets aren't hosted here) ---------- */
+.placeholder {
+  background:
+    repeating-linear-gradient(45deg,
+      var(--paper-300) 0 12px,
+      var(--paper-400) 12px 24px);
+  border: 1px solid var(--border);
+  color: var(--ink-300);
+  font-family: var(--font-mono, "SF Mono", monospace);
+  font-size: 12px;
+  padding: 24px;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+}
+
+/* ---------- Chips ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+.chip-oxblood { background: var(--oxblood-100); color: var(--oxblood-500); }
+.chip-gold    { background: var(--gold-50);     color: var(--gold-500); }
+.chip-forest  { background: var(--forest-100);  color: var(--forest-500); }
+
+/* ---------- Ornament ---------- */
+.orn {
+  color: var(--gold-400);
+  font-family: var(--font-display);
+  font-style: italic;
+  margin-right: 8px;
+}
+
+/* ---------- Sticky mobile pre-order bar (landing page only) ---------- */
+.sticky-mobile-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+  background: var(--ink-700);
+  color: var(--paper-100);
+  border-top: 1px solid var(--gold-400);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+@media (min-width: 900px) { .sticky-mobile-bar { display: none; } }
+.sticky-mobile-bar .meta {
+  min-width: 0;
+}
+.sticky-mobile-bar .meta .eyebrow { color: var(--gold-200); margin-bottom: 2px; }
+.sticky-mobile-bar .meta .caption { color: var(--paper-200); }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background: var(--ink-700);
+  color: var(--paper-200);   /* raise the ambient contrast on ink */
+}
+.footer-subscribe {
+  border-bottom: 1px solid rgba(184, 146, 90, 0.22);
+  padding: 56px 0;
+}
+.footer-main {
+  padding: 72px 0 48px;
+}
+/* Extra horizontal breathing room on ink so column content doesn't kiss
+   the visual edge of the dark band, especially on narrow viewports. */
+.site-footer .container { padding-left: 32px; padding-right: 32px; }
+@media (min-width: 1024px) {
+  .site-footer .container { padding-left: 48px; padding-right: 48px; }
+}
+.footer-cols {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 48px;
+}
+@media (min-width: 720px) {
+  .footer-cols { grid-template-columns: 2fr 1fr 1fr; gap: 56px; }
+}
+.footer-bottom {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(184, 146, 90, 0.22);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  color: var(--paper-500);
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+.footer-bottom em {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--paper-200);
+  font-size: 13px;
+}
+
+/* Legibility: any body copy inside the footer must inherit paper-tone.
+   Overrides the site-wide `.body` / `.body-sm` ink-500 color. */
+.site-footer .body,
+.site-footer .body-sm,
+.site-footer .body-lg,
+.site-footer p {
+  color: var(--paper-200);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.footer-nav {
+  list-style: none; padding: 0; margin: 12px 0 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+.footer-nav li { margin-bottom: 10px; }
+.footer-nav a { color: var(--paper-100); text-decoration: none; transition: color 200ms ease; }
+.footer-nav a:hover { color: var(--gold-200); }
+
+/* ---------- Beehiiv embed (direct iframe, always renders) ---------- */
+.beehiiv-embed {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  color-scheme: light;
+  background: transparent;
+  display: block;
+}
+
+/* ---------- Podcast platform grid ---------- */
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (min-width: 640px) { .platform-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1024px) { .platform-grid { grid-template-columns: repeat(6, 1fr); } }
+.platform-card {
+  background: var(--forest-500);
+  border: 1px solid rgba(184, 146, 90, 0.35);
+  padding: 16px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-height: 130px;
+  color: var(--paper-100);
+  transition: background 200ms ease, transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.platform-card:hover {
+  background: var(--forest-600);
+  transform: translateY(-1px);
+}
+.platform-card .mark { color: var(--gold-200); }
+.platform-card .name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--paper-50);
+  letter-spacing: -0.005em;
+  margin-top: 8px;
+}
+.platform-card .eyebrow { color: var(--paper-500); }
+.platform-card svg { width: 28px; height: 28px; }
+
+/* ---------- Letter feed items ---------- */
+.letter-item {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-700);
+}
+.letter-item:last-child { border-bottom: 0; }
+.letter-item .date {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-200);
+}
+.letter-item .title {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1.15;
+  color: var(--ink-700);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  margin: 6px 0 8px;
+  text-wrap: balance;
+}
+.letter-item .excerpt {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-300);
+  max-width: 60ch;
+  margin: 0;
+}
+.letter-item .arrow {
+  color: var(--gold-400);
+  flex-shrink: 0;
+  margin-top: 6px;
+  transition: color 200ms ease, transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.letter-item:hover .arrow { color: var(--oxblood-400); transform: translate(2px, -2px); }
+
+/* ---------- Editions cards ---------- */
+.tier-card {
+  background: var(--ink-800);
+  color: var(--paper-100);
+  border: 1px solid rgba(184, 146, 90, 0.35);
+  padding: 24px;
+  display: flex; flex-direction: column;
+}
+.tier-card.popular {
+  border: 2px solid var(--gold-300);
+}
+.tier-card .tier-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--gold-200);
+  margin-top: 12px;
+}
+.tier-card .price {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--paper-50);
+  margin-top: 8px;
+}
+.tier-card .price s {
+  color: var(--paper-500);
+  font-size: 17px;
+  margin-left: 8px;
+  font-weight: 400;
+}
+.tier-card .tier-desc {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--paper-100);
+  margin: 12px 0 20px;
+  flex: 1;
+}
+
+/* Selar card variant */
+.tier-card.on-paper {
+  background: var(--paper-50);
+  color: var(--ink-700);
+  border-color: var(--border-strong);
+}
+.tier-card.on-paper .tier-name { color: var(--oxblood-400); }
+.tier-card.on-paper .price { color: var(--ink-700); }
+.tier-card.on-paper .price s { color: var(--ink-200); }
+.tier-card.on-paper .tier-desc { color: var(--ink-500); }
+.tier-card.on-paper.popular { border-color: var(--oxblood-400); }
+
+/* ---------- Route label bar ---------- */
+.route-bar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 0;
+}
+.route-bar .route-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.route-bar .rule { flex: 1; height: 1px; background: var(--border); }
+.surface-ink .route-bar .rule { background: rgba(184, 146, 90, 0.35); }
+
+/* ---------- FAQ ---------- */
+details.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+}
+details.faq-item:first-of-type { border-top: 1px solid var(--border); }
+details.faq-item summary {
+  cursor: pointer;
+  padding: 20px 0;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 500;
+  color: var(--ink-700);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition: color 200ms ease;
+}
+details.faq-item summary::-webkit-details-marker { display: none; }
+details.faq-item summary:hover { color: var(--oxblood-400); }
+details.faq-item summary::after {
+  content: "+";
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--gold-400);
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+details.faq-item[open] summary::after {
+  content: "−";
+}
+details.faq-item .faq-body {
+  padding: 0 0 20px;
+  color: var(--ink-500);
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 62ch;
+}
+
+/* ---------- Reveal on scroll ----------
+   Content is always visible by default. When the reveal engine is
+   ready, it adds `.js-reveal` to <html>, at which point elements
+   marked [data-reveal] start out translated + faded and animate to
+   visible when they scroll into view (or after a safety timeout).
+   This keeps content visible even if IntersectionObserver never
+   fires (some sandboxed iframes never emit intersection events).
+   ------------------------------------------------------------------ */
+[data-reveal] { opacity: 1; transform: none; }
+
+html.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity   320ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+html.js-reveal [data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js-reveal [data-reveal],
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- Reveal stagger (T1.1) ------------------------------------
+   When a section is marked [data-reveal-stagger], its direct child
+   items ripple in on a 60ms cadence rather than popping together.
+   Cap at 360ms so nothing feels laggy. Any parent can opt in by adding
+   the attribute; falls back gracefully if reduced-motion is on.
+   ------------------------------------------------------------------ */
+html.js-reveal [data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity   320ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: 0ms;
+}
+html.js-reveal [data-reveal-stagger].is-visible > *:nth-child(1) { transition-delay: 0ms; }
+html.js-reveal [data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 60ms; }
+html.js-reveal [data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 120ms; }
+html.js-reveal [data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 180ms; }
+html.js-reveal [data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 240ms; }
+html.js-reveal [data-reveal-stagger].is-visible > *:nth-child(6) { transition-delay: 300ms; }
+html.js-reveal [data-reveal-stagger].is-visible > *:nth-child(n + 7) { transition-delay: 360ms; }
+html.js-reveal [data-reveal-stagger].is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js-reveal [data-reveal-stagger] > *,
+  html.js-reveal [data-reveal-stagger].is-visible > * {
+    opacity: 1; transform: none; transition: none; transition-delay: 0s;
+  }
+}
+
+/* ---------- Anchor scroll offset (T1.4) ------------------------------
+   The masthead is a scrolled scrim; anchor jumps would otherwise land
+   at the section top and hide the section heading beneath the header.
+   96px matches the site's header height at scroll. Applies to every
+   section with an id.
+   ------------------------------------------------------------------ */
+section[id] {
+  scroll-margin-top: 96px;
+}
+
+/* ---------- Motion primitives ----------------------------------------
+   Keyframes used by page-scoped animations (cover-stamp arrival,
+   hero-anthem underline draw, book-cover breathing). Centralized here
+   so pages reference them by name and reduced-motion can suppress in
+   one place. Duration + easing per component; the keyframes only
+   describe the shape of the motion.
+   ------------------------------------------------------------------ */
+@keyframes stampIn {
+  from { opacity: 0; transform: rotate(-4deg) scale(0.94); }
+  to   { opacity: 1; transform: rotate(0)     scale(1); }
+}
+@keyframes anthemRule {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+@keyframes coverBreath {
+  0%, 100% { transform: rotate(-1deg); }
+  50%      { transform: rotate(-0.4deg); }
+}
+@keyframes ornPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+/* Each component below scopes its own prefers-reduced-motion opt-out
+   so third-party embeds (Beehiiv iframe, Payhip loader) aren't
+   accidentally frozen by a global animation kill-switch. */
+
+/* ---------- Utility ---------- */
+.text-center { text-align: center; }
+.max-w-narrow { max-width: 720px; }
+.max-w-body { max-width: 60ch; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mt-0 { margin-top: 0; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 12px; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mt-8 { margin-top: 32px; }
+.mt-10 { margin-top: 40px; }
+.mt-12 { margin-top: 48px; }
+.mb-6 { margin-bottom: 24px; }
+.mb-8 { margin-bottom: 32px; }
+.mb-12 { margin-bottom: 48px; }
+.flex-wrap-gap { display: flex; flex-wrap: wrap; gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+
+/* ---------- Author portrait — feathered (edges dissolve into paper) ----------
+   Preserves original pixels — no facial retouch. A radial mask fades the
+   photo's outer edge to transparent so it appears to bleed into the paper
+   surface beneath it. Use on <figure> wrapping the portrait <img>. */
+.author-portrait--feathered {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.author-portrait--feathered img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  -webkit-mask-image: radial-gradient(
+    ellipse 78% 82% at 50% 42%,
+    #000 40%,
+    rgba(0, 0, 0, 0.72) 62%,
+    rgba(0, 0, 0, 0.28) 82%,
+    transparent 100%
+  );
+          mask-image: radial-gradient(
+    ellipse 78% 82% at 50% 42%,
+    #000 40%,
+    rgba(0, 0, 0, 0.72) 62%,
+    rgba(0, 0, 0, 0.28) 82%,
+    transparent 100%
+  );
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  filter: contrast(1.02) saturate(1.02);
+}
+/* Square/portrait variant, for the hero portrait on Home that doesn't use 4:5 */
+.author-portrait--feathered.is-square img { aspect-ratio: 1/1; }
+
+/* ---------- Author portrait — signature thumbnail variant ----------
+   For the "byline" use: a small square (~128px) beside a letter body.
+   Same feathering treatment, just resized. Use inside an .author-byline
+   flex row so the thumbnail sits like a signature next to the name. */
+.author-portrait--feathered.author-portrait--signature {
+  flex: 0 0 auto;
+  width: 128px;
+}
+.author-portrait--feathered.author-portrait--signature img {
+  aspect-ratio: 1/1;
+  width: 128px;
+  height: 128px;
+}
+@media (max-width: 640px) {
+  .author-portrait--feathered.author-portrait--signature,
+  .author-portrait--feathered.author-portrait--signature img {
+    width: 96px; height: 96px;
+  }
+}
