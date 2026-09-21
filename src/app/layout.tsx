@@ -66,10 +66,10 @@ export const metadata: Metadata = {
     locale: "en",
     images: [
       {
-        url: "/images/cover.jpg",
+        url: "/og.png",
         width: 1200,
-        height: 1800,
-        alt: "The Influential Spirit · book cover by Eryeza Kalalu",
+        height: 630,
+        alt: "Eryeza Kalalu · Pastor, Author & Bible Teacher",
       },
     ],
   },
@@ -77,14 +77,16 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Eryeza Kalalu · Pastor, Author & Bible Teacher",
     description: SITE_DESCRIPTION,
-    images: ["/images/cover.jpg"],
+    images: ["/og.png"],
   },
   icons: {
     icon: [
       { url: "/brand/logo-monogram.svg", type: "image/svg+xml" },
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
-    apple: [{ url: "/brand/logo-monogram.svg" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
+  manifest: "/manifest.webmanifest",
   robots: {
     index: true,
     follow: true,
@@ -159,12 +161,33 @@ const jsonLd = {
     },
     {
       "@type": "PodcastSeries",
+      "@id": `${SITE_URL}/#podcast`,
       name: "Devotion In Season",
       description:
         "Short episodes on faith, formation, and the practical realities of walking with God.",
       url: "https://www.iheart.com/podcast/269-devotion-in-season-198850928",
       author: { "@id": `${SITE_URL}/#person` },
-      webFeed: "https://anchor.fm/s/103e4e254/podcast/rss",
+      inLanguage: "en",
+      // NOTE: the previous value here was
+      // "https://anchor.fm/s/103e4e254/podcast/rss", which now returns HTTP 404
+      // (the Anchor feed is dead), so it was removed rather than publish a
+      // broken feed URL to crawlers. Re-add `webFeed` once a live RSS URL is
+      // confirmed (iHeart / Spotify for Podcasters).
+      sameAs: [
+        "https://www.iheart.com/podcast/269-devotion-in-season-198850928",
+        "https://open.spotify.com/show/7xWARwXWq7Zm3qHuyOvfrH",
+        "https://podcasts.apple.com/nl/podcast/devotional-podcast/id1759589414",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "Eryeza Kalalu",
+      description: SITE_DESCRIPTION,
+      inLanguage: "en",
+      publisher: { "@id": `${SITE_URL}/#person` },
+      copyrightHolder: { "@id": `${SITE_URL}/#person` },
     },
   ],
 };
@@ -179,11 +202,9 @@ export default function RootLayout({
       className={`${newsreader.variable} ${sourceSerif.variable} ${dmSans.variable}`}
     >
       <head>
-        {/* Beehiiv attribution · keeps subscribe tracking from the embedded iframe */}
-        <script
-          async
-          src="https://subscribe-forms.beehiiv.com/attribution.js"
-        />
+        {/* Self-hosted font files are the only font source; no Google Fonts request is made. */}
+        <link rel="preconnect" href="https://subscribe-forms.beehiiv.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://www.iheart.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

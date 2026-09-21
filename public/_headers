@@ -1,21 +1,48 @@
-# Cloudflare Pages headers for eryezakalalu.com.
+# Cloudflare Workers Static Assets / Pages headers for eryezakalalu.com
 #
-# These used to live in next.config.ts `headers()`, which does not run in
-# static-export mode. Cloudflare Pages reads this file at deploy time instead.
+# NOTE: Cloudflare joins duplicate header names with a comma, so Cache-Control is
+# set ONLY in the path-specific rules below and never in `/*`.
 #
 # CSP allows exactly the third-party origins the site actually uses:
-#  - Google Fonts (Newsreader, Source Serif 4, DM Sans)
 #  - Beehiiv (attribution.js + the embedded subscribe iframe)
 #  - iHeart (the Devotion In Season podcast iframe player)
+# Google Fonts is deliberately absent: next/font/google downloads and self-hosts
+# the woff2 files at build time, so no request ever goes to fonts.googleapis.com
+# or fonts.gstatic.com (verified: 0 references in the built HTML).
 # Commerce links (Payhip, Selar, Audible, Spotify, Apple, Amazon, Castbox) open
-# in new tabs via <a target="_blank" rel="noopener noreferrer"> -- these are
-# top-level navigations, not resource loads, so CSP does not need to list them.
+# in new tabs via <a target="_blank" rel="noopener noreferrer"> - top-level
+# navigations, not resource loads, so CSP does not need to list them.
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; frame-src 'self' https://subscribe-forms.beehiiv.com https://www.iheart.com; connect-src 'self'; media-src 'self' https://*.iheart.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; frame-src 'self' https://subscribe-forms.beehiiv.com https://www.iheart.com; connect-src 'self'; media-src 'self' https://*.iheart.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
-  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=(), payment=(), usb=(), serial=(), midi=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-Permitted-Cross-Domain-Policies: none
   X-DNS-Prefetch-Control: off
+  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+
+# Fingerprinted build assets (hash in the filename) never change - cache hard.
+/_next/static/*
+  Cache-Control: public, max-age=31556952, immutable
+
+# Unhashed static media: cache for 30 days, allow stale-while-revalidate.
+/images/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+/brand/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+/logo.svg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+# Crawler/discovery files can change at any time.
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600

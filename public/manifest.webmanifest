@@ -1,0 +1,26 @@
+{
+  "name": "Eryeza Kalalu",
+  "short_name": "Eryeza Kalalu",
+  "description": "Pastor Eryeza Kalalu — author of The Influential Spirit and host of the Devotion In Season podcast.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F5F0E8",
+  "theme_color": "#F5F0E8",
+  "lang": "en",
+  "categories": ["books", "religion", "education"],
+  "icons": [
+    {
+      "src": "/brand/logo-monogram.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

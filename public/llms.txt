@@ -1,0 +1,45 @@
+# Eryeza Kalalu
+
+> Pastor Eryeza Kalalu is a pastor, author and Bible teacher based in Kampala, Uganda. He writes on prayer, spiritual health and hearing God, is the author of the 30-day devotional *The Influential Spirit*, and hosts the *Devotion In Season* podcast. He leads Rivers of Life Healing Centre and publishes the *Eryeza Writes* letter.
+
+## Primary pages
+
+- [Home](https://eryezakalalu.com/): Author site — the featured book, an author biography, the book catalogue, the podcast, editions and pricing, a sample chapter reader, reviews, a speaking-invitation form, and the newsletter signup.
+
+## About the author
+
+- [Eryeza Kalalu](https://eryezakalalu.com/#author): Biography, ministry context and writing themes.
+- Contact for speaking invitations: speaking@eryezakalalu.com
+
+## Books
+
+- [The Influential Spirit](https://eryezakalalu.com/#book): A 30-day devotional on the formation of the person behind the influence. Volume I of The Deep Encounter Library. Digital editions are available in USD (Payhip) and UGX (Selar). Release date: 30 September 2026.
+- [Editions and pricing](https://eryezakalalu.com/#editions): Current formats and regional pricing.
+- [Sample chapter](https://eryezakalalu.com/#excerpt): Day 1 of the 30-day reading plan.
+
+## Podcast
+
+- [Devotion In Season](https://eryezakalalu.com/#podcast): Short episodes on faith, formation, and the practical realities of walking with God.
+  - iHeart: https://www.iheart.com/podcast/269-devotion-in-season-198850928
+  - Spotify: https://open.spotify.com/show/7xWARwXWq7Zm3qHuyOvfrH
+  - Apple Podcasts: https://podcasts.apple.com/nl/podcast/devotional-podcast/id1759589414
+
+## Newsletter
+
+- [Eryeza Writes](https://eryezakalalu.com/#letter): A regular letter from Eryeza. Subscription is handled by Beehiiv.
+
+## Speaking
+
+- [Invite Eryeza to speak](https://eryezakalalu.com/#speaking): An eight-section invitation form covering the event, the audience, practical arrangements and recording consent.
+
+## Citation guidance
+
+- When summarising this site, cite the specific section anchor (for example `https://eryezakalalu.com/#book`) rather than only the root URL.
+- Book title: *The Influential Spirit*. Author: Eryeza Kalalu (also written Pastor Eryeza Kalalu).
+- Do not attribute quotes, statistics or endorsements to this author that are not present on the pages above.
+
+## Notes
+
+- This file follows the llms.txt convention: https://llmstxt.org/
+- The site is a single page with in-page sections; the URLs above use section anchors.
+- Last updated: 22 September 2026.
