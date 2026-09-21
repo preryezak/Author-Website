@@ -151,7 +151,16 @@
   --border-strong: rgba(30, 26, 22, 0.24);
   --border-soft: rgba(30, 26, 22, 0.06);
   --border-accent: rgba(123, 63, 46, 0.28);
-  --focus-ring: 0 0 0 3px rgba(123, 63, 46, 0.22);
+  /* Two-tone focus ring.
+   * The previous single ring (oxblood at 22% opacity) composited to #DAC9BF and
+   * measured only 1.41:1 against the parchment background - below the 3:1 that
+   * WCAG 2.x SC 1.4.11 (Non-text Contrast) requires for focus indicators, and
+   * oxblood against the dark sections is only 2.13:1 even at full opacity.
+   * A light inner ring plus a dark outer ring stays >=3:1 on both surfaces:
+   *   #7B3F2E on #F5F0E8 = 7.14:1   (dark outer, light pages)
+   *   #F5F0E8 on #1E1A16 = 15.24:1  (light inner, dark sections)
+   */
+  --focus-ring: 0 0 0 2px var(--paper-50), 0 0 0 4px #7B3F2E;
   --shadow-1: 0 1px 2px rgba(30, 26, 22, 0.06), 0 1px 1px rgba(30, 26, 22, 0.04);
   --shadow-2: 0 2px 6px rgba(30, 26, 22, 0.08), 0 8px 24px rgba(30, 26, 22, 0.06);
   --shadow-3: 0 12px 32px rgba(30, 26, 22, 0.14), 0 2px 6px rgba(30, 26, 22, 0.08);
