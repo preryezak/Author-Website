@@ -1,0 +1,31 @@
+# Cloudflare Worker with Static Assets — eryezakalalu.com author site.
+#
+# This is the SAME deployment mechanism the previous site used. The superseded
+# Vite project shipped this file on the `archive/old-vite-site` branch:
+#
+#     name = "ccndaily-books"
+#     [assets]
+#     directory = "./dist/public"
+#
+# `npm run build` produces `dist/public` (the Next.js static export is mirrored
+# there by scripts/postbuild.mjs), so deploying this Worker replaces the old
+# site with no wrangler-side change beyond the Worker name:
+#
+#     npm run build
+#     npx wrangler deploy
+#
+# Then bind the custom domain in the Cloudflare dashboard
+# (Workers & Pages -> this Worker -> Settings -> Domains & Routes ->
+#  Add custom domain -> eryezakalalu.com).
+#
+# If instead the domain is served by a Cloudflare PAGES project, point that
+# project at build command `npm run build` with output directory `dist`
+# (or `dist/public`) - both are produced.
+
+name = "eryezakalalu-author-site"
+compatibility_date = "2026-09-21"
+
+[assets]
+directory = "./dist/public"
+# Single-page export: serve index.html for unmatched paths rather than a 404.
+not_found_handling = "single-page-application"
