@@ -1,0 +1,21 @@
+# Cloudflare Pages headers for eryezakalalu.com.
+#
+# These used to live in next.config.ts `headers()`, which does not run in
+# static-export mode. Cloudflare Pages reads this file at deploy time instead.
+#
+# CSP allows exactly the third-party origins the site actually uses:
+#  - Google Fonts (Newsreader, Source Serif 4, DM Sans)
+#  - Beehiiv (attribution.js + the embedded subscribe iframe)
+#  - iHeart (the Devotion In Season podcast iframe player)
+# Commerce links (Payhip, Selar, Audible, Spotify, Apple, Amazon, Castbox) open
+# in new tabs via <a target="_blank" rel="noopener noreferrer"> -- these are
+# top-level navigations, not resource loads, so CSP does not need to list them.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; frame-src 'self' https://subscribe-forms.beehiiv.com https://www.iheart.com; connect-src 'self'; media-src 'self' https://*.iheart.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-DNS-Prefetch-Control: off
