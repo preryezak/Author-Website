@@ -50,14 +50,10 @@ await rm(distPublic, { recursive: true, force: true });
 await mkdir(distPublic, { recursive: true });
 await cp(out, distPublic, { recursive: true });
 
-// Cloudflare fallback for a single-page export.
-// dist/_redirects must not shadow dist/public/_redirects.
-if (!(await exists(join(dist, "_redirects")))) {
-  await writeFile(join(dist, "_redirects"), "/*    /index.html   200\n", "utf8");
-}
-if (!(await exists(join(distPublic, "_redirects")))) {
-  await writeFile(join(distPublic, "_redirects"), "/*    /index.html   200\n", "utf8");
-}
+// NOTE: no `_redirects` is written. Cloudflare Workers Static Assets handles the
+// single-page fallback via `not_found_handling = "single-page-application"` in
+// wrangler.toml, and a `/* -> /index.html 200` rule is rejected by Cloudflare as
+// an infinite-loop redirect when that setting is present (error 100324).
 
 console.log(
   `[postbuild] mirrored out/ -> dist/ (${await count(dist)} files) and dist/public/ (${await count(distPublic)} files)`
