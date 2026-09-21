@@ -291,7 +291,7 @@ export const ABOUT = {
     "Eryeza lives and writes from Uganda. He is married to Geraldine, and together they are raising their 3 sons.",
   ],
   closer: "Explore the books, listen to the teaching, and join Eryeza on the journey of becoming the person God has called you to be.",
-  photo: "/images/author.jpg",
+  photo: "/images/author-640.webp",
   logo: "/brand/logo-monogram-gold.svg",
 } as const;
 

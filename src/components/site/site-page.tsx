@@ -164,7 +164,16 @@ export default function SitePage({
                 <div className="portrait-frame">
                   <figure className="author-portrait--feathered">
                     { }
-                    <img src="/images/author.jpg" alt="Pastor Eryeza Kalalu" />
+                    <img
+                      src="/images/author-640.webp"
+                      srcSet="/images/author-640.webp 640w"
+                      sizes="(max-width: 1024px) 88vw, 420px"
+                      width={640}
+                      height={960}
+                      alt="Pastor Eryeza Kalalu"
+                      fetchPriority="high"
+                      decoding="async"
+                    />
                   </figure>
                   <div className="portrait-tag">
                     <div className="name">{HERO.portraitName}</div>
@@ -185,7 +194,15 @@ export default function SitePage({
                   <span className="device__bezel-mark" aria-hidden="true" />
                   <div className="device__screen">
                     { }
-                    <img src="/images/cover.jpg" alt="The Influential Spirit, the actual book front cover" />
+                    <img
+                      src="/images/cover-640.webp"
+                      srcSet="/images/cover-640.webp 640w, /images/cover-1200.webp 1200w"
+                      sizes="(max-width: 1024px) 70vw, 460px"
+                      width={1200}
+                      height={1800}
+                      alt="The Influential Spirit, the actual book front cover"
+                      decoding="async"
+                    />
                   </div>
                   <div className="device__chrome"><span>Digital edition</span><span className="device__battery" aria-hidden="true" /></div>
                 </div>
@@ -234,7 +251,16 @@ export default function SitePage({
             <div className="mx-auto" style={{ maxWidth: 760, textAlign: "center" }}>
               <figure className="author-portrait--rounded" style={{ margin: "0 auto 24px" }}>
                 { }
-                <img src="/images/author.jpg" alt="Pastor Eryeza Kalalu" />
+                <img
+                  src="/images/author-640.webp"
+                  srcSet="/images/author-640.webp 640w"
+                  sizes="(max-width: 760px) 88vw, 420px"
+                  width={640}
+                  height={960}
+                  alt="Pastor Eryeza Kalalu"
+                  loading="lazy"
+                  decoding="async"
+                />
               </figure>
               <h2 className="display" style={{ fontSize: "clamp(32px, 4vw, 44px)", fontWeight: 400, letterSpacing: "-0.015em" }}>{AUTHOR_LETTER.eyebrow}</h2>
               <OrnamentRule>§</OrnamentRule>
@@ -392,7 +418,16 @@ export default function SitePage({
                 <div className="bundle-digital__device">
                   <div className="mini-device">
                     { }
-                    <img src="/images/cover.jpg" alt="The Influential Spirit cover on a tablet screen" />
+                    <img
+                      src="/images/cover-640.webp"
+                      srcSet="/images/cover-640.webp 640w"
+                      sizes="(max-width: 1024px) 50vw, 260px"
+                      width={640}
+                      height={960}
+                      alt="The Influential Spirit cover on a tablet screen"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                 </div>
                 <div className="bundle-digital__text">
@@ -404,7 +439,16 @@ export default function SitePage({
               </div>
               <figure>
                 { }
-                <img src="/images/mockups/book-audiogram.png" alt="Author-narrated audiobook with headphones" />
+                <img
+                  src="/images/mockups/book-audiogram-640.webp"
+                  srcSet="/images/mockups/book-audiogram-640.webp 640w"
+                  sizes="(max-width: 1024px) 88vw, 520px"
+                  width={640}
+                  height={640}
+                  alt="Author-narrated audiobook with headphones"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <figcaption><strong>Author-narrated audiobook</strong>Included in the Formation Bundle</figcaption>
               </figure>
             </div>
@@ -514,7 +558,16 @@ export default function SitePage({
                 <article className="col-4 book-card book-card--dark" key={b.title}>
                   {b.cover === "cover" ? (
                     <a href={b.href} className="cover-slot" aria-label={`${b.title} book cover`}>
-                      <img src="/images/cover.jpg" alt={`${b.title} book cover`} />
+                      <img
+                        src="/images/cover-640.webp"
+                        srcSet="/images/cover-640.webp 640w"
+                        sizes="(max-width: 1024px) 45vw, 300px"
+                        width={640}
+                        height={960}
+                        alt={`${b.title} book cover`}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </a>
                   ) : (
                     <div className="cover-slot" aria-hidden="true" style={{ display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 8, background: b.cover === "oxblood" ? "var(--oxblood-500)" : "var(--forest-500)", boxShadow: "inset 0 0 0 1px rgba(228,199,187,0.28), 0 8px 24px rgba(30,26,22,0.18)" }}>
@@ -633,7 +686,14 @@ export default function SitePage({
                 <img className="about-logo" src={ABOUT.logo} alt="EK monogram" width={96} height={96} />
                 <div className="about-portrait">
                   { }
-                  <img src={ABOUT.photo} alt="Pastor Eryeza Kalalu" />
+                  <img
+                  src={ABOUT.photo}
+                  width={640}
+                  height={960}
+                  alt="Pastor Eryeza Kalalu"
+                  loading="lazy"
+                  decoding="async"
+                />
                 </div>
               </div>
               <div className="about-section__body">
