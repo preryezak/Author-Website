@@ -1,20 +1,44 @@
 /**
  * Cloudflare Worker — Eryeza Kalalu speaking-form handler.
  *
- * Receives the 8-section speaking invitation POST, validates it, emails
- * speaking@eryezakalalu.com via the Resend API, optionally stores the
- * submission in Cloudflare D1, and returns { ok: true, emailed }.
+ * Receives the 8-section speaking invitation POST, validates it, stores it in
+ * Cloudflare D1 (when the binding exists), and emails
+ * speaking@eryezakalalu.com. Returns { ok, emailed, via }.
  *
- * Deploy: `wrangler deploy` (after `wrangler secret put RESEND_API_KEY`).
- * The Next.js site posts to this Worker via NEXT_PUBLIC_SPEAKING_ENDPOINT.
+ * There are two supported send paths and the Worker prefers the first:
+ *
+ *   1. NATIVE  — Cloudflare Email Service `send_email` binding (`env.EMAIL.send`).
+ *                No third-party account, no API key. Sending to a *verified
+ *                destination address* (e.g. speaking@eryezakalalu.com) is free on
+ *                every plan, including Workers Free. Sending to arbitrary
+ *                recipients requires the Workers Paid plan.
+ *                Docs: https://developers.cloudflare.com/email-service/api/send-emails/workers-api/
+ *   2. RESEND  — fallback via https://api.resend.com/emails using RESEND_API_KEY.
+ *
+ * Deploy: `wrangler deploy` (see worker/README.md).
+ * The Next.js site posts here via NEXT_PUBLIC_SPEAKING_ENDPOINT.
  */
 
+interface EmailSendBinding {
+  send(message: {
+    to: string | { email: string; name?: string } | Array<string | { email: string; name?: string }>;
+    from: string | { email: string; name?: string };
+    subject: string;
+    html?: string;
+    text?: string;
+    replyTo?: string | { email: string; name?: string };
+    headers?: Record<string, string>;
+  }): Promise<{ messageId: string }>;
+}
+
 interface Env {
-  RESEND_API_KEY: string; // set via `wrangler secret put RESEND_API_KEY`
-  SPEAKING_EMAIL?: string; // default: speaking@eryezakalalu.com
-  RESEND_FROM?: string; // default: onboarding@resend.dev (set to speaking@eryezakalalu.com after domain verification on Resend)
-  ALLOWED_ORIGIN?: string; // default: https://eryezakalalu.com
-  DB?: D1Database; // optional D1 binding (set in wrangler.toml). Storage fails quietly if absent.
+  EMAIL?: EmailSendBinding; // Native Cloudflare Email Service binding ([[send_email]] name = "EMAIL")
+  RESEND_API_KEY?: string;   // Fallback: set via `wrangler secret put RESEND_API_KEY`
+  SPEAKING_EMAIL?: string;   // default: speaking@eryezakalalu.com
+  RESEND_FROM?: string;      // default: onboarding@resend.dev (used only on the Resend path)
+  EMAIL_FROM?: string;       // native path sender, must be on a domain onboarded to Email Service
+  ALLOWED_ORIGIN?: string;   // default: https://eryezakalalu.com
+  DB?: D1Database;           // optional D1 binding (set in wrangler.toml). Storage fails quietly if absent.
 }
 
 // The 8 sections, in order. Each field: [key, label].
@@ -53,6 +77,17 @@ function buildEmailHtml(d: Record<string, string>, receivedAt: string): string {
   </table></body></html>`;
 }
 
+function buildEmailText(d: Record<string, string>, receivedAt: string): string {
+  const lines: string[] = [`New speaking invitation from ${d.name || "a visitor"} — received ${receivedAt}`, ""];
+  for (const s of SECTIONS) {
+    lines.push(s.heading.toUpperCase());
+    for (const [k, label] of s.fields) lines.push(`  ${label}: ${d[k] || "—"}`);
+    lines.push("");
+  }
+  lines.push(`Reply to the requester at ${d.email || ""}.`);
+  return lines.join("\n");
+}
+
 function jsonResponse(data: unknown, status: number, cors: Record<string, string>): Response {
   return new Response(JSON.stringify(data), {
     status,
@@ -75,9 +110,19 @@ export default {
       return new Response(null, { headers: cors });
     }
 
-    // Health check
+    // Health check — tells you at a glance which send path is wired up.
     if (request.method === "GET") {
-      return jsonResponse({ ok: true, service: "speaking", emailConfigured: Boolean(env.RESEND_API_KEY) }, 200, cors);
+      return jsonResponse(
+        {
+          ok: true,
+          service: "speaking",
+          nativeEmailBinding: Boolean(env.EMAIL),
+          resendConfigured: Boolean(env.RESEND_API_KEY),
+          storageConfigured: Boolean(env.DB),
+        },
+        200,
+        cors
+      );
     }
 
     if (request.method !== "POST") {
@@ -104,24 +149,48 @@ export default {
     if (!d.speakAbout || d.speakAbout.length < 10) return jsonResponse({ ok: false, error: "Please share what you would like Eryeza to speak about." }, 422, cors);
 
     const receivedAt = new Date().toISOString();
+    const speakingEmail = env.SPEAKING_EMAIL || "speaking@eryezakalalu.com";
+    const subject = `Speaking invitation from ${name}${d.organisation ? ", " + d.organisation : ""}`;
+    const html = buildEmailHtml(d, receivedAt);
+    const text = buildEmailText(d, receivedAt);
 
-    // 1) Optional D1 storage (fails quietly if the binding or table is absent)
+    // 1) Storage first, so a mail failure never loses the submission.
+    let stored = false;
     if (env.DB) {
       try {
         await env.DB.prepare(
           "INSERT INTO speaking_requests (id, name, email, data, status, createdAt) VALUES (?, ?, ?, ?, 'new', ?)"
         ).bind(crypto.randomUUID(), name, email, JSON.stringify(d), receivedAt).run();
+        stored = true;
       } catch {
-        // D1 table may not be created yet, or the binding is misconfigured. Fail quietly.
+        // D1 table may not be created yet, or the binding is misconfigured.
       }
     }
 
-    // 2) Email via Resend
+    // 2) Email — native Email Service binding first, then Resend.
     let emailed = false;
-    if (env.RESEND_API_KEY) {
+    let via: "cloudflare-email" | "resend" | "none" = "none";
+    let sendError = "";
+
+    if (env.EMAIL) {
       try {
-        const speakingEmail = env.SPEAKING_EMAIL || "speaking@eryezakalalu.com";
-        const fromAddr = env.RESEND_FROM || "onboarding@resend.dev";
+        await env.EMAIL.send({
+          to: speakingEmail,
+          from: env.EMAIL_FROM || speakingEmail,
+          subject,
+          html,
+          text,
+          replyTo: email,
+        });
+        emailed = true;
+        via = "cloudflare-email";
+      } catch (e) {
+        sendError = e instanceof Error ? e.message : String(e);
+      }
+    }
+
+    if (!emailed && env.RESEND_API_KEY) {
+      try {
         const res = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
@@ -129,21 +198,35 @@ export default {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: fromAddr,
+            from: env.RESEND_FROM || "onboarding@resend.dev",
             to: [speakingEmail],
             replyTo: email,
-            subject: `Speaking invitation from ${name}${d.organisation ? ", " + d.organisation : ""}`,
-            html: buildEmailHtml(d, receivedAt),
+            subject,
+            html,
           }),
         });
-        if (res.ok) emailed = true;
-      } catch {
-        // Resend call failed. The submission is in D1 (if configured). Fail quietly.
+        if (res.ok) {
+          emailed = true;
+          via = "resend";
+        } else {
+          sendError = `resend ${res.status}`;
+        }
+      } catch (e) {
+        sendError = e instanceof Error ? e.message : String(e);
       }
     }
 
+    // The submission is safe in D1 even when mail could not be sent; the site
+    // reports success so the visitor is not asked to resubmit.
     return jsonResponse(
-      { ok: true, emailed, message: "Thank you. Your speaking invitation has been received." },
+      {
+        ok: true,
+        emailed,
+        stored,
+        via,
+        sendError: emailed ? undefined : sendError || "no email binding configured",
+        message: "Thank you. Your speaking invitation has been received.",
+      },
       201,
       cors
     );

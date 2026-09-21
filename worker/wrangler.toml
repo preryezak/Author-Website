@@ -3,23 +3,39 @@ main = "speaking.ts"
 compatibility_date = "2024-12-01"
 
 # ── Public vars (set in the dashboard or here) ──────────────────────
-# The inbox that receives every speaking invitation.
 [vars]
+# The inbox that receives every speaking invitation.
 SPEAKING_EMAIL = "speaking@eryezakalalu.com"
-# Until eryezakalalu.com is verified on Resend, mail sends from Resend's
-# shared onboarding address. After verification, set this to
-# speaking@eryezakalalu.com (or any address on your verified domain).
+# Native Email Service sender. Must be an address on a domain you have
+# onboarded to Cloudflare Email Service (eryezakalalu.com).
+EMAIL_FROM = "speaking@eryezakalalu.com"
+# Used only on the Resend fallback path. Until eryezakalalu.com is verified
+# on Resend, mail sends from Resend's shared onboarding address.
 RESEND_FROM = "onboarding@resend.dev"
 ALLOWED_ORIGIN = "https://eryezakalalu.com"
 
-# ── Secrets (set via `wrangler secret put`) ──────────────────────────
-# RESEND_API_KEY  ->  run:  wrangler secret put RESEND_API_KEY
-# (Never commit the key. It's stored encrypted in Cloudflare.)
+# ── Path 1 (preferred): NATIVE Cloudflare Email Service ─────────────
+# No third-party account and no API key. Free on every plan when sending to a
+# verified destination address (like speaking@eryezakalalu.com); sending to
+# arbitrary recipients needs the Workers Paid plan.
+#   1. Cloudflare dashboard -> Compute -> Email Service -> onboard eryezakalalu.com
+#   2. Add this binding, then:  wrangler deploy
+#
+[[send_email]]
+name = "EMAIL"
+# Restrict the binding for safety (recommended):
+# allowed_sender_addresses = ["speaking@eryezakalalu.com"]
+# allowed_destination_addresses = ["speaking@eryezakalalu.com"]
 
-# ── Optional D1 storage (uncomment after creating the D1 database) ─
+# ── Path 2 (fallback): Resend ───────────────────────────────────────
+# Used automatically only when the native EMAIL binding above is absent.
+# RESEND_API_KEY  ->  run:  wrangler secret put RESEND_API_KEY
+# (Never commit the key. It is stored encrypted in Cloudflare.)
+
+# ── D1 storage (recommended, so submissions survive mail failures) ──
 # Create the DB:   wrangler d1 create eryeza-speaking-db
-# Run the schema:   wrangler d1 execute eryeza-speaking-db --file=schema.sql --remote
-# Then uncomment:
+# Run the schema:  wrangler d1 execute eryeza-speaking-db --file=schema.sql --remote
+# Then uncomment and paste the id wrangler printed:
 #
 # [[d1_databases]]
 # binding = "DB"
@@ -27,8 +43,8 @@ ALLOWED_ORIGIN = "https://eryezakalalu.com"
 # database_id = "<the id wrangler printed when you created it>"
 
 # ── Optional custom route (instead of the *.workers.dev URL) ────────
-# Once you want the Worker at eryezakalalu.com/worker/speaking (so the
-# Next.js site can post to a same-origin URL), add a route in the
-# Cloudflare dashboard: eryezakalalu.com/worker/speaking* -> this Worker.
-# Then set NEXT_PUBLIC_SPEAKING_ENDPOINT=https://eryezakalalu.com/worker/speaking
-# in the Cloudflare Pages env vars.
+# To serve the Worker at eryezakalalu.com/worker/speaking (same-origin, so no
+# CORS at all), add a route in the Cloudflare dashboard:
+#   eryezakalalu.com/worker/speaking*  ->  this Worker
+# Then, in the Pages project environment variables, set
+#   NEXT_PUBLIC_SPEAKING_ENDPOINT = https://eryezakalalu.com/worker/speaking

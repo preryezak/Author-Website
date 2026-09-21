@@ -46,15 +46,23 @@ function renderRich(text: string): React.ReactNode[] {
 }
 
 /* ==================================================================== */
-export default function SitePage() {
+export default function SitePage({
+  letters: initialLetters = [],
+  episodes: initialEpisodes = [],
+}: {
+  letters?: LetterItem[];
+  episodes?: EpisodeItem[];
+}) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [day1Open, setDay1Open] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [cookieSeen, setCookieSeen] = useState(false);
   const [editionsRegion, setEditionsRegion] = useState<"usd" | "ugx">("usd");
   const [privacyOpen, setPrivacyOpen] = useState(false);
-  const [letters, setLetters] = useState<LetterItem[] | null>(null);
-  const [episodes, setEpisodes] = useState<EpisodeItem[] | null>(null);
+  // Supplied by the server component at build time (static export): there is no
+  // runtime /api/letters or /api/episodes route on Cloudflare Pages.
+  const letters: LetterItem[] | null = initialLetters.length ? initialLetters : [];
+  const episodes: EpisodeItem[] | null = initialEpisodes.length ? initialEpisodes : [];
   const mastheadRef = useRef<HTMLElement>(null);
 
   const openDay1 = () => {
@@ -87,16 +95,8 @@ export default function SitePage() {
     window.addEventListener("keydown", onKey); window.addEventListener("resize", onResize);
     return () => { window.removeEventListener("keydown", onKey); window.removeEventListener("resize", onResize); };
   }, []);
-  useEffect(() => {
-    let c = false;
-    fetch("/api/letters").then((r) => (r.ok ? r.json() : null)).then((d) => { if (!c && d?.items?.length) setLetters(d.items.slice(0, 6)); else if (!c) setLetters([]); }).catch(() => !c && setLetters([]));
-    return () => { c = true; };
-  }, []);
-  useEffect(() => {
-    let c = false;
-    fetch("/api/episodes").then((r) => (r.ok ? r.json() : null)).then((d) => { if (!c && d?.items?.length) setEpisodes(d.items.slice(0, 3)); else if (!c) setEpisodes([]); }).catch(() => !c && setEpisodes([]));
-    return () => { c = true; };
-  }, []);
+  // Letters and episodes are fetched at build time in src/app/page.tsx and
+  // passed in as props (static export has no runtime API routes).
   useEffect(() => {
     const bar = document.querySelector<HTMLElement>("[data-sticky-bar]"); if (!bar) return;
     const editions = document.getElementById("editions");
