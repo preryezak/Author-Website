@@ -18,13 +18,68 @@ export const SITE = {
   year: "2026",
 } as const;
 
+/**
+ * Giving.
+ *
+ * SINGLE SOURCE OF TRUTH for the giving destination. The hosted Flutterwave
+ * donation page is the system of record for gifts: this site only links out to
+ * it. There is deliberately no Flutterwave SDK, no payment-initiation endpoint,
+ * no webhook handler and no secret key anywhere in this project.
+ *
+ * Change the destination without touching component code by setting the build
+ * variable NEXT_PUBLIC_GIVING_URL. Set it to an empty string to switch the
+ * button off entirely: the UI then falls back to a plain note instead of a link.
+ */
+const GIVING_DEFAULT_URL = "https://flutterwave.com/donate/h2tj4bfhltce";
+
+/**
+ * Resolution rules for the giving destination, and why they look like this.
+ *
+ * Next inlines NEXT_PUBLIC_* values at build time and treats an empty string as
+ * "not set", so an empty value cannot be told apart from an absent one. That
+ * means `NEXT_PUBLIC_GIVING_URL=` does NOT switch the button off, it just falls
+ * back to the default. To switch giving off, use one of the OFF sentinels;
+ * anything else is used verbatim as the destination.
+ *
+ * Also note: on this setup a changed NEXT_PUBLIC_* value needs a clean .next,
+ * otherwise the webpack cache can reuse the previous compilation.
+ */
+const RAW_GIVING_URL = process.env.NEXT_PUBLIC_GIVING_URL;
+const GIVING_IS_OFF =
+  typeof RAW_GIVING_URL === "string" && /^(off|none|disabled|false)$/i.test(RAW_GIVING_URL.trim());
+const RESOLVED_GIVING_URL = GIVING_IS_OFF
+  ? ""
+  : (RAW_GIVING_URL ?? "").trim() || GIVING_DEFAULT_URL;
+
+export const GIVING = {
+  url: RESOLVED_GIVING_URL,
+  label: "Give",
+  navLabel: "Give",
+  eyebrow: "Giving",
+  heading: "Support the work.",
+  lede:
+    "Writing, teaching and pastoral work are sustained by people who give quietly and gladly. Your gift goes toward the books, the podcast and the ministry of Rivers of Life Healing Centre.",
+  body: [
+    "Giving here is simple and unpressured. There is nothing to buy and nothing to sign up for. You choose an amount on the secure giving page and it is handled by Flutterwave, who hold the transaction record and send your receipt.",
+    "I am grateful for every gift, and I would rather you gave prayerfully than gave under pressure.",
+  ],
+  trust: [
+    { title: "Secure", desc: "Payments are processed by Flutterwave on their own secure pages. This site never sees or stores your card details." },
+    { title: "Direct", desc: "Your gift goes to the ministry, not through a storefront built for selling products." },
+    { title: "Receipted", desc: "Flutterwave emails your confirmation and holds the record of the transaction." },
+  ],
+  disclaimer: "Gifts are received through a commercial payment provider. They are not represented as tax-deductible.",
+  campaign: "site-give",
+} as const;
+
 export const NAV = [
-  { label: "Home", href: "#top" },
-  { label: "The Influential Spirit", href: "#influential-spirit" },
-  { label: "Speaking", href: "#speaking" },
-  { label: "Letter", href: "#letter" },
-  { label: "Books", href: "#books" },
-  { label: "About", href: "#about" },
+  { label: "Home", href: "/" },
+  { label: "The Influential Spirit", href: "/influential-spirit" },
+  { label: "Speaking", href: "/speaking" },
+  { label: "Letter", href: "/letter" },
+  { label: "Books", href: "/books" },
+  { label: "About", href: "/about" },
+  { label: "Give", href: "/give" },
 ] as const;
 
 /** Hero */
@@ -302,17 +357,20 @@ export const SPEAKING = {
   heroHeading: "Bringing Scripture into the places where faith is lived.",
   heroLede: "Eryeza speaks to churches, leadership gatherings, conferences, retreats, universities, and the spaces where faith and everyday life meet. His teaching is biblical, practical, and Christ-centred, aimed at the formation of people who can faithfully live, lead, work, and influence in the world God has placed them in.",
   whereHeading: "Where Eryeza Can Serve",
+  whereEyebrow: "Venues & Gatherings",
+  whereLede: "From the sanctuary to the campus, the desk and the shop floor. These are the gatherings where Scripture meets the work people actually do.",
   whereItems: [
-    "Church services and congregations",
-    "Conferences and conventions",
-    "Leadership and ministry gatherings",
-    "Retreats and formation weekends",
-    "University and academic gatherings",
-    "Corporate and professional settings",
-    "Community gatherings",
-    "Podcast and media conversations",
+    { icon: "church", title: "Church Services", desc: "Sunday worship, midweek congregations and teaching times that open Scripture plainly." },
+    { icon: "conference", title: "Conferences", desc: "Keynotes and main sessions for conventions built around a clear biblical theme." },
+    { icon: "leaders", title: "Leadership Gatherings", desc: "Pastors, elders and ministry teams, with formation placed before function." },
+    { icon: "retreat", title: "Retreats", desc: "Formation weekends and days set apart for reflection, prayer and rest." },
+    { icon: "academic", title: "Universities", desc: "Campus and academic settings where faith meets hard questions." },
+    { icon: "briefcase", title: "Corporate Settings", desc: "Teams and professionals who want their faith to shape the work they lead." },
+    { icon: "community", title: "Community Gatherings", desc: "Associations, outreaches and the everyday places where people gather." },
+    { icon: "media", title: "Podcast & Media", desc: "Conversations and interviews for the listener on the other side of the mic." },
   ],
   themesHeading: "Themes I Explore",
+  themesEyebrow: "Territories",
   themesLede: "These are some of the territories I explore through Scripture, teaching, conversation, and lived experience. Each engagement is shaped around the gathering, the audience, and the questions they are facing.",
   themes: [
     { title: "Spiritual Formation", desc: "The formation of the inner life, maturity, identity, discipleship, character, and becoming who Christ is forming us to be." },
@@ -323,12 +381,14 @@ export const SPEAKING = {
     { title: "Faithfulness, Pressure & Legacy", desc: "Walking with God through pressure, seasons of waiting, responsibility, perseverance, finishing well, and the life we leave behind." },
   ],
   howHeading: "How I Teach",
+  howEyebrow: "Approach",
   howParas: [
     "My approach is biblical and practical. I work from Scripture outward into the real rooms people walk into on Monday, the desk, the clinic, the classroom, the kitchen table, the verdict, the lesson plan.",
     "I teach for formation, not noise. The aim is not to impress a gathering but to help people become the kind of person Christ is forming, whose life then speaks.",
     "I hold the pulpit and the marketplace together. Most of what I preach and teach is written for the believer whose influence is already larger than they feel comfortable with, and who wants to carry it faithfully.",
   ],
   engagementsHeading: "Selected Engagements",
+  engagementsEyebrow: "Track Record",
   engagementsLede: "A selection of gatherings Eryeza has served. A fuller list is available on request.",
   engagements: [
     { event: "Rivers of Life Healing Centre", note: "Pastoral and teaching ministry, Kawuku, Uganda" },

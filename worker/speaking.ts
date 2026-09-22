@@ -88,6 +88,100 @@ function buildEmailText(d: Record<string, string>, receivedAt: string): string {
   return lines.join("\n");
 }
 
+/**
+ * Site event logging — `POST /events`.
+ *
+ * Records a small, non-personal click record (the Giving button today) so
+ * giving intent can be counted and reconciled against the Flutterwave donation
+ * dashboard. This is deliberately NOT a payment endpoint: it holds no keys, it
+ * never touches money, and it stores none of the giver's details.
+ *
+ * Stored fields: event name, surface/source, page path, campaign label, the
+ * client timestamp and a random event id (the primary key, so a retried beacon
+ * cannot create a duplicate row).
+ *
+ * Create the table with:
+ *   wrangler d1 execute eryeza-speaking-db --remote --command "<SITE_EVENTS_DDL>"
+ */
+const SITE_EVENTS_DDL =
+  "CREATE TABLE IF NOT EXISTS site_events (" +
+  "id TEXT PRIMARY KEY, event TEXT NOT NULL, source TEXT NOT NULL, " +
+  "page TEXT NOT NULL DEFAULT '', campaign TEXT NOT NULL DEFAULT '', " +
+  "ts TEXT NOT NULL, receivedAt TEXT NOT NULL, country TEXT DEFAULT '');";
+
+const ALLOWED_EVENTS = new Set(["give_click"]);
+
+/** Exported for the deploy notes: the exact DDL to run against D1. */
+export { SITE_EVENTS_DDL };
+
+function shortString(v: unknown, max: number): string {
+  return typeof v === "string" ? v.slice(0, max).trim() : "";
+}
+
+async function handleSiteEvent(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>
+): Promise<Response> {
+  if (request.method !== "POST") {
+    return jsonResponse({ ok: false, error: "Method not allowed." }, 405, cors);
+  }
+
+  let body: Record<string, unknown>;
+  try {
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return jsonResponse({ ok: false, error: "Invalid request body." }, 422, cors);
+  }
+
+  const event = shortString(body.event, 40);
+  if (!ALLOWED_EVENTS.has(event)) {
+    return jsonResponse({ ok: false, error: "Unknown event." }, 422, cors);
+  }
+
+  const id = shortString(body.id, 80) || crypto.randomUUID();
+  const source = shortString(body.source, 64) || "unknown";
+  const page = shortString(body.page, 200);
+  const campaign = shortString(body.campaign, 80);
+  const ts = shortString(body.ts, 40);
+  const receivedAt = new Date().toISOString();
+  const country = (request as { cf?: { country?: string } }).cf?.country ?? "";
+
+  // Storage is the point of this endpoint; a missing binding is a real failure.
+  if (!env.DB) {
+    return jsonResponse({ ok: false, error: "Storage is not configured." }, 503, cors);
+  }
+
+  const insert = () =>
+    env.DB!.prepare(
+      "INSERT OR IGNORE INTO site_events (id, event, source, page, campaign, ts, receivedAt, country) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    )
+      .bind(id, event, source, page, campaign, ts, receivedAt, country)
+      .run();
+
+  try {
+    await insert();
+  } catch (e) {
+    // The table may not exist yet on a fresh database. Create it once and retry,
+    // so the endpoint works without a separate manual migration step.
+    const message = e instanceof Error ? e.message : String(e);
+    if (!/no such table/i.test(message)) {
+      return jsonResponse({ ok: false, error: "Could not record the event.", detail: message }, 500, cors);
+    }
+    try {
+      await env.DB.prepare(SITE_EVENTS_DDL).run();
+      await env.DB.prepare("CREATE INDEX IF NOT EXISTS idx_site_events_event ON site_events(event, ts);").run();
+      await insert();
+    } catch (e2) {
+      const message2 = e2 instanceof Error ? e2.message : String(e2);
+      return jsonResponse({ ok: false, error: "Could not record the event.", detail: message2 }, 500, cors);
+    }
+  }
+
+  return jsonResponse({ ok: true, recorded: true, id }, 202, cors);
+}
+
 function jsonResponse(data: unknown, status: number, cors: Record<string, string>): Response {
   return new Response(JSON.stringify(data), {
     status,
@@ -110,6 +204,13 @@ export default {
       return new Response(null, { headers: cors });
     }
 
+    // Click/event logging lives on its own path, so the speaking-form
+    // contract on POST / is untouched.
+    const url = new URL(request.url);
+    if (url.pathname === "/events") {
+      return handleSiteEvent(request, env, cors);
+    }
+
     // Health check — tells you at a glance which send path is wired up.
     if (request.method === "GET") {
       return jsonResponse(
@@ -119,6 +220,8 @@ export default {
           nativeEmailBinding: Boolean(env.EMAIL),
           resendConfigured: Boolean(env.RESEND_API_KEY),
           storageConfigured: Boolean(env.DB),
+          eventsPath: "/events",
+          eventsTable: "site_events",
         },
         200,
         cors

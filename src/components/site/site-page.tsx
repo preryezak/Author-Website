@@ -7,6 +7,7 @@ import {
   THE_DAYS, EDITIONS, REVIEWS, FAQ, WHATS_NEXT, ABOUT, SPEAKING, PRIVACY,
 } from "@/lib/site-content";
 import SpeakingInviteForm from "@/components/site/speaking-invite-form";
+import GiveButton from "@/components/site/give-button";
 
 function PlatformIcon({ name }: { name: string }) {
   const c: SVGProps<SVGSVGElement> = { viewBox: "0 0 24 24", "aria-hidden": true };
@@ -30,8 +31,31 @@ type LetterItem = { title: string; link: string; pubDate: string; description: s
 type EpisodeItem = { title: string; link: string; pubDate: string; audioUrl: string };
 // How many episodes are shown before "All N episodes" expands the rest in place.
 const EPISODE_PREVIEW = 3;
-function fmtDate(iso: string) {
-  try { const d = new Date(iso); if (isNaN(d.getTime())) return ""; return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); } catch { return ""; }
+function fmtDate(iso: string) {
+  try { const d = new Date(iso); if (isNaN(d.getTime())) return ""; return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); } catch { return ""; }
+}
+
+// Line icons for the "Where Eryeza Can Serve" cards. Drawn in the site's own
+// stroke style (1.6 / round caps, currentColor) so they sit in the brand system
+// rather than looking like an imported set.
+const SERVE_ICON_PATHS: Record<string, string[]> = {
+  church: ["M12 2v4", "M10 4h4", "M4 11l8-6 8 6", "M6 9.5V20h12V9.5", "M10 20v-5a2 2 0 0 1 4 0v5"],
+  conference: ["M3 4h18v11H3z", "M12 15v5", "M8 20h8", "M7 8l3 3 4-4"],
+  leaders: ["M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8", "M2 21v-1a7 7 0 0 1 14 0v1", "M16.5 3.6a4 4 0 0 1 0 7.4", "M18 21v-1a7 7 0 0 0-3.5-6.1"],
+  retreat: ["M2 19l5.5-7 4 5 3.5-4.5L22 19z", "M17 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4"],
+  academic: ["M12 4L2 9l10 5 10-5-10-5z", "M6 11.5V16c0 1.6 2.7 2.8 6 2.8s6-1.2 6-2.8v-4.5", "M20 10v5"],
+  briefcase: ["M4 8h16v11H4z", "M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2", "M4 13h16"],
+  community: ["M8.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7", "M2.5 20v-1.2A6 6 0 0 1 8.5 13a6 6 0 0 1 6 6.8V20", "M15.5 4.2a3.5 3.5 0 0 1 0 6.9", "M17.8 14.3A6 6 0 0 1 21.5 20"],
+  media: ["M12 13.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3", "M8.5 15.5a5 5 0 0 1 0-7", "M15.5 8.5a5 5 0 0 1 0 7", "M5.6 18.4a9 9 0 0 1 0-12.8", "M18.4 5.6a9 9 0 0 1 0 12.8"],
+};
+
+function ServeIcon({ name }: { name: string }) {
+  const paths = SERVE_ICON_PATHS[name] || SERVE_ICON_PATHS.church;
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths.map((d, i) => (<path key={i} d={d} />))}
+    </svg>
+  );
 }
 
 /* Render **bold** and *italic* markers in the About bio */
@@ -59,7 +83,10 @@ export default function SitePage({
   const [day1Open, setDay1Open] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [cookieSeen, setCookieSeen] = useState(false);
-  const [editionsRegion, setEditionsRegion] = useState<"usd" | "ugx">("usd");
+  // null = both regions collapsed. Previously this was a non-nullable union, so
+  // clicking one route could only switch to the other - there was no way to close
+  // the open one without opening a different one.
+  const [editionsRegion, setEditionsRegion] = useState<"usd" | "ugx" | null>("usd");
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [episodesOpen, setEpisodesOpen] = useState(false);
   // Supplied by the server component at build time (static export): there is no
@@ -136,9 +163,9 @@ export default function SitePage({
             <img src="/brand/logo-monogram.svg" alt="" width={40} height={40} />
             <span className="wordmark"><span className="name">Eryeza Kalalu</span><span className="role">{SITE.role}</span></span>
           </a>
-          <nav aria-label="Primary">{NAV.map((n) => (<a key={n.href} href={n.href} aria-current={n.href === "#top" ? "page" : undefined}>{n.label}</a>))}</nav>
+          <nav aria-label="Primary">{NAV.map((n) => (<a key={n.href} href={n.href} aria-current={n.href === "/" ? "page" : undefined}>{n.label}</a>))}</nav>
           <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-            <a className="cta" href="#letter">Subscribe</a>
+            <GiveButton source="masthead" variant="button" className="cta" /><a className="cta" href="/letter">Subscribe</a>
             <button className="masthead-burger" type="button" aria-label={drawerOpen ? "Close navigation" : "Open navigation"} aria-controls="drawer" aria-expanded={drawerOpen} onClick={() => setDrawerOpen((v) => !v)}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{drawerOpen ? (<><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></>) : (<><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></>)}</svg>
             </button>
@@ -457,7 +484,7 @@ export default function SitePage({
             </div>
             <div className="editions-accordion">
             <div>
-              <button type="button" className={`editions-accordion__head ${editionsRegion === "usd" ? "is-open" : ""}`} onClick={() => setEditionsRegion("usd")} aria-expanded={editionsRegion === "usd"}>
+              <button type="button" className={`editions-accordion__head ${editionsRegion === "usd" ? "is-open" : ""}`} onClick={() => setEditionsRegion((r) => (r === "usd" ? null : "usd"))} aria-expanded={editionsRegion === "usd"}>
                 <span className="ea-region">{EDITIONS.regionUSD}</span>
                 <span className="ea-sub">{EDITIONS.regionUSDSub}</span>
                 <svg className="ea-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
@@ -478,7 +505,7 @@ export default function SitePage({
               )}
             </div>
             <div>
-              <button type="button" className={`editions-accordion__head ${editionsRegion === "ugx" ? "is-open" : ""}`} onClick={() => setEditionsRegion("ugx")} aria-expanded={editionsRegion === "ugx"}>
+              <button type="button" className={`editions-accordion__head ${editionsRegion === "ugx" ? "is-open" : ""}`} onClick={() => setEditionsRegion((r) => (r === "ugx" ? null : "ugx"))} aria-expanded={editionsRegion === "ugx"}>
                 <span className="ea-region">{EDITIONS.regionUGX}</span>
                 <span className="ea-sub">{EDITIONS.regionUGXSub}</span>
                 <svg className="ea-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
@@ -709,8 +736,11 @@ export default function SitePage({
               <span className="eyebrow">{NEWSLETTER.eyebrow}</span>
               <h2 className="display" style={{ fontSize: "clamp(34px, 3.6vw, 48px)", marginTop: 12, letterSpacing: "-0.01em", lineHeight: 1.15 }}>{NEWSLETTER.heading}</h2>
             </div>
-            <div className="mx-auto letter-card letter-card--embed" style={{ maxWidth: 520 }}>
-              <iframe className="beehiiv-embed" title="Subscribe to Eryeza Writes" loading="lazy" scrolling="no" style={{ height: 420 }} src={SITE.beehiivEmbed} />
+            {/* Sizing lives in globals.css (.letter-card--embed). No inline height/width:
+                an inline style would win over the responsive rules. scrolling="no" was
+                removed so the post-subscribe confirmation can never be unreachable. */}
+            <div className="mx-auto letter-card letter-card--embed">
+              <iframe className="beehiiv-embed" title="Subscribe to Eryeza Writes" loading="lazy" src={SITE.beehiivEmbed} />
             </div>
           </div>
         </section>
@@ -784,24 +814,29 @@ export default function SitePage({
               </div>
             </div>
 
-            {/* Where Eryeza Can Serve (tonal --a/--b) */}
-            <div style={{ marginTop: 56, marginBottom: 48 }}>
-              <div className="speaking-block-label">{SPEAKING.whereHeading}</div>
+            {/* Where Eryeza Can Serve */}
+            <div className="speaking-block-head" style={{ marginBottom: 30 }}>
+              <span className="eyebrow">{SPEAKING.whereEyebrow}</span>
+              <h3 className="speaking-block-h">{SPEAKING.whereHeading}</h3>
               <OrnamentRule>§</OrnamentRule>
-              <div className="grid-12" style={{ gap: 16 }} data-reveal-stagger>
-                {SPEAKING.whereItems.map((w, i) => (
-                  <div className={`col-6 speaking-card speaking-card--${i % 2 ? "b" : "a"}`} key={i}>
-                    <div className="sc-body">{w}</div>
-                  </div>
-                ))}
-              </div>
+              <p className="speaking-lede">{SPEAKING.whereLede}</p>
+            </div>
+            <div className="serve-grid">
+              {SPEAKING.whereItems.map((w, i) => (
+                <article className="serve-card" key={i}>
+                  <span className="serve-card__icon" aria-hidden="true"><ServeIcon name={w.icon} /></span>
+                  <h4 className="serve-card__title">{w.title}</h4>
+                  <p className="serve-card__desc">{w.desc}</p>
+                </article>
+              ))}
             </div>
 
             {/* Themes I Explore (tonal --c) */}
-            <div style={{ marginBottom: 48 }}>
-              <div className="speaking-block-label">{SPEAKING.themesHeading}</div>
-              <p className="speaking-lede" style={{ fontStyle: "italic", color: "var(--ink-300)" }}>{SPEAKING.themesLede}</p>
+            <div className="speaking-block-head" style={{ marginBottom: 26 }}>
+              <span className="eyebrow">{SPEAKING.themesEyebrow}</span>
+              <h3 className="speaking-block-h">{SPEAKING.themesHeading}</h3>
               <OrnamentRule>§</OrnamentRule>
+              <p className="speaking-lede">{SPEAKING.themesLede}</p>
               <div className="grid-12" style={{ gap: 24 }} data-reveal-stagger>
                 {SPEAKING.themes.map((t, i) => (
                   <article className="col-4 speaking-card speaking-card--c" key={i}>
@@ -814,8 +849,9 @@ export default function SitePage({
             </div>
 
             {/* How I Teach (prose on --d) */}
-            <div style={{ marginBottom: 48 }}>
-              <div className="speaking-block-label">{SPEAKING.howHeading}</div>
+            <div className="speaking-block-head" style={{ marginBottom: 26 }}>
+              <span className="eyebrow">{SPEAKING.howEyebrow}</span>
+              <h3 className="speaking-block-h">{SPEAKING.howHeading}</h3>
               <OrnamentRule>§</OrnamentRule>
               <div className="speaking-card speaking-card--d" style={{ padding: 32 }}>
                 <div className="prose-feature" style={{ maxWidth: "68ch" }}>
@@ -825,10 +861,11 @@ export default function SitePage({
             </div>
 
             {/* Selected Engagements (tonal --a) */}
-            <div style={{ marginBottom: 40 }}>
-              <div className="speaking-block-label">{SPEAKING.engagementsHeading}</div>
-              <p className="caption" style={{ marginTop: 4, marginBottom: 0 }}>{SPEAKING.engagementsLede}</p>
+            <div className="speaking-block-head" style={{ marginBottom: 26 }}>
+              <span className="eyebrow">{SPEAKING.engagementsEyebrow}</span>
+              <h3 className="speaking-block-h">{SPEAKING.engagementsHeading}</h3>
               <OrnamentRule>§</OrnamentRule>
+              <p className="caption" style={{ margin: 0 }}>{SPEAKING.engagementsLede}</p>
               <div className="grid-12" style={{ gap: 20 }} data-reveal-stagger>
                 {SPEAKING.engagements.map((e, i) => (
                   <div className="col-4 speaking-card speaking-card--a" key={i}>
@@ -895,15 +932,15 @@ export default function SitePage({
             <div className="col-2">
               <div className="eyebrow" style={{ color: "var(--gold-200)", marginBottom: 14 }}>Read</div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                <li style={{ padding: "4px 0" }}><a href="#letters-preview" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>Latest letter</a></li>
-                <li style={{ padding: "4px 0" }}><a href="#influential-spirit" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>The Influential Spirit</a></li>
-                <li style={{ padding: "4px 0" }}><a href="#books" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>The library</a></li>
+                <li style={{ padding: "4px 0" }}><a href="/letter" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>Latest letter</a></li>
+                <li style={{ padding: "4px 0" }}><a href="/influential-spirit" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>The Influential Spirit</a></li>
+                <li style={{ padding: "4px 0" }}><a href="/books" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>The library</a></li>
               </ul>
             </div>
             <div className="col-2">
               <div className="eyebrow" style={{ color: "var(--gold-200)", marginBottom: 14 }}>Listen</div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                <li style={{ padding: "4px 0" }}><a href="#podcast" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>Devotion In Season</a></li>
+                <li style={{ padding: "4px 0" }}><a href="/podcast" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>Devotion In Season</a></li>
                 <li style={{ padding: "4px 0" }}><a href={PODCAST.platforms[0].url} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>Spotify</a></li>
                 <li style={{ padding: "4px 0" }}><a href={PODCAST.platforms[1].url} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>Apple Podcasts</a></li>
               </ul>
@@ -911,7 +948,8 @@ export default function SitePage({
             <div className="col-3">
               <div className="eyebrow" style={{ color: "var(--gold-200)", marginBottom: 14 }}>Contact</div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                <li style={{ padding: "4px 0" }}><a href="#speaking" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>Invite to speak</a></li>
+                <li style={{ padding: "4px 0" }}><a href="/speaking" style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>Invite to speak</a></li>
+                <li style={{ padding: "4px 0" }}><GiveButton source="footer" variant="footer" /></li>
                 <li style={{ padding: "4px 0" }}><a href={`mailto:${SITE.speakingEmail}`} style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>{SITE.speakingEmail}</a></li>
                 <li style={{ padding: "4px 0" }}><a href={`mailto:${SITE.email}`} style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none" }}>{SITE.email}</a></li>
                 <li style={{ padding: "4px 0" }}><button type="button" onClick={() => setPrivacyOpen(true)} style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--paper-100)", textDecoration: "none", background: "none", border: 0, cursor: "pointer", padding: 0 }}>Privacy</button></li>

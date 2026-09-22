@@ -91,7 +91,15 @@ export default function SpeakingInviteForm() {
   const setField = (k: string, v: string) => setData((d) => ({ ...d, [k]: v }));
   const visible = (f: Field) => (f.showIf ? f.showIf.anyOf.includes(data[f.showIf.field] || "") : true);
   const stepValid = () => current.fields.filter((f) => f.required && visible(f)).every((f) => (data[f.key] || "").trim().length > 0);
-  const next = () => { if (stepValid()) setStep((s) => Math.min(total - 1, s + 1)); };
+  // Clicking Next with a required field empty used to do nothing at all, with no
+  // explanation. Now it names what is missing so the visitor is never stuck.
+  const next = () => {
+    if (stepValid()) { setError(""); setStep((s) => Math.min(total - 1, s + 1)); return; }
+    const missing = current.fields
+      .filter((f) => f.required && visible(f) && !(data[f.key] || "").trim())
+      .map((f) => f.label);
+    setError(missing.length ? `Please complete: ${missing.join(", ")}.` : "Please complete this step before continuing.");
+  };
   const back = () => setStep((s) => Math.max(0, s - 1));
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {

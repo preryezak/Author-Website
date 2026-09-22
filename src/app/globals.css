@@ -1574,8 +1574,22 @@ html.js-reveal [data-reveal-stagger].is-visible > * { opacity: 1; transform: tra
 /* ============================================================
    MOBILE FIXES (newsletter + general)
    ============================================================ */
-.letter-card--embed { width: 100%; max-width: 520px; }
-.letter-card--embed .beehiiv-embed { width: 100% !important; min-width: 0 !important; }
+/* Beehiiv subscribe embed.
+   The form's own stylesheet caps it at max-width 400px and uses width:max-content, so its
+   natural width is ~440px; below that the email input's right edge was cut off on phones
+   (measured: 57 rows of the input touching the viewport edge at 360px). The embed is
+   cross-origin so it cannot be re-styled - instead it is laid out at its natural width and
+   the whole frame is zoomed to fit, so nothing is cropped. */
+.letter-card--embed { width: 100%; max-width: 464px; padding: 12px; overflow: hidden; }
+.letter-card--embed .beehiiv-embed { width: 440px !important; max-width: 440px !important;
+  min-width: 440px !important; height: 520px !important; margin: 0 auto; }
+@media (max-width: 479px) {
+  .letter-card--embed { padding: 8px; }
+  .letter-card--embed .beehiiv-embed { zoom: 0.74; }
+}
+@media (max-width: 379px) {
+  .letter-card--embed .beehiiv-embed { zoom: 0.66; }
+}
 @media (max-width: 560px) {
   .letter-card--embed { padding: 14px; }
   .letter-card--embed .beehiiv-embed { height: 480px !important; }
@@ -1613,6 +1627,47 @@ html.js-reveal [data-reveal-stagger].is-visible > * { opacity: 1; transform: tra
 /* ============================================================
    SPEAKING — refined headings, tonal shades, hero-cta, end-cta
    ============================================================ */
+/* ---- Pronounced, centred block headings (Speaking section) ----
+   These blocks previously used a small uppercase .speaking-block-label, which
+   read like a caption rather than a heading, and the ornament rule carried 40px
+   of margin above and below. Tightened and centred so the heading is clearly the
+   heading and sits close to what it introduces. */
+.speaking-block-head { text-align: center; }
+.speaking-block-head .eyebrow { color: var(--oxblood-500); }
+.speaking-block-head .speaking-block-h { margin: 8px 0 0; }
+.speaking-block-head .ornament-rule { margin: 18px auto 22px; max-width: 340px; }
+.speaking-block-head .speaking-lede,
+.speaking-block-head .caption { margin-left: auto; margin-right: auto; text-align: center; }
+.speaking-block-head .speaking-lede { font-style: italic; color: var(--ink-300); }
+
+/* ---- Where Eryeza Can Serve: icon cards ---- */
+.serve-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 560px) { .serve-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+@media (min-width: 960px) { .serve-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; } }
+.serve-card {
+  display: flex; flex-direction: column; align-items: flex-start;
+  background: var(--paper-50); border: 1px solid var(--border); border-top: 2px solid var(--gold-300);
+  padding: 20px 18px 22px;
+  transition: transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              box-shadow 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              border-color 220ms ease;
+}
+.serve-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); border-top-color: var(--oxblood-400); }
+.serve-card__icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; margin-bottom: 14px;
+  background: var(--gold-50); border: 1px solid rgba(184, 146, 90, 0.45); color: var(--gold-500);
+}
+/* Alternating icon tint keeps the grid from reading as one flat block of cards. */
+.serve-card:nth-child(even) .serve-card__icon {
+  background: var(--oxblood-50); border-color: rgba(123, 63, 46, 0.35); color: var(--oxblood-400);
+}
+.serve-card__title {
+  font-family: var(--font-display); font-size: 19px; font-weight: 500;
+  letter-spacing: -0.005em; color: var(--ink-700); margin: 0 0 6px;
+}
+.serve-card__desc { font-family: var(--font-serif); font-size: 14.5px; line-height: 1.6; color: var(--ink-500); margin: 0; }
+@media (prefers-reduced-motion: reduce) { .serve-card { transition: none; } .serve-card:hover { transform: none; } }
 .speaking-block-label { font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--oxblood-500); font-weight: 700; margin-bottom: 6px; }
 .speaking-block-h { font-family: var(--font-display); font-size: clamp(26px, 3vw, 34px); color: var(--ink-700); font-weight: 400; letter-spacing: -0.012em; margin: 0 0 8px; line-height: 1.15; }
 .speaking-lede { font-family: var(--font-serif); font-size: 17px; line-height: 1.65; color: var(--ink-500); max-width: 60ch; margin: 0 0 8px; }
@@ -1655,3 +1710,387 @@ html.js-reveal [data-reveal-stagger].is-visible > * { opacity: 1; transform: tra
 /* Fri Sep 18 00:04:40 UTC 2026 */
 /* Fri Sep 18 20:23:56 UTC 2026 */
 /* Fri Sep 18 20:47:25 UTC 2026 */
+
+/* ==================================================================
+   EK-ROUTES-AND-CARD-TIERS
+   Added for the standalone route pages (/about, /books, /give ...) and
+   the differentiated card system.
+
+   Card system: four deliberate tiers, replacing the old two-tone fill
+   alternation (paper-50 vs paper-100, about six RGB points apart) which
+   made every card read at the same weight.
+     .card--anchor   the one card per section that earns prominence
+     .card--standard the default
+     .card--quiet    structurally present, visually receding
+   Rule: one emphasis device per card. Never two.
+   ================================================================== */
+
+.masthead-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.masthead-drawer {
+  border-top: 1px solid var(--border);
+  background: var(--paper-50);
+  padding: 12px 0;
+}
+.masthead-drawer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.masthead-drawer__inner > a {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ink-500);
+  text-decoration: none;
+}
+.masthead-drawer__give {
+  color: var(--oxblood-400) !important;
+  font-weight: 500;
+}
+
+/* ---- page scaffolding (golden-ratio vertical rhythm) ---- */
+.page-hero {
+  padding: clamp(64px, 10vw, 132px) 0 clamp(40px, 6vw, 80px);
+}
+.page-hero__inner {
+  max-width: 68ch;
+}
+.page-hero__title {
+  font-size: clamp(34px, 5vw, 62px);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  margin: 12px 0 0;
+}
+.page-hero__lede {
+  margin-top: 20px;
+  font-size: clamp(16px, 1.6vw, 19px);
+  color: var(--ink-500);
+  max-width: 62ch;
+}
+.page-hero__actions {
+  margin-top: 32px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.page-hero__note {
+  color: var(--ink-300);
+}
+
+/* ---- card grid + the four tiers ---- */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 3vw, 30px);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 26px 24px;
+  border: 1px solid var(--border);
+  background: var(--paper-50);
+  border-top: 1px solid var(--border);
+}
+.card__tag {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-300);
+}
+.card__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.25;
+  margin: 0;
+  color: var(--ink-500);
+}
+.card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+.card__meta {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-300);
+  margin: 0;
+}
+.card__desc {
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-400);
+  margin: 0;
+  flex: 1;
+}
+.card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 4px 0 0;
+}
+.card__price strong {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--ink-500);
+}
+.card__was {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink-300);
+}
+.card__foot {
+  margin: 0;
+}
+.card__quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-500);
+  margin: 0;
+}
+.card__cta {
+  margin-top: 10px;
+  align-self: flex-start;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--oxblood-400);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+
+/* tier 1: earns prominence through ONE device, a top accent rule */
+.card--anchor {
+  background: var(--paper-50);
+  border-top: 3px solid var(--oxblood-400);
+  padding: 30px 26px;
+}
+.card--anchor .card__title {
+  font-size: 23px;
+  font-weight: 600;
+}
+
+/* tier 2: the default */
+.card--standard {
+  background: var(--paper-50);
+}
+
+/* tier 3: recedes - no border, smaller type, muted */
+.card--quiet {
+  border-color: transparent;
+  background: transparent;
+  padding: 20px 0;
+}
+.card--quiet .card__title {
+  font-size: 17px;
+  font-weight: 400;
+}
+.card--quiet .card__desc {
+  color: var(--ink-300);
+}
+
+/* ---- trust cards on the giving page ---- */
+.trust-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 3vw, 30px);
+}
+.trust-card {
+  padding: 26px 24px;
+  border: 1px solid var(--border);
+  background: var(--paper-50);
+}
+.trust-card__title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 6px;
+  color: var(--ink-500);
+}
+.trust-card__desc {
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-400);
+  margin: 0;
+}
+
+/* ---- editions ---- */
+.edition-group {
+  margin-top: 44px;
+}
+.edition-group__head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.edition-group__label {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--ink-500);
+}
+
+/* ---- about / book / podcast / speaking pieces ---- */
+.about-portrait {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--border);
+}
+.about-para {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink-400);
+  margin: 0 0 18px;
+}
+.about-closer {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink-500);
+  margin-top: 28px;
+}
+.book-cover-frame {
+  border: 1px solid var(--border);
+  background: var(--paper-100);
+  padding: 18px;
+}
+.book-cover-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.episode-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(18px, 2.6vw, 26px);
+}
+.episode__audio {
+  width: 100%;
+  margin-top: 6px;
+}
+.platform-grid {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+.platform-grid a {
+  display: block;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  background: var(--paper-50);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink-500);
+  text-decoration: none;
+}
+.invite-panel {
+  max-width: 760px;
+  background: var(--paper-50);
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--oxblood-400);
+}
+.faq-item {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.faq-item__q {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 500;
+  margin: 0 0 6px;
+  color: var(--ink-500);
+}
+.faq-item__a {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-400);
+  margin: 0;
+}
+.footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-list li {
+  padding: 4px 0;
+}
+.footer-list a {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--paper-100);
+  text-decoration: none;
+}
+.notfound-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  margin-top: 28px;
+}
+.notfound-links a {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--oxblood-400);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+.contact-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.letter-embed {
+  max-width: 460px;
+}
+
+/* ---- responsive: 1 column mobile, 2 tablet, 3 desktop ---- */
+@media (min-width: 700px) {
+  .card-grid,
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card-grid--editions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1040px) {
+  .card-grid,
+  .trust-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .card-grid--library,
+  .card-grid--contact {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card-grid--themes,
+  .card-grid--serve {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

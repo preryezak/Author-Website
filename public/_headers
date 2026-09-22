@@ -10,11 +10,14 @@
 # the woff2 files at build time, so no request ever goes to fonts.googleapis.com
 # or fonts.gstatic.com (verified: 0 references in the built HTML).
 # Commerce links (Payhip, Selar, Audible, Spotify, Apple, Amazon, Castbox) open
+# Our own Cloudflare Worker (speaking invitations + the Giving click record) is
+# listed in connect-src: without it the browser blocks both the speaking form's
+# POST and the Giving click beacon.
 # in new tabs via <a target="_blank" rel="noopener noreferrer"> - top-level
 # navigations, not resource loads, so CSP does not need to list them.
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; frame-src 'self' https://subscribe-forms.beehiiv.com https://www.iheart.com; connect-src 'self'; media-src 'self' https://*.iheart.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; frame-src 'self' https://subscribe-forms.beehiiv.com https://www.iheart.com; connect-src 'self' https://eryeza-speaking.preryezakalalu.workers.dev; media-src 'self' https://*.iheart.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN

@@ -24,5 +24,13 @@ compatibility_date = "2026-08-19"
 
 [assets]
 directory = "./dist/public"
-# Single-page export: serve index.html for unmatched paths rather than a 404.
-not_found_handling = "single-page-application"
+# Real 404s.
+#
+# This was "single-page-application", which returned HTTP 200 with the
+# homepage HTML for ANY unmatched path. That made /about, /books, /give and
+# every other missing route look like a success to browsers, crawlers and link
+# checkers, while showing the wrong page to a visitor.
+#
+# The site now ships real route pages plus a designed 404.html (src/app/not-found.tsx),
+# so unmatched paths are served that page with a genuine 404 status.
+not_found_handling = "404-page"
