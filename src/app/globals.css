@@ -204,6 +204,14 @@
 @media (min-width: 1024px) { .container { padding: 0 40px; } }
 
 .grid-12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: 32px; }
+/* .col-2 and .col-3 are used by the footer (5+2+2+3 = 12 columns) but were never
+   defined here, so they fell through to the built-in .col-2/.col-3 utilities, which
+   set grid-column to a LINE NUMBER (2 / 3) rather than a span. Inside the single
+   column grid that .grid-12 collapses to below 900px, those line numbers created
+   implicit extra columns and pushed the footer content off-screen (measured 104px of
+   horizontal overflow at 360px, 74px at 390px). */
+.col-2 { grid-column: span 2; }
+.col-3 { grid-column: span 3; }
 .col-4 { grid-column: span 4; }
 .col-5 { grid-column: span 5; }
 .col-6 { grid-column: span 6; }
@@ -212,7 +220,7 @@
 .col-12 { grid-column: 1 / -1; }
 @media (max-width: 900px) {
   .grid-12 { grid-template-columns: 1fr; gap: 32px; }
-  .col-4, .col-5, .col-6, .col-7, .col-8 { grid-column: 1; }
+  .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8 { grid-column: 1; }
 }
 
 /* Tonal surfaces */
@@ -330,17 +338,29 @@
    ============================================================ */
 .masthead { position: sticky; top: 0; z-index: 40; background: rgba(245, 240, 232, 0.88); backdrop-filter: blur(12px); border-bottom: 1px solid transparent; transition: background 200ms ease, border-color 200ms ease; }
 .masthead.is-scrolled { background: rgba(245, 240, 232, 0.96); border-bottom-color: var(--border); }
-.masthead .row { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+/* Longhand padding on purpose: the `padding: 18px 0` shorthand also zeroed the
+   .container horizontal padding, so the masthead sat flush against the screen edges
+   instead of lining up with every other section. */
+.masthead .row { display: flex; align-items: center; justify-content: space-between; padding-top: 18px; padding-bottom: 18px; }
 .masthead .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
 .masthead .brand img { width: 40px; height: 40px; }
 .masthead .brand .wordmark { display: flex; flex-direction: column; line-height: 1; }
 .masthead .brand .wordmark .name { font-family: var(--font-display); font-size: 22px; font-weight: 500; letter-spacing: -0.005em; color: var(--ink-700); }
 .masthead .brand .wordmark .role { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); margin-top: 5px; }
-.masthead nav { display: none; gap: 32px; align-items: center; }
-@media (min-width: 1024px) { .masthead nav { display: flex; } }
-.masthead nav a { font-family: var(--font-sans); font-size: 14px; color: var(--ink-500); text-decoration: none; font-weight: 400; padding-bottom: 4px; border-bottom: 1px solid transparent; transition: color 200ms ease, border-color 300ms cubic-bezier(0.2, 0.7, 0.2, 1); }
-.masthead nav a:hover { color: var(--ink-700); border-bottom-color: var(--gold-300); }
-.masthead nav a[aria-current="page"] { color: var(--ink-700); font-weight: 600; border-bottom-color: var(--gold-300); }
+/* Only the TOP-LEVEL nav (a direct child of .masthead .row) is the desktop menu.
+   The selector must not match #drawer, which is also a <nav> inside .masthead:
+   matching it applied display:none at every width below 1024px, so the burger
+   toggled state that could never be shown - the drawer appeared to do nothing. */
+.masthead .row > nav { display: none; gap: 32px; align-items: center; }
+@media (min-width: 1024px) { .masthead .row > nav { display: flex; } }
+/* The mobile drawer is controlled purely by the hidden attribute. */
+#drawer { display: block; }
+#drawer[hidden] { display: none; }
+.masthead .row > nav a { font-family: var(--font-sans); font-size: 14px; color: var(--ink-500); text-decoration: none; font-weight: 400; padding-bottom: 4px; border-bottom: 1px solid transparent; transition: color 200ms ease, border-color 300ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.masthead .row > nav a:hover { color: var(--ink-700); border-bottom-color: var(--gold-300); }
+.masthead .row > nav a[aria-current="page"] { color: var(--ink-700); font-weight: 600; border-bottom-color: var(--gold-300); }
+#drawer a { font-family: var(--font-sans); font-size: 14px; color: var(--ink-500); text-decoration: none; }
+#drawer a:hover { color: var(--ink-700); }
 .masthead .cta { background: var(--ink-700); color: var(--paper-50); padding: 12px 18px; font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; transition: background-color 200ms ease; }
 .masthead .cta:hover { background: var(--ink-500); }
 .masthead-burger { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--border-strong); color: var(--ink-700); background: transparent; cursor: pointer; }

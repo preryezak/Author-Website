@@ -2,7 +2,7 @@ name = "eryeza-speaking"
 main = "speaking.ts"
 compatibility_date = "2024-12-01"
 
-# ── Public vars (set in the dashboard or here) ──────────────────────
+# ── Public vars ─────────────────────────────────────────────────────
 [vars]
 # The inbox that receives every speaking invitation.
 SPEAKING_EMAIL = "speaking@eryezakalalu.com"
@@ -14,37 +14,43 @@ EMAIL_FROM = "speaking@eryezakalalu.com"
 RESEND_FROM = "onboarding@resend.dev"
 ALLOWED_ORIGIN = "https://eryezakalalu.com"
 
-# ── Path 1 (preferred): NATIVE Cloudflare Email Service ─────────────
-# No third-party account and no API key. Free on every plan when sending to a
-# verified destination address (like speaking@eryezakalalu.com); sending to
-# arbitrary recipients needs the Workers Paid plan.
-#   1. Cloudflare dashboard -> Compute -> Email Service -> onboard eryezakalalu.com
-#   2. Add this binding, then:  wrangler deploy
+# ── D1 storage (LIVE) ───────────────────────────────────────────────
+# Created 2026-09-22. The Worker stores every submission here BEFORE attempting
+# to email, so a mail outage never loses an invitation.
+#   Query submissions:
+#     wrangler d1 execute eryeza-speaking-db --remote \
+#       --command "SELECT createdAt, name, email, status FROM speaking_requests ORDER BY createdAt DESC LIMIT 20"
+[[d1_databases]]
+binding = "DB"
+database_name = "eryeza-speaking-db"
+database_id = "d1ba4007-adb8-4965-8213-3af2c475c321"
+
+# ── Email path 1 (preferred): NATIVE Cloudflare Email Service ───────
+# NOT ENABLED YET, and deliberately left commented out.
 #
-[[send_email]]
-name = "EMAIL"
-# Restrict the binding for safety (recommended):
+# Enabling Email Service / Email Routing for eryezakalalu.com asks Cloudflare to
+# manage the domain's MX records. If that domain's mail is currently handled
+# elsewhere, turning this on would divert or break existing mail. That is a
+# decision for the domain owner, so this binding is off by default.
+#
+# To switch it on:
+#   1. Cloudflare dashboard -> Compute -> Email Service -> onboard eryezakalalu.com
+#      (confirm first how the domain's mail is currently handled)
+#   2. verify the destination address speaking@eryezakalalu.com
+#   3. uncomment the block below and re-run:  wrangler deploy
+#
+# [[send_email]]
+# name = "EMAIL"
 # allowed_sender_addresses = ["speaking@eryezakalalu.com"]
 # allowed_destination_addresses = ["speaking@eryezakalalu.com"]
 
-# ── Path 2 (fallback): Resend ───────────────────────────────────────
+# ── Email path 2 (fallback): Resend ─────────────────────────────────
 # Used automatically only when the native EMAIL binding above is absent.
-# RESEND_API_KEY  ->  run:  wrangler secret put RESEND_API_KEY
-# (Never commit the key. It is stored encrypted in Cloudflare.)
+# RESEND_API_KEY -> run:  wrangler secret put RESEND_API_KEY
+# (Never commit the key; it is stored encrypted in Cloudflare.)
 
-# ── D1 storage (recommended, so submissions survive mail failures) ──
-# Create the DB:   wrangler d1 create eryeza-speaking-db
-# Run the schema:  wrangler d1 execute eryeza-speaking-db --file=schema.sql --remote
-# Then uncomment and paste the id wrangler printed:
-#
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "eryeza-speaking-db"
-# database_id = "<the id wrangler printed when you created it>"
-
-# ── Optional custom route (instead of the *.workers.dev URL) ────────
-# To serve the Worker at eryezakalalu.com/worker/speaking (same-origin, so no
-# CORS at all), add a route in the Cloudflare dashboard:
-#   eryezakalalu.com/worker/speaking*  ->  this Worker
-# Then, in the Pages project environment variables, set
+# ── Optional custom route ───────────────────────────────────────────
+# To serve the Worker at eryezakalalu.com/worker/speaking (same origin, so no
+# CORS at all), add a route in the Cloudflare dashboard, then set
 #   NEXT_PUBLIC_SPEAKING_ENDPOINT = https://eryezakalalu.com/worker/speaking
+# on the site. Until then the site uses the workers.dev URL.
