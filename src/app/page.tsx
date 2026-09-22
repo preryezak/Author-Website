@@ -11,6 +11,6 @@ import { getLetters, getEpisodes } from "@/lib/rss";
 export const dynamic = "force-static";
 
 export default async function Home() {
-  const [letters, episodes] = await Promise.all([getLetters(6), getEpisodes(3)]);
+  const [letters, episodes] = await Promise.all([getLetters(6), getEpisodes(30)]);
   return <SitePage letters={letters} episodes={episodes} />;
 }

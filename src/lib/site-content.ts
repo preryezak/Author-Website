@@ -12,7 +12,7 @@ export const SITE = {
   speakingEmail: "speaking@eryezakalalu.com",
   beehiivEmbed: "https://subscribe-forms.beehiiv.com/08ebdc41-e9b6-4032-8703-87c65fe51eda",
   beehiivRss: "https://rss.beehiiv.com/feeds/m7Wi8T8MXS.xml",
-  podcastRss: "https://anchor.fm/s/103e4e254/podcast/rss",
+  podcastRss: "https://anchor.fm/s/f7311ecc/podcast/rss",
   podcastIheart: "https://www.iheart.com/podcast/269-devotion-in-season-198850928",
   excerptUrl: "https://payhip.com/b/D3nkl",
   year: "2026",

@@ -27,7 +27,9 @@ function ArrowRight() {
   return (<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--gold-200)" }}><path d="M5 12h14" /><path d="M13 5l7 7-7 7" /></svg>);
 }
 type LetterItem = { title: string; link: string; pubDate: string; description: string };
-type EpisodeItem = { title: string; link: string; pubDate: string };
+type EpisodeItem = { title: string; link: string; pubDate: string; audioUrl: string };
+// How many episodes are shown before "All N episodes" expands the rest in place.
+const EPISODE_PREVIEW = 3;
 function fmtDate(iso: string) {
   try { const d = new Date(iso); if (isNaN(d.getTime())) return ""; return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); } catch { return ""; }
 }
@@ -59,6 +61,7 @@ export default function SitePage({
   const [cookieSeen, setCookieSeen] = useState(false);
   const [editionsRegion, setEditionsRegion] = useState<"usd" | "ugx">("usd");
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [episodesOpen, setEpisodesOpen] = useState(false);
   // Supplied by the server component at build time (static export): there is no
   // runtime /api/letters or /api/episodes route on Cloudflare Pages.
   const letters: LetterItem[] | null = initialLetters.length ? initialLetters : [];
@@ -632,19 +635,58 @@ export default function SitePage({
               <div className="episode-chip">
                 <span className="pulse-dot" aria-hidden="true" />
                 <span>Latest episode · on air</span>
-                <span style={{ marginLeft: "auto", fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--gold-200)", letterSpacing: 0, textTransform: "none" }}>iHeart</span>
               </div>
-              <iframe title="Devotion In Season, live iHeart player" loading="lazy" src={`${SITE.podcastIheart}/?embed=true`} style={{ display: "block", width: "100%", height: 180, border: 0, background: "var(--forest-500)", colorScheme: "dark" }} />
+              {/* iHeart's embed honours ?theme=dark (verified: backgroundPrimary flips from
+                  #FFFFFF to #2D3134 / #3F4447 / #27292D). Custom colours are ignored, so the
+                  player keeps iHeart's own dark greys rather than the site charcoal. The
+                  background here matches that dark tone so there is no light flash while the
+                  iframe loads. */}
+              <iframe title="Devotion In Season player" loading="lazy" src={`${SITE.podcastIheart}/?embed=true&theme=dark`} style={{ display: "block", width: "100%", height: 180, border: 0, background: "#2D3134", colorScheme: "dark" }} />
             </div>
             <div className="mt-12">
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
-                <span className="eyebrow" style={{ color: "var(--gold-200)" }}>Recent episodes</span>
-                <a href={SITE.podcastIheart} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-sans)", fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--gold-200)", textDecoration: "underline", textDecorationColor: "rgba(184,146,90,0.5)", textUnderlineOffset: 4 }}>All episodes ↗</a>
+                <span className="eyebrow" style={{ color: "var(--gold-100)" }}>Recent episodes</span>
+                {episodes.length > EPISODE_PREVIEW ? (
+                  <button
+                    type="button"
+                    className="episode-more"
+                    aria-expanded={episodesOpen}
+                    aria-controls="podcast-episodes"
+                    onClick={() => setEpisodesOpen((v) => !v)}
+                  >
+                    {episodesOpen ? "Show fewer" : `All ${episodes.length} episodes`}
+                  </button>
+                ) : null}
               </div>
               <ul id="podcast-episodes" className="episode-list">
-                {episodes === null ? (<li><div><div className="meta">Loading the latest season…</div><h4 className="title">A few minutes with God, on your commute or your kitchen table.</h4></div></li>)
-                : episodes.length === 0 ? (<li><div><div className="meta">Devotion In Season · iHeart</div><h4 className="title">Episode list loads live in-browser. Open the show to see all episodes.</h4></div><a className="play" href={SITE.podcastIheart} target="_blank" rel="noopener noreferrer">All episodes ↗</a></li>)
-                : episodes.map((it, i) => (<li key={i}><div><div className="meta">{fmtDate(it.pubDate) || "Episode"}</div><h4 className="title">{it.title}</h4></div><a className="play" href={it.link} target="_blank" rel="noopener noreferrer">Play ↗</a></li>))}
+                {episodes.length === 0 ? (
+                  <li>
+                    <div>
+                      <div className="meta">Devotion In Season</div>
+                      <h4 className="title">The episode list is unavailable right now. Please check back shortly.</h4>
+                    </div>
+                  </li>
+                ) : (
+                  (episodesOpen ? episodes : episodes.slice(0, EPISODE_PREVIEW)).map((it, i) => (
+                    <li key={i}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className="meta">{fmtDate(it.pubDate) || "Episode"}</div>
+                        <h4 className="title">{it.title}</h4>
+                        {it.audioUrl ? (
+                          <audio
+                            className="episode-audio"
+                            controls
+                            preload="none"
+                            src={it.audioUrl}
+                            style={{ colorScheme: "dark" }}
+                          >
+                            Your browser does not support the audio element.
+                          </audio>
+                        ) : null}
+                      </div>
+                    </li>
+                  ))
+                )}
               </ul>
             </div>
             <div className="mt-12" id="podcast-platforms">

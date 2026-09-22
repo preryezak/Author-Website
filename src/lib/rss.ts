@@ -9,10 +9,14 @@
  */
 
 export type LetterItem = { title: string; link: string; pubDate: string; description: string };
-export type EpisodeItem = { title: string; link: string; pubDate: string };
+export type EpisodeItem = { title: string; link: string; pubDate: string; audioUrl: string };
 
 export const LETTERS_RSS = "https://rss.beehiiv.com/feeds/m7Wi8T8MXS.xml";
-export const EPISODES_RSS = "https://anchor.fm/s/103e4e254/podcast/rss";
+// Live feed verified 2026-09-22: the previous id (s/103e4e254) returns HTTP 404,
+// which is why the episode list never populated. Confirmed via Apple's directory
+// (itunes.apple.com/lookup?id=1759589414) that this is the current feed: 7 items,
+// each with a playable enclosure.
+export const EPISODES_RSS = "https://anchor.fm/s/f7311ecc/podcast/rss";
 
 function decodeEntities(s: string): string {
   return (s || "")
@@ -45,6 +49,11 @@ function items(xml: string, limit: number): string[] {
   let m: RegExpExecArray | null;
   while ((m = re.exec(xml)) && out.length < limit) out.push(m[1]);
   return out;
+}
+
+function enclosureUrl(block: string): string {
+  const m = /<enclosure[^>]*\burl="([^"]+)"/i.exec(block);
+  return m ? decodeEntities(m[1]) : "";
 }
 
 async function fetchXml(url: string): Promise<string> {
@@ -80,5 +89,8 @@ export async function getEpisodes(limit = 3): Promise<EpisodeItem[]> {
     title: decodeEntities(field(b, "title")) || "Untitled",
     link: decodeEntities(field(b, "link")) || "#",
     pubDate: decodeEntities(field(b, "pubDate")),
+    // Direct audio file for in-page playback, so "Play" never sends the
+    // visitor off-site.
+    audioUrl: enclosureUrl(b),
   }));
 }
