@@ -61,11 +61,11 @@ export const GIVING = {
     "Writing, teaching and pastoral work are sustained by people who give quietly and gladly. Your gift goes toward the books, the podcast and the ministry of Rivers of Life Healing Centre.",
   body: [
     "Giving here is simple and unpressured. There is nothing to buy and nothing to sign up for. You choose an amount on the secure giving page and it is handled by Flutterwave, who hold the transaction record and send your receipt.",
-    "I am grateful for every gift, and I would rather you gave prayerfully than gave under pressure.",
+    "I am grateful for every gift, and no one should ever give under pressure.",
   ],
   trust: [
     { title: "Secure", desc: "Payments are processed by Flutterwave on their own secure pages. This site never sees or stores your card details." },
-    { title: "Direct", desc: "Your gift goes to the ministry, not through a storefront built for selling products." },
+    { title: "Direct", desc: "Your gift goes straight to the ministry it is meant for." },
     { title: "Receipted", desc: "Flutterwave emails your confirmation and holds the record of the transaction." },
   ],
   disclaimer: "Gifts are received through a commercial payment provider. They are not represented as tax-deductible.",

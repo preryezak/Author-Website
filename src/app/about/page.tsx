@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import SiteShell from "@/components/site/site-shell";
-import { ABOUT } from "@/lib/site-content";
+import { ABOUT, SITE } from "@/lib/site-content";
 
 export const metadata: Metadata = {
   title: "About Eryeza Kalalu",
@@ -25,42 +25,69 @@ function renderRich(text: string) {
   return out;
 }
 
+/**
+ * About, on its own route.
+ *
+ * Uses the home page's own `.about-section` layout: the mark and portrait in a
+ * media column, the bio in the reading column. Same classes, same rhythm.
+ */
 export default function AboutPage() {
   return (
     <SiteShell active="/about">
-      <section className="section surface-100 page-hero">
+      <section className="section surface-parchment">
         <div className="container">
-          <div className="grid-12" style={{ gap: 56, alignItems: "center" }}>
-            <div className="col-7">
-              <span className="eyebrow">{ABOUT.eyebrow}</span>
-              <h1 className="display page-hero__title">{ABOUT.heading}</h1>
-              <p className="body page-hero__lede">{ABOUT.lead}</p>
+          <div className="mx-auto text-center" style={{ maxWidth: 720, marginBottom: 48 }}>
+            <span className="eyebrow">{ABOUT.eyebrow}</span>
+            <h1 className="page-head__title">{ABOUT.heading}</h1>
+          </div>
+
+          <div className="about-section">
+            <div className="about-section__media">
+              <img className="about-logo" src={ABOUT.logo} alt="EK monogram" width={96} height={96} />
+              <div className="about-portrait">
+                <img
+                  src={ABOUT.photo}
+                  width={640}
+                  height={960}
+                  alt="Pastor Eryeza Kalalu"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
             </div>
-            <div className="col-5">
-              <img
-                className="about-portrait"
-                src={ABOUT.photo}
-                alt="Portrait of Eryeza Kalalu"
-                width={640}
-                height={640}
-              />
+            <div className="about-section__body">
+              <p className="about-lead">{ABOUT.lead}</p>
+              {ABOUT.paras.map((p, i) => (
+                <p key={i} className="about-para">
+                  {renderRich(p)}
+                </p>
+              ))}
+              <div className="about-section__closer">{ABOUT.closer}</div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="section surface-50">
+      <section className="section surface-100">
         <div className="container">
-          <div className="prose-feature" style={{ maxWidth: "68ch" }}>
-            {ABOUT.paras.map((p, i) => (
-              <p key={i} className="about-para">
-                {renderRich(p)}
-              </p>
-            ))}
+          <div className="page-head">
+            <span className="eyebrow">Elsewhere</span>
+            <h2 className="page-head__title">Where to find the work.</h2>
           </div>
-          <p className="about-closer" style={{ maxWidth: "60ch" }}>
-            {ABOUT.closer}
-          </p>
+          <ul className="link-list">
+            <li>
+              <a href="/books">The library</a>
+            </li>
+            <li>
+              <a href="/speaking">Invite Eryeza to speak</a>
+            </li>
+            <li>
+              <a href="/podcast">Devotion In Season, the podcast</a>
+            </li>
+            <li>
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            </li>
+          </ul>
         </div>
       </section>
     </SiteShell>

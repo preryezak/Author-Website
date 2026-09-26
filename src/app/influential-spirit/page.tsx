@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SiteShell from "@/components/site/site-shell";
-import { LIBRARY, EDITIONS, FAQ, REVIEWS } from "@/lib/site-content";
+import BooksEditions from "@/components/site/books-editions";
+import { LIBRARY, FAQ, REVIEWS, FEATURED_BOOK, FLAGSHIP } from "@/lib/site-content";
 
 const BOOK = LIBRARY.books[0];
 
@@ -11,116 +12,144 @@ export const metadata: Metadata = {
   alternates: { canonical: "/influential-spirit" },
 };
 
+/** Home-page anchors have to become real routes on a standalone page. */
+const route = (href: string) => (href.startsWith("#") ? "/" + href.slice(1) : href);
+
+/**
+ * The book page.
+ *
+ * The opening is the home page's `featured-book` presentation, copied exactly:
+ * the same device frame around the cover, the same stamp, the same type
+ * hierarchy. The previous draft used a plain bordered image, which is what made
+ * the page read as a plainer cousin of the home page.
+ */
 export default function InfluentialSpiritPage() {
   return (
     <SiteShell active="/influential-spirit">
-      <section className="section surface-100 page-hero">
+      {/* ---------- OPENING: the home page's featured-book block ---------- */}
+      <section className="section surface-200 loose">
         <div className="container">
-          <div className="grid-12" style={{ gap: 56, alignItems: "center" }}>
-            <div className="col-7">
-              <span className="eyebrow">{BOOK.status} · {BOOK.caption}</span>
-              <h1 className="display page-hero__title">The Influential Spirit</h1>
-              <p className="card__meta" style={{ marginTop: 10 }}>{BOOK.role}</p>
-              <p className="body page-hero__lede">{BOOK.excerpt}</p>
-              <div className="page-hero__actions">
-                <a className="btn btn-gold" href="#editions">
-                  Choose an edition
-                </a>
-                <a
-                  className="btn btn-outline"
-                  href={EDITIONS.tiers[0].href}
-                  target="_blank"
-                  rel="noopener noreferrer external"
-                >
-                  Read a sample
-                </a>
+          <div className="featured-book">
+            <div className="featured-book__media">
+              <div className="device">
+                <span className="device__bezel-mark" aria-hidden="true" />
+                <div className="device__screen">
+                  <img
+                    src="/images/cover-640.webp"
+                    srcSet="/images/cover-640.webp 640w, /images/cover-1200.webp 1200w"
+                    sizes="(max-width: 1024px) 70vw, 460px"
+                    width={1200}
+                    height={1800}
+                    alt="The Influential Spirit, the actual book front cover"
+                    decoding="async"
+                  />
+                </div>
+                <div className="device__chrome">
+                  <span>Digital edition</span>
+                  <span className="device__battery" aria-hidden="true" />
+                </div>
+              </div>
+              <div className="cover-stamp">
+                <span className="orn">§</span>
+                {FLAGSHIP.stampMeta}
+                <strong>{FLAGSHIP.stampTitle}</strong>
               </div>
             </div>
-            <div className="col-5">
-              <div className="book-cover-frame">
-                <img
-                  src="/images/cover-640.webp"
-                  alt="Cover of The Influential Spirit by Eryeza Kalalu"
-                  width={640}
-                  height={960}
-                />
+
+            <div>
+              <span className="eyebrow">{FEATURED_BOOK.eyebrow}</span>
+              <h1 className="featured-book__title">{FEATURED_BOOK.title}</h1>
+              <p className="featured-book__subtitle">{FEATURED_BOOK.subtitle}</p>
+              <p className="featured-book__headline">{FEATURED_BOOK.headline}</p>
+              {FEATURED_BOOK.paras.map((p, i) => (
+                <p
+                  key={i}
+                  className="body body-lg"
+                  style={{ maxWidth: "60ch", marginTop: i === 0 ? 0 : 16 }}
+                >
+                  {p}
+                </p>
+              ))}
+              <p className="featured-book__audience">{FEATURED_BOOK.audience}</p>
+              <div className="flex-wrap-gap gap-4" style={{ marginTop: 24 }}>
+                <a className="btn btn-primary" href={route(FEATURED_BOOK.ctaPrimaryHref)}>
+                  {FEATURED_BOOK.ctaPrimary}
+                </a>
+                <a className="btn btn-ghost" href={route(FEATURED_BOOK.ctaSecondaryHref)}>
+                  {FEATURED_BOOK.ctaSecondary}
+                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* ---------- WHAT THE BOOK ASKS ---------- */}
       <section className="section surface-50">
         <div className="container">
-          <div className="prose-feature" style={{ maxWidth: "66ch" }}>
-            <p className="body" style={{ color: "var(--ink-500)" }}>
+          <div className="route-prose route-measure">
+            <p>
               The book asks a simple, uncomfortable question: who are you becoming? Influence, platform and
-              visibility are not the target. The target is the person behind them, formed quietly in the
-              presence of God and tested in ordinary life.
+              visibility follow from the answer, and the answer is formed quietly, in the presence of God and
+              in ordinary life.
             </p>
-            <p className="body" style={{ color: "var(--ink-500)" }}>
-              Thirty days, each with Scripture, a short reflection and a prayer. Written for people carrying
-              real responsibility: at home, at work, in church and in public life.
+            <p>
+              Thirty days, each with Scripture, a short reflection and a prayer. Written for people with real
+              responsibility at home, at work, in church and in public life.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="section surface-100" id="editions">
-        <div className="container">
-          <span className="eyebrow">{EDITIONS.eyebrow}</span>
-          <h2 className="display" style={{ fontSize: "clamp(28px, 3.6vw, 42px)", marginTop: 10, fontWeight: 400 }}>
-            Editions
-          </h2>
-          <div className="card-grid card-grid--editions" style={{ marginTop: 28 }}>
-            {EDITIONS.tiers.map((t, i) => (
-              <article className={i === 1 ? "card card--anchor" : "card card--standard"} key={`${t.region}-${t.name}`}>
-                <span className="card__tag">{t.region === "usd" ? "Rest of the world" : "Africa"}</span>
-                <h3 className="card__title">{t.name}</h3>
-                <p className="card__price">
-                  <strong>{t.price}</strong>
-                  <s className="card__was">{t.was}</s>
-                </p>
-                <p className="card__desc">{t.desc}</p>
-                <a className="card__cta" href={t.href} target="_blank" rel="noopener noreferrer external">
-                  Buy
-                </a>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ---------- EDITIONS (shared with /books) ---------- */}
+      <BooksEditions />
 
+      {/* ---------- READER RESPONSES ---------- */}
       {REVIEWS.items.length > 0 && (
         <section className="section surface-50">
           <div className="container">
-            <span className="eyebrow">{REVIEWS.eyebrow}</span>
-            <h2 className="display" style={{ fontSize: "clamp(26px, 3.2vw, 38px)", marginTop: 10, fontWeight: 400 }}>
-              {REVIEWS.heading}
-            </h2>
-            <div className="card-grid card-grid--reviews" style={{ marginTop: 28 }}>
+            <div className="text-center mx-auto" style={{ maxWidth: 640, marginBottom: 48 }}>
+              <span className="eyebrow">{REVIEWS.eyebrow}</span>
+              <h2
+                className="display"
+                style={{ fontSize: "clamp(28px, 3.4vw, 40px)", marginTop: 8, letterSpacing: "-0.01em" }}
+              >
+                {REVIEWS.heading}
+              </h2>
+              <p className="caption mt-3">{REVIEWS.subhead}</p>
+            </div>
+            <div className="ornament-rule" aria-hidden="true">
+              <span>§</span>
+            </div>
+            <div className="grid-12" style={{ gap: 24, marginTop: 32 }}>
               {REVIEWS.items.map((r, i) => (
-                <article className={i === 0 ? "card card--anchor" : "card card--quiet"} key={i}>
-                  <blockquote className="card__quote">“{r.quote}”</blockquote>
-                  <p className="card__meta">
-                    {r.name} · {r.role}
-                  </p>
-                </article>
+                <figure className={`col-6 review-card review-card--${i % 2 === 0 ? "a" : "b"}`} key={i}>
+                  <div className="orn">“</div>
+                  <blockquote>{r.quote}</blockquote>
+                  <figcaption>
+                    <span className="reviewer-name">{r.name}</span>
+                    <span className="reviewer-role">{r.role}</span>
+                  </figcaption>
+                </figure>
               ))}
             </div>
           </div>
         </section>
       )}
 
-      <section className="section surface-100">
+      {/* ---------- QUESTIONS ---------- */}
+      <section className="section surface-100" id="questions">
         <div className="container">
-          <span className="eyebrow">{FAQ.eyebrow}</span>
-          <div className="prose-feature" style={{ maxWidth: "70ch", marginTop: 20 }}>
+          <div className="mx-auto" style={{ maxWidth: 760 }}>
+            <span className="eyebrow">{FAQ.eyebrow}</span>
+            <div className="ornament-rule" aria-hidden="true">
+              <span>§</span>
+            </div>
             {FAQ.items.map((f, i) => (
-              <div className="faq-item" key={i}>
-                <h3 className="faq-item__q">{f.q}</h3>
-                <p className="faq-item__a">{f.a}</p>
-              </div>
+              <details className="faq-item" key={i}>
+                <summary>{f.q}</summary>
+                <div className="faq-body">{f.a}</div>
+              </details>
             ))}
           </div>
         </div>

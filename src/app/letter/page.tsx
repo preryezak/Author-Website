@@ -21,37 +21,45 @@ function fmtDate(iso: string) {
   }
 }
 
+/**
+ * The letter, on its own route.
+ *
+ * Uses the home page's `letter-item` markup for the archive so the two lists
+ * read identically, with the subscribe embed beneath.
+ */
 export default async function LetterPage() {
   const letters = await getLetters(8);
 
   return (
     <SiteShell active="/letter">
-      <section className="section surface-100 page-hero">
+      <section className="section surface-200">
         <div className="container">
-          <span className="eyebrow">{NEWSLETTER.eyebrow}</span>
-          <h1 className="display page-hero__title">{NEWSLETTER.heading}</h1>
-          <p className="body page-hero__lede" style={{ maxWidth: "62ch" }}>
-            Short, personal letters on faith, formation and the work. No schedule, no noise. Subscribe and read
-            them in your inbox or here on the site.
-          </p>
-        </div>
-      </section>
+          <div className="page-head">
+            <span className="eyebrow">{NEWSLETTER.eyebrow}</span>
+            <h1 className="page-head__title">{NEWSLETTER.heading}</h1>
+            <p className="page-head__lede">
+              Short, personal letters on faith, formation and the work. No schedule, no noise. Read them here or
+              have them sent to you.
+            </p>
+          </div>
 
-      <section className="section surface-50">
-        <div className="container">
-          <div className="card-grid card-grid--letters">
+          <div className="mx-auto" style={{ maxWidth: 760 }}>
             {letters.length === 0 ? (
-              <p className="card__meta">The letter archive is unavailable right now. Please check back shortly.</p>
+              <div className="letter-item">
+                <div>
+                  <div className="date">&nbsp;</div>
+                  <div className="title">The archive is unavailable right now. Please check back shortly.</div>
+                </div>
+              </div>
             ) : (
               letters.map((l, i) => (
-                <article className={i === 0 ? "card card--anchor" : "card card--quiet"} key={i}>
-                  <p className="card__meta">{fmtDate(l.pubDate) || "Letter"}</p>
-                  <h2 className="card__title">{l.title}</h2>
-                  {l.description ? <p className="card__desc">{l.description.slice(0, 220)}</p> : null}
-                  <a className="card__cta" href={l.link} target="_blank" rel="noopener noreferrer external">
-                    Read the letter
-                  </a>
-                </article>
+                <a className="letter-item" key={i} href={l.link} target="_blank" rel="noopener noreferrer external">
+                  <div>
+                    <div className="date">{fmtDate(l.pubDate) || "Letter"}</div>
+                    <div className="title">{l.title}</div>
+                    {l.description ? <div className="excerpt">{l.description.slice(0, 220)}</div> : null}
+                  </div>
+                </a>
               ))
             )}
           </div>
@@ -60,18 +68,23 @@ export default async function LetterPage() {
 
       <section className="section surface-100">
         <div className="container">
-          <h2 className="display" style={{ fontSize: "clamp(24px, 3vw, 34px)", fontWeight: 400 }}>
-            Subscribe
-          </h2>
-          <p className="caption" style={{ marginTop: 8, color: "var(--ink-400)" }}>
-            Letters are sent through Beehiiv. You can unsubscribe at any time.
-          </p>
-          <div className="letter-embed" style={{ marginTop: 20 }}>
+          <div className="page-head">
+            <span className="eyebrow">Subscribe</span>
+            <h2 className="page-head__title">Have the next one sent to you.</h2>
+            <p className="page-head__lede">
+              Letters are sent through Beehiiv. You can unsubscribe at any time.
+            </p>
+          </div>
+          {/* Sizing lives in globals.css (.letter-card--embed / .beehiiv-embed),
+              exactly as on the home page. No inline height or width: an inline
+              value would override the responsive rules and clip the email field,
+              which is what pushed the input below the fold before. */}
+          <div className="mx-auto letter-card letter-card--embed">
             <iframe
-              src={SITE.beehiivEmbed}
-              title="Subscribe to letters from Eryeza Kalalu"
-              style={{ width: "100%", maxWidth: 440, height: 220, border: "1px solid var(--border)" }}
+              className="beehiiv-embed"
+              title="Subscribe to Eryeza Writes"
               loading="lazy"
+              src={SITE.beehiivEmbed}
             />
           </div>
         </div>

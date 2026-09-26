@@ -7,6 +7,9 @@ import {
   THE_DAYS, EDITIONS, REVIEWS, FAQ, WHATS_NEXT, ABOUT, SPEAKING, PRIVACY,
 } from "@/lib/site-content";
 import SpeakingInviteForm from "@/components/site/speaking-invite-form";
+import ServeIcon from "@/components/site/serve-icon";
+import BookCard from "@/components/site/book-card";
+import EngagementsGrid from "@/components/site/engagements";
 import GiveButton from "@/components/site/give-button";
 
 function PlatformIcon({ name }: { name: string }) {
@@ -35,28 +38,6 @@ function fmtDate(iso: string) {
   try { const d = new Date(iso); if (isNaN(d.getTime())) return ""; return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); } catch { return ""; }
 }
 
-// Line icons for the "Where Eryeza Can Serve" cards. Drawn in the site's own
-// stroke style (1.6 / round caps, currentColor) so they sit in the brand system
-// rather than looking like an imported set.
-const SERVE_ICON_PATHS: Record<string, string[]> = {
-  church: ["M12 2v4", "M10 4h4", "M4 11l8-6 8 6", "M6 9.5V20h12V9.5", "M10 20v-5a2 2 0 0 1 4 0v5"],
-  conference: ["M3 4h18v11H3z", "M12 15v5", "M8 20h8", "M7 8l3 3 4-4"],
-  leaders: ["M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8", "M2 21v-1a7 7 0 0 1 14 0v1", "M16.5 3.6a4 4 0 0 1 0 7.4", "M18 21v-1a7 7 0 0 0-3.5-6.1"],
-  retreat: ["M2 19l5.5-7 4 5 3.5-4.5L22 19z", "M17 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4"],
-  academic: ["M12 4L2 9l10 5 10-5-10-5z", "M6 11.5V16c0 1.6 2.7 2.8 6 2.8s6-1.2 6-2.8v-4.5", "M20 10v5"],
-  briefcase: ["M4 8h16v11H4z", "M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2", "M4 13h16"],
-  community: ["M8.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7", "M2.5 20v-1.2A6 6 0 0 1 8.5 13a6 6 0 0 1 6 6.8V20", "M15.5 4.2a3.5 3.5 0 0 1 0 6.9", "M17.8 14.3A6 6 0 0 1 21.5 20"],
-  media: ["M12 13.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3", "M8.5 15.5a5 5 0 0 1 0-7", "M15.5 8.5a5 5 0 0 1 0 7", "M5.6 18.4a9 9 0 0 1 0-12.8", "M18.4 5.6a9 9 0 0 1 0 12.8"],
-};
-
-function ServeIcon({ name }: { name: string }) {
-  const paths = SERVE_ICON_PATHS[name] || SERVE_ICON_PATHS.church;
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {paths.map((d, i) => (<path key={i} d={d} />))}
-    </svg>
-  );
-}
 
 /* Render **bold** and *italic* markers in the About bio */
 function renderRich(text: string): React.ReactNode[] {
@@ -165,7 +146,7 @@ export default function SitePage({
           </a>
           <nav aria-label="Primary">{NAV.map((n) => (<a key={n.href} href={n.href} aria-current={n.href === "/" ? "page" : undefined}>{n.label}</a>))}</nav>
           <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-            <GiveButton source="masthead" variant="button" className="cta" /><a className="cta" href="/letter">Subscribe</a>
+            <a className="cta" href="/letter">Subscribe</a>
             <button className="masthead-burger" type="button" aria-label={drawerOpen ? "Close navigation" : "Open navigation"} aria-controls="drawer" aria-expanded={drawerOpen} onClick={() => setDrawerOpen((v) => !v)}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{drawerOpen ? (<><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></>) : (<><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></>)}</svg>
             </button>
@@ -585,38 +566,8 @@ export default function SitePage({
             <OrnamentRule>§</OrnamentRule>
             <div className="grid-12" style={{ gap: 24, marginTop: 24 }} data-reveal-stagger>
               {LIBRARY.books.map((b) => (
-                <article className="col-4 book-card book-card--dark" key={b.title}>
-                  {b.cover === "cover" ? (
-                    <a href={b.href} className="cover-slot" aria-label={`${b.title} book cover`}>
-                      <img
-                        src="/images/cover-640.webp"
-                        srcSet="/images/cover-640.webp 640w"
-                        sizes="(max-width: 1024px) 45vw, 300px"
-                        width={640}
-                        height={960}
-                        alt={`${b.title} book cover`}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </a>
-                  ) : (
-                    <div className="cover-slot" aria-hidden="true" style={{ display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 8, background: b.cover === "oxblood" ? "var(--oxblood-500)" : "var(--forest-500)", boxShadow: "inset 0 0 0 1px rgba(228,199,187,0.28), 0 8px 24px rgba(30,26,22,0.18)" }}>
-                      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "8px 4px", border: `1px solid ${b.cover === "oxblood" ? "rgba(228,199,187,0.35)" : "rgba(196,207,199,0.35)"}` }}>
-                        <span style={{ fontFamily: "var(--font-sans)", fontSize: 8, letterSpacing: "0.2em", color: b.cover === "oxblood" ? "var(--oxblood-100)" : "var(--forest-100)", textTransform: "uppercase" }}>{b.cover === "oxblood" ? "Vol. II" : "2027"}</span>
-                        <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 15, lineHeight: 1.1, color: "var(--paper-50)" }}>{b.cover === "oxblood" ? <>Unedited<br />Christmas</> : <>Forth-<br />coming</>}</span>
-                        <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", color: b.cover === "oxblood" ? "var(--oxblood-100)" : "var(--forest-100)", fontSize: 14, lineHeight: 1 }}>§</span>
-                      </div>
-                    </div>
-                  )}
-                  <div>
-                    <div className="meta-row"><span className="eyebrow">{b.status}</span><span className="caption">{b.caption}</span></div>
-                    <h3 className="display" style={{ fontSize: 20, fontWeight: 500, letterSpacing: "-0.005em" }}>{b.title}</h3>
-                    <p className="role-line">{b.role}</p>
-                    <p className="excerpt">{b.excerpt}</p>
-                    <div className="card-cta"><a className="btn btn-ghost btn-sm" href={b.href}>{b.cta}</a></div>
-                  </div>
-                </article>
-              ))}
+              <BookCard book={b} key={b.title} />
+            ))}
             </div>
           </div>
         </section>
@@ -867,12 +818,7 @@ export default function SitePage({
               <OrnamentRule>§</OrnamentRule>
               <p className="caption" style={{ margin: 0 }}>{SPEAKING.engagementsLede}</p>
               <div className="grid-12" style={{ gap: 20 }} data-reveal-stagger>
-                {SPEAKING.engagements.map((e, i) => (
-                  <div className="col-4 speaking-card speaking-card--a" key={i}>
-                    <div className="sc-title">{e.event}</div>
-                    <div style={{ fontFamily: "var(--font-sans)", fontSize: 12, letterSpacing: "0.04em", color: "var(--ink-300)", marginTop: 8 }}>{e.note}</div>
-                  </div>
-                ))}
+                {SPEAKING.engagements.length > 0 ? <EngagementsGrid /> : null}
               </div>
             </div>
 

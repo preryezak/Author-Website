@@ -2094,3 +2094,351 @@ html.js-reveal [data-reveal-stagger].is-visible > * { opacity: 1; transform: tra
     grid-template-columns: repeat(3, 1fr);
   }
 }
+.page-head__actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ==================================================================
+   EK-PAGE-CRAFT
+   Shared page craft for the route pages (/about, /books, /give ...).
+
+   The home page is the design benchmark. These rules let a route page
+   reach the same standard by using the SAME classes the home page uses,
+   rather than inventing per-page treatments.
+
+   Typographic rule that matters most here: a heading gets a controlled
+   measure and balanced wrapping. A sentence set across a 1280px viewport
+   is the failure this fixes.
+   ================================================================== */
+
+/* Section heads: centred, measured, balanced. Used by every route page. */
+.page-head {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 44px;
+}
+.page-head--left {
+  text-align: left;
+  margin-left: 0;
+  margin-right: 0;
+}
+.page-head__title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.2vw, 50px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  margin: 10px 0 0;
+  text-wrap: balance;
+  max-width: 22ch;
+  margin-inline: auto;
+}
+.page-head--left .page-head__title {
+  margin-inline: 0;
+}
+.page-head__lede {
+  margin: 16px auto 0;
+  max-width: 62ch;
+  color: var(--ink-500);
+}
+.page-head__support {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.5;
+  color: var(--ink-500);
+  margin: 16px auto 0;
+  max-width: 48ch;
+}
+
+/* A hero heading that must never stretch: hard 2-line hierarchy on desktop. */
+.hero-split {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.6vw, 56px);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  margin: 12px 0 0;
+  text-wrap: balance;
+}
+.hero-split__line {
+  display: block;
+}
+@media (min-width: 900px) {
+  /* desktop gets a deliberate two-line break, not a wrapped paragraph */
+  .hero-split {
+    max-width: 20ch;
+    margin-inline: auto;
+  }
+}
+
+/* Route page section rhythm, matching the home page's surfaces. */
+.route-section {
+  padding: clamp(64px, 9vw, 116px) 0;
+}
+.route-narrow {
+  max-width: 68ch;
+}
+.route-measure {
+  max-width: 66ch;
+}
+
+/* Editorial split used where a route page needs asymmetric emphasis rather
+   than three equal cards (the style contract bans equal marketing card rows). */
+.split-editorial {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .split-editorial {
+    grid-template-columns: 7fr 5fr;
+  }
+  .split-editorial--reverse {
+    grid-template-columns: 5fr 7fr;
+  }
+}
+
+/* The book library needs the dark treatment the home page gives it. */
+.library-dark {
+  background: var(--ink-800);
+}
+.library-dark .page-head__title,
+.library-dark .page-head__lede {
+  color: var(--paper-50);
+}
+.library-dark .page-head__lede {
+  color: var(--paper-200);
+}
+
+/* Evidence row: two or three facts stated as a rule-separated list rather
+   than as decorative cards. */
+.fact-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-top: 1px solid var(--border);
+}
+@media (min-width: 700px) {
+  .fact-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.fact-row__item {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+@media (min-width: 700px) {
+  .fact-row__item {
+    padding: 22px 28px 22px 0;
+    border-bottom: 0;
+    border-right: 1px solid var(--border);
+  }
+  .fact-row__item:last-child {
+    border-right: 0;
+    padding-right: 0;
+  }
+}
+.fact-row__label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-300);
+  margin: 0 0 6px;
+}
+.fact-row__body {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-500);
+  margin: 0;
+}
+
+/* Keep long-form reading comfortable on every route page. */
+.route-prose p {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--ink-400);
+  margin: 0 0 18px;
+}
+.route-prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* Link list used on contact and index-style pages. */
+.link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+.link-list li {
+  border-bottom: 1px solid var(--border);
+}
+.link-list a {
+  display: block;
+  padding: 18px 0;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2vw, 22px);
+  color: var(--ink-500);
+  text-decoration: none;
+}
+.link-list a:hover,
+.link-list a:focus-visible {
+  color: var(--oxblood-400);
+}
+
+/* ==================================================================
+   EK-POLISH-PASS
+   Fixes from the polish review.
+
+   1. The footer had no padding of its own, so the logo and wordmark sat
+      directly against whatever section came before it. Every page uses
+      .site-footer, so one rule fixes the whole site.
+   2. The three Selected Engagements cards were three identical blocks.
+      They now alternate surface, accent device and title weight.
+   3. A collapsible home for the speaking invitation form.
+   ================================================================== */
+
+/* ---- 1. footer breathing room ---- */
+.site-footer {
+  padding-top: clamp(64px, 8vw, 104px);
+  padding-bottom: clamp(24px, 3vw, 36px);
+}
+.site-footer .container > .grid-12 {
+  padding-bottom: clamp(16px, 2.5vw, 28px);
+}
+
+/* ---- 2. alternating engagement cards ---- */
+.engagements-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(18px, 2.4vw, 26px);
+}
+@media (min-width: 900px) {
+  .engagements-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.engagement-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 26px 24px 28px;
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--gold-300);
+  background: var(--paper-50);
+  transition: box-shadow 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.engagement-card:hover {
+  box-shadow: var(--shadow-2);
+}
+.engagement-card__title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--ink-700);
+  margin: 0;
+}
+.engagement-card__note {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+  color: var(--ink-400);
+  margin: 0;
+}
+.engagement-card__rule {
+  width: 34px;
+  height: 2px;
+  background: var(--gold-300);
+  margin-bottom: 4px;
+}
+
+/* card 1 leads: a top rule, a heavier title, a little more air */
+.engagement-card--lead {
+  padding: 30px 26px 32px;
+  border-left: 1px solid var(--border);
+  border-top: 3px solid var(--oxblood-400);
+  background: var(--paper-50);
+}
+.engagement-card--lead .engagement-card__title {
+  font-size: 22px;
+  font-weight: 600;
+}
+.engagement-card--lead .engagement-card__rule {
+  background: var(--oxblood-400);
+}
+
+/* card 2 sits back on the middle tint */
+.engagement-card--mid {
+  background: var(--paper-100);
+  border-left-color: var(--gold-300);
+}
+.engagement-card--mid .engagement-card__rule {
+  background: var(--gold-400);
+}
+
+/* card 3 closes on the deepest tint with a different accent */
+.engagement-card--deep {
+  background: var(--paper-200);
+  border-left-color: var(--forest-500);
+}
+.engagement-card--deep .engagement-card__rule {
+  background: var(--forest-500);
+}
+
+/* ---- 3. the collapsible invitation panel ---- */
+.invite-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 22px;
+  border: 1px solid var(--border);
+  background: var(--ink-700);
+  color: var(--paper-50);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.invite-toggle:hover {
+  background: var(--ink-800);
+}
+.invite-toggle__chev {
+  transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.invite-toggle[aria-expanded="true"] .invite-toggle__chev {
+  transform: rotate(180deg);
+}
+.invite-collapse {
+  margin-top: 16px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink-400);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.invite-panel__body {
+  margin-top: 28px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .invite-toggle__chev {
+    transition: none;
+  }
+}

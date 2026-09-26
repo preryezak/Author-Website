@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import SiteShell from "@/components/site/site-shell";
-import { LIBRARY, EDITIONS } from "@/lib/site-content";
+import BookCard from "@/components/site/book-card";
+import BooksEditions from "@/components/site/books-editions";
+import { LIBRARY, WHATS_NEXT, PODCAST } from "@/lib/site-content";
 
 export const metadata: Metadata = {
   title: "Books · The Deep Encounter Library",
@@ -9,85 +11,73 @@ export const metadata: Metadata = {
   alternates: { canonical: "/books" },
 };
 
+/**
+ * The library, on its own route.
+ *
+ * Built to the same standard as the home page's library block: the dark ink
+ * surface, the same BookCard component, the same block-head pattern. The page
+ * previously used a generic light card grid, which is what made it read as a
+ * plainer cousin of the home page.
+ */
 export default function BooksPage() {
-  const usd = EDITIONS.tiers.filter((t) => t.region === "usd");
-  const ugx = EDITIONS.tiers.filter((t) => t.region === "ugx");
-
   return (
     <SiteShell active="/books">
-      <section className="section surface-100 page-hero">
+      {/* ---------- LIBRARY ---------- */}
+      <section className="section surface-ink library-dark">
         <div className="container">
-          <span className="eyebrow">{LIBRARY.eyebrow}</span>
-          <h1 className="display page-hero__title">{LIBRARY.heading}</h1>
-          <p className="body page-hero__lede" style={{ maxWidth: "62ch" }}>
-            Books, devotionals and study resources written to help people encounter God, understand His Word,
-            and live faithfully in ordinary life.
-          </p>
-        </div>
-      </section>
+          <div className="mx-auto text-center" style={{ maxWidth: 640 }}>
+            <span className="eyebrow">{LIBRARY.eyebrow}</span>
+            <h1 className="page-head__title">{LIBRARY.heading}</h1>
+          </div>
+          <div className="ornament-rule" aria-hidden="true">
+            <span>§</span>
+          </div>
 
-      <section className="section surface-50">
-        <div className="container">
-          <div className="card-grid card-grid--library">
-            {LIBRARY.books.map((b, i) => (
-              <article className={i === 0 ? "card card--anchor" : "card card--standard"} key={b.title}>
-                <span className="card__tag">{b.status}</span>
-                <h2 className="card__title">{b.title}</h2>
-                <p className="card__meta">{b.role}</p>
-                <p className="card__desc">{b.excerpt}</p>
-                <p className="card__foot caption">{b.caption}</p>
-                {i === 0 ? (
-                  <a className="card__cta" href="/influential-spirit">
-                    Read about this book
-                  </a>
-                ) : null}
-              </article>
+          <div className="grid-12" style={{ gap: 24, marginTop: 24 }}>
+            {LIBRARY.books.map((b) => (
+              <BookCard book={b} key={b.title} anchorMode="route" />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section surface-100" id="editions">
+      {/* ---------- WHAT COMES NEXT ---------- */}
+      <section className="section surface-100">
         <div className="container">
-          <span className="eyebrow">{EDITIONS.eyebrow}</span>
-          <h2 className="display" style={{ fontSize: "clamp(28px, 3.6vw, 42px)", marginTop: 10, fontWeight: 400 }}>
-            Choose an edition.
-          </h2>
-          <p className="caption" style={{ marginTop: 10, color: "var(--ink-400)", maxWidth: "62ch" }}>
-            {EDITIONS.note}
-          </p>
+          <div className="page-head">
+            <span className="eyebrow">{WHATS_NEXT.nextEyebrow}</span>
+            <h2 className="page-head__title">{WHATS_NEXT.nextHeading}</h2>
+          </div>
+          <div className="fact-row">
+            {LIBRARY.books.map((b) => (
+              <div className="fact-row__item" key={`f-${b.title}`}>
+                <p className="fact-row__label">{b.status}</p>
+                <p className="fact-row__body">{b.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          {[
-            { label: EDITIONS.regionUSD, sub: EDITIONS.regionUSDSub, list: usd },
-            { label: EDITIONS.regionUGX, sub: EDITIONS.regionUGXSub, list: ugx },
-          ].map((group) => (
-            <div className="edition-group" key={group.label}>
-              <div className="edition-group__head">
-                <h3 className="edition-group__label">{group.label}</h3>
-                <span className="caption">{group.sub}</span>
-              </div>
-              <div className="card-grid card-grid--editions">
-                {group.list.map((t, i) => (
-                  <article className={i === 1 ? "card card--anchor" : "card card--standard"} key={t.name}>
-                    <h4 className="card__title">{t.name}</h4>
-                    <p className="card__price">
-                      <strong>{t.price}</strong>
-                      <s className="card__was">{t.was}</s>
-                    </p>
-                    <p className="card__desc">{t.desc}</p>
-                    <a
-                      className="card__cta"
-                      href={t.href}
-                      target="_blank"
-                      rel="noopener noreferrer external"
-                    >
-                      Buy this edition
-                    </a>
-                  </article>
-                ))}
-              </div>
+      {/* ---------- EDITIONS ---------- */}
+      <BooksEditions />
+
+      {/* ---------- THE PODCAST, AS ON THE HOME PAGE ---------- */}
+      <section className="dis-strip">
+        <div className="container">
+          <div className="dis-row">
+            <img
+              src="/brand/dis-mark.svg"
+              alt="Devotion In Season seal"
+              className="dis-seal"
+              style={{ padding: 12 }}
+            />
+            <div className="stack">
+              <span className="dis-eb">{PODCAST.eyebrow}</span>
+              <h2 className="dis-title">{PODCAST.title}</h2>
+              <p className="dis-lede">{PODCAST.lede}</p>
             </div>
-          ))}
+          </div>
         </div>
       </section>
     </SiteShell>

@@ -22,49 +22,81 @@ function fmtDate(iso: string) {
   }
 }
 
+/**
+ * The podcast, on its own route.
+ *
+ * Opens with the home page's own `dis-strip` band rather than a generic page
+ * header, then lists episodes in the same markup the home page uses, with the
+ * platform row beneath.
+ */
 export default async function PodcastPage() {
   const episodes = await getEpisodes(7);
 
   return (
     <SiteShell active="/podcast">
-      <section className="section surface-100 page-hero">
+      {/* ---------- STRIP, exactly as the home page carries it ---------- */}
+      <section className="dis-strip">
         <div className="container">
-          <span className="eyebrow">{PODCAST.eyebrow}</span>
-          <h1 className="display page-hero__title">{PODCAST.title}</h1>
-          <p className="body page-hero__lede">{PODCAST.lede}</p>
-        </div>
-      </section>
-
-      <section className="section surface-50">
-        <div className="container">
-          <div className="episode-list">
-            {episodes.length === 0 ? (
-              <p className="card__meta">The episode list is unavailable right now. Please check back shortly.</p>
-            ) : (
-              episodes.map((ep, i) => (
-                <article className={i === 0 ? "episode card card--anchor" : "episode card card--quiet"} key={i}>
-                  <p className="card__meta">{fmtDate(ep.pubDate) || "Episode"}</p>
-                  <h2 className="card__title">{ep.title}</h2>
-                  {ep.audioUrl ? (
-                    <audio className="episode__audio" controls preload="none" src={ep.audioUrl} />
-                  ) : null}
-                  <a className="card__cta" href={ep.link} target="_blank" rel="noopener noreferrer external">
-                    Open episode
-                  </a>
-                </article>
-              ))
-            )}
+          <div className="dis-row">
+            <img
+              src="/brand/dis-mark.svg"
+              alt="Devotion In Season seal"
+              className="dis-seal"
+              style={{ padding: 12 }}
+            />
+            <div className="stack">
+              <span className="dis-eb">{PODCAST.eyebrow}</span>
+              <h1 className="dis-title">{PODCAST.title}</h1>
+              <p className="dis-lede">{PODCAST.lede}</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="section surface-100">
+      {/* ---------- EPISODES ---------- */}
+      <section className="section surface-100" id="podcast-episodes">
         <div className="container">
-          <span className="eyebrow">{PODCAST.platformsLabel}</span>
-          <h2 className="display" style={{ fontSize: "clamp(26px, 3.2vw, 38px)", marginTop: 10, fontWeight: 400 }}>
-            {PODCAST.platformsHeading}
-          </h2>
-          <ul className="platform-grid">
+          <div className="page-head page-head--left">
+            <span className="eyebrow">Episodes</span>
+            <h2 className="page-head__title">Listen here, or in your own player.</h2>
+          </div>
+
+          {episodes.length === 0 ? (
+            <div className="letter-item">
+              <div>
+                <div className="date">&nbsp;</div>
+                <div className="title">The episode list is unavailable right now. Please check back shortly.</div>
+              </div>
+            </div>
+          ) : (
+            <ul className="episode-list">
+              {episodes.map((it, i) => (
+                <li key={i} className={i === 0 ? "episode episode--lead" : "episode"}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="meta">{fmtDate(it.pubDate) || "Episode"}</div>
+                    <h3 className="title">{it.title}</h3>
+                    {it.audioUrl ? <audio className="episode__audio" controls preload="none" src={it.audioUrl} /> : null}
+                    <div className="card-cta" style={{ marginTop: 10 }}>
+                      <a className="btn btn-ghost btn-sm" href={it.link} target="_blank" rel="noopener noreferrer external">
+                        Open episode
+                      </a>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+
+      {/* ---------- PLATFORMS ---------- */}
+      <section className="section surface-50" id="podcast-platforms">
+        <div className="container">
+          <div className="page-head page-head--left">
+            <span className="eyebrow">{PODCAST.platformsLabel}</span>
+            <h2 className="page-head__title">{PODCAST.platformsHeading}</h2>
+          </div>
+          <ul className="link-list">
             {PODCAST.platforms.map((p) => (
               <li key={p.name}>
                 <a href={p.url} target="_blank" rel="noopener noreferrer external">

@@ -37,14 +37,16 @@ export default function SiteShell({
             </span>
           </Link>
           <nav aria-label="Primary">
-            {NAV.filter((n) => n.href !== "/give").map((n) => (
+            {NAV.map((n) => (
               <Link key={n.href} href={n.href} aria-current={isActive(n.href) ? "page" : undefined}>
                 {n.label}
               </Link>
             ))}
           </nav>
           <div className="masthead-actions">
-            <GiveButton source="masthead" variant="button" />
+            <a className="cta" href="/letter">
+              Subscribe
+            </a>
             <button
               className="masthead-burger"
               type="button"
@@ -81,7 +83,7 @@ export default function SiteShell({
         </div>
         <nav id="drawer" hidden={!drawerOpen} className="masthead-drawer">
           <div className="container masthead-drawer__inner">
-            {NAV.filter((n) => n.href !== "/give").map((n) => (
+            {NAV.map((n) => (
               <Link
                 key={n.href}
                 href={n.href}
@@ -91,7 +93,6 @@ export default function SiteShell({
                 {n.label}
               </Link>
             ))}
-            <GiveButton source="drawer" variant="link" className="masthead-drawer__give" />
           </div>
         </nav>
       </header>
@@ -179,22 +180,22 @@ export default function SiteShell({
                 </li>
               </ul>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <div className="eyebrow" style={{ color: "var(--gold-200)", marginBottom: 14 }}>
-                Contact
+                Support
               </div>
               <ul className="footer-list">
+                <li>
+                  <GiveButton source="footer" variant="footer" />
+                </li>
                 <li>
                   <Link href="/speaking">Invite to speak</Link>
                 </li>
                 <li>
+                  <Link href="/contact">Contact</Link>
+                </li>
+                <li>
                   <a href={`mailto:${SITE.speakingEmail}`}>{SITE.speakingEmail}</a>
-                </li>
-                <li>
-                  <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-                </li>
-                <li>
-                  <GiveButton source="footer" variant="footer" />
                 </li>
               </ul>
             </div>

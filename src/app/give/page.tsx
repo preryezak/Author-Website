@@ -9,6 +9,9 @@ import { GIVING, SITE } from "@/lib/site-content";
  * Deliberately link-only. There is no payment code in this application: the
  * button opens the hosted Flutterwave donation page in a new tab, and
  * Flutterwave holds the transaction record, the receipt and the payout.
+ *
+ * The three reassurances are set as a rule-separated fact row rather than three
+ * equal cards, which the site's own style contract rules out.
  */
 export const metadata: Metadata = {
   title: "Give · Support the work",
@@ -20,54 +23,50 @@ export const metadata: Metadata = {
 export default function GivePage() {
   return (
     <SiteShell active="/give">
-      <section className="section surface-100 page-hero">
+      <section className="section surface-100">
         <div className="container">
-          <div className="page-hero__inner">
+          <div className="page-head">
             <span className="eyebrow">{GIVING.eyebrow}</span>
-            <h1 className="display page-hero__title">{GIVING.heading}</h1>
-            <p className="body page-hero__lede">{GIVING.lede}</p>
-            <div className="page-hero__actions">
+            <h1 className="page-head__title">{GIVING.heading}</h1>
+            <p className="page-head__lede">{GIVING.lede}</p>
+            <div className="page-head__actions">
               <GiveButton source="give-page" variant="button" className="btn btn-gold" />
-              <span className="caption page-hero__note">Opens the secure giving page in a new tab.</span>
             </div>
+            <p className="caption" style={{ marginTop: 12, color: "var(--ink-300)" }}>
+              Opens the secure giving page in a new tab.
+            </p>
+          </div>
+
+          <div className="fact-row">
+            {GIVING.trust.map((t, i) => (
+              <div className="fact-row__item" key={i}>
+                <p className="fact-row__label">{t.title}</p>
+                <p className="fact-row__body">{t.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       <section className="section surface-50">
         <div className="container">
-          <div className="prose-feature" style={{ maxWidth: "64ch" }}>
+          <div className="route-prose route-measure">
             {GIVING.body.map((p, i) => (
-              <p key={i} className="body" style={{ color: "var(--ink-500)" }}>
-                {p}
-              </p>
+              <p key={i}>{p}</p>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="section surface-100">
-        <div className="container">
-          <div className="trust-grid">
-            {GIVING.trust.map((t, i) => (
-              <article className="trust-card" key={i}>
-                <h2 className="trust-card__title">{t.title}</h2>
-                <p className="trust-card__desc">{t.desc}</p>
-              </article>
-            ))}
-          </div>
-          <p className="caption" style={{ marginTop: 28, color: "var(--ink-300)", maxWidth: "62ch" }}>
+          <p className="caption" style={{ marginTop: 24, color: "var(--ink-300)", maxWidth: "62ch" }}>
             {GIVING.disclaimer}
           </p>
         </div>
       </section>
 
-      <section className="section surface-50">
+      <section className="section surface-100">
         <div className="container">
-          <div className="grid-12" style={{ gap: 40, alignItems: "center" }}>
-            <div className="col-7">
+          <div className="split-editorial">
+            <div>
               <span className="eyebrow">Another way</span>
-              <h2 className="display" style={{ fontSize: "clamp(26px, 3.2vw, 36px)", marginTop: 10, fontWeight: 400 }}>
+              <h2 className="speaking-block-h" style={{ marginTop: 10 }}>
                 Prefer to give by another route?
               </h2>
               <p className="body" style={{ marginTop: 12, color: "var(--ink-500)", maxWidth: "58ch" }}>
@@ -75,10 +74,15 @@ export default function GivePage() {
                 provider at all, that is entirely understandable.
               </p>
             </div>
-            <div className="col-5">
-              <a className="btn btn-outline" href={`mailto:${SITE.email}`}>
-                {SITE.email}
-              </a>
+            <div>
+              <ul className="link-list">
+                <li>
+                  <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+                </li>
+                <li>
+                  <a href="/contact">Contact</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

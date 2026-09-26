@@ -79,10 +79,17 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: ["/og.png"],
   },
+  // Browser icon: the existing ink monogram (logo-monogram.svg) rendered on the
+  // paper colour it was designed for, exported as favicon.ico and PNG frames.
+  // The tile carries its own background, so the mark reads on both light and
+  // dark tab bars, and it stays the same mark as the masthead. Chosen over the
+  // gold monogram on ink by measurement: 15.24:1 contrast against 6.01:1, and
+  // it holds its strokes at every favicon size.
   icons: {
     icon: [
-      { url: "/brand/logo-monogram.svg", type: "image/svg+xml" },
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { url: "/brand/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/icon-192.png", sizes: "192x192", type: "image/png" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
