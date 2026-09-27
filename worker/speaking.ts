@@ -37,6 +37,9 @@ interface Env {
   SPEAKING_EMAIL?: string;   // default: speaking@eryezakalalu.com
   RESEND_FROM?: string;      // default: onboarding@resend.dev (used only on the Resend path)
   EMAIL_FROM?: string;       // native path sender, must be on a domain onboarded to Email Service
+  NOTIFY_EMAIL?: string;     // inbox that receives submissions. Must be a VERIFIED destination
+                             // address in Email Routing (e.g. pastor.eryeza@gmail.com).
+                             // SPEAKING_EMAIL is the public alias and is NOT a valid destination.
   ALLOWED_ORIGIN?: string;   // default: https://eryezakalalu.com
   DB?: D1Database;           // optional D1 binding (set in wrangler.toml). Storage fails quietly if absent.
 }
@@ -253,6 +256,10 @@ export default {
 
     const receivedAt = new Date().toISOString();
     const speakingEmail = env.SPEAKING_EMAIL || "speaking@eryezakalalu.com";
+    // Where submissions are actually delivered. The Cloudflare send_email binding
+    // only accepts a VERIFIED destination address, so this cannot be the public
+    // alias speaking@eryezakalalu.com (that is a routing rule, not a destination).
+    const notifyEmail = env.NOTIFY_EMAIL || speakingEmail;
     const subject = `Speaking invitation from ${name}${d.organisation ? ", " + d.organisation : ""}`;
     const html = buildEmailHtml(d, receivedAt);
     const text = buildEmailText(d, receivedAt);
@@ -278,7 +285,7 @@ export default {
     if (env.EMAIL) {
       try {
         await env.EMAIL.send({
-          to: speakingEmail,
+          to: notifyEmail,
           from: env.EMAIL_FROM || speakingEmail,
           subject,
           html,
@@ -302,7 +309,7 @@ export default {
           },
           body: JSON.stringify({
             from: env.RESEND_FROM || "onboarding@resend.dev",
-            to: [speakingEmail],
+            to: [notifyEmail],
             replyTo: email,
             subject,
             html,

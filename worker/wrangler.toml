@@ -9,6 +9,10 @@ SPEAKING_EMAIL = "speaking@eryezakalalu.com"
 # Native Email Service sender. Must be an address on a domain you have
 # onboarded to Cloudflare Email Service (eryezakalalu.com).
 EMAIL_FROM = "speaking@eryezakalalu.com"
+# The inbox that receives submissions. This must be a VERIFIED destination
+# address in Email Routing; the send_email binding refuses anything else.
+# Verified destination on this account: pastor.eryeza@gmail.com
+NOTIFY_EMAIL = "pastor.eryeza@gmail.com"
 # Used only on the Resend fallback path. Until eryezakalalu.com is verified
 # on Resend, mail sends from Resend's shared onboarding address.
 RESEND_FROM = "onboarding@resend.dev"
@@ -26,23 +30,31 @@ database_name = "eryeza-speaking-db"
 database_id = "d1ba4007-adb8-4965-8213-3af2c475c321"
 
 # ── Email path 1 (preferred): NATIVE Cloudflare Email Service ───────
-# NOT ENABLED YET, and deliberately left commented out.
+# ENABLED 2026-09-27.
 #
-# Enabling Email Service / Email Routing for eryezakalalu.com asks Cloudflare to
-# manage the domain's MX records. If that domain's mail is currently handled
-# elsewhere, turning this on would divert or break existing mail. That is a
-# decision for the domain owner, so this binding is off by default.
+# The old warning here said that turning this on asks Cloudflare to manage the
+# domain's MX records, and that it would divert mail handled elsewhere. That
+# concern was checked and does not apply: eryezakalalu.com already runs on
+# Cloudflare Email Routing. Verified via the API on 2026-09-27:
+#   - Email Routing enabled, status "ready"
+#   - MX -> route1/2/3.mx.cloudflare.net
+#   - DKIM published at cf2024-1._domainkey, SPF includes _spf.mx.cloudflare.net
+#   - forwarding rules for speaking@, media@, books@, hello@ -> pastor.eryeza@gmail.com
+#   - verified destination address: pastor.eryeza@gmail.com
+# So this binding is additive. It does not change MX records or routing.
 #
-# To switch it on:
-#   1. Cloudflare dashboard -> Compute -> Email Service -> onboard eryezakalalu.com
-#      (confirm first how the domain's mail is currently handled)
-#   2. verify the destination address speaking@eryezakalalu.com
-#   3. uncomment the block below and re-run:  wrangler deploy
+# NOTE on the addresses: allowed_destination_addresses must list a VERIFIED
+# destination address, which is pastor.eryeza@gmail.com. speaking@eryezakalalu.com
+# is a routing rule (an address on the domain), not a destination, so the earlier
+# draft of this block had the wrong value.
 #
-# [[send_email]]
-# name = "EMAIL"
-# allowed_sender_addresses = ["speaking@eryezakalalu.com"]
-# allowed_destination_addresses = ["speaking@eryezakalalu.com"]
+# Sending to a verified destination address is free on every plan, including
+# Workers Free. Sending to arbitrary recipients needs Workers Paid.
+[[send_email]]
+name = "EMAIL"
+allowed_sender_addresses = ["speaking@eryezakalalu.com"]
+allowed_destination_addresses = ["pastor.eryeza@gmail.com"]
+
 
 # ── Email path 2 (fallback): Resend ─────────────────────────────────
 # Used automatically only when the native EMAIL binding above is absent.

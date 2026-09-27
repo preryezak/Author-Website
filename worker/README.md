@@ -85,3 +85,61 @@ and use `https://eryezakalalu.com/worker/speaking` instead (removes CORS entirel
 - `speaking.ts` — the Worker (single file, zero npm dependencies)
 - `wrangler.toml` — bindings, vars, commented D1 block
 - `schema.sql` — D1 table + indexes
+
+---
+
+## Email delivery is ON (enabled 2026-09-27)
+
+The native Cloudflare Email Service binding is now active, so an invitation
+posted to this Worker sends a real email as well as writing the D1 row. No
+dashboard step was required: `eryezakalalu.com` already runs on Cloudflare Email
+Routing, which is what the binding needs.
+
+Verified state of the domain (checked through the Cloudflare API on 2026-09-27):
+
+| Item | Value |
+| --- | --- |
+| Email Routing | enabled, status `ready` |
+| MX | `route1/2/3.mx.cloudflare.net` |
+| SPF | `v=spf1 include:_spf.mx.cloudflare.net ~all` |
+| DKIM | published at `cf2024-1._domainkey.eryezakalalu.com` |
+| Forwarding rules | `speaking@`, `media@`, `books@`, `hello@` -> `pastor.eryeza@gmail.com` |
+| Verified destination address | `pastor.eryeza@gmail.com` |
+
+Bindings and vars that make it work (see `wrangler.toml`):
+
+```toml
+[[send_email]]
+name = "EMAIL"
+allowed_sender_addresses = ["speaking@eryezakalalu.com"]
+allowed_destination_addresses = ["pastor.eryeza@gmail.com"]
+
+[vars]
+EMAIL_FROM   = "speaking@eryezakalalu.com"   # what the recipient sees
+NOTIFY_EMAIL = "pastor.eryeza@gmail.com"     # where it is delivered
+```
+
+**The one rule that bites:** a `send_email` binding only accepts a **verified
+destination address**. `speaking@eryezakalalu.com` is a forwarding rule on the
+domain, not a destination, so sending to it is refused with
+`email to speaking@eryezakalalu.com not allowed`. That is why the Worker resolves
+`NOTIFY_EMAIL` first and sends the message there, while `EMAIL_FROM` keeps the
+public-facing sender.
+
+Test, end to end (2026-09-27):
+
+```
+POST https://eryeza-speaking.preryezakalalu.workers.dev
+-> HTTP 201 {"ok":true,"emailed":true,"stored":true,"via":"cloudflare-email"}
+```
+
+**To change the destination later:** add and verify the new address in
+Cloudflare (Email Routing -> Destination addresses), then update `NOTIFY_EMAIL`
+in `wrangler.toml` and redeploy. Sending to a verified destination is free on
+every plan, including Workers Free; sending to arbitrary recipients needs
+Workers Paid.
+
+**Fallback:** the Resend path is still in the code and still unconfigured. If the
+native binding is ever removed, set the `RESEND_API_KEY` secret
+(`wrangler secret put RESEND_API_KEY`) to restore sending. The Resend sender is
+`onboarding@resend.dev` until `eryezakalalu.com` is verified on Resend.
