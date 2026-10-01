@@ -143,3 +143,41 @@ Workers Paid.
 native binding is ever removed, set the `RESEND_API_KEY` secret
 (`wrangler secret put RESEND_API_KEY`) to restore sending. The Resend sender is
 `onboarding@resend.dev` until `eryezakalalu.com` is verified on Resend.
+---
+
+# `eryeza-study` — study-guide sign-up Worker
+
+`study.ts` · config `study.wrangler.toml` · schema `study-schema.sql`. Served same-origin at
+`https://eryezakalalu.com/api/study` via a Worker **route**, which runs in front of the
+`ccndaily-books` custom-domain site, so the `/study/` page needs no CORS and no CSP change.
+
+Flow per sign-up: honeypot + Origin + email checks → 5 posts per IP per hour (D1 counter on a
+salted IP hash) → **row stored in D1 first** → Kit v4 (upsert subscriber, add to `KIT_FORM_ID`,
+tag `study-guide`, `week-N`, and `letter-optin` when ticked) → Beehiiv subscription when ticked
+*and* `BEEHIIV_API_KEY` + `BEEHIIV_PUB_ID` are set → `kitStatus` / `beehiivStatus` written back
+to the row. The visitor gets `{ ok: true }` once the row is stored; provider errors stay in D1.
+
+## Deploy (from the repo root)
+
+```bash
+npx wrangler d1 create eryeza-study-db          # paste database_id into study.wrangler.toml
+npx wrangler d1 execute eryeza-study-db --remote -c worker/study.wrangler.toml --file=worker/study-schema.sql
+npx wrangler secret put KIT_API_KEY -c worker/study.wrangler.toml
+# only if the Beehiiv plan includes API access:
+npx wrangler secret put BEEHIIV_API_KEY -c worker/study.wrangler.toml
+# set KIT_FORM_ID (and BEEHIIV_PUB_ID if used) in [vars], then:
+npx wrangler deploy -c worker/study.wrangler.toml
+```
+
+Check: `curl https://eryezakalalu.com/api/study` returns the health JSON (which paths are
+configured, never the values).
+
+## Read sign-ups
+
+```bash
+npx wrangler d1 execute eryeza-study-db --remote -c worker/study.wrangler.toml \
+  --command "SELECT createdAt, email, firstName, week, letterOptIn, kitStatus, beehiivStatus FROM study_signups ORDER BY createdAt DESC LIMIT 20"
+```
+
+Manual Beehiiv import (when there is no API access): export the `letter-optin` tag from Kit, or
+`SELECT email, firstName FROM study_signups WHERE letterOptIn = 1`.

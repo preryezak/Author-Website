@@ -20,6 +20,8 @@
  * DEDUP_MS are dropped, so a double tap cannot create two records.
  */
 
+import { ENDPOINTS } from "@/lib/site-content";
+
 export type SiteEventPayload = {
   event: string;
   source: string;
@@ -32,7 +34,8 @@ export type SiteEventPayload = {
 /** Kept in sync with `site_events.event` in the logging Worker (D1). */
 export type SiteEventName = "give_click";
 
-const ENDPOINT = (process.env.NEXT_PUBLIC_EVENTS_ENDPOINT ?? "").trim();
+// Default lives in site-content ENDPOINTS so the build never depends on the shell.
+const ENDPOINT = ENDPOINTS.events;
 
 /** Rapid repeats of the same event/source inside this window are ignored. */
 const DEDUP_MS = 1500;

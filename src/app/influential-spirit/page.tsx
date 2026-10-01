@@ -6,14 +6,20 @@ import { LIBRARY, FAQ, REVIEWS, FEATURED_BOOK, FLAGSHIP } from "@/lib/site-conte
 const BOOK = LIBRARY.books[0];
 
 export const metadata: Metadata = {
-  title: "The Influential Spirit · Eryeza Kalalu",
+  title: "The Influential Spirit",
   description:
     "The Influential Spirit is a thirty-day devotional about the person behind the influence: character, formation and the life Christ is forming in us.",
   alternates: { canonical: "/influential-spirit" },
+  openGraph: { type: "website", url: "/influential-spirit", title: "The Influential Spirit · Eryeza Kalalu", images: [{ url: "/og.png", width: 1200, height: 630, alt: "The Influential Spirit" }] },
 };
 
-/** Home-page anchors have to become real routes on a standalone page. */
-const route = (href: string) => (href.startsWith("#") ? "/" + href.slice(1) : href);
+/**
+ * Home-page anchors on a standalone page: sections that exist here (editions,
+ * questions) stay in-page; anything else points at its home-page section.
+ * The earlier version turned "#editions" into "/editions", a 404.
+ */
+const ON_THIS_PAGE = new Set(["#editions", "#questions"]);
+const route = (href: string) => (!href.startsWith("#") || ON_THIS_PAGE.has(href) ? href : "/" + href);
 
 /**
  * The book page.
@@ -41,6 +47,7 @@ export default function InfluentialSpiritPage() {
                     width={1200}
                     height={1800}
                     alt="The Influential Spirit, the actual book front cover"
+                    fetchPriority="high"
                     decoding="async"
                   />
                 </div>
@@ -89,9 +96,9 @@ export default function InfluentialSpiritPage() {
         <div className="container">
           <div className="route-prose route-measure">
             <p>
-              The book asks a simple, uncomfortable question: who are you becoming? Influence, platform and
-              visibility follow from the answer, and the answer is formed quietly, in the presence of God and
-              in ordinary life.
+              The book asks a simple question: who are you becoming? Influence, platform and
+              visibility follow from the answer, and the answer is formed in the presence of God and in ordinary
+              life.
             </p>
             <p>
               Thirty days, each with Scripture, a short reflection and a prayer. Written for people with real

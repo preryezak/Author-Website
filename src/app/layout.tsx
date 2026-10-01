@@ -1,12 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import { Newsreader, Source_Serif_4, DM_Sans } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
+import { LAUNCH_PRICE_ENDS, GIVING } from "@/lib/site-content";
 
+/*
+ * Fonts: variable files (no `weight` list), so each style is ONE file covering
+ * every weight. The previous fixed-weight setup shipped 22 font files and
+ * preloaded them all, which competed with the hero for bandwidth on mobile.
+ * Now: 5 files, and only the display face (headings, the first paint) is
+ * preloaded. DM Sans is never set in italic, so its italic file is dropped.
+ * The unused shadcn <Toaster /> (and its JS) was removed from the layout.
+ */
 const newsreader = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   display: "swap",
 });
@@ -14,17 +21,17 @@ const newsreader = Newsreader({
 const sourceSerif = Source_Serif_4({
   variable: "--font-source-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   display: "swap",
+  preload: false,
 });
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   display: "swap",
+  preload: false,
 });
 
 const SITE_URL = "https://eryezakalalu.com";
@@ -134,6 +141,10 @@ const jsonLd = {
         "https://podcasts.apple.com/nl/podcast/devotional-podcast/id1759589414",
         "https://www.iheart.com/podcast/269-devotion-in-season-198850928",
       ],
+      // Giving (handoff P0-5): the /give/ page, which links out to Flutterwave.
+      ...(GIVING.url
+        ? { potentialAction: { "@type": "DonateAction", name: "Support the ministry", recipient: { "@id": `${SITE_URL}/#person` }, target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/give/` } } }
+        : {}),
     },
     {
       "@type": "Book",
@@ -147,21 +158,25 @@ const jsonLd = {
       inLanguage: "en",
       datePublished: "2026-09-30",
       imageUrl: `${SITE_URL}/images/cover.jpg`,
+      // Launch prices run until 31 Oct 2026 (priceValidUntil). From 1 Nov the
+      // full prices apply ($15 / UGX 45,000): update these on the next rebuild.
       offers: [
         {
           "@type": "Offer",
-          name: "Digital Pre-order Edition",
+          name: "Reader Edition",
           price: "12",
           priceCurrency: "USD",
-          availability: "https://schema.org/PreOrder",
+          priceValidUntil: "2026-10-31",
+          availability: "https://schema.org/InStock",
           url: "https://payhip.com/b/CidbX",
         },
         {
           "@type": "Offer",
-          name: "Digital Pre-order Edition",
+          name: "Reader Edition",
           price: "36000",
           priceCurrency: "UGX",
-          availability: "https://schema.org/PreOrder",
+          priceValidUntil: "2026-10-31",
+          availability: "https://schema.org/InStock",
           url: "https://selar.com/8818840887",
         },
       ],
@@ -175,11 +190,8 @@ const jsonLd = {
       url: "https://www.iheart.com/podcast/269-devotion-in-season-198850928",
       author: { "@id": `${SITE_URL}/#person` },
       inLanguage: "en",
-      // NOTE: the previous value here was
-      // "https://anchor.fm/s/103e4e254/podcast/rss", which now returns HTTP 404
-      // (the Anchor feed is dead), so it was removed rather than publish a
-      // broken feed URL to crawlers. Re-add `webFeed` once a live RSS URL is
-      // confirmed (iHeart / Spotify for Podcasters).
+      // Live feed (verified 2026-09-22 and 2026-10-01). The old s/103e4e254 id is dead.
+      webFeed: "https://anchor.fm/s/f7311ecc/podcast/rss",
       sameAs: [
         "https://www.iheart.com/podcast/269-devotion-in-season-198850928",
         "https://open.spotify.com/show/7xWARwXWq7Zm3qHuyOvfrH",
@@ -209,9 +221,14 @@ export default function RootLayout({
       className={`${newsreader.variable} ${sourceSerif.variable} ${dmSans.variable}`}
     >
       <head>
-        {/* Self-hosted font files are the only font source; no Google Fonts request is made. */}
-        <link rel="preconnect" href="https://subscribe-forms.beehiiv.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://www.iheart.com" />
+        {/* Before first paint: the launch-price switch (components/site/price.tsx) and hiding the cookie notice for visitors who already chose (components/site/cookie-banner.tsx). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var d=document.documentElement;if(Date.now()>=${Date.parse(LAUNCH_PRICE_ENDS)})d.setAttribute("data-price-phase","full");if(localStorage.getItem("ek-cookie-choice"))d.classList.add("ek-cookie-set")}catch(e){}`,
+          }}
+        />
+        {/* Self-hosted font files are the only font source; no Google Fonts request is made.
+            No preconnects: the Beehiiv form and the iHeart player both load below the fold or on demand. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -219,7 +236,6 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {children}
-        <Toaster />
       </body>
     </html>
   );

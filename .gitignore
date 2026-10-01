@@ -57,3 +57,7 @@ server.log
 /download/
 /handoff/
 /worklog.md
+
+# build output mirrored by scripts/postbuild.mjs, and wrangler dev state
+/dist/
+.wrangler/

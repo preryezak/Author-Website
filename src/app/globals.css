@@ -1,4 +1,13 @@
-@import "tailwindcss";
+/*
+ * Tailwind scans ONLY the folders the site renders from. By default it scanned
+ * the whole repo: 48 unused shadcn files in src/components/ui, the hooks, the
+ * Worker and every markdown doc, which generated ~80 KB of unused utilities
+ * (46% of the stylesheet) that every page had to download and style against.
+ */
+@import "tailwindcss" source(none);
+@source "../app";
+@source "../components/site";
+@source "../lib";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -346,7 +355,7 @@
 .masthead .brand img { width: 40px; height: 40px; }
 .masthead .brand .wordmark { display: flex; flex-direction: column; line-height: 1; }
 .masthead .brand .wordmark .name { font-family: var(--font-display); font-size: 22px; font-weight: 500; letter-spacing: -0.005em; color: var(--ink-700); }
-.masthead .brand .wordmark .role { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-400); margin-top: 5px; }
+.masthead .brand .wordmark .role { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-500); /* 5.80:1 on paper-100; gold-400 was 3.73:1 (WCAG 1.4.3) */ margin-top: 5px; }
 /* Only the TOP-LEVEL nav (a direct child of .masthead .row) is the desktop menu.
    The selector must not match #drawer, which is also a <nav> inside .masthead:
    matching it applied display:none at every width below 1024px, so the burger
@@ -522,7 +531,7 @@
 .episode-list { list-style: none; padding: 0; margin: 0; }
 .episode-list li { padding: 16px 0; border-bottom: 1px solid rgba(184, 146, 90, 0.28); display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .episode-list li:last-child { border-bottom: 0; }
-.episode-list .meta { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-200); margin-bottom: 4px; }
+.episode-list .meta { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-100); margin-bottom: 4px; } /* gold-100 6.04:1 on forest-400; gold-200 was 4.49:1 */
 .episode-list .title { font-family: var(--font-display); font-size: 18px; font-weight: 500; color: var(--paper-50); letter-spacing: -0.005em; text-wrap: balance; margin: 0; }
 .episode-list a.play { flex-shrink: 0; color: var(--gold-200); padding: 8px 14px; border: 1px solid rgba(184, 146, 90, 0.5); font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: background-color 200ms ease, color 200ms ease; white-space: nowrap; align-self: center; }
 .episode-list a.play:hover { background: var(--gold-300); color: var(--forest-500); }
@@ -594,7 +603,7 @@ details.faq-item .faq-body { padding: 0 0 20px; color: var(--ink-500); font-fami
 .letter-card--embed .beehiiv-embed { outline: 0; }
 
 /* ============================================================
-   STICKY MOBILE PRE-ORDER BAR (book deep-dive)
+   STICKY MOBILE BUY BAR (book deep-dive)
    ============================================================ */
 .sticky-mobile-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 30; background: var(--ink-700); color: var(--paper-100); border-top: 1px solid var(--gold-400); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 @media (min-width: 900px) { .sticky-mobile-bar { display: none; } }
@@ -2250,7 +2259,7 @@ html.js-reveal [data-reveal-stagger].is-visible > * { opacity: 1; transform: tra
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--gold-300);
+  color: var(--gold-500); /* 5.80:1 on paper-100; gold-300 was 2.53:1 (WCAG 1.4.3) */
   margin: 0 0 6px;
 }
 .fact-row__body {
@@ -2442,3 +2451,87 @@ html.js-reveal [data-reveal-stagger].is-visible > * { opacity: 1; transform: tra
     transition: none;
   }
 }
+/* ============================================================
+   LAUNCH PRICE SWITCH
+   Both price sets are in the HTML. layout.tsx sets
+   <html data-price-phase="full"> from 1 Nov 2026 00:00 EAT.
+   ============================================================ */
+.price-full { display: none; }
+html[data-price-phase="full"] .price-launch,
+html[data-price-phase="full"] .launch-only { display: none; }
+html[data-price-phase="full"] .price-full { display: inline; }
+
+/* ============================================================
+   /study/ — this week card + sign-up form
+   ============================================================ */
+.study-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; }
+@media (min-width: 900px) { .study-grid { grid-template-columns: 5fr 7fr; gap: 48px; } }
+.study-week { display: grid; grid-template-columns: 120px 1fr; gap: 20px; align-items: center; background: var(--paper-50); border: 1px solid var(--border); border-top: 3px solid var(--forest-400); padding: 20px; }
+@media (min-width: 900px) { .study-week { grid-template-columns: 1fr; } }
+.study-week__cover { aspect-ratio: 3 / 4; overflow: hidden; box-shadow: 0 8px 24px rgba(30, 26, 22, 0.18); }
+.study-week__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.study-week__seal { width: 100%; height: 100%; background: var(--forest-500); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; border: 1px solid rgba(184, 146, 90, 0.35); }
+.study-week__seal img { width: 50%; height: auto; }
+.study-week__seal span { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-100); }
+.study-week__title { font-size: clamp(24px, 2.6vw, 32px); font-weight: 500; letter-spacing: -0.01em; margin-top: 8px; }
+.study-week__episode { font-family: var(--font-display); font-style: italic; font-size: 17px; color: var(--ink-500); margin: 6px 0 0; }
+.study-form-card { background: var(--paper-50); padding: 24px; border: 1px solid rgba(184, 146, 90, 0.5); border-top: 3px solid var(--oxblood-400); }
+@media (min-width: 640px) { .study-form-card { padding: 32px; } }
+.study-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.study-check { display: flex; gap: 12px; align-items: flex-start; font-family: var(--font-serif); font-size: 15px; line-height: 1.5; color: var(--ink-500); cursor: pointer; }
+.study-check input { width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; accent-color: var(--oxblood-400); }
+.study-check input:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.study-error { font-family: var(--font-serif); font-size: 15px; color: var(--oxblood-500); margin: 16px 0 0; }
+.study-privacy { margin-top: 16px; }
+.study-privacy a { color: var(--ink-500); text-decoration: underline; text-decoration-color: var(--gold-300); text-underline-offset: 3px; }
+.study-success { font-size: clamp(24px, 2.6vw, 30px); font-weight: 400; line-height: 1.25; margin: 0 0 24px; color: var(--ink-700); }
+.study-book { display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center; background: var(--ink-700); color: var(--paper-100); padding: 16px; text-decoration: none; border: 1px solid rgba(184, 146, 90, 0.35); transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.study-book:hover { transform: translateY(-1px); }
+.study-book img { width: 72px; height: auto; display: block; }
+.study-book__line { display: block; font-family: var(--font-display); font-size: 19px; line-height: 1.3; color: var(--paper-50); }
+.study-book__cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold-200); }
+
+/* ============================================================
+   /podcast/ — YouTube facade, series run, study block
+   (forest surface; text pairings per the DIS contrast notes above)
+   ============================================================ */
+.yt-facade { position: relative; aspect-ratio: 16 / 9; background: #000; }
+.yt-facade iframe, .yt-facade__btn { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt-facade__btn { padding: 0; cursor: pointer; background: #000; display: block; }
+.yt-facade__btn img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.88; }
+.yt-facade__play { position: absolute; top: 50%; left: 50%; width: 68px; height: 68px; margin: -34px 0 0 -34px; border-radius: 50%; background: var(--paper-50); color: var(--ink-700); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.yt-facade__btn:hover .yt-facade__play { transform: scale(1.06); }
+.yt-facade__btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+.series-run { list-style: none; padding: 0; margin: 0; }
+.series-run li { display: grid; grid-template-columns: 40px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(184, 146, 90, 0.28); }
+.series-run li:last-child { border-bottom: 0; }
+.series-run__num { font-family: var(--font-display); font-style: italic; font-size: 28px; line-height: 1; color: var(--gold-100); }
+.series-run__meta { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-100); margin-bottom: 4px; }
+.series-run__title { font-family: var(--font-display); font-size: 20px; font-weight: 500; color: var(--paper-50); margin: 0; text-wrap: balance; }
+.series-run__theme { font-family: var(--font-serif); font-size: 15px; line-height: 1.55; color: var(--paper-200); margin: 6px 0 0; max-width: 60ch; }
+.series-run__guide { display: inline-block; margin-top: 8px; font-family: var(--font-sans); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: var(--gold-100); text-decoration: underline; text-decoration-color: rgba(225, 205, 165, 0.5); text-underline-offset: 3px; }
+.series-run__guide:hover { color: var(--paper-50); }
+
+.podcast-study { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; background: var(--forest-500); border: 1px solid rgba(184, 146, 90, 0.35); padding: 24px; }
+.dis-strip a.dis-cta:focus-visible, .series-run__guide:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* ============================================================
+   iHeart player facade (home + /podcast/): the iframe, its
+   scripts and its third-party cookies load only on press.
+   ============================================================ */
+.iheart-facade { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 180px; padding: 24px; border: 0; background: #2D3134; color: var(--paper-50); cursor: pointer; text-align: left; font: inherit; transition: background 200ms ease; }
+.iheart-facade:hover { background: #3F4447; }
+.iheart-facade:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.iheart-facade__play { flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%; background: var(--paper-50); color: var(--ink-700); display: flex; align-items: center; justify-content: center; }
+.iheart-facade__text { display: flex; flex-direction: column; gap: 4px; }
+.iheart-facade__label { font-family: var(--font-display); font-size: 20px; font-weight: 500; color: var(--paper-50); }
+.iheart-facade__note { font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.04em; color: var(--paper-200); }
+
+/* Cookie notice: in the HTML from first paint; hidden before paint for
+   visitors who already chose (class set by the head script in layout.tsx). */
+html.ek-cookie-set .cookie-banner { display: none; }
+
+/* Inline text link on light surfaces (e.g. Give on /contact/). */
+.text-link { color: var(--ink-700); text-decoration: underline; text-decoration-color: var(--gold-300); text-underline-offset: 3px; }
+.text-link:hover { color: var(--oxblood-400); }

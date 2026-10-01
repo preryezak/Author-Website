@@ -1,4 +1,3 @@
-"use client";
 
 /**
  * Book card.
@@ -24,10 +23,14 @@ export type LibraryBook = {
 export default function BookCard({
   book,
   anchorMode = "section",
+  headingLevel = 3,
 }: {
   book: LibraryBook;
   anchorMode?: "section" | "route";
+  /** 2 where the cards sit directly under the page h1 (/books). */
+  headingLevel?: 2 | 3;
 }) {
+  const H = headingLevel === 2 ? "h2" : "h3";
   const href =
     anchorMode === "route" && book.href.startsWith("#")
       ? "/" + book.href.slice(1)
@@ -59,7 +62,7 @@ export default function BookCard({
                         )}
                         <div>
                           <div className="meta-row"><span className="eyebrow">{book.status}</span><span className="caption">{book.caption}</span></div>
-                          <h3 className="display" style={{ fontSize: 20, fontWeight: 500, letterSpacing: "-0.005em" }}>{book.title}</h3>
+                          <H className="display" style={{ fontSize: 20, fontWeight: 500, letterSpacing: "-0.005em" }}>{book.title}</H>
                           <p className="role-line">{book.role}</p>
                           <p className="excerpt">{book.excerpt}</p>
                           <div className="card-cta"><a className="btn btn-ghost btn-sm" href={href}>{book.cta}</a></div>

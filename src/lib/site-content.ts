@@ -53,34 +53,134 @@ const RESOLVED_GIVING_URL = GIVING_IS_OFF
 
 export const GIVING = {
   url: RESOLVED_GIVING_URL,
+  /** Nav, footer and inline links. */
   label: "Give",
   navLabel: "Give",
-  eyebrow: "Giving",
-  heading: "Support the work.",
-  lede:
-    "Writing, teaching and pastoral work are sustained by people who give quietly and gladly. Your gift goes toward the books, the podcast and the ministry of Rivers of Life Healing Centre.",
-  body: [
-    "Giving here is simple and unpressured. There is nothing to buy and nothing to sign up for. You choose an amount on the secure giving page and it is handled by Flutterwave, who hold the transaction record and send your receipt.",
-    "I am grateful for every gift, and no one should ever give under pressure.",
-  ],
-  trust: [
-    { title: "Secure", desc: "Payments are processed by Flutterwave on their own secure pages. This site never sees or stores your card details." },
-    { title: "Direct", desc: "Your gift goes straight to the ministry it is meant for." },
-    { title: "Receipted", desc: "Flutterwave emails your confirmation and holds the record of the transaction." },
-  ],
-  disclaimer: "Gifts are received through a commercial payment provider. They are not represented as tax-deductible.",
+  // /give/ page copy: Cowork handoff P0-1, used exactly.
+  eyebrow: "Support the ministry",
+  heading: "Help this teaching reach one more person",
+  lede: "Devotion in Season and the daily devotionals are free to everyone who listens. Your gift covers recording, editing, hosting and the hours of study behind every episode, and helps these messages reach working believers in Uganda and around the world.",
+  pageCta: "Give through Flutterwave",
+  smallPrint: "Payments are processed securely by Flutterwave. You'll receive a receipt by email.",
+  readHeading: "Prefer to support by reading?",
+  readCta: "Get The Influential Spirit",
+  readHref: "/#editions",
   campaign: "site-give",
 } as const;
 
+/** The handoff's name for the giving destination; same value as GIVING.url. */
+export const GIVE_URL = GIVING.url;
+
+/** Every menu item is a real route. Podcast sits between Books and About (handoff P0-3). */
 export const NAV = [
   { label: "Home", href: "/" },
   { label: "The Influential Spirit", href: "/influential-spirit" },
   { label: "Speaking", href: "/speaking" },
   { label: "Letter", href: "/letter" },
   { label: "Books", href: "/books" },
+  { label: "Podcast", href: "/podcast" },
   { label: "About", href: "/about" },
   { label: "Give", href: "/give" },
 ] as const;
+
+/**
+ * Release moments are 8 PM EAT (17:00 UTC) on the Sunday each episode airs.
+ * Dates are full ISO timestamps so "has this week been released?" is exact.
+ */
+export type StudyWeek = {
+  week: number;
+  title: string;
+  episodeTitle: string;
+  releaseDate: string;
+  /** Public path of the guide PDF (unguessable name). Empty until supplied. FROM-COWORK. */
+  pdfPath: string;
+  /** Public path of the guide cover (WebP, 3:4). FROM-COWORK. The page shows a seal panel until the file exists. */
+  cover: string;
+};
+
+/**
+ * One entry per released (or about-to-release) study guide. Cowork adds an
+ * entry per week. The /study/ card shows the latest entry whose releaseDate has
+ * passed, falling back to week 1.
+ */
+export const STUDY_WEEKS: StudyWeek[] = [
+  {
+    week: 1,
+    title: "The Reversal",
+    // FROM-COWORK: episode title for week 1. Using the series title until supplied.
+    episodeTitle: "The Reversal",
+    releaseDate: "2026-10-04T20:00:00+03:00",
+    // FROM-COWORK: e.g. "/study/week-1-the-reversal-7f3k.pdf"
+    pdfPath: "",
+    cover: "/study/covers/week-1.webp",
+  },
+];
+
+/** === /study/ (handoff P0-2 copy) === */
+export const STUDY = {
+  eyebrow: "Free weekly study guide",
+  heading: "Take this week's episode deeper",
+  lede: "Each Sunday's episode of Devotion in Season comes with a short guide: the passages, five questions for personal or group study, one practice for the week, and a prayer. Free, every week of the series.",
+  thisWeekLabel: "This week",
+  firstNameLabel: "First name",
+  emailLabel: "Email",
+  letterOptIn: "Also send me Eryeza's letter: personal updates and new writing.",
+  submit: "Send me the guide",
+  success: "Check your inbox. This week's guide is on its way.",
+  bookLine: "The whole argument of this series is in The Influential Spirit.",
+  bookHref: "/#editions",
+  privacy: "One email a week with the guide. Unsubscribe any time.",
+  privacyHref: "/privacy",
+} as const;
+
+/** === /podcast/ (handoff P0-3 copy) === */
+export const PODCAST_PAGE = {
+  heading: "Devotion in Season",
+  lede: "A weekly conversation for believers at work and in business, every Sunday at 8 PM East Africa Time, and a short daily devotional every weekday morning at 6 AM. The current series walks through the themes of The Influential Spirit.",
+} as const;
+
+/**
+ * YouTube video id of the latest Sunday episode. FROM-COWORK after each upload.
+ * While empty, /podcast/ shows a link to the latest episode on iHeart instead.
+ */
+export const LATEST_EPISODE_YT_ID = "";
+
+/** The eight-week series. `theme` is FROM-COWORK (empty lines are not rendered). */
+export const SERIES_WEEKS = [
+  { week: 1, sunday: "2026-10-04", title: "The Reversal", theme: "" },
+  { week: 2, sunday: "2026-10-11", title: "Pressure and Shortcuts", theme: "" },
+  { week: 3, sunday: "2026-10-18", title: "Your Work Is the Sermon", theme: "" },
+  { week: 4, sunday: "2026-10-25", title: "Would Outsiders Vouch for You?", theme: "" },
+  { week: 5, sunday: "2026-11-01", title: "Visibility Is Not Credibility", theme: "" },
+  { week: 6, sunday: "2026-11-08", title: "The Message and the Messenger", theme: "" },
+  { week: 7, sunday: "2026-11-15", title: "The Grace That Doesn't Excuse", theme: "" },
+  { week: 8, sunday: "2026-11-22", title: "Restoration Without Amnesia", theme: "" },
+] as const;
+
+/** Latest study week released by `now` (falls back to week 1). */
+export function currentStudyWeek(now: Date = new Date()): StudyWeek {
+  const released = STUDY_WEEKS.filter((w) => Date.parse(w.releaseDate) <= now.getTime());
+  return released.length ? released[released.length - 1] : STUDY_WEEKS[0];
+}
+
+/**
+ * Launch pricing ends at 2026-11-01 00:00 EAT (= 2026-10-31 21:00 UTC). Both
+ * price sets are rendered into the HTML; a tiny inline script in layout.tsx
+ * sets <html data-price-phase="full"> after this moment and CSS swaps them, so
+ * the switch does not need a rebuild.
+ */
+export const LAUNCH_PRICE_ENDS = "2026-11-01T00:00:00+03:00";
+
+/**
+ * Worker endpoints. Public URLs, not secrets. Written here as defaults so every
+ * build produces a working site (the live build of 23 Sep had them supplied
+ * only through the shell). NEXT_PUBLIC_* still overrides at build time.
+ */
+export const ENDPOINTS = {
+  speaking: (process.env.NEXT_PUBLIC_SPEAKING_ENDPOINT || "https://eryeza-speaking.preryezakalalu.workers.dev").trim(),
+  events: (process.env.NEXT_PUBLIC_EVENTS_ENDPOINT || "https://eryeza-speaking.preryezakalalu.workers.dev/events").trim(),
+  study: (process.env.NEXT_PUBLIC_STUDY_ENDPOINT || "/api/study").trim(),
+} as const;
 
 /** Hero */
 export const HERO = {
@@ -99,7 +199,7 @@ export const FLAGSHIP = {
   stampOrn: "§",
   stampMeta: "NEW BOOK · AUTUMN ’26",
   stampTitle: "The Influential Spirit",
-  marginNote: "Digital delivery · 30 September 2026",
+  marginNote: "Instant digital delivery.",
   subtitle: "Volume I of The Deep Encounter Library",
 } as const;
 
@@ -162,7 +262,7 @@ export const LIBRARY = {
   eyebrow: "The Deep Encounter Library",
   heading: "The library.",
   books: [
-    { status: "Pre-order", caption: "30 Sept 2026", title: "The Influential Spirit", role: "Volume I · The Deep Encounter Library", excerpt: "The book that anchors the library. Thirty days inside the person behind the influence.", cta: "Open the book page", href: "#influential-spirit", cover: "cover" },
+    { status: "Out now", caption: "Volume I", title: "The Influential Spirit", role: "Volume I · The Deep Encounter Library", excerpt: "The book that anchors the library. Thirty days inside the person behind the influence.", cta: "Open the book page", href: "#influential-spirit", cover: "cover" },
     { status: "Coming next", caption: "Volume II", title: "Unedited Christmas", role: "A fresh encounter with the mystery of the incarnation", excerpt: "Advent, stripped of sentimentality.", cta: "Get notice by letter", href: "#letter", cover: "oxblood" },
     { status: "In preparation", caption: "2027", title: "Forthcoming volumes", role: "Holy Week Every Week · Prayer Craft · Discerning God’s Whisper · Spiritual Health Solution", excerpt: "Ongoing volumes on prayer, spiritual health, and hearing God.", cta: "Get notice by letter", href: "#letter", cover: "forest" },
   ],
@@ -277,14 +377,18 @@ export const EDITIONS = {
   regionUSDSub: "Payhip, card & PayPal",
   regionUGX: "Africa",
   regionUGXSub: "Selar, mobile money & card",
-  note: "Pre-order, early-bird pricing built in. No coupon needed. Digital delivery 30 September 2026.",
+  note: "Instant digital delivery. No coupon needed.",
+  /** Hidden automatically from 1 Nov 2026 00:00 EAT (see LAUNCH_PRICE_ENDS). */
+  launchLine: "Launch price until 31 October.",
+  // price/was = launch price with the struck-through full price; full = the price shown from 1 November.
+  // Payhip and Selar URLs confirmed live by Eryeza on 1 Oct 2026.
   tiers: [
-    { region: "usd", name: "Digital Pre-order Edition", price: "$12", was: "$15", desc: "The complete 30-day devotional. PDF and EPUB delivered 30 September.", href: "https://payhip.com/b/CidbX", popular: false },
-    { region: "usd", name: "Formation Bundle", price: "$23", was: "$29", desc: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and the 30-Day Reading Plan and Challenge.", href: "https://payhip.com/b/CidbX", popular: true },
-    { region: "usd", name: "Complete Formation Edition", price: "$39", was: "$49", desc: "Everything in the Formation Bundle, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", href: "https://payhip.com/b/CidbX", popular: false },
-    { region: "ugx", name: "Digital Pre-order Edition", price: "UGX 36,000", was: "45,000", desc: "The complete 30-day devotional. PDF and EPUB delivered 30 September.", href: "https://selar.com/8818840887", popular: false },
-    { region: "ugx", name: "Formation Bundle", price: "UGX 72,000", was: "90,000", desc: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and the 30-Day Reading Plan and Challenge.", href: "https://selar.com/8818840887", popular: true },
-    { region: "ugx", name: "Complete Formation Edition", price: "UGX 120,000", was: "150,000", desc: "Everything in the Formation Bundle, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", href: "https://selar.com/8818840887", popular: false },
+    { region: "usd", name: "Reader Edition", price: "$12", was: "$15", full: "$15", desc: "The complete 30-day devotional. Instant digital delivery.", href: "https://payhip.com/b/CidbX", popular: false },
+    { region: "usd", name: "Formation Bundle", price: "$23", was: "$29", full: "$29", desc: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and the 30-Day Reading Plan and Challenge.", href: "https://payhip.com/b/CidbX", popular: true },
+    { region: "usd", name: "Complete Formation Edition", price: "$39", was: "$49", full: "$49", desc: "Everything in the Formation Bundle, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", href: "https://payhip.com/b/CidbX", popular: false },
+    { region: "ugx", name: "Reader Edition", price: "UGX 36,000", was: "45,000", full: "UGX 45,000", desc: "The complete 30-day devotional. Instant digital delivery.", href: "https://selar.com/8818840887", popular: false },
+    { region: "ugx", name: "Formation Bundle", price: "UGX 72,000", was: "90,000", full: "UGX 90,000", desc: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and the 30-Day Reading Plan and Challenge.", href: "https://selar.com/8818840887", popular: true },
+    { region: "ugx", name: "Complete Formation Edition", price: "UGX 120,000", was: "150,000", full: "UGX 150,000", desc: "Everything in the Formation Bundle, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", href: "https://selar.com/8818840887", popular: false },
   ],
 } as const;
 
@@ -324,7 +428,8 @@ export const WHATS_NEXT = {
   twoWaysEyebrow: "Two ways to begin.",
   twoWaysHeading: "Begin, or take with you the excerpt and preview assets.",
   twoWays: [
-    { title: "Get the book", desc: "Three editions, from $12 · UGX 36,000. Digital delivery 30 September 2026.", cta: "Choose your edition", href: "#editions", variant: "primary" },
+    // {usd} and {ugx} are filled with the launch or full "from" price (see components/site/price.tsx).
+    { title: "Get the book", desc: "Three editions, from {usd} · {ugx}. Instant digital delivery.", cta: "Choose your edition", href: "#editions", variant: "primary" },
     { title: "Read Day 1 free", desc: "The full opening day is on this page: scripture, reading, reflection, prayer, and declaration. Or get the full excerpt and all the preview materials sent to your inbox, free.", cta: "Open Day 1", href: "#day-one", variant: "ghost" },
   ],
   nextEyebrow: "What comes next.",

@@ -6,16 +6,22 @@ export const dynamic = "force-static";
 
 const SITE_URL = "https://eryezakalalu.com";
 
+/** Every real route (trailing slash, as served). Keep in step with src/app/<route>/. */
+const ROUTES: { path: string; changeFrequency: "weekly" | "monthly" | "yearly"; priority: number }[] = [
+  { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/influential-spirit/", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/podcast/", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/study/", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/books/", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/letter/", changeFrequency: "weekly", priority: 0.7 },
+  { path: "/speaking/", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/about/", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/give/", changeFrequency: "monthly", priority: 0.5 },
+  { path: "/contact/", changeFrequency: "yearly", priority: 0.4 },
+  { path: "/privacy/", changeFrequency: "yearly", priority: 0.2 },
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-  // The site is a single page with in-page sections; only the root is a real
-  // URL, so the sitemap lists it once rather than repeating fragment anchors.
-  return [
-    {
-      url: `${SITE_URL}/`,
-      lastModified,
-      changeFrequency: "weekly" as const,
-      priority: 1,
-    },
-  ];
+  return ROUTES.map((r) => ({ url: `${SITE_URL}${r.path}`, lastModified, changeFrequency: r.changeFrequency, priority: r.priority }));
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SPEAKING } from "@/lib/site-content";
+import { SPEAKING, ENDPOINTS } from "@/lib/site-content";
 
 type FieldType = "text" | "email" | "tel" | "date" | "country" | "select" | "radio" | "textarea";
 interface Field {
@@ -106,9 +106,9 @@ export default function SpeakingInviteForm() {
     e.preventDefault();
     setStatus("submitting"); setError("");
     try {
-      // In production on Cloudflare Pages, this posts to the Cloudflare Worker (NEXT_PUBLIC_SPEAKING_ENDPOINT).
-      // In the sandbox, it falls back to the local /api/speaking route.
-      const endpoint = process.env.NEXT_PUBLIC_SPEAKING_ENDPOINT || "/api/speaking";
+      // Posts to the eryeza-speaking Worker (ENDPOINTS.speaking in site-content.ts;
+      // NEXT_PUBLIC_SPEAKING_ENDPOINT overrides it at build time).
+      const endpoint = ENDPOINTS.speaking;
       const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
       const r = await res.json();
       if (res.ok && r.ok) setStatus("success");

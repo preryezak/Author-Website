@@ -1,43 +1,35 @@
-"use client";
-
-import { useState } from "react";
 import { EDITIONS, DAY1_FULL } from "@/lib/site-content";
+import { OrnamentRule } from "@/components/site/ui-bits";
+import { LaunchOnly } from "@/components/site/price";
+import EditionsTiers from "@/components/site/books-editions-tiers";
 
 /**
- * Editions, on their own route.
+ * Editions block, shared by the home page, /books and /influential-spirit so
+ * the three cannot drift.
  *
- * Same class vocabulary and same structure as the home page's #editions block,
- * so the two read as one design. The only addition is that on a standalone page
- * the region panels start open for the reader's own region when one is known;
- * both can still be collapsed.
+ * Server-rendered: only the USD / UGX region picker (EditionsTiers) is a client
+ * island. The style contract rules out three equal marketing cards, so the
+ * bundle band carries the emphasis and the tiers sit in a disclosure beneath it.
  *
- * The style contract is explicit that editions must not be three equal
- * marketing cards, so the bundle band carries the emphasis and the tiers sit
- * inside a disclosure beneath it.
+ * `heading` adds the "Choose an edition." title used on the standalone routes;
+ * the home page keeps its eyebrow-only head.
  */
-export default function BooksEditions() {
-  const [region, setRegion] = useState<"usd" | "ugx" | null>("usd");
-
-  const usd = EDITIONS.tiers.filter((t) => t.region === "usd");
-  const ugx = EDITIONS.tiers.filter((t) => t.region === "ugx");
-
-  const groups = [
-    { key: "usd" as const, label: EDITIONS.regionUSD, sub: EDITIONS.regionUSDSub, list: usd, via: "Payhip", paper: false },
-    { key: "ugx" as const, label: EDITIONS.regionUGX, sub: EDITIONS.regionUGXSub, list: ugx, via: "Selar", paper: true },
-  ];
-
+export default function BooksEditions({ heading = true }: { heading?: boolean }) {
   return (
     <section className="section surface-200" id="editions">
       <div className="container">
         <div className="text-center mx-auto" style={{ maxWidth: 640, marginBottom: 32 }}>
           <span className="eyebrow">{EDITIONS.eyebrow}</span>
-          <h2 className="display" style={{ fontSize: "clamp(30px, 3.6vw, 44px)", marginTop: 10, fontWeight: 400 }}>
-            Choose an edition.
-          </h2>
-          <div className="ornament-rule" aria-hidden="true">
-            <span>§</span>
-          </div>
-          <p className="caption" style={{ marginTop: 8 }}>{EDITIONS.note}</p>
+          {heading ? (
+            <h2 className="display" style={{ fontSize: "clamp(30px, 3.6vw, 44px)", marginTop: 10, fontWeight: 400 }}>
+              Choose an edition.
+            </h2>
+          ) : null}
+          <OrnamentRule>§</OrnamentRule>
+          <p className="caption" style={{ marginTop: 8 }}>
+            <LaunchOnly>{EDITIONS.launchLine} </LaunchOnly>
+            {EDITIONS.note}
+          </p>
         </div>
 
         <div className="bundle-band">
@@ -63,9 +55,7 @@ export default function BooksEditions() {
                 {DAY1_FULL.scripture}
                 <cite>{DAY1_FULL.scriptureRef}</cite>
               </div>
-              <div className="bundle-meta">
-                Day 1 in full, plus the 30-day reading plan inside every edition.
-              </div>
+              <div className="bundle-meta">Day 1 in full, plus the 30-day reading plan inside every edition.</div>
             </div>
           </div>
           <figure>
@@ -86,56 +76,7 @@ export default function BooksEditions() {
           </figure>
         </div>
 
-        <div className="editions-accordion">
-          {groups.map((g) => (
-            <div key={g.key}>
-              <button
-                type="button"
-                className={`editions-accordion__head ${region === g.key ? "is-open" : ""}`}
-                aria-expanded={region === g.key}
-                onClick={() => setRegion((r) => (r === g.key ? null : g.key))}
-              >
-                <span className="ea-region">{g.label}</span>
-                <span className="ea-sub">{g.sub}</span>
-                <svg
-                  className="ea-chev"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d={region === g.key ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6"} />
-                </svg>
-              </button>
-              {region === g.key && (
-                <div className="editions-accordion__panel">
-                  <div className="grid-12" style={{ gap: 24, marginTop: 20 }}>
-                    {g.list.map((t, i) => (
-                      <a
-                        className={`col-4 tier-card${g.paper ? " on-paper" : ""}`}
-                        key={`${g.key}-${i}`}
-                        href={t.href}
-                        target="_blank"
-                        rel="noopener noreferrer external"
-                      >
-                        <span className="tier-name">{t.name}</span>
-                        <div className="price">
-                          {t.price} <s>{t.was}</s>
-                        </div>
-                        <p className="tier-desc">{t.desc}</p>
-                        <span className="tier-cta">Pre-order via {g.via} →</span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <EditionsTiers />
       </div>
     </section>
   );

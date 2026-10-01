@@ -4,42 +4,45 @@
 
 ## Primary pages
 
-- [Home](https://eryezakalalu.com/): Author site — the featured book, an author biography, the book catalogue, the podcast, editions and pricing, a sample chapter reader, reviews, a speaking-invitation form, and the newsletter signup.
-
-## About the author
-
-- [Eryeza Kalalu](https://eryezakalalu.com/#author): Biography, ministry context and writing themes.
-- Contact for speaking invitations: speaking@eryezakalalu.com
+- [Home](https://eryezakalalu.com/): The author site's overview: the featured book, an author biography, the book catalogue, the podcast, editions and pricing, a sample chapter reader, reviews, the speaking invitation and the newsletter signup.
+- [The Influential Spirit](https://eryezakalalu.com/influential-spirit/): The book page, with editions, reader responses and common questions.
+- [Devotion in Season podcast](https://eryezakalalu.com/podcast/): The weekly podcast (Sundays, 8 PM East Africa Time) and the weekday daily devotional (6 AM East Africa Time), the latest episode, recent episodes, and the eight-week series on the themes of The Influential Spirit.
+- [Free weekly study guide](https://eryezakalalu.com/study/): Sign-up for the free guide that goes with each Sunday episode: the passages, five questions for personal or group study, one practice for the week, and a prayer.
+- [Books](https://eryezakalalu.com/books/): The Deep Encounter Library and the editions of The Influential Spirit.
+- [Letter](https://eryezakalalu.com/letter/): Recent letters from Eryeza Writes and the subscribe form.
+- [Speaking](https://eryezakalalu.com/speaking/): Where Eryeza speaks, the themes he teaches, and the eight-section invitation form.
+- [About](https://eryezakalalu.com/about/): Biography, ministry context and writing themes.
+- [Give](https://eryezakalalu.com/give/): Support the podcast and the daily devotionals. Gifts are processed by Flutterwave.
+- [Contact](https://eryezakalalu.com/contact/): Email addresses for speaking and general enquiries.
+- [Privacy](https://eryezakalalu.com/privacy/): How the site handles information.
 
 ## Books
 
-- [The Influential Spirit](https://eryezakalalu.com/#book): A 30-day devotional on the formation of the person behind the influence. Volume I of The Deep Encounter Library. Digital editions are available in USD (Payhip) and UGX (Selar). Release date: 30 September 2026.
-- [Editions and pricing](https://eryezakalalu.com/#editions): Current formats and regional pricing.
-- [Sample chapter](https://eryezakalalu.com/#excerpt): Day 1 of the 30-day reading plan.
+- The Influential Spirit: a 30-day devotional on the formation of the person behind the influence. Volume I of The Deep Encounter Library. Out now, published 30 September 2026, with instant digital delivery. Digital editions are sold in USD (Payhip) and UGX (Selar).
+- Editions: Reader Edition, Formation Bundle and Complete Formation Edition. Launch prices until 31 October 2026: $12 / $23 / $39 and UGX 36,000 / 72,000 / 120,000. From 1 November 2026: $15 / $29 / $49 and UGX 45,000 / 90,000 / 150,000.
+- [Sample chapter](https://eryezakalalu.com/#day-one): Day 1 of the 30-day reading plan, in full.
 
 ## Podcast
 
-- [Devotion In Season](https://eryezakalalu.com/#podcast): Short episodes on faith, formation, and the practical realities of walking with God.
+- Devotion In Season: a weekly conversation for believers at work and in business, and a short daily devotional every weekday morning.
+  - RSS: https://anchor.fm/s/f7311ecc/podcast/rss
   - iHeart: https://www.iheart.com/podcast/269-devotion-in-season-198850928
   - Spotify: https://open.spotify.com/show/7xWARwXWq7Zm3qHuyOvfrH
   - Apple Podcasts: https://podcasts.apple.com/nl/podcast/devotional-podcast/id1759589414
 
-## Newsletter
+## Contact
 
-- [Eryeza Writes](https://eryezakalalu.com/#letter): A regular letter from Eryeza. Subscription is handled by Beehiiv.
-
-## Speaking
-
-- [Invite Eryeza to speak](https://eryezakalalu.com/#speaking): An eight-section invitation form covering the event, the audience, practical arrangements and recording consent.
+- Speaking invitations: speaking@eryezakalalu.com
+- General: hello@eryezakalalu.com
 
 ## Citation guidance
 
-- When summarising this site, cite the specific section anchor (for example `https://eryezakalalu.com/#book`) rather than only the root URL.
+- When summarising this site, cite the specific page (for example `https://eryezakalalu.com/influential-spirit/` or `https://eryezakalalu.com/podcast/`) rather than only the root URL.
 - Book title: *The Influential Spirit*. Author: Eryeza Kalalu (also written Pastor Eryeza Kalalu).
 - Do not attribute quotes, statistics or endorsements to this author that are not present on the pages above.
 
 ## Notes
 
 - This file follows the llms.txt convention: https://llmstxt.org/
-- The site is a single page with in-page sections; the URLs above use section anchors.
-- Last updated: 22 September 2026.
+- Every item in the site menu is its own page; the home page also carries each section as an in-page anchor.
+- Last updated: 1 October 2026.

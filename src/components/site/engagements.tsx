@@ -1,4 +1,3 @@
-"use client";
 
 import { SPEAKING } from "@/lib/site-content";
 
@@ -15,13 +14,14 @@ import { SPEAKING } from "@/lib/site-content";
  */
 const VARIANTS = ["engagement-card--lead", "engagement-card--mid", "engagement-card--deep"] as const;
 
-export default function EngagementsGrid() {
+export default function EngagementsGrid({ headingLevel = 3 }: { headingLevel?: 3 | 4 }) {
+  const H = headingLevel === 4 ? "h4" : "h3";
   return (
     <div className="engagements-grid">
       {SPEAKING.engagements.map((e, i) => (
         <article className={`engagement-card ${VARIANTS[i % VARIANTS.length]}`} key={i}>
           <span className="engagement-card__rule" aria-hidden="true" />
-          <h3 className="engagement-card__title">{e.event}</h3>
+          <H className="engagement-card__title">{e.event}</H>
           <p className="engagement-card__note">{e.note}</p>
         </article>
       ))}

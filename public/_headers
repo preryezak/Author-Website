@@ -16,8 +16,15 @@
 # in new tabs via <a target="_blank" rel="noopener noreferrer"> - top-level
 # navigations, not resource loads, so CSP does not need to list them.
 
+# Phase 0 (1 Oct 2026):
+#  - frame-src += youtube-nocookie.com: the /podcast/ latest-episode player,
+#    loaded only when pressed (poster from i.ytimg.com is covered by img-src https:).
+#  - media-src += anchor.fm and *.cloudfront.net: RSS audio enclosures are
+#    anchor.fm URLs that 302 to CloudFront, so the in-page episode players were
+#    being blocked. The /study/ form posts same-origin (/api/study Worker route).
+
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; frame-src 'self' https://subscribe-forms.beehiiv.com https://www.iheart.com; connect-src 'self' https://eryeza-speaking.preryezakalalu.workers.dev; media-src 'self' https://*.iheart.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; frame-src 'self' https://subscribe-forms.beehiiv.com https://www.iheart.com https://www.youtube-nocookie.com; connect-src 'self' https://eryeza-speaking.preryezakalalu.workers.dev; media-src 'self' https://*.iheart.com https://anchor.fm https://*.cloudfront.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN

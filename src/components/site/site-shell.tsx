@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { NAV, SITE, PODCAST } from "@/lib/site-content";
 import GiveButton from "@/components/site/give-button";
+import CookieBanner from "@/components/site/cookie-banner";
 
 /**
  * Shared shell for the standalone route pages (/about, /books, /give ...).
@@ -22,14 +23,27 @@ export default function SiteShell({
   children: React.ReactNode;
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const mastheadRef = useRef<HTMLElement>(null);
+
+  // Masthead tint once the page scrolls; Escape and desktop width close the drawer.
+  useEffect(() => {
+    const onScroll = () => { const m = mastheadRef.current; if (m) m.classList.toggle("is-scrolled", window.scrollY > 16); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setDrawerOpen(false); };
+    const onResize = () => { if (window.innerWidth >= 1024) setDrawerOpen(false); };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("keydown", onKey); window.removeEventListener("resize", onResize); };
+  }, []);
 
   const isActive = (href: string) => href === active;
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="masthead" id="masthead">
+      <header className="masthead" id="masthead" ref={mastheadRef}>
         <div className="container row">
-          <Link className="brand" href="/" aria-label="Eryeza Kalalu, home">
+          <Link className="brand" href="/">
             <img src="/brand/logo-monogram.svg" alt="" width={40} height={40} />
             <span className="wordmark">
               <span className="name">Eryeza Kalalu</span>
@@ -38,7 +52,7 @@ export default function SiteShell({
           </Link>
           <nav aria-label="Primary">
             {NAV.map((n) => (
-              <Link key={n.href} href={n.href} aria-current={isActive(n.href) ? "page" : undefined}>
+              <Link key={n.href} href={n.href} prefetch={false} aria-current={isActive(n.href) ? "page" : undefined}>
                 {n.label}
               </Link>
             ))}
@@ -56,6 +70,7 @@ export default function SiteShell({
               onClick={() => setDrawerOpen((v) => !v)}
             >
               <svg
+                aria-hidden="true"
                 width="18"
                 height="18"
                 viewBox="0 0 24 24"
@@ -81,12 +96,13 @@ export default function SiteShell({
             </button>
           </div>
         </div>
-        <nav id="drawer" hidden={!drawerOpen} className="masthead-drawer">
+        <nav id="drawer" aria-label="Mobile" hidden={!drawerOpen} className="masthead-drawer">
           <div className="container masthead-drawer__inner">
             {NAV.map((n) => (
               <Link
                 key={n.href}
                 href={n.href}
+                prefetch={false}
                 aria-current={isActive(n.href) ? "page" : undefined}
                 onClick={() => setDrawerOpen(false)}
               >
@@ -158,6 +174,9 @@ export default function SiteShell({
                 <li>
                   <Link href="/books">The library</Link>
                 </li>
+                <li>
+                  <Link href="/study">Study guide</Link>
+                </li>
               </ul>
             </div>
             <div className="col-2">
@@ -197,6 +216,9 @@ export default function SiteShell({
                 <li>
                   <a href={`mailto:${SITE.speakingEmail}`}>{SITE.speakingEmail}</a>
                 </li>
+                <li>
+                  <Link href="/privacy">Privacy</Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -208,6 +230,7 @@ export default function SiteShell({
           </div>
         </div>
       </footer>
+      <CookieBanner />
     </div>
   );
 }

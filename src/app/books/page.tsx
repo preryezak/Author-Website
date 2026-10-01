@@ -35,7 +35,7 @@ export default function BooksPage() {
 
           <div className="grid-12" style={{ gap: 24, marginTop: 24 }}>
             {LIBRARY.books.map((b) => (
-              <BookCard book={b} key={b.title} anchorMode="route" />
+              <BookCard book={b} key={b.title} anchorMode="route" headingLevel={2} />
             ))}
           </div>
         </div>

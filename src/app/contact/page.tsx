@@ -65,8 +65,8 @@ export default function ContactPage() {
                 <div className="fact-row__item">
                   <p className="fact-row__label">Support</p>
                   <p className="fact-row__body">
-                    <GiveButton source="contact" variant="footer" />
-                    <span style={{ color: "var(--paper-100)" }} />
+                    {/* "inline" variant: the footer variant hard-codes pale text meant for the dark footer, which was near-invisible here. */}
+                    <GiveButton source="contact" variant="inline" className="text-link" />
                   </p>
                 </div>
               </div>
