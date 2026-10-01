@@ -7,8 +7,10 @@ import { LAUNCH_PRICE_ENDS, GIVING } from "@/lib/site-content";
  * Fonts: variable files (no `weight` list), so each style is ONE file covering
  * every weight. The previous fixed-weight setup shipped 22 font files and
  * preloaded them all, which competed with the hero for bandwidth on mobile.
- * Now: 5 files, and only the display face (headings, the first paint) is
- * preloaded. DM Sans is never set in italic, so its italic file is dropped.
+ * Now: 5 files and NO font preloads. Measured on PageSpeed Insights (mobile,
+ * slow 4G), preloaded fonts (122 KB) competed with the one render-blocking
+ * stylesheet; text now paints at once in a metric-matched fallback and swaps.
+ * DM Sans is never set in italic, so its italic file is dropped.
  * The unused shadcn <Toaster /> (and its JS) was removed from the layout.
  */
 const newsreader = Newsreader({
@@ -16,6 +18,7 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   style: ["normal", "italic"],
   display: "swap",
+  preload: false,
 });
 
 const sourceSerif = Source_Serif_4({

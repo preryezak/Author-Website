@@ -120,7 +120,7 @@ export default function SiteShell({
           <div className="grid-12" style={{ gap: 48 }}>
             <div className="col-5">
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <img src="/brand/logo-monogram-gold.svg" alt="EK monogram" width={40} height={40} />
+                <img src="/brand/logo-monogram-gold.svg" alt="EK monogram" width={40} height={40} loading="lazy" />
                 <div>
                   <div
                     style={{

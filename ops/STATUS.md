@@ -1,57 +1,92 @@
 # Phase 0 status
 
-Branch `launch/phase-0` · base `main` @ `619b23e` · last updated 2026-10-01 (EAT)
+Branch `launch/phase-0` · base **`abab44c`** (the live code, see below) · last updated 2026-10-02 (EAT)
 **Not live yet.** Nothing has been merged, pushed or deployed; that waits for Eryeza's go-ahead.
+
+## Read this first: the live site was not in GitHub
+
+`main` on GitHub (`619b23e`) is **not** what eryezakalalu.com serves. AutoClaw built three more commits on
+22–23 Sep and deployed them (`ccndaily-books` version `8bd8a955`, 2026-09-23 09:58 UTC) without pushing:
+`2161382` (real routes, Give button, click tracking), `f97e881` (polish pass), `abab44c` (speaking-form
+native email). Source found at `C:\Users\user\.openclaw-autoclaw\workspace\.cluster\pickup-95a292f8\Author-Website`.
+Phase 0 is built **on top of those commits**, so deploying it keeps everything live today. Merging to `main`
+will publish those three commits to GitHub for the first time.
+
+A first attempt built on `619b23e` is kept locally as branch `launch/phase-0-v1-on-619b23e` (not for use).
 
 ## Still missing
 
 ### NEEDS-OWNER (Eryeza)
-- [ ] **`KIT_API_KEY`**: Eryeza enters it himself with `npx wrangler secret put KIT_API_KEY -c worker/study.wrangler.toml`. Claude Code does not handle API keys.
-- [ ] **`KIT_FORM_ID`**: Eryeza asked for it to be created; the Kit API cannot create forms. Create it in the Kit dashboard (Grow → Landing Pages & Forms → New form, incentive email linking the week PDF), then put its id in `[vars]`.
-- [ ] **Beehiiv**: Eryeza confirmed (1 Oct) the plan includes API access, so the API path applies. Still needed: `BEEHIIV_PUB_ID` (starts `pub_`) in `[vars]`, and Eryeza runs `npx wrangler secret put BEEHIIV_API_KEY -c worker/study.wrangler.toml`.
-- [x] **Payhip / Selar URLs**: Eryeza confirmed (1 Oct) both point at the live products. Unchanged.
-- [ ] **Go-ahead** to create D1 `eryeza-study-db`, deploy `eryeza-study` (adds the route `eryezakalalu.com/api/study*`), merge to `main`, push, and deploy `ccndaily-books`.
+- [ ] **`KIT_API_KEY`**: Eryeza runs `npx wrangler secret put KIT_API_KEY -c worker/study.wrangler.toml`. Claude Code does not handle API keys.
+- [ ] **`KIT_FORM_ID`**: the Kit API cannot create forms. Create one in Kit (Grow → Landing Pages & Forms → New → Inline form; Settings → Incentive → send the week's guide link), then send the number from its URL. Until then subscribers are still created and tagged in Kit and stored in D1, but no guide email goes out.
+- [x] **Beehiiv**: plan includes API access (Eryeza, 1 Oct). `BEEHIIV_PUB_ID = pub_c9f06833-61ef-4c33-a6ef-b571a5fd3304` is set in `worker/study.wrangler.toml` (an id, not a secret).
+- [ ] **`BEEHIIV_API_KEY`**: Eryeza runs `npx wrangler secret put BEEHIIV_API_KEY -c worker/study.wrangler.toml` (Beehiiv → Settings → API). Without it, opt-ins are tagged `letter-optin` in Kit and kept in D1 for import.
+- [x] **Payhip / Selar URLs**: confirmed live (Eryeza, 1 Oct). Unchanged.
+- [ ] **Go-ahead** to: create D1 `eryeza-study-db`; deploy `eryeza-study` (adds route `eryezakalalu.com/api/study*`); merge `launch/phase-0` to `main` and push; deploy `ccndaily-books`.
+- [ ] **Privacy notice** (`PRIVACY` in `site-content.ts`) does not yet mention the study-guide sign-up (Kit, optional Beehiiv). Wording is the owner's call.
 
 ### FROM-COWORK
-- [ ] `public/study/covers/week-1.webp` (3:4 WebP). Until it exists, the card shows a forest panel with the DIS seal.
-- [ ] Week 1 guide PDF at an unguessable path, e.g. `public/study/week-1-the-reversal-7f3k.pdf`. Set `pdfPath` in `STUDY_WEEKS`. Kit's email links to it.
-- [ ] Week 1 `episodeTitle` (currently the series title "The Reversal").
-- [ ] `LATEST_EPISODE_YT_ID` after each upload. While empty, `/podcast/` shows the iHeart player.
-- [ ] `SERIES_WEEKS[].theme` lines (empty lines are not rendered).
-- [ ] Review the short UI labels Claude Code wrote (listed under Decisions) against the house rules.
+- [ ] `public/study/covers/week-1.webp` (3:4 WebP). Until it exists the card shows the DIS seal panel.
+- [ ] Week 1 guide PDF at an unguessable path, e.g. `public/study/week-1-the-reversal-7f3k.pdf`; set `pdfPath` in `STUDY_WEEKS`. Kit's email links to it.
+- [ ] Week 1 `episodeTitle` (currently the series title).
+- [ ] `LATEST_EPISODE_YT_ID` after each upload (until then `/podcast/` offers the iHeart player).
+- [ ] `SERIES_WEEKS[].theme` lines.
+- [ ] Review the UI labels Claude Code wrote (Decisions, below).
+- [ ] P1-3 copy: existing copy that breaks the house rules is listed under Decisions.
 
 ## Tasks
 
-- [x] P0-1 `/give/`: commit `8d57749`. Not live. Copy as specified; `GIVE_URL` is in `site-content.ts`; "Give" link added to the footer (Listen column). Files: `src/app/give/page.tsx`, `src/lib/site-content.ts`, `src/components/site/site-chrome.tsx`.
-- [x] P0-2 `/study/` + Worker `eryeza-study`: commit `8d57749`. Not live; **blocked** on NEEDS-OWNER (Kit key and form id, D1 creation, deploy go-ahead). Page: `src/app/study/page.tsx`, `src/components/site/study-signup.tsx`. Worker: `worker/study.ts`, `worker/study.wrangler.toml`, `worker/study-schema.sql`, `worker/README.md`. Same-origin route `eryezakalalu.com/api/study*` (and `www.`), so no CORS and no `connect-src` change. Beehiiv path: **not decided yet** (see NEEDS-OWNER). The code supports both paths.
-- [x] P0-3 `/podcast/`: commit `8d57749`. Not live. YouTube facade on `youtube-nocookie.com` (the iframe loads only on press); RSS episode list with in-page audio; `SERIES_WEEKS` run; study-guide block; platforms. Podcast is in the nav between Books and About, and every nav anchor is now `/#...` so it works from any route. Files: `src/app/podcast/page.tsx`, `src/components/site/podcast-parts.tsx`, `public/_headers`.
-- [x] P0-4 Editions: commit `8d57749`. Not live. Reader Edition, "Instant digital delivery.", "Launch price until 31 October.", library card "Out now / Volume I". The launch line, tier prices, the two-ways card and the sticky bar switch to full prices at 2026-11-01 00:00 EAT via an inline date check (`<html data-price-phase="full">`). Verified locally by forcing the phase. `grep -rniE "pre-order|30 sept" src` returns nothing.
-- [x] P0-5 Small fixes: commit `8d57749`. Not live. Sitemap (4 URLs), `llms.txt` (new routes and pricing, stale `#book` / `#excerpt` anchors fixed), per-route canonical, OG and Twitter metadata, JSON-LD `PodcastSeries.webFeed` and a `DonateAction` on the Person node, Book offers set to InStock with `priceValidUntil` 2026-10-31.
+- [x] P0-1 `/give/` — commit `9eba33c` — not live. Handoff copy exactly (`GIVING` in `site-content.ts`, `GIVE_URL` alias). The button is AutoClaw's `GiveButton`, so give clicks are still recorded. Give is in the menu, footer and contact page.
+- [x] P0-2 `/study/` + Worker `eryeza-study` — commit `9eba33c` — not live, **blocked** on Kit key/form id and deploy go-ahead. Same-origin route, so no CORS or CSP change. Beehiiv path: **API** (pub id set; key pending). Worker tested locally: origin check, honeypot, validation, 6th post in an hour blocked, D1 row written before provider calls, statuses written back.
+- [x] P0-3 `/podcast/` — commit `9eba33c` — not live. Handoff copy; latest episode loads on press (YouTube when `LATEST_EPISODE_YT_ID` is set, iHeart until then); RSS list with in-page audio; 8-week run (study link appears per week at 8 PM EAT Sunday, no rebuild); study block; platforms. **Podcast is in the menu between Books and About.**
+- [x] P0-4 Editions — commit `9eba33c` — not live. Reader Edition; "Instant digital delivery."; "Launch price until 31 October."; library card "Out now / Volume I"; "Buy via Payhip/Selar". Full prices appear automatically from 2026-11-01 00:00 EAT (inline check sets `<html data-price-phase="full">`), verified locally by forcing the phase. `grep -rniE "pre-order|30 sept" src` → nothing.
+- [x] P0-5 — commit `9eba33c` — not live. Sitemap lists all 11 routes; `llms.txt` rewritten for real routes and current pricing; canonical/OG on new routes; JSON-LD `PodcastSeries.webFeed` and `DonateAction`; Book offers `InStock` with `priceValidUntil`.
+
+### Also delivered (Eryeza's 1 Oct requests)
+- **Every menu item is its own page**: Home `/`, `/influential-spirit/`, `/speaking/`, `/letter/`, `/books/`, `/podcast/`, `/about/`, `/give/` (plus `/study/`, `/contact/`, `/privacy/`; unknown paths get a real 404). Kept AutoClaw's live URLs (`/influential-spirit/`, not `/the-influential-spirit/`) so existing links keep working.
+- **Home page performance** (target 100): see Lighthouse below.
 
 ## Phase 0 acceptance
 
-- [ ] `/give/`, `/study/`, `/podcast/` return their own pages **on the live site**. Locally (`wrangler dev` on `dist/public`) each returns its own title and canonical.
-- [ ] Study form end to end (D1 row, Kit subscriber and tags, Beehiiv path). Blocked on NEEDS-OWNER. Locally the error state was checked (no Worker behind `/api/study`).
-- [ ] No CSP errors. Locally: none on `/give/` or `/study/`. `/podcast/` and the home page had **media-src errors that are also on the live site today** (episode audio blocked); fixed, audio now loads. Re-check on live.
-- [ ] Lighthouse mobile ≥ 90 performance and ≥ 95 accessibility: see below.
+- [ ] Routes on the **live** site. Locally all 11 return their own title; `/nope/` returns 404.
+- [ ] Study form end to end on live (needs Kit key/form id).
+- [ ] No CSP errors on live. Locally none; the in-page audio CSP block that is live today is fixed.
+- [ ] Lighthouse mobile ≥ 90 / ≥ 95 on live URLs (PageSpeed Insights after deploy).
 - [x] No "Pre-order" or "30 September" in `src`.
 - [ ] Worker Version IDs: pending deploy.
 
-### Lighthouse (local, mobile emulation)
-Lighthouse numbers are not final. Local runs are inflated: Lighthouse warns this machine's CPU is slower than it expects, and the first run hit a trace error. Mobile, before the fixes below: give 62 / a11y 96, study 63 / 96, podcast 60 / 95 / best-practices 79 (iHeart third-party cookies). Fixed after that run: masthead "Pastor · Author" contrast (gold-400 3.73:1 → gold-500 5.80:1) and a logo link label mismatch. Both were live on the home page too. A same-machine baseline against the live home page is still running; re-measure on the live URLs with PageSpeed Insights after deploy. Open item on /podcast/: heading-order.
+### Lighthouse
+
+Reference, **PageSpeed Insights on the live home page today** (Google hardware, mobile, 2 Oct 02:36 EAT):
+Performance **86**, Accessibility **95**, Best Practices **92**, SEO **100**; FCP 2.6 s, LCP 3.6 s, TBT 0 ms, CLS 0.016.
+PSI's top item: render-blocking requests (est. 2.17 s).
+
+This machine's CPU benchmarks at ~600 (Lighthouse expects much faster), so local blocking-time numbers are
+inflated several-fold (the same live page scored 29–50 locally against 86 on PSI). Local runs below use
+Lighthouse's calibrated 2× CPU setting; read FCP/LCP and the non-performance categories, not TBT.
+
+New build, local, mobile, 2× (2 Oct): **home** A11y 100 · BP 100 · SEO 100 · FCP 1.5 s · LCP 1.9 s (live: 2.6 s / 3.6 s on PSI).
+All 11 pages: Accessibility 100, SEO 100; Best Practices 100 except `/letter/` (79: the Beehiiv form iframe sets
+third-party cookies; the form is that page's purpose, so it stays).
+
+What changed for speed: home rebuilt as server-rendered sections (was one 950-line client component); fonts 22 → 5
+files with no preloads; Tailwind scans only `src/app`, `src/components/site`, `src/lib` (CSS 175 KB → 97 KB);
+unused Toaster removed; iHeart player loads on press; no preconnects; cookie notice painted with the page; the
+"on air" pulse animates on the compositor. Tried and reverted: `content-visibility` (no gain, broke contrast
+measurement) and inlined CSS (doubled the HTML).
 
 ## Decisions made by Claude Code
 
-- **Same-origin `/api/study` via a Worker route** on `eryeza-study`, not a change to `ccndaily-books`. Cloudflare runs route Workers before custom-domain Workers, so the live site Worker stays assets-only.
-- **Masthead, footer and episode list extracted** to `src/components/site/site-chrome.tsx`, so `/give/`, `/study/` and `/podcast/` share them with the home page.
-- **`/#privacy` opens the privacy modal.** There was no privacy section, and the cookie-banner link pointed nowhere. The footer, the cookie banner and the `/study/` privacy line all use it.
-- **CSP `media-src` += `https://anchor.fm https://*.cloudfront.net`.** RSS enclosures 302 from anchor.fm to CloudFront, and the live site was blocking every in-page player.
-- **YouTube as a click-to-load facade** (poster from `i.ytimg.com`, already covered by `img-src https:`), to keep mobile performance above 90.
-- **Gutters stay at the site's existing 24 px** on mobile (wider than the 16 px minimum), for consistency with the home page.
-- **Study week and series "released" state are re-checked in the browser**, so week links appear at 8 PM EAT on each Sunday without a rebuild, provided the `STUDY_WEEKS` entry was in the last build.
-- **Kit tags `week-N` are find-or-create by name** (Kit v4 returns the existing tag). `KIT_TAG_STUDY` and `KIT_TAG_LETTER` are optional overrides.
-- **Worker answers `{ ok: true }` once the D1 row is stored** and finishes the Kit and Beehiiv calls in `waitUntil`, so a slow provider never stalls the reader. Statuses are written back to the row.
-- **Rate limit counts per salted IP hash** (`study_rate` table); raw IPs are never stored.
-- **Commits:** one commit covers all of P0-1 to P0-5 because the tasks share `site-content.ts`, `globals.css` and `layout.tsx`.
-- **UI labels written by Claude Code** (not in the handoff; please review): footer "Study guide" and "Give"; study form error "That did not go through. Please try again in a moment." and the validation messages in `worker/study.ts`; study success card CTA "Get the book"; `/podcast/` headings "The current series", "The Influential Spirit, in eight weeks", "This week's study guide", button "Get the free guide", chip "Latest episode", link "Study guide for week N"; editions CTAs "Buy via Payhip →" and "Buy via Selar →"; sticky bar eyebrow "Out now"; Day 1 reader CTA "Get the book".
-- **Existing home-page copy left as is** although it breaks house rules (weekday-as-work "Monday" in `THIRTY_DAYS`, `THE_DAYS`, `FAQ` and `SPEAKING.howParas`; "Sit with" in `THIRTY_DAYS.eyebrow`; figurative "carry" in `SPEAKING.howParas`). This is P1-3, where Cowork supplies the replacement diff.
+- **Built on AutoClaw's unpushed live commits** rather than `619b23e`, so the deploy cannot roll back live features.
+- **Kept `/influential-spirit/`** (live URL) instead of P1-1's `/the-influential-spirit/`.
+- **Same-origin `/api/study` via a Worker route** on `eryeza-study`; `ccndaily-books` stays assets-only.
+- **Worker URLs as code defaults** (`ENDPOINTS` in `site-content.ts`); the live build had them only from the shell, so a plain rebuild would have broken the speaking form and give tracking.
+- **`/privacy/` is a real page**; the cookie notice (now on every page) links to it.
+- **CSP**: `media-src` += `https://anchor.fm https://*.cloudfront.net` (episode audio was blocked live); `frame-src` += `https://www.youtube-nocookie.com`; `connect-src` keeps the speaking Worker.
+- **Kit tags `week-N`** are find-or-create by name; the Worker replies once the D1 row is stored and finishes Kit/Beehiiv in `waitUntil`; rate limit uses a salted IP hash.
+- **Kit for the guide, Beehiiv only for opt-ins.** Beehiiv can deliver files (lead-magnet automation), but everyone it delivers to becomes a subscriber of the letter; using it for the guide would break the unticked opt-in.
+- **Live bugs fixed on the way**: `/influential-spirit/` buttons linked to `/editions` and `/thirtydays` (404s); doubled title on that page; contrast failures (masthead role 3.73:1, episode dates 4.49:1, fact-row labels 2.53:1); logo link name mismatch; pale Give link on `/contact/`; heading order on `/books/` and `/podcast/`.
+- **House-rule copy fixes on AutoClaw text**: removed "uncomfortable" and "quietly" from the `/influential-spirit/` intro; the old `/give/` copy (with "quietly") is replaced by the handoff copy.
+- **Gutters stay at the site's 24 px** on mobile.
+- **UI labels written by Claude Code** (please review): footer "Study guide", "Privacy"; `/study/` error "That did not go through. Please try again in a moment." and the Worker's validation messages; success CTA "Get the book"; `/podcast/` "The current series", "The Influential Spirit, in eight weeks", "This week's study guide", "Get the free guide", "Latest episode", "Study guide for week N"; player button "Load the player" / "Plays the latest episode here, via iHeart"; "Buy via Payhip/Selar →"; sticky bar "Out now"; Day 1 CTA "Get the book".
+- **Existing copy left for P1-3** although it breaks house rules: weekday-as-work "Monday" (`THIRTY_DAYS`, `THE_DAYS`, `FAQ`, `SPEAKING.howParas`); "Sit with" (`THIRTY_DAYS.eyebrow`); figurative "carry" (`SPEAKING.howParas`); fragment "No schedule, no noise." (`/letter/`).
