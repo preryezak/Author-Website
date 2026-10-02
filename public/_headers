@@ -56,3 +56,14 @@
 
 /sitemap.xml
   Cache-Control: public, max-age=3600
+
+# Study Library and guide PDFs: unlisted (reached from the Kit confirmation
+# email). Replace the site-wide index header rather than joining it.
+/resources/library/*
+  ! X-Robots-Tag
+  X-Robots-Tag: noindex, nofollow
+
+/resources/guides/*
+  ! X-Robots-Tag
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: public, max-age=3600

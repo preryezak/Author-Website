@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import SiteShell from "@/components/site/site-shell";
 import EpisodeList from "@/components/site/episode-list";
 import { YouTubeFacade, SeriesRun } from "@/components/site/podcast-parts";
 import { IheartPlayer } from "@/components/site/home-islands";
 import { OrnamentRule, PlatformGrid, ArrowRight } from "@/components/site/ui-bits";
 import { getEpisodes } from "@/lib/rss";
-import { PODCAST, PODCAST_PAGE, LATEST_EPISODE_YT_ID, STUDY, currentStudyWeek } from "@/lib/site-content";
+import { PODCAST, PODCAST_PAGE, LATEST_EPISODE_YT_ID, STUDY, CURRENT_THEME, currentEpisode, guidePath } from "@/lib/site-content";
 
 /**
  * /podcast/ (handoff P0-3), on the forest Devotion in Season surface.
@@ -36,7 +38,9 @@ export const metadata: Metadata = {
 
 export default async function PodcastPage() {
   const episodes = await getEpisodes(30);
-  const studyWeek = currentStudyWeek();
+  const latest = currentEpisode();
+  // Episodes whose guide PDF is in public/ (checked at build time).
+  const guides = CURRENT_THEME.episodes.filter((ep) => existsSync(join(process.cwd(), "public", guidePath(CURRENT_THEME, ep)))).map((ep) => ep.n);
   return (
     <SiteShell active="/podcast">
       <section className="dis-strip">
@@ -71,19 +75,19 @@ export default async function PodcastPage() {
           {/* Series run */}
           <div className="mt-12">
             <OrnamentRule>§</OrnamentRule>
-            <span className="dis-eb">The current series</span>
-            <h2 className="display" style={{ fontSize: "clamp(28px, 3.4vw, 40px)", fontWeight: 500, color: "var(--paper-50)", marginTop: 8, marginBottom: 24 }}>The Influential Spirit, in eight weeks</h2>
-            <SeriesRun buildTime={Date.now()} />
+            <span className="dis-eb">The current theme</span>
+            <h2 className="display" style={{ fontSize: "clamp(28px, 3.4vw, 40px)", fontWeight: 500, color: "var(--paper-50)", marginTop: 8, marginBottom: 24 }}>{CURRENT_THEME.title}</h2>
+            <SeriesRun buildTime={Date.now()} guides={guides} />
           </div>
 
-          {/* This week's study guide */}
+          {/* Study guides */}
           <div className="mt-12 podcast-study">
             <div>
               <span className="dis-eb">{STUDY.eyebrow}</span>
-              <h2 className="display" style={{ fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 500, color: "var(--paper-50)", marginTop: 8 }}>This week&apos;s study guide</h2>
-              <p className="dis-lede" style={{ marginTop: 8 }}>Week {studyWeek.week}: {studyWeek.title}</p>
+              <h2 className="display" style={{ fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 500, color: "var(--paper-50)", marginTop: 8 }}>A study guide for every episode</h2>
+              <p className="dis-lede" style={{ marginTop: 8 }}>Latest: {CURRENT_THEME.title}, episode {latest.n}, {latest.title}</p>
             </div>
-            <a className="dis-cta" href="/resources">Get the free guide<ArrowRight /></a>
+            <a className="dis-cta" href="/resources/">Get the free guides<ArrowRight /></a>
           </div>
 
           {/* Listen on */}

@@ -85,53 +85,97 @@ export const NAV = [
 ] as const;
 
 /**
- * Release moments are 8 PM EAT (17:00 UTC) on the Sunday each episode airs.
- * Dates are full ISO timestamps so "has this week been released?" is exact.
+ * Study guides, organised the way the podcast runs: by theme (a series of
+ * Sunday episodes), each episode numbered within its theme.
+ *
+ * Adding a guide (the only weekly step): save the PDF as
+ *   public/resources/guides/<theme slug>/<NN>-<episode slug>.pdf
+ * e.g. public/resources/guides/the-witness-test/01-the-reversal.pdf, then
+ * build and deploy. `guidePath()` derives that path from the data below and
+ * the pages check the file exists at build time, so nothing else is edited.
+ * Guides are never removed: old videos keep linking to the library, and every
+ * guide stays there. A guide shows from its episode's air time (8 PM EAT).
+ *
+ * A new theme: add an entry at the END of STUDY_THEMES (the last one is the
+ * current theme) with its episode titles and Sunday dates.
  */
-export type StudyWeek = {
-  week: number;
+export type StudyEpisode = {
+  /** Episode number within the theme: 1, 2, 3 ... (files use 01, 02, 03). */
+  n: number;
   title: string;
-  episodeTitle: string;
-  releaseDate: string;
-  /** Public path of the guide PDF (unguessable name). Empty until supplied. FROM-COWORK. */
-  pdfPath: string;
-  /** Public path of the guide cover (WebP, 3:4). FROM-COWORK. The page shows a seal panel until the file exists. */
-  cover: string;
+  /** Sunday the episode airs (YYYY-MM-DD); it airs and its guide opens at 8 PM EAT. */
+  sunday: string;
+  /** One-line summary under the title on /podcast/. FROM-COWORK; empty lines are not rendered. */
+  line: string;
 };
+export type StudyTheme = { slug: string; title: string; episodes: StudyEpisode[] };
 
-/**
- * One entry per released (or about-to-release) study guide. Cowork adds an
- * entry per week. The /resources/ card shows the latest entry whose releaseDate has
- * passed, falling back to week 1.
- */
-export const STUDY_WEEKS: StudyWeek[] = [
+export const STUDY_THEMES: StudyTheme[] = [
   {
-    week: 1,
-    title: "The Reversal",
-    // FROM-COWORK: episode title for week 1. Using the series title until supplied.
-    episodeTitle: "The Reversal",
-    releaseDate: "2026-10-04T20:00:00+03:00",
-    // FROM-COWORK: e.g. "/resources/week-1-the-reversal-7f3k.pdf" (file in public/resources/)
-    pdfPath: "",
-    cover: "/resources/covers/week-1.webp",
+    slug: "the-witness-test",
+    title: "The Witness Test",
+    episodes: [
+      { n: 1, sunday: "2026-10-04", title: "The Reversal", line: "" },
+      { n: 2, sunday: "2026-10-11", title: "Pressure and Shortcuts", line: "" },
+      { n: 3, sunday: "2026-10-18", title: "Your Work Is the Sermon", line: "" },
+      { n: 4, sunday: "2026-10-25", title: "Would Outsiders Vouch for You?", line: "" },
+      { n: 5, sunday: "2026-11-01", title: "Visibility Is Not Credibility", line: "" },
+      { n: 6, sunday: "2026-11-08", title: "The Message and the Messenger", line: "" },
+      { n: 7, sunday: "2026-11-15", title: "The Grace That Doesn't Excuse", line: "" },
+      { n: 8, sunday: "2026-11-22", title: "Restoration Without Amnesia", line: "" },
+    ],
   },
 ];
 
+/** The theme now running (the last entry). */
+export const CURRENT_THEME = STUDY_THEMES[STUDY_THEMES.length - 1];
+
+/** The one general cover used for every guide (1200 x 1600, 3:4). The page shows a seal panel until it exists. */
+export const STUDY_COVER = "/resources/cover.webp";
+
+/** The library every confirmed subscriber lands on (Kit's redirect after confirming). */
+export const STUDY_LIBRARY = "/resources/library/";
+
+/** 8 PM EAT on the episode's Sunday, in ms. */
+export function airsAt(ep: StudyEpisode): number {
+  return Date.parse(`${ep.sunday}T20:00:00+03:00`);
+}
+
+/** "the-reversal" from "The Reversal"; "would-outsiders-vouch-for-you" from "Would Outsiders Vouch for You?". */
+export function slugify(title: string): string {
+  return title.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+/** Public path of an episode's guide PDF. */
+export function guidePath(theme: StudyTheme, ep: StudyEpisode): string {
+  return `/resources/guides/${theme.slug}/${String(ep.n).padStart(2, "0")}-${slugify(ep.title)}.pdf`;
+}
+
+/** Latest episode of the current theme that has aired by `now` (falls back to its first episode). */
+export function currentEpisode(now: Date = new Date()): StudyEpisode {
+  const aired = CURRENT_THEME.episodes.filter((e) => airsAt(e) <= now.getTime());
+  return aired.length ? aired[aired.length - 1] : CURRENT_THEME.episodes[0];
+}
+
 /** === /resources/ (handoff P0-2 study page; renamed at Eryeza's request 2 Oct 2026; /study redirects here) === */
 export const STUDY = {
-  eyebrow: "Free weekly study guide",
-  heading: "Take this week's episode deeper",
-  lede: "Each Sunday's episode of Devotion in Season comes with a short guide: the passages, five questions for personal or group study, one practice for the week, and a prayer. Free, every week of the series.",
-  thisWeekLabel: "This week",
+  eyebrow: "Free study guides",
+  heading: "Take each episode deeper",
+  lede: "Every Sunday episode of Devotion in Season comes with a short study guide: the passages, five questions for personal or group study, one practice, and a prayer. Sign up once and every guide is yours, including those for episodes you come back to later.",
+  latestLabel: "Latest episode",
   firstNameLabel: "First name",
   emailLabel: "Email",
   letterOptIn: "Also send me Eryeza's letter: personal updates and new writing.",
   submit: "Send me the guide",
-  success: "Check your inbox and tap Confirm. This week's guide opens right after.",
+  success: "Check your inbox and tap the button in the email. The study guides open right after.",
   bookLine: "The whole argument of this series is in The Influential Spirit.",
   bookHref: "/#editions",
-  privacy: "One email a week with the guide. Unsubscribe any time.",
+  privacy: "An email when each new guide is out. Unsubscribe any time.",
   privacyHref: "/privacy",
+  // /resources/library/ (reached from Kit's confirmation email)
+  libraryHeading: "Study Library",
+  libraryLede: "Every guide, newest first. Keep this page; the guide for any episode, past or present, is always here.",
+  libraryEmpty: "The first guide opens when its episode airs, Sunday at 8 PM East Africa Time. Come back then.",
 } as const;
 
 /** === /podcast/ (handoff P0-3 copy) === */
@@ -145,24 +189,6 @@ export const PODCAST_PAGE = {
  * While empty, /podcast/ shows a link to the latest episode on iHeart instead.
  */
 export const LATEST_EPISODE_YT_ID = "";
-
-/** The eight-week series. `theme` is FROM-COWORK (empty lines are not rendered). */
-export const SERIES_WEEKS = [
-  { week: 1, sunday: "2026-10-04", title: "The Reversal", theme: "" },
-  { week: 2, sunday: "2026-10-11", title: "Pressure and Shortcuts", theme: "" },
-  { week: 3, sunday: "2026-10-18", title: "Your Work Is the Sermon", theme: "" },
-  { week: 4, sunday: "2026-10-25", title: "Would Outsiders Vouch for You?", theme: "" },
-  { week: 5, sunday: "2026-11-01", title: "Visibility Is Not Credibility", theme: "" },
-  { week: 6, sunday: "2026-11-08", title: "The Message and the Messenger", theme: "" },
-  { week: 7, sunday: "2026-11-15", title: "The Grace That Doesn't Excuse", theme: "" },
-  { week: 8, sunday: "2026-11-22", title: "Restoration Without Amnesia", theme: "" },
-] as const;
-
-/** Latest study week released by `now` (falls back to week 1). */
-export function currentStudyWeek(now: Date = new Date()): StudyWeek {
-  const released = STUDY_WEEKS.filter((w) => Date.parse(w.releaseDate) <= now.getTime());
-  return released.length ? released[released.length - 1] : STUDY_WEEKS[0];
-}
 
 /**
  * Launch pricing ends at 2026-11-01 00:00 EAT (= 2026-10-31 21:00 UTC). Both

@@ -6,13 +6,13 @@
  *    youtube-nocookie.com iframe only when pressed, so the ~1 MB YouTube
  *    player never loads for visitors who do not watch (keeps Lighthouse
  *    performance up). No library.
- *  - SeriesRun: the eight-week list. Which weeks are released (and so get a
+ *  - SeriesRun: the current theme's episodes. Which have aired (and so get a
  *    study-guide link) is re-checked in the browser, so it advances on each
  *    Sunday without a rebuild.
  */
 
 import { useEffect, useState } from "react";
-import { SERIES_WEEKS, STUDY_WEEKS } from "@/lib/site-content";
+import { CURRENT_THEME, airsAt } from "@/lib/site-content";
 
 export function YouTubeFacade({ id, title }: { id: string; title: string }) {
   const [playing, setPlaying] = useState(false);
@@ -38,30 +38,28 @@ export function YouTubeFacade({ id, title }: { id: string; title: string }) {
   );
 }
 
-/** Sunday 8 PM EAT for a YYYY-MM-DD date. */
-function airsAt(sunday: string) { return Date.parse(`${sunday}T20:00:00+03:00`); }
-
 function fmtSunday(sunday: string) {
   const d = new Date(`${sunday}T12:00:00+03:00`);
   return d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Kampala" });
 }
 
-export function SeriesRun({ buildTime }: { buildTime: number }) {
+/** `guides`: episode numbers whose guide PDF exists (checked at build time by the page). */
+export function SeriesRun({ buildTime, guides }: { buildTime: number; guides: number[] }) {
   const [now, setNow] = useState(buildTime);
   useEffect(() => { setNow(Date.now()); }, []);
   return (
     <ol className="series-run">
-      {SERIES_WEEKS.map((w) => {
-        const aired = airsAt(w.sunday) <= now;
-        const guide = STUDY_WEEKS.find((s) => s.week === w.week && Date.parse(s.releaseDate) <= now);
+      {CURRENT_THEME.episodes.map((ep) => {
+        const aired = airsAt(ep) <= now;
+        const guide = aired && guides.includes(ep.n);
         return (
-          <li key={w.week} className={aired ? "is-aired" : undefined}>
-            <span className="series-run__num" aria-hidden="true">{w.week}</span>
+          <li key={ep.n} className={aired ? "is-aired" : undefined}>
+            <span className="series-run__num" aria-hidden="true">{ep.n}</span>
             <div style={{ minWidth: 0 }}>
-              <div className="series-run__meta">Week {w.week} · <time dateTime={w.sunday}>{fmtSunday(w.sunday)}</time></div>
-              <h3 className="series-run__title">{w.title}</h3>
-              {w.theme ? <p className="series-run__theme">{w.theme}</p> : null}
-              {guide ? <a className="series-run__guide" href="/resources">Study guide for week {w.week}</a> : null}
+              <div className="series-run__meta">Episode {ep.n} · <time dateTime={ep.sunday}>{fmtSunday(ep.sunday)}</time></div>
+              <h3 className="series-run__title">{ep.title}</h3>
+              {ep.line ? <p className="series-run__theme">{ep.line}</p> : null}
+              {guide ? <a className="series-run__guide" href="/resources/">Study guide for episode {ep.n}</a> : null}
             </div>
           </li>
         );

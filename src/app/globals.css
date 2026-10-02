@@ -2488,6 +2488,17 @@ html[data-price-phase="full"] .price-full { display: inline; }
 .study-check input:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 .study-error { font-family: var(--font-serif); font-size: 15px; color: var(--oxblood-500); margin: 16px 0 0; }
 .study-privacy { margin-top: 16px; }
+/* /resources/library/: every guide, newest theme and episode first */
+.study-library { display: grid; gap: 48px; }
+.study-library__theme { font-size: clamp(26px, 3vw, 34px); font-weight: 500; letter-spacing: -0.01em; margin: 0 0 8px; }
+.study-library__list { list-style: none; padding: 0; margin: 0; border-top: 3px solid var(--forest-400); }
+.study-library__list li { display: grid; grid-template-columns: 44px 1fr; gap: 8px 16px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); }
+@media (min-width: 640px) { .study-library__list li { grid-template-columns: 56px 1fr auto; } }
+.study-library__num { font-family: var(--font-display); font-style: italic; font-size: 30px; line-height: 1; color: var(--oxblood-400); }
+.study-library__meta { font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-500); margin-bottom: 4px; }
+.study-library__title { font-family: var(--font-display); font-size: 20px; font-weight: 500; margin: 0; text-wrap: balance; }
+.study-library__open { grid-column: 2; justify-self: start; }
+@media (min-width: 640px) { .study-library__open { grid-column: auto; } }
 .study-privacy a { color: var(--ink-500); text-decoration: underline; text-decoration-color: var(--gold-300); text-underline-offset: 3px; }
 .study-success { font-size: clamp(24px, 2.6vw, 30px); font-weight: 400; line-height: 1.25; margin: 0 0 24px; color: var(--ink-700); }
 .study-book { display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center; background: var(--ink-700); color: var(--paper-100); padding: 16px; text-decoration: none; border: 1px solid rgba(184, 146, 90, 0.35); transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1); }

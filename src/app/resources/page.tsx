@@ -3,11 +3,11 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import SiteShell from "@/components/site/site-shell";
 import StudySignup from "@/components/site/study-signup";
-import { STUDY, STUDY_WEEKS, currentStudyWeek } from "@/lib/site-content";
+import { STUDY, STUDY_COVER, CURRENT_THEME, currentEpisode } from "@/lib/site-content";
 
 export const dynamic = "force-static";
 
-const TITLE = "Free weekly study guide";
+const TITLE = "Free study guides";
 const DESCRIPTION = STUDY.lede;
 
 export const metadata: Metadata = {
@@ -25,9 +25,8 @@ export const metadata: Metadata = {
 };
 
 export default function StudyPage() {
-  // Which guide covers actually exist in public/ (FROM-COWORK). Missing ones
-  // render a seal panel instead of a broken image.
-  const coversPresent = STUDY_WEEKS.map((w) => w.cover).filter((c) => c && existsSync(join(process.cwd(), "public", c)));
+  // The general guide cover (FROM-COWORK). Until it exists the card shows a seal panel.
+  const hasCover = existsSync(join(process.cwd(), "public", STUDY_COVER));
   return (
     <SiteShell active="/resources">
       <section className="section surface-100 loose">
@@ -38,7 +37,7 @@ export default function StudyPage() {
             <p className="body body-lg" style={{ marginTop: 20, maxWidth: "60ch" }}>{STUDY.lede}</p>
           </div>
           <div style={{ marginTop: 48 }}>
-            <StudySignup initialWeek={currentStudyWeek()} coversPresent={coversPresent} />
+            <StudySignup themeTitle={CURRENT_THEME.title} initialEpisode={currentEpisode()} hasCover={hasCover} />
           </div>
         </div>
       </section>
