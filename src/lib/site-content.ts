@@ -90,7 +90,7 @@ export const NAV = [
  *
  * Adding a guide (the only weekly step): save the PDF as
  *   public/resources/guides/<theme slug>/<NN>-<episode slug>.pdf
- * e.g. public/resources/guides/the-witness-test/01-the-reversal.pdf, then
+ * e.g. public/resources/guides/the-witness-test/01-integrity-at-work.pdf, then
  * build and deploy. `guidePath()` derives that path from the data below and
  * the pages check the file exists at build time, so nothing else is edited.
  * Guides are never removed: old videos keep linking to the library, and every
@@ -115,10 +115,10 @@ export const STUDY_THEMES: StudyTheme[] = [
     slug: "the-witness-test",
     title: "The Witness Test",
     episodes: [
-      { n: 1, sunday: "2026-10-04", title: "The Reversal", line: "" },
-      { n: 2, sunday: "2026-10-11", title: "Pressure and Shortcuts", line: "" },
-      { n: 3, sunday: "2026-10-18", title: "Your Work Is the Sermon", line: "" },
-      { n: 4, sunday: "2026-10-25", title: "Would Outsiders Vouch for You?", line: "" },
+      { n: 1, sunday: "2026-10-04", title: "Integrity at Work", line: "When the world keeps a standard the church dropped" },
+      { n: 2, sunday: "2026-10-11", title: "Pressure at Work", line: "How to handle pressure without compromising your faith" },
+      { n: 3, sunday: "2026-10-18", title: "Your Work Is the Sermon", line: "How to glorify God at an ordinary job" },
+      { n: 4, sunday: "2026-10-25", title: "Would Outsiders Vouch for You?", line: "Running a Christian business with a good name" },
       { n: 5, sunday: "2026-11-01", title: "Visibility Is Not Credibility", line: "" },
       { n: 6, sunday: "2026-11-08", title: "The Message and the Messenger", line: "" },
       { n: 7, sunday: "2026-11-15", title: "The Grace That Doesn't Excuse", line: "" },
@@ -141,7 +141,7 @@ export function airsAt(ep: StudyEpisode): number {
   return Date.parse(`${ep.sunday}T20:00:00+03:00`);
 }
 
-/** "the-reversal" from "The Reversal"; "would-outsiders-vouch-for-you" from "Would Outsiders Vouch for You?". */
+/** "integrity-at-work" from "Integrity at Work"; "would-outsiders-vouch-for-you" from "Would Outsiders Vouch for You?". */
 export function slugify(title: string): string {
   return title.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }

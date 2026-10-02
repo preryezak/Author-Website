@@ -1,6 +1,6 @@
 # Phase 0 status
 
-Branch `launch/phase-0` · base **`abab44c`** (the live code, see below) · last updated 2026-10-02 (EAT)
+Branch `launch/phase-0` · base **`abab44c`** (the live code, see below) · last updated 2026-10-02 15:30 (EAT)
 **Not live yet.** Nothing has been merged, pushed or deployed; that waits for Eryeza's go-ahead.
 
 ## Where we are (2 Oct 2026, 11:30 EAT) — study guides
@@ -10,7 +10,7 @@ opt-in). Kit form **9991957**; its confirmation email is the delivery email; aft
 redirects to the unlisted **Study Library** `/resources/library/` (set by Eryeza). Guides are
 organised by **theme** (e.g. The Witness Test, 8 Sunday episodes) and **episode number within the
 theme**, saved as `public/resources/guides/<theme-slug>/<NN>-<episode-slug>.pdf`
-(e.g. `the-witness-test/01-the-reversal.pdf`), never removed. One general cover at
+(e.g. `the-witness-test/01-integrity-at-work.pdf`), never removed. One general cover at
 `public/resources/cover.webp` (1200x1600). Commits `70468fb`, `6ad20ab`, `79db2d0`.
 
 **Done:** `BEEHIIV_API_KEY` secret on `eryeza-study` (terminal showed one `*`; confirm in the live test).
@@ -19,7 +19,9 @@ Library page, theme/episode data, week wording removed, noindex on library + PDF
 **Still needed from Eryeza**
 - [ ] Kit confirmation email pasted (Settings → Confirmation email → Edit Email Contents), button label changed, Save & Publish.
 - [ ] General cover image (1200 x 1600).
-- [ ] Episode 1 guide PDF (The Witness Test · 01 · The Reversal; airs Sun 4 Oct, 8 PM EAT).
+- [x] Guides for episodes 1–4 (month 1) added 2 Oct from Eryeza's PDFs. Episode 1 and 2 titles changed to match the guides: "Integrity at Work" (was "The Reversal") and "Pressure at Work" (was "Pressure and Shortcuts"); the guides' subtitles are now the one-line summaries on /podcast/. Each guide appears in the library at 8 PM EAT on its Sunday (4, 11, 18, 25 Oct).
+- [ ] Guides for episodes 5–8 (month 2), saved as `05-visibility-is-not-credibility.pdf` … `08-restoration-without-amnesia.pdf`, or new titles if they change.
+- Note: the guides print "eryezakalalu.com/study"; that address redirects (301) to /resources/, so it works.
 - [ ] Go-ahead to go live (create D1, deploy `eryeza-study`, merge + push, deploy site).
 
 ## Read this first: the live site was not in GitHub
@@ -46,11 +48,9 @@ A first attempt built on `619b23e` is kept locally as branch `launch/phase-0-v1-
 - [x] **`/study` renamed `/resources`** at Eryeza's request (2 Oct), with a menu item between Podcast and About. `/study`, `/study/` and `/study/*` redirect (301) to `/resources/`, so links that already say eryezakalalu.com/study keep working. Cowork: use eryezakalalu.com/resources in new copy (the house rules section 6 still says /study).
 
 ### FROM-COWORK
-- [ ] `public/resources/covers/week-1.webp` (3:4 WebP). Until it exists the card shows the DIS seal panel.
-- [ ] Week 1 guide PDF at an unguessable path, e.g. `public/resources/week-1-the-reversal-7f3k.pdf`; set `pdfPath` in `STUDY_WEEKS`. The Kit form's confirmation email links to it (update that link each Sunday).
-- [ ] Week 1 `episodeTitle` (currently the series title).
+- [ ] General cover `public/resources/cover.webp` (1200x1600). Until it exists the card shows the DIS seal panel.
 - [ ] `LATEST_EPISODE_YT_ID` after each upload (until then `/podcast/` offers the iHeart player).
-- [ ] `SERIES_WEEKS[].theme` lines.
+- [x] One-line summaries for episodes 1–4 (from the guides); 5–8 still empty.
 - [ ] Review the UI labels Claude Code wrote (Decisions, below).
 - [ ] P1-3 copy: existing copy that breaks the house rules is listed under Decisions.
 
