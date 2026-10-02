@@ -9,13 +9,12 @@
  *   1. reject if the honeypot `website` is filled, the Origin is not allowed,
  *      the email is malformed, or the IP has posted more than 5 times this hour
  *   2. store the submission in D1 (`study_signups`) BEFORE any API call
- *   3. The guide. Preferred (Eryeza's choice, 2 Oct 2026): a separate Beehiiv
- *      publication for the study guide (BEEHIIV_STUDY_PUB_ID). The Worker
- *      subscribes the reader there; that publication's welcome email carries
- *      this week's guide, and weekly guides go out as posts to it. It is a
- *      different publication from the letter, so guide-only readers never get
- *      the letter. Fallback (only if BEEHIIV_STUDY_PUB_ID is empty): Kit, via
- *      the API (KIT_API_KEY) or the form's public subscribe address.
+ *   3. The guide. Kit (Eryeza's choice, 2 Oct 2026): on Kit's free plan the
+ *      Worker posts to the form's public subscribe address (KIT_FORM_ID); the
+ *      form's confirmation email carries this week's guide. With KIT_API_KEY
+ *      (paid Kit) it uses the v4 API instead. Optional, paid Beehiiv only: a
+ *      separate study-guide publication (BEEHIIV_STUDY_PUB_ID) replaces Kit
+ *      when set; Beehiiv's free plan allows one publication, so it stays empty.
  *   4. The letter (only when the reader ticked the box, and BEEHIIV_API_KEY +
  *      BEEHIIV_PUB_ID are set): subscribe them to Eryeza Writes.
  *   5. record guideStatus / beehiivStatus on the D1 row

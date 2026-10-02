@@ -17,9 +17,9 @@ routes = [
 
 [vars]
 ALLOWED_ORIGIN = "https://eryezakalalu.com,https://www.eryezakalalu.com"
-# Fallback only (not used once BEEHIIV_STUDY_PUB_ID is set): a Kit form whose
-# confirmation email delivers the guide. Kit free plan has no API, so the Worker
-# would submit to the form's public subscribe address.
+# The guide: a Kit form whose confirmation email delivers it. Kit free plan has
+# no API, so the Worker submits to the form's public subscribe address.
+# NEEDS-OWNER: the number from the form's address in Kit.
 KIT_FORM_ID = ""
 # Only used on a paid Kit plan with KIT_API_KEY set: optional tag ids. Left
 # empty, the Worker finds-or-creates "study-guide" / "letter-optin" / "week-N".
@@ -28,8 +28,8 @@ KIT_TAG_LETTER = ""
 # Beehiiv (free Launch plan; API included once Stripe identity verification is done).
 # Eryeza Writes, the letter (supplied by Eryeza 1 Oct 2026). Not a secret.
 BEEHIIV_PUB_ID = "pub_c9f06833-61ef-4c33-a6ef-b571a5fd3304"
-# NEEDS-OWNER: the separate Study Guide publication (starts pub_). Its welcome
-# email carries this week's guide. While empty, the Kit fallback (KIT_FORM_ID above) is used.
+# Optional, paid Beehiiv only (free plan = one publication): a separate Study
+# Guide publication that would replace Kit. Leave empty; Kit (above) is used.
 BEEHIIV_STUDY_PUB_ID = ""
 
 # Secrets (never committed):
