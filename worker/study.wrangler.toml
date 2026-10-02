@@ -17,10 +17,12 @@ routes = [
 
 [vars]
 ALLOWED_ORIGIN = "https://eryezakalalu.com,https://www.eryezakalalu.com"
-# NEEDS-OWNER: the Kit form whose incentive email / automation delivers the guide.
+# NEEDS-OWNER: the Kit form whose confirmation (incentive) email delivers the
+# guide. Kit is on the FREE plan (Eryeza, 2 Oct 2026), which has no API, so the
+# Worker submits to this form's public subscribe address (no key needed).
 KIT_FORM_ID = ""
-# Optional tag ids. Left empty, the Worker finds-or-creates the tags
-# "study-guide" and "letter-optin" by name (and always "week-N" by name).
+# Only used on a paid Kit plan with KIT_API_KEY set: optional tag ids. Left
+# empty, the Worker finds-or-creates "study-guide" / "letter-optin" / "week-N".
 KIT_TAG_STUDY = ""
 KIT_TAG_LETTER = ""
 # Beehiiv publication id (supplied by Eryeza 1 Oct 2026; plan includes API access).
@@ -28,8 +30,8 @@ KIT_TAG_LETTER = ""
 BEEHIIV_PUB_ID = "pub_c9f06833-61ef-4c33-a6ef-b571a5fd3304"
 
 # Secrets (never committed):
-#   npx wrangler secret put KIT_API_KEY -c worker/study.wrangler.toml
-#   npx wrangler secret put BEEHIIV_API_KEY -c worker/study.wrangler.toml   # only if the plan has API access
+#   npx wrangler secret put BEEHIIV_API_KEY -c worker/study.wrangler.toml
+#   npx wrangler secret put KIT_API_KEY -c worker/study.wrangler.toml   # only if Kit is upgraded to a paid plan
 
 # D1: created with
 #   npx wrangler d1 create eryeza-study-db

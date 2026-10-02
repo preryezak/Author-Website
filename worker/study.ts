@@ -9,9 +9,10 @@
  *   1. reject if the honeypot `website` is filled, the Origin is not allowed,
  *      the email is malformed, or the IP has posted more than 5 times this hour
  *   2. store the submission in D1 (`study_signups`) BEFORE any API call
- *   3. Kit v4: upsert subscriber -> add to form KIT_FORM_ID (Kit's incentive /
- *      automation sends the guide) -> tag `study-guide`, `week-{N}` and, when
- *      opted in, `letter-optin`
+ *   3. Kit. Free plan (no KIT_API_KEY): submit to form KIT_FORM_ID's public
+ *      subscribe address, so the form's confirmation email sends the guide.
+ *      Paid plan (KIT_API_KEY set): Kit v4 API, upsert subscriber -> add to
+ *      form -> tag `study-guide`, `week-{N}` and, when opted in, `letter-optin`
  *   4. Beehiiv (only when opted in AND BEEHIIV_API_KEY + BEEHIIV_PUB_ID are set):
  *      create the letter subscription. Without API access this is skipped and the
  *      `letter-optin` Kit tag is exported for a manual import instead.
@@ -25,8 +26,8 @@
 
 interface Env {
   DB?: D1Database;
-  KIT_API_KEY?: string;      // secret
-  KIT_FORM_ID?: string;      // NEEDS-OWNER
+  KIT_API_KEY?: string;      // secret; paid Kit plans only. Without it the public form address is used.
+  KIT_FORM_ID?: string;      // the Kit form whose confirmation email delivers the guide
   KIT_TAG_STUDY?: string;    // optional tag id; otherwise the "study-guide" tag is looked up/created by name
   KIT_TAG_LETTER?: string;   // optional tag id; otherwise "letter-optin" by name
   BEEHIIV_API_KEY?: string;  // secret, only if the Beehiiv plan includes API access
@@ -36,6 +37,8 @@ interface Env {
 }
 
 const KIT = "https://api.kit.com/v4";
+/** Public form endpoint used by Kit embed code (works on the free plan). */
+const KIT_FORM_BASE = "https://app.kit.com/forms";
 const RATE_LIMIT_PER_HOUR = 5;
 const API_TIMEOUT_MS = 8000;
 
@@ -83,8 +86,25 @@ async function tagId(env: Env, configured: string | undefined, name: string): Pr
   return String(id);
 }
 
+/**
+ * Kit free (Newsletter) plan: no API. The Worker submits to the form's public
+ * subscribe address, exactly what Kit's own embed code posts, so Kit treats it
+ * as a normal form sign-up and sends the form's confirmation (incentive) email,
+ * which carries this week's guide. No key involved.
+ */
+async function runKitFormPost(env: Env, s: { email: string; firstName: string }): Promise<string> {
+  const id = encodeURIComponent(env.KIT_FORM_ID || "");
+  const res = await fetch(`${KIT_FORM_BASE}/${id}/subscriptions`, timed({
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+    body: new URLSearchParams({ email_address: s.email, "fields[first_name]": s.firstName }).toString(),
+  }));
+  return res.ok ? "form:ok" : `error:form ${res.status}`;
+}
+
 async function runKit(env: Env, s: { email: string; firstName: string; week: number; letterOptIn: boolean }): Promise<string> {
-  if (!env.KIT_API_KEY) return "skipped:no-key";
+  // No API key (Kit free plan): public form subscribe address instead of the API.
+  if (!env.KIT_API_KEY) return env.KIT_FORM_ID ? runKitFormPost(env, s) : "skipped:no-kit";
   const steps: string[] = [];
   // 1) upsert the subscriber (required before form/tag calls)
   await kit(env, "subscriber", "/subscribers", { email_address: s.email, first_name: s.firstName });
@@ -143,7 +163,7 @@ export default {
         ok: true,
         service: "study",
         storageConfigured: Boolean(env.DB),
-        kitConfigured: Boolean(env.KIT_API_KEY),
+        kitMode: env.KIT_API_KEY ? "api" : env.KIT_FORM_ID ? "form" : "none",
         kitFormConfigured: Boolean(env.KIT_FORM_ID),
         beehiivConfigured: Boolean(env.BEEHIIV_API_KEY && env.BEEHIIV_PUB_ID),
       });
@@ -203,7 +223,7 @@ export default {
     }
     // Not stored: only report success if Kit actually took it.
     const { kitStatus } = await runApis(env, null, sub);
-    if (kitStatus === "ok" || kitStatus.startsWith("partial")) return json({ ok: true });
+    if (kitStatus === "ok" || kitStatus === "form:ok" || kitStatus.startsWith("partial")) return json({ ok: true });
     return json({ ok: false, error: "That did not go through. Please try again in a moment." }, 502);
   },
 };
