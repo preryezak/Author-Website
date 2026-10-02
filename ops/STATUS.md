@@ -18,7 +18,7 @@ Library page, theme/episode data, week wording removed, noindex on library + PDF
 
 **Still needed from Eryeza**
 - [ ] Kit confirmation email pasted (Settings → Confirmation email → Edit Email Contents), button label changed, Save & Publish.
-- [ ] General cover image (1200 x 1600).
+- [x] General cover image (1200 x 1600): `public/resources/cover.webp`, supplied 2 Oct.
 - [x] Guides for episodes 1–4 (month 1) added 2 Oct from Eryeza's PDFs. Episode 1 and 2 titles changed to match the guides: "Integrity at Work" (was "The Reversal") and "Pressure at Work" (was "Pressure and Shortcuts"); the guides' subtitles are now the one-line summaries on /podcast/. Each guide appears in the library at 8 PM EAT on its Sunday (4, 11, 18, 25 Oct).
 - [ ] Guides for episodes 5–8 (month 2), saved as `05-visibility-is-not-credibility.pdf` … `08-restoration-without-amnesia.pdf`, or new titles if they change.
 - Note: the guides print "eryezakalalu.com/study"; that address redirects (301) to /resources/, so it works.
@@ -48,7 +48,6 @@ A first attempt built on `619b23e` is kept locally as branch `launch/phase-0-v1-
 - [x] **`/study` renamed `/resources`** at Eryeza's request (2 Oct), with a menu item between Podcast and About. `/study`, `/study/` and `/study/*` redirect (301) to `/resources/`, so links that already say eryezakalalu.com/study keep working. Cowork: use eryezakalalu.com/resources in new copy (the house rules section 6 still says /study).
 
 ### FROM-COWORK
-- [ ] General cover `public/resources/cover.webp` (1200x1600). Until it exists the card shows the DIS seal panel.
 - [ ] `LATEST_EPISODE_YT_ID` after each upload (until then `/podcast/` offers the iHeart player).
 - [x] One-line summaries for episodes 1–4 (from the guides); 5–8 still empty.
 - [ ] Review the UI labels Claude Code wrote (Decisions, below).
