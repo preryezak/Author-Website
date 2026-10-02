@@ -127,7 +127,7 @@ export const STUDY = {
   emailLabel: "Email",
   letterOptIn: "Also send me Eryeza's letter: personal updates and new writing.",
   submit: "Send me the guide",
-  success: "Check your inbox. This week's guide is on its way.",
+  success: "Check your inbox and tap Confirm. This week's guide opens right after.",
   bookLine: "The whole argument of this series is in The Influential Spirit.",
   bookHref: "/#editions",
   privacy: "One email a week with the guide. Unsubscribe any time.",
