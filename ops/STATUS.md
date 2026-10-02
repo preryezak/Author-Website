@@ -1,7 +1,7 @@
 # Phase 0 status
 
 Branch `launch/phase-0` · base **`abab44c`** (the live code, see below) · last updated 2026-10-02 15:30 (EAT)
-**Not live yet.** Nothing has been merged, pushed or deployed; that waits for Eryeza's go-ahead.
+**Go-ahead given 2 Oct.** Merged to `main` and pushed to GitHub (2 Oct, 15:50 EAT). **Not live yet:** the Cloudflare steps (create D1 `eryeza-study-db`, deploy `eryeza-study`, then deploy the site) wait for Eryeza to approve them. Deploy the study Worker before the site, or the /resources/ form posts to a missing /api/study.
 
 ## Where we are (2 Oct 2026, 11:30 EAT) — study guides
 
