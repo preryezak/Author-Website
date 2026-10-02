@@ -92,7 +92,7 @@ async function runKit(env: Env, s: { email: string; firstName: string; week: num
   if (env.KIT_FORM_ID) {
     await kit(env, "form", `/forms/${encodeURIComponent(env.KIT_FORM_ID)}/subscribers`, {
       email_address: s.email,
-      referrer: `https://eryezakalalu.com/study/?utm_source=study-guide&week=${s.week}`,
+      referrer: `https://eryezakalalu.com/resources/?utm_source=study-guide&week=${s.week}`,
     });
   } else {
     steps.push("no-form-id");

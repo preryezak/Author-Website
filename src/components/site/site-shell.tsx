@@ -29,7 +29,7 @@ export default function SiteShell({
   useEffect(() => {
     const onScroll = () => { const m = mastheadRef.current; if (m) m.classList.toggle("is-scrolled", window.scrollY > 16); };
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setDrawerOpen(false); };
-    const onResize = () => { if (window.innerWidth >= 1024) setDrawerOpen(false); };
+    const onResize = () => { if (window.innerWidth >= 1200) setDrawerOpen(false); };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("keydown", onKey);
@@ -175,7 +175,7 @@ export default function SiteShell({
                   <Link href="/books">The library</Link>
                 </li>
                 <li>
-                  <Link href="/study">Study guide</Link>
+                  <Link href="/resources">Resources</Link>
                 </li>
               </ul>
             </div>

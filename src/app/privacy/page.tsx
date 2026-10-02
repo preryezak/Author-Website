@@ -5,7 +5,7 @@ import { PRIVACY } from "@/lib/site-content";
 
 /**
  * Privacy notice as a real page. It used to live only in a modal on the home
- * page, so the cookie banner's "privacy page" link and the /study/ privacy
+ * page, so the cookie banner's "privacy page" link and the /resources/ privacy
  * line had nowhere to go. Copy is unchanged (PRIVACY in site-content.ts).
  */
 export const metadata: Metadata = {

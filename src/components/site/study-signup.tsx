@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * /study/ "This week" card + sign-up form.
+ * /resources/ (study guide) "This week" card + sign-up form.
  *
  * The week shown is computed at build time (latest released, else week 1) and
  * re-checked in the browser on load, so a new week appears at its release

@@ -11,7 +11,7 @@ const ROUTES: { path: string; changeFrequency: "weekly" | "monthly" | "yearly"; 
   { path: "/", changeFrequency: "weekly", priority: 1 },
   { path: "/influential-spirit/", changeFrequency: "weekly", priority: 0.9 },
   { path: "/podcast/", changeFrequency: "weekly", priority: 0.8 },
-  { path: "/study/", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/resources/", changeFrequency: "weekly", priority: 0.8 },
   { path: "/books/", changeFrequency: "monthly", priority: 0.7 },
   { path: "/letter/", changeFrequency: "weekly", priority: 0.7 },
   { path: "/speaking/", changeFrequency: "monthly", priority: 0.7 },

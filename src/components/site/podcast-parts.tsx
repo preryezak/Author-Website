@@ -61,7 +61,7 @@ export function SeriesRun({ buildTime }: { buildTime: number }) {
               <div className="series-run__meta">Week {w.week} · <time dateTime={w.sunday}>{fmtSunday(w.sunday)}</time></div>
               <h3 className="series-run__title">{w.title}</h3>
               {w.theme ? <p className="series-run__theme">{w.theme}</p> : null}
-              {guide ? <a className="series-run__guide" href="/study/">Study guide for week {w.week}</a> : null}
+              {guide ? <a className="series-run__guide" href="/resources">Study guide for week {w.week}</a> : null}
             </div>
           </li>
         );

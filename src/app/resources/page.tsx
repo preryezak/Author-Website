@@ -13,10 +13,10 @@ const DESCRIPTION = STUDY.lede;
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/study" },
+  alternates: { canonical: "/resources" },
   openGraph: {
     type: "website",
-    url: "/study/",
+    url: "/resources",
     title: `${TITLE} · Devotion in Season`,
     description: DESCRIPTION,
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "Eryeza Kalalu" }],
@@ -29,7 +29,7 @@ export default function StudyPage() {
   // render a seal panel instead of a broken image.
   const coversPresent = STUDY_WEEKS.map((w) => w.cover).filter((c) => c && existsSync(join(process.cwd(), "public", c)));
   return (
-    <SiteShell active="/study">
+    <SiteShell active="/resources">
       <section className="section surface-100 loose">
         <div className="container">
           <div style={{ maxWidth: 720 }}>

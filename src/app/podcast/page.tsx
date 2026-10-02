@@ -83,7 +83,7 @@ export default async function PodcastPage() {
               <h2 className="display" style={{ fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 500, color: "var(--paper-50)", marginTop: 8 }}>This week&apos;s study guide</h2>
               <p className="dis-lede" style={{ marginTop: 8 }}>Week {studyWeek.week}: {studyWeek.title}</p>
             </div>
-            <a className="dis-cta" href="/study">Get the free guide<ArrowRight /></a>
+            <a className="dis-cta" href="/resources">Get the free guide<ArrowRight /></a>
           </div>
 
           {/* Listen on */}

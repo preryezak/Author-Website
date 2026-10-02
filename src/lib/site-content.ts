@@ -79,6 +79,7 @@ export const NAV = [
   { label: "Letter", href: "/letter" },
   { label: "Books", href: "/books" },
   { label: "Podcast", href: "/podcast" },
+  { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
   { label: "Give", href: "/give" },
 ] as const;
@@ -100,7 +101,7 @@ export type StudyWeek = {
 
 /**
  * One entry per released (or about-to-release) study guide. Cowork adds an
- * entry per week. The /study/ card shows the latest entry whose releaseDate has
+ * entry per week. The /resources/ card shows the latest entry whose releaseDate has
  * passed, falling back to week 1.
  */
 export const STUDY_WEEKS: StudyWeek[] = [
@@ -110,13 +111,13 @@ export const STUDY_WEEKS: StudyWeek[] = [
     // FROM-COWORK: episode title for week 1. Using the series title until supplied.
     episodeTitle: "The Reversal",
     releaseDate: "2026-10-04T20:00:00+03:00",
-    // FROM-COWORK: e.g. "/study/week-1-the-reversal-7f3k.pdf"
+    // FROM-COWORK: e.g. "/resources/week-1-the-reversal-7f3k.pdf" (file in public/resources/)
     pdfPath: "",
-    cover: "/study/covers/week-1.webp",
+    cover: "/resources/covers/week-1.webp",
   },
 ];
 
-/** === /study/ (handoff P0-2 copy) === */
+/** === /resources/ (handoff P0-2 study page; renamed at Eryeza's request 2 Oct 2026; /study redirects here) === */
 export const STUDY = {
   eyebrow: "Free weekly study guide",
   heading: "Take this week's episode deeper",
@@ -573,15 +574,15 @@ export const SPEAKING = {
 export const PRIVACY = {
   eyebrow: "Privacy",
   heading: "How your information is handled",
-  updated: "Last updated: September 2026",
+  updated: "Last updated: October 2026",
   paras: [
-    "This page explains what information eryezakalalu.com collects and how it is used. It applies to visitors, subscribers, readers, and anyone who submits a speaking invitation or message.",
-    "**Information you provide directly.** When you subscribe to Eryeza Writes, you share your email address. When you submit a speaking invitation, you share the details you choose to provide on that form, which may include your name, email, phone, organisation, role, location, and the particulars of your gathering. This information is used to respond to your request and to consider the invitation.",
+    "This page explains what information eryezakalalu.com collects and how it is used. It applies to visitors, subscribers, readers, anyone who requests the free study guide, and anyone who submits a speaking invitation or message.",
+    "**Information you provide directly.** When you subscribe to Eryeza Writes, you share your email address. When you request the free weekly study guide on the Resources page, you share your first name and email address, and you can choose to receive Eryeza's letter as well. When you submit a speaking invitation, you share the details you choose to provide on that form, which may include your name, email, phone, organisation, role, location, and the particulars of your gathering. This information is used to respond to your request and to consider the invitation.",
     "**Information collected automatically.** Like most websites, this site may collect basic technical data (browser type, pages visited, referring page) through the hosting platform and any analytics in use. No personal data is sold.",
     "**How your information is used.** Information you submit is used to respond to you, to consider invitations, and to send the updates you have asked for. Your email is never added to a list you did not request.",
-    "**Third-party services.** This site uses third-party services to deliver its work: a newsletter provider for Eryeza Writes, a payment provider for book orders, and an email service that forwards speaking invitations to the team. Each operates under its own privacy terms. This site does not control and is not responsible for their separate practices.",
-    "**Email and storage.** Speaking invitations are stored in this site's database and, when email delivery is configured, forwarded to speaking@eryezakalalu.com. Submissions are retained until no longer needed and then removed.",
-    "**Your choices.** You may unsubscribe from Eryeza Writes at any time using the link in any letter. You may request access to, correction of, or deletion of information you have submitted by writing to hello@eryezakalalu.com.",
+    "**Third-party services.** This site uses third-party services to deliver its work: a newsletter provider for Eryeza Writes (Beehiiv), an email service that sends the weekly study guide (Kit), a payment provider for book orders, and an email service that forwards speaking invitations to the team. Each operates under its own privacy terms. This site does not control and is not responsible for their separate practices.",
+    "**Email and storage.** Speaking invitations are stored in this site's database and, when email delivery is configured, forwarded to speaking@eryezakalalu.com. Study-guide requests are stored in this site's database and passed to Kit, which sends the guide. If you ask for Eryeza's letter, your email address is also passed to Beehiiv for Eryeza Writes. To limit abuse of the study-guide form, a one-way code derived from your internet address is stored with each request; the address itself is not stored. Submissions are retained until no longer needed and then removed.",
+    "**Your choices.** You may unsubscribe from the study guide or from Eryeza Writes at any time using the link in any email. You may request access to, correction of, or deletion of information you have submitted by writing to hello@eryezakalalu.com.",
     "**Cookies.** This site uses only essential cookies and those required by the third-party services above, such as the newsletter embed and the podcast players. No advertising cookies are used. You may decline non-essential cookies using the banner below and change your preference at any time.",
   ],
   contactLine: "Questions about privacy can be sent to hello@eryezakalalu.com.",

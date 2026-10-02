@@ -1,0 +1,9 @@
+# Workers Static Assets redirects (https://developers.cloudflare.com/workers/static-assets/redirects/)
+#
+# The study-guide page was renamed /study -> /resources on 2 Oct 2026 at Eryeza's
+# request. Podcast scripts, show notes and the house rules already say
+# "eryezakalalu.com/study", so those links keep working permanently.
+# (Never add a "/* /index.html 200" rule here: see README "Gotchas".)
+/study /resources/ 301
+/study/ /resources/ 301
+/study/* /resources/:splat 301
