@@ -42,4 +42,4 @@ BEEHIIV_STUDY_PUB_ID = ""
 [[d1_databases]]
 binding = "DB"
 database_name = "eryeza-study-db"
-database_id = "REPLACE_WITH_D1_ID"
+database_id = "d9e54ccd-4e43-4949-adae-58a82e6f1a4c"
