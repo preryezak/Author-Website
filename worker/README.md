@@ -156,14 +156,22 @@ salted IP hash) → **row stored in D1 first** → Kit → Beehiiv subscription 
 `BEEHIIV_API_KEY` + `BEEHIIV_PUB_ID` are set → `kitStatus` / `beehiivStatus` written back to the
 row. The visitor gets `{ ok: true }` once the row is stored; provider errors stay in D1.
 
-Kit has two modes:
+How the guide is delivered (`guideStatus` on the row):
 
-- **Free plan (current, no `KIT_API_KEY`)**: the Worker submits `email_address` and
-  `fields[first_name]` to the form's public subscribe address (`https://app.kit.com/forms/<KIT_FORM_ID>/subscriptions`),
-  the same request Kit's own embed code makes. Kit treats it as a form sign-up and sends the form's
-  confirmation (incentive) email, which carries the week's guide. `kitStatus = form:ok`.
-- **Paid plan (`KIT_API_KEY` set)**: Kit v4 API: upsert subscriber, add to `KIT_FORM_ID`, tag
-  `study-guide`, `week-N`, and `letter-optin` when ticked.
+- **Recommended: a separate Beehiiv publication for the study guide** (`BEEHIIV_STUDY_PUB_ID`).
+  The Worker subscribes the reader to it with `send_welcome_email: true`; that publication's
+  welcome email carries this week's guide, and weekly guides go out as posts to it. It is a
+  different publication from Eryeza Writes, so guide-only readers never receive the letter and can
+  unsubscribe from either separately. Works on Beehiiv's free Launch plan (up to 3 publications,
+  welcome email and API included; the API needs Stripe identity verification). `guideStatus = beehiiv:ok`.
+- **Fallback, only while `BEEHIIV_STUDY_PUB_ID` is empty: Kit.** On Kit's free plan (no
+  `KIT_API_KEY`) the Worker submits `email_address` and `fields[first_name]` to the form's public
+  subscribe address (`https://app.kit.com/forms/<KIT_FORM_ID>/subscriptions`), as Kit's embed code
+  does; the form's confirmation email carries the guide (`form:ok`). With `KIT_API_KEY` (paid Kit)
+  it uses the v4 API with tags.
+
+The letter (`beehiivStatus`): only when the reader ticked "Also send me Eryeza's letter", the
+Worker also subscribes them to Eryeza Writes (`BEEHIIV_PUB_ID`).
 
 ## Deploy (from the repo root)
 
@@ -173,7 +181,7 @@ npx wrangler d1 execute eryeza-study-db --remote -c worker/study.wrangler.toml -
 npx wrangler secret put BEEHIIV_API_KEY -c worker/study.wrangler.toml
 # only on a paid Kit plan:
 # npx wrangler secret put KIT_API_KEY -c worker/study.wrangler.toml
-# set KIT_FORM_ID in [vars], then:
+# set BEEHIIV_STUDY_PUB_ID in [vars] (or KIT_FORM_ID for the Kit fallback), then:
 npx wrangler deploy -c worker/study.wrangler.toml
 ```
 
@@ -184,7 +192,7 @@ configured, never the values).
 
 ```bash
 npx wrangler d1 execute eryeza-study-db --remote -c worker/study.wrangler.toml \
-  --command "SELECT createdAt, email, firstName, week, letterOptIn, kitStatus, beehiivStatus FROM study_signups ORDER BY createdAt DESC LIMIT 20"
+  --command "SELECT createdAt, email, firstName, week, letterOptIn, guideStatus, beehiivStatus FROM study_signups ORDER BY createdAt DESC LIMIT 20"
 ```
 
 Manual Beehiiv import (when there is no API access): export the `letter-optin` tag from Kit, or

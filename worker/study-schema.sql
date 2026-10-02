@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS study_signups (
   firstName     TEXT NOT NULL,
   week          INTEGER NOT NULL,
   letterOptIn   INTEGER NOT NULL DEFAULT 0,   -- 1 = ticked "Also send me Eryeza's letter"
-  kitStatus     TEXT NOT NULL DEFAULT 'pending',  -- form:ok (Kit free plan) | ok | partial:<steps> (Kit API) | error:... | skipped:no-kit
-  beehiivStatus TEXT NOT NULL DEFAULT 'pending',  -- ok | n/a | skipped:manual-import | error:<status>
+  guideStatus   TEXT NOT NULL DEFAULT 'pending',  -- beehiiv:ok (study publication) | beehiiv:error:<status> | Kit fallback: form:ok | ok | partial:... | skipped:...
+  beehiivStatus TEXT NOT NULL DEFAULT 'pending',  -- the LETTER (Eryeza Writes): ok | n/a (box not ticked) | skipped:manual-import | error:<status>
   ipHash        TEXT                            -- salted SHA-256, never the raw IP
 );
 

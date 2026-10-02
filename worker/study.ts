@@ -9,14 +9,16 @@
  *   1. reject if the honeypot `website` is filled, the Origin is not allowed,
  *      the email is malformed, or the IP has posted more than 5 times this hour
  *   2. store the submission in D1 (`study_signups`) BEFORE any API call
- *   3. Kit. Free plan (no KIT_API_KEY): submit to form KIT_FORM_ID's public
- *      subscribe address, so the form's confirmation email sends the guide.
- *      Paid plan (KIT_API_KEY set): Kit v4 API, upsert subscriber -> add to
- *      form -> tag `study-guide`, `week-{N}` and, when opted in, `letter-optin`
- *   4. Beehiiv (only when opted in AND BEEHIIV_API_KEY + BEEHIIV_PUB_ID are set):
- *      create the letter subscription. Without API access this is skipped and the
- *      `letter-optin` Kit tag is exported for a manual import instead.
- *   5. record kitStatus / beehiivStatus on the D1 row
+ *   3. The guide. Preferred (Eryeza's choice, 2 Oct 2026): a separate Beehiiv
+ *      publication for the study guide (BEEHIIV_STUDY_PUB_ID). The Worker
+ *      subscribes the reader there; that publication's welcome email carries
+ *      this week's guide, and weekly guides go out as posts to it. It is a
+ *      different publication from the letter, so guide-only readers never get
+ *      the letter. Fallback (only if BEEHIIV_STUDY_PUB_ID is empty): Kit, via
+ *      the API (KIT_API_KEY) or the form's public subscribe address.
+ *   4. The letter (only when the reader ticked the box, and BEEHIIV_API_KEY +
+ *      BEEHIIV_PUB_ID are set): subscribe them to Eryeza Writes.
+ *   5. record guideStatus / beehiivStatus on the D1 row
  * Responds { ok: true } or { ok: false, error } with a human-readable message.
  * Provider errors are never returned to the client; they are kept in D1.
  *
@@ -30,8 +32,9 @@ interface Env {
   KIT_FORM_ID?: string;      // the Kit form whose confirmation email delivers the guide
   KIT_TAG_STUDY?: string;    // optional tag id; otherwise the "study-guide" tag is looked up/created by name
   KIT_TAG_LETTER?: string;   // optional tag id; otherwise "letter-optin" by name
-  BEEHIIV_API_KEY?: string;  // secret, only if the Beehiiv plan includes API access
-  BEEHIIV_PUB_ID?: string;
+  BEEHIIV_API_KEY?: string;  // secret; one workspace key covers both publications
+  BEEHIIV_PUB_ID?: string;        // Eryeza Writes (the letter)
+  BEEHIIV_STUDY_PUB_ID?: string;  // the separate study-guide publication; its welcome email delivers the guide
   ALLOWED_ORIGIN?: string;   // comma-separated; default https://eryezakalalu.com,https://www.eryezakalalu.com
   IP_SALT?: string;          // optional; salts the stored IP hash
 }
@@ -131,28 +134,48 @@ async function runKit(env: Env, s: { email: string; firstName: string; week: num
   return steps.length ? `partial:${steps.join(";")}` : "ok";
 }
 
-async function runBeehiiv(env: Env, email: string, letterOptIn: boolean): Promise<string> {
-  if (!letterOptIn) return "n/a";
-  if (!env.BEEHIIV_API_KEY || !env.BEEHIIV_PUB_ID) return "skipped:manual-import";
-  const res = await fetch(`https://api.beehiiv.com/v2/publications/${encodeURIComponent(env.BEEHIIV_PUB_ID)}/subscriptions`, timed({
+/** Beehiiv v2: create (or update) a subscription on one publication. */
+async function beehiivSubscribe(env: Env, pubId: string, body: Record<string, unknown>): Promise<string> {
+  const res = await fetch(`https://api.beehiiv.com/v2/publications/${encodeURIComponent(pubId)}/subscriptions`, timed({
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.BEEHIIV_API_KEY}` },
-    body: JSON.stringify({ email, reactivate_existing: false, send_welcome_email: true, utm_source: "study-guide" }),
+    body: JSON.stringify(body),
   }));
   return res.ok ? "ok" : `error:${res.status}`;
 }
 
-async function runApis(env: Env, id: string | null, s: { email: string; firstName: string; week: number; letterOptIn: boolean }): Promise<{ kitStatus: string; beehiivStatus: string }> {
-  let kitStatus: string;
-  try { kitStatus = await runKit(env, s); } catch (e) { kitStatus = `error:${e instanceof Error ? e.message : "unknown"}`; }
+/** The letter: only for readers who ticked "Also send me Eryeza's letter". */
+async function runBeehiiv(env: Env, email: string, letterOptIn: boolean, week: number): Promise<string> {
+  if (!letterOptIn) return "n/a";
+  if (!env.BEEHIIV_API_KEY || !env.BEEHIIV_PUB_ID) return "skipped:manual-import";
+  return beehiivSubscribe(env, env.BEEHIIV_PUB_ID, { email, reactivate_existing: false, send_welcome_email: true, utm_source: "resources", utm_campaign: `week-${week}` });
+}
+
+/**
+ * The guide. Beehiiv study publication when configured: the reader asked for
+ * the guide on this request, so a past unsubscribe from the GUIDE publication
+ * is reactivated, and its welcome email (this week's guide) is sent.
+ */
+async function runGuide(env: Env, s: { email: string; firstName: string; week: number; letterOptIn: boolean }): Promise<string> {
+  if (env.BEEHIIV_STUDY_PUB_ID) {
+    if (!env.BEEHIIV_API_KEY) return "skipped:no-beehiiv-key";
+    const r = await beehiivSubscribe(env, env.BEEHIIV_STUDY_PUB_ID, { email: s.email, reactivate_existing: true, send_welcome_email: true, utm_source: "resources", utm_campaign: `week-${s.week}` });
+    return r === "ok" ? "beehiiv:ok" : `beehiiv:${r}`;
+  }
+  return runKit(env, s);
+}
+
+async function runApis(env: Env, id: string | null, s: { email: string; firstName: string; week: number; letterOptIn: boolean }): Promise<{ guideStatus: string; beehiivStatus: string }> {
+  let guideStatus: string;
+  try { guideStatus = await runGuide(env, s); } catch (e) { guideStatus = `error:${e instanceof Error ? e.message : "unknown"}`; }
   let beehiivStatus: string;
-  try { beehiivStatus = await runBeehiiv(env, s.email, s.letterOptIn); } catch (e) { beehiivStatus = `error:${e instanceof Error ? e.message : "unknown"}`; }
+  try { beehiivStatus = await runBeehiiv(env, s.email, s.letterOptIn, s.week); } catch (e) { beehiivStatus = `error:${e instanceof Error ? e.message : "unknown"}`; }
   if (env.DB && id) {
     try {
-      await env.DB.prepare("UPDATE study_signups SET kitStatus = ?, beehiivStatus = ? WHERE id = ?").bind(kitStatus, beehiivStatus, id).run();
+      await env.DB.prepare("UPDATE study_signups SET guideStatus = ?, beehiivStatus = ? WHERE id = ?").bind(guideStatus, beehiivStatus, id).run();
     } catch { /* the row still holds the submission */ }
   }
-  return { kitStatus, beehiivStatus };
+  return { guideStatus, beehiivStatus };
 }
 
 export default {
@@ -163,9 +186,9 @@ export default {
         ok: true,
         service: "study",
         storageConfigured: Boolean(env.DB),
-        kitMode: env.KIT_API_KEY ? "api" : env.KIT_FORM_ID ? "form" : "none",
-        kitFormConfigured: Boolean(env.KIT_FORM_ID),
-        beehiivConfigured: Boolean(env.BEEHIIV_API_KEY && env.BEEHIIV_PUB_ID),
+        guideVia: env.BEEHIIV_STUDY_PUB_ID ? "beehiiv-study-publication" : env.KIT_API_KEY ? "kit-api" : env.KIT_FORM_ID ? "kit-form" : "none",
+        beehiivKeySet: Boolean(env.BEEHIIV_API_KEY),
+        letterConfigured: Boolean(env.BEEHIIV_API_KEY && env.BEEHIIV_PUB_ID),
       });
     }
     if (request.method !== "POST") return json({ ok: false, error: "Method not allowed." }, 405);
@@ -209,7 +232,7 @@ export default {
     if (env.DB) {
       try {
         await env.DB.prepare(
-          "INSERT INTO study_signups (id, createdAt, email, firstName, week, letterOptIn, kitStatus, beehiivStatus, ipHash) VALUES (?, ?, ?, ?, ?, ?, 'pending', 'pending', ?)"
+          "INSERT INTO study_signups (id, createdAt, email, firstName, week, letterOptIn, guideStatus, beehiivStatus, ipHash) VALUES (?, ?, ?, ?, ?, ?, 'pending', 'pending', ?)"
         ).bind(id, new Date().toISOString(), email, firstName, week, letterOptIn ? 1 : 0, ipHash).run();
         stored = true;
       } catch { /* fall through to the synchronous path below */ }
@@ -221,9 +244,9 @@ export default {
       ctx.waitUntil(runApis(env, id, sub));
       return json({ ok: true });
     }
-    // Not stored: only report success if Kit actually took it.
-    const { kitStatus } = await runApis(env, null, sub);
-    if (kitStatus === "ok" || kitStatus === "form:ok" || kitStatus.startsWith("partial")) return json({ ok: true });
+    // Not stored: only report success if the guide provider actually took it.
+    const { guideStatus } = await runApis(env, null, sub);
+    if (["ok", "form:ok", "beehiiv:ok"].includes(guideStatus) || guideStatus.startsWith("partial")) return json({ ok: true });
     return json({ ok: false, error: "That did not go through. Please try again in a moment." }, 502);
   },
 };

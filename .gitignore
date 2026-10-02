@@ -61,3 +61,7 @@ server.log
 # build output mirrored by scripts/postbuild.mjs, and wrangler dev state
 /dist/
 .wrangler/
+
+# wrangler local-only variables and secrets
+.dev.vars
+**/.dev.vars
