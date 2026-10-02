@@ -3,6 +3,15 @@
 Where it goes: Kit → Grow → Landing Pages & Forms → **Influential Spirit Study Guide** (form 9991957) →
 Settings → **Incentive** (Confirmation email) → **Edit Email Contents**. Paste the parts below, then **Save** and **Publish**.
 
+**Sender (From):** `resources@eryezakalalu.com`. Cloudflare Email Routing forwards it to eryezawrites@gmail.com
+(added 2 Oct; the Gmail address had to be verified in Cloudflare first). Add it in Kit as a sender address and
+click Kit's verification email, which arrives in eryezawrites@gmail.com through the forward.
+Fallback: `hello@eryezakalalu.com` (forwards to pastor.eryeza@gmail.com).
+
+**Button:** keep Kit's own confirmation button and its link `{{ confirm_url }}`; change only its label.
+`{{ confirm_url }}` is each reader's personal confirm link. Clicking it confirms them, and Kit then sends them
+to the "After confirming, redirect to" address below.
+
 Check in the same place that **"After confirming, redirect to"** is set to a URL:
 `https://eryezakalalu.com/resources/library/`
 
@@ -20,7 +29,7 @@ Hi {{ subscriber.first_name | default: "friend" }},
 
 Thank you for asking for the Devotion in Season study guides. Please tap the button below to confirm your email address. It opens the Study Library, where the guides are kept.
 
-**Button label:** Confirm and open the guides
+**Button label:** Confirm and open the guides *(link stays `{{ confirm_url }}`)*
 
 Each guide goes with a Sunday episode of the podcast. It gives you the passages, five questions for personal or group study, one practice for the week, and a prayer. On your own it takes about twenty minutes. With a small group or a team at work, allow about forty-five.
 

@@ -113,7 +113,7 @@ export type StudyTheme = { slug: string; title: string; episodes: StudyEpisode[]
 export const STUDY_THEMES: StudyTheme[] = [
   {
     slug: "the-witness-test",
-    title: "The Witness Test",
+    title: "The Witness Test: The Influential Spirit",
     episodes: [
       { n: 1, sunday: "2026-10-04", title: "Integrity at Work", line: "When the world keeps a standard the church dropped" },
       { n: 2, sunday: "2026-10-11", title: "Pressure at Work", line: "How to handle pressure without compromising your faith" },
