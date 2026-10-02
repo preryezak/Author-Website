@@ -3,6 +3,25 @@
 Branch `launch/phase-0` · base **`abab44c`** (the live code, see below) · last updated 2026-10-02 (EAT)
 **Not live yet.** Nothing has been merged, pushed or deployed; that waits for Eryeza's go-ahead.
 
+## Where we are (2 Oct 2026, 11:30 EAT) — study guides
+
+**Decided:** Kit delivers the guides (Beehiiv free = one publication, so Beehiiv is only the letter
+opt-in). Kit form **9991957**; its confirmation email is the delivery email; after confirming, Kit
+redirects to the unlisted **Study Library** `/resources/library/` (set by Eryeza). Guides are
+organised by **theme** (e.g. The Witness Test, 8 Sunday episodes) and **episode number within the
+theme**, saved as `public/resources/guides/<theme-slug>/<NN>-<episode-slug>.pdf`
+(e.g. `the-witness-test/01-the-reversal.pdf`), never removed. One general cover at
+`public/resources/cover.webp` (1200x1600). Commits `70468fb`, `6ad20ab`, `79db2d0`.
+
+**Done:** `BEEHIIV_API_KEY` secret on `eryeza-study` (terminal showed one `*`; confirm in the live test).
+Library page, theme/episode data, week wording removed, noindex on library + PDFs. Built and checked locally.
+
+**Still needed from Eryeza**
+- [ ] Kit confirmation email pasted (Settings → Confirmation email → Edit Email Contents), button label changed, Save & Publish.
+- [ ] General cover image (1200 x 1600).
+- [ ] Episode 1 guide PDF (The Witness Test · 01 · The Reversal; airs Sun 4 Oct, 8 PM EAT).
+- [ ] Go-ahead to go live (create D1, deploy `eryeza-study`, merge + push, deploy site).
+
 ## Read this first: the live site was not in GitHub
 
 `main` on GitHub (`619b23e`) is **not** what eryezakalalu.com serves. AutoClaw built three more commits on
