@@ -18,7 +18,7 @@ Library page, theme/episode data, week wording removed, noindex on library + PDF
 
 **Still needed from Eryeza**
 - [ ] Kit confirmation email: text written in `ops/kit-confirmation-email.md` (2 Oct). Eryeza pastes it into Kit, then Save & Publish.
-- [ ] Click Cloudflare's verification email in eryezawrites@gmail.com; then Claude Code creates the routing rule resources@eryezakalalu.com → eryezawrites@gmail.com (the rule cannot be created before the address is verified).
+- [x] Email Routing rule `45db958a…`: resources@eryezakalalu.com → eryezawrites@gmail.com (2 Oct, after Eryeza verified the Gmail destination). Kit sender: resources@.
 - [ ] One real test sign-up on /resources/ (check the Kit email arrives and the button opens the library).
 - [x] General cover image (1200 x 1600): `public/resources/cover.webp`, supplied 2 Oct.
 - [x] Guides for episodes 1–4 (month 1) added 2 Oct from Eryeza's PDFs. Episode 1 and 2 titles changed to match the guides: "Integrity at Work" (was "The Reversal") and "Pressure at Work" (was "Pressure and Shortcuts"); the guides' subtitles are now the one-line summaries on /podcast/. Each guide appears in the library at 8 PM EAT on its Sunday (4, 11, 18, 25 Oct).
