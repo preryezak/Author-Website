@@ -101,7 +101,11 @@ async function runKitFormPost(env: Env, s: { email: string; firstName: string })
     headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
     body: new URLSearchParams({ email_address: s.email, "fields[first_name]": s.firstName }).toString(),
   }));
-  return res.ok ? "form:ok" : `error:form ${res.status}`;
+  if (!res.ok) return `error:form ${res.status}`;
+  // Kit answers 200 even when it rejects the sign-up; the verdict is in the body.
+  const data = (await res.json().catch(() => ({}))) as { status?: string; errors?: { messages?: string[] } };
+  if (data.status === "success") return "form:ok";
+  return `error:form ${data.status || "unknown"} ${(data.errors?.messages || []).join("; ")}`.slice(0, 200);
 }
 
 async function runKit(env: Env, s: { email: string; firstName: string; week: number; letterOptIn: boolean }): Promise<string> {
@@ -140,7 +144,8 @@ async function beehiivSubscribe(env: Env, pubId: string, body: Record<string, un
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.BEEHIIV_API_KEY}` },
     body: JSON.stringify(body),
   }));
-  return res.ok ? "ok" : `error:${res.status}`;
+  if (res.ok) return "ok";
+  return `error:${res.status} ${(await res.text().catch(() => "")).replace(/\s+/g, " ")}`.slice(0, 200);
 }
 
 /** The letter: only for readers who ticked "Also send me Eryeza's letter". */
