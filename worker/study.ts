@@ -139,11 +139,16 @@ async function runKit(env: Env, s: { email: string; firstName: string; week: num
   return steps.length ? `partial:${steps.join(";")}` : "ok";
 }
 
+/** The stored key, without invisible characters a paste can add (BOM, line breaks, spaces); those make Beehiiv answer an empty 400. */
+function beehiivKey(env: Env): string {
+  return (env.BEEHIIV_API_KEY || "").replace(/[^!-~]/g, "");
+}
+
 /** Beehiiv v2: create (or update) a subscription on one publication. */
 async function beehiivSubscribe(env: Env, pubId: string, body: Record<string, unknown>): Promise<string> {
   const res = await fetch(`https://api.beehiiv.com/v2/publications/${encodeURIComponent(pubId)}/subscriptions`, timed({
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.BEEHIIV_API_KEY}` },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${beehiivKey(env)}` },
     body: JSON.stringify(body),
   }));
   if (res.ok) return "ok";
@@ -190,11 +195,13 @@ export default {
     if (request.method === "GET") {
       // Diagnostic: can the saved Beehiiv key read the letter publication? Status and error text only.
       if (new URL(request.url).searchParams.get("check") === "beehiiv" && env.BEEHIIV_API_KEY && env.BEEHIIV_PUB_ID) {
-        const r = await fetch(`https://api.beehiiv.com/v2/publications/${encodeURIComponent(env.BEEHIIV_PUB_ID)}`, timed({ headers: { Authorization: `Bearer ${env.BEEHIIV_API_KEY}` } }));
+        const r = await fetch(`https://api.beehiiv.com/v2/publications/${encodeURIComponent(env.BEEHIIV_PUB_ID)}`, timed({ headers: { Authorization: `Bearer ${new URL(request.url).searchParams.get("fake") ? "fake-key" : beehiivKey(env)}` } }));
         const t = await r.text().catch(() => "");
         let detail = t.slice(0, 300);
         try { const d = JSON.parse(t) as { data?: { name?: string }; errors?: unknown }; detail = d.data ? `publication: ${d.data.name}` : JSON.stringify(d.errors || d).slice(0, 300); } catch { /* raw text */ }
-        return json({ beehiivStatus: r.status, detail });
+        const k = env.BEEHIIV_API_KEY;
+        const shape = { rawLength: k.length, cleanLength: beehiivKey(env).length, alnumOnly: /^[A-Za-z0-9]+$/.test(beehiivKey(env)), hasSpaceOrBreak: /\s/.test(k), otherChars: [...new Set(beehiivKey(env).replace(/[A-Za-z0-9]/g, ""))].join("") };
+        return json({ beehiivStatus: r.status, detail, keyShape: shape });
       }
       // Health check: shows which paths are configured, never the values.
       return json({
