@@ -28,7 +28,7 @@ So that my letters reach you, please move this email to your main inbox, or add 
 
 While you wait for the next letter, you are welcome to use the free Devotion in Season study guides. A new guide opens every Sunday at 8 PM East Africa Time, when its podcast episode airs: eryezakalalu.com/study
 
-My book, The Influential Spirit, is a 30-day journey into how the Holy Spirit shapes the way we lead and influence others. You can read more about it at eryezakalalu.com.
+My book, The Influential Spirit, is a 30-day journey into kingdom authority, character and meaningful influence, and into how the Holy Spirit shapes who we are becoming. You can read more about it at eryezakalalu.com.
 
 If you would like to tell me a little about yourself, or what you hope to find here, simply reply to this email. I read every reply.
 
@@ -41,4 +41,3 @@ Eryeza
 
 Audit: no banned words (incl. carry, weight, deeply, quietly), no em-dashes, no binary contrasts, no fragments,
 no weekday-as-work. Gospel edge: Christ and the Holy Spirit named in the book line and the blessing.
-Check before saving: the book description ("30-day journey") matches the site; edit if Eryeza describes it differently.
