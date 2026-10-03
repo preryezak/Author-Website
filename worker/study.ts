@@ -29,6 +29,7 @@ interface Env {
   DB?: D1Database;
   KIT_API_KEY?: string;      // secret; paid Kit plans only. Without it the public form address is used.
   KIT_FORM_ID?: string;      // the Kit form whose confirmation email delivers the guide
+  KIT_VIA_BROWSER?: string;  // "1": the reader's browser posts to the Kit form (Kit quarantines server posts); the Worker only records the result
   KIT_TAG_STUDY?: string;    // optional tag id; otherwise the "study-guide" tag is looked up/created by name
   KIT_TAG_LETTER?: string;   // optional tag id; otherwise "letter-optin" by name
   BEEHIIV_API_KEY?: string;  // secret; one workspace key covers both publications
@@ -110,6 +111,7 @@ async function runKitFormPost(env: Env, s: { email: string; firstName: string })
 
 async function runKit(env: Env, s: { email: string; firstName: string; week: number; letterOptIn: boolean }): Promise<string> {
   // No API key (Kit free plan): public form subscribe address instead of the API.
+  if (!env.KIT_API_KEY && env.KIT_FORM_ID && env.KIT_VIA_BROWSER === "1") return "browser:pending";
   if (!env.KIT_API_KEY) return env.KIT_FORM_ID ? runKitFormPost(env, s) : "skipped:no-kit";
   const steps: string[] = [];
   // 1) upsert the subscriber (required before form/tag calls)
@@ -176,7 +178,8 @@ async function runApis(env: Env, id: string | null, s: { email: string; firstNam
   try { beehiivStatus = await runBeehiiv(env, s.email, s.letterOptIn, s.week); } catch (e) { beehiivStatus = `error:${e instanceof Error ? e.message : "unknown"}`; }
   if (env.DB && id) {
     try {
-      await env.DB.prepare("UPDATE study_signups SET guideStatus = ?, beehiivStatus = ? WHERE id = ?").bind(guideStatus, beehiivStatus, id).run();
+      // "browser:pending" never overwrites a result the browser already reported.
+      await env.DB.prepare("UPDATE study_signups SET guideStatus = CASE WHEN ?1 = 'browser:pending' AND guideStatus NOT IN ('pending') THEN guideStatus ELSE ?1 END, beehiivStatus = ?2 WHERE id = ?3").bind(guideStatus, beehiivStatus, id).run();
     } catch { /* the row still holds the submission */ }
   }
   return { guideStatus, beehiivStatus };
@@ -203,6 +206,20 @@ export default {
 
     let body: Record<string, unknown>;
     try { body = (await request.json()) as Record<string, unknown>; } catch { return json({ ok: false, error: "Please fill in the form and try again." }, 422); }
+
+    // The browser reports what Kit said to its own form post. Only a row still
+    // waiting on the browser can be updated, and only with a short status.
+    if (new URL(request.url).pathname.endsWith("/result")) {
+      const rid = clean(body.id, 64);
+      const kit = clean(body.kit, 200);
+      if (env.DB && rid && kit) {
+        try {
+          await env.DB.prepare("UPDATE study_signups SET guideStatus = ? WHERE id = ? AND guideStatus IN ('pending', 'browser:pending')")
+            .bind(kit === "success" ? "form:ok" : `error:form ${kit}`.slice(0, 200), rid).run();
+        } catch { /* the row keeps browser:pending */ }
+      }
+      return json({ ok: true });
+    }
 
     // Honeypot: answer like a success so bots learn nothing, store nothing.
     if (clean(body.website, 200)) return json({ ok: true });
@@ -246,7 +263,7 @@ export default {
     if (stored) {
       // Safe in D1: finish the provider calls after replying, so the reader is not kept waiting.
       ctx.waitUntil(runApis(env, id, sub));
-      return json({ ok: true });
+      return json(env.KIT_VIA_BROWSER === "1" && !env.KIT_API_KEY && env.KIT_FORM_ID ? { ok: true, id, kitFormId: env.KIT_FORM_ID } : { ok: true });
     }
     // Not stored: only report success if the guide provider actually took it.
     const { guideStatus } = await runApis(env, null, sub);

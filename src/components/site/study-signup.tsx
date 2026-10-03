@@ -42,7 +42,24 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
           website: String(fd.get("website") || ""),
         }),
       });
-      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; id?: string; kitFormId?: string };
+      if (res.ok && data.ok && data.kitFormId) {
+        // Kit quarantines sign-ups posted from a server, so the browser posts to
+        // the Kit form itself (as Kit's embed code does), then reports the result.
+        let kit = "unknown";
+        try {
+          const kr = await fetch(`https://app.kit.com/forms/${encodeURIComponent(data.kitFormId)}/subscriptions`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+            body: new URLSearchParams({ email_address: String(fd.get("email") || "").trim(), "fields[first_name]": String(fd.get("firstName") || "").trim() }).toString(),
+          });
+          const kd = (await kr.json().catch(() => ({}))) as { status?: string; errors?: { messages?: string[] } };
+          kit = kd.status === "success" ? "success" : `${kd.status || kr.status} ${(kd.errors?.messages || []).join("; ")}`.trim();
+        } catch { kit = "network"; }
+        fetch(`${ENDPOINT.replace(/\/$/, "")}/result`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: data.id, kit }), keepalive: true }).catch(() => {});
+        if (kit === "success") { setStatus("done"); return; }
+        setError(FALLBACK_ERROR); setStatus("error"); return;
+      }
       if (res.ok && data.ok) { setStatus("done"); return; }
       setError(data.error || FALLBACK_ERROR); setStatus("error");
     } catch {
