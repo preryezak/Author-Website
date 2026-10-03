@@ -195,13 +195,11 @@ export default {
     if (request.method === "GET") {
       // Diagnostic: can the saved Beehiiv key read the letter publication? Status and error text only.
       if (new URL(request.url).searchParams.get("check") === "beehiiv" && env.BEEHIIV_API_KEY && env.BEEHIIV_PUB_ID) {
-        const r = await fetch(`https://api.beehiiv.com/v2/publications/${encodeURIComponent(env.BEEHIIV_PUB_ID)}`, timed({ headers: { Authorization: `Bearer ${new URL(request.url).searchParams.get("fake") ? "fake-key" : beehiivKey(env)}` } }));
+        const r = await fetch(`https://api.beehiiv.com/v2/publications/${encodeURIComponent(env.BEEHIIV_PUB_ID)}`, timed({ headers: { Authorization: `Bearer ${beehiivKey(env)}` } }));
         const t = await r.text().catch(() => "");
         let detail = t.slice(0, 300);
         try { const d = JSON.parse(t) as { data?: { name?: string }; errors?: unknown }; detail = d.data ? `publication: ${d.data.name}` : JSON.stringify(d.errors || d).slice(0, 300); } catch { /* raw text */ }
-        const k = env.BEEHIIV_API_KEY;
-        const shape = { rawLength: k.length, cleanLength: beehiivKey(env).length, alnumOnly: /^[A-Za-z0-9]+$/.test(beehiivKey(env)), hasSpaceOrBreak: /\s/.test(k), otherChars: [...new Set(beehiivKey(env).replace(/[A-Za-z0-9]/g, ""))].join("") };
-        return json({ beehiivStatus: r.status, detail, keyShape: shape });
+        return json({ beehiivStatus: r.status, detail });
       }
       // Health check: shows which paths are configured, never the values.
       return json({
