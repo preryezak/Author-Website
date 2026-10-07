@@ -309,7 +309,7 @@ export default {
           ok: true,
           service: "speaking",
           nativeEmailBinding: Boolean(env.EMAIL),
-          resendConfigured: Boolean(env.RESEND_API_KEY),
+          resendConfigured: Boolean(env.RESEND_API_KEY && env.RESEND_API_KEY.trim().length > 20),
           storageConfigured: Boolean(env.DB),
           eventsPath: "/events",
           eventsTable: "site_events",
@@ -372,12 +372,13 @@ export default {
     const text = buildEmailText(d, receivedAt);
 
     // 1) Storage first, so a mail failure never loses the submission.
+    const requestId = crypto.randomUUID();
     let stored = false;
     if (env.DB) {
       try {
         await env.DB.prepare(
           "INSERT INTO speaking_requests (id, name, email, data, status, createdAt) VALUES (?, ?, ?, ?, 'new', ?)"
-        ).bind(crypto.randomUUID(), name, email, JSON.stringify(d), receivedAt).run();
+        ).bind(requestId, name, email, JSON.stringify(d), receivedAt).run();
         stored = true;
       } catch {
         // D1 table may not be created yet, or the binding is misconfigured.
@@ -411,7 +412,7 @@ export default {
         const res = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${env.RESEND_API_KEY}`,
+            Authorization: `Bearer ${env.RESEND_API_KEY.trim()}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -438,11 +439,12 @@ export default {
     //    can only reach verified inboxes, so this goes through Resend (eryezakalalu.com is verified there).
     //    Never blocks or fails the submission.
     let confirmed = false;
+    let confirmNote = "";
     if (env.RESEND_API_KEY) {
       try {
         const res = await fetch("https://api.resend.com/emails", {
           method: "POST",
-          headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+          headers: { Authorization: `Bearer ${env.RESEND_API_KEY.trim()}`, "Content-Type": "application/json" },
           body: JSON.stringify({
             from: "Eryeza Kalalu <hello@eryezakalalu.com>",
             to: [email],
@@ -453,7 +455,14 @@ export default {
           }),
         });
         confirmed = res.ok;
-      } catch { /* the owner copy is already sent and stored */ }
+        if (!res.ok) confirmNote = `confirm:error:${res.status} ct=${res.headers.get("content-type")} keyLen=${env.RESEND_API_KEY.trim().length} keyPrefix=${env.RESEND_API_KEY.trim().slice(0, 3)} body=${(await res.text()).slice(0, 200)}`;
+      } catch (e) { confirmNote = `confirm:exception:${e instanceof Error ? e.message : "unknown"}`; /* the owner copy is already sent and stored */ }
+    } else {
+      confirmNote = "confirm:skipped:no RESEND_API_KEY";
+    }
+    if (confirmed) confirmNote = "confirm:ok";
+    if (env.DB && stored) {
+      try { await env.DB.prepare("UPDATE speaking_requests SET status = ? WHERE id = ?").bind(`new|${confirmNote}`.slice(0, 400), requestId).run(); } catch { /* diagnostics only */ }
     }
 
     // The submission is safe in D1 even when mail could not be sent; the site
