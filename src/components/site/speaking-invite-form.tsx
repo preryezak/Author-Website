@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SPEAKING, ENDPOINTS } from "@/lib/site-content";
 
 type FieldType = "text" | "email" | "tel" | "date" | "country" | "select" | "radio" | "textarea";
@@ -102,6 +102,8 @@ export default function SpeakingInviteForm() {
   };
   const back = () => setStep((s) => Math.max(0, s - 1));
 
+  const hpRef = useRef<HTMLInputElement>(null);
+
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("submitting"); setError("");
@@ -109,7 +111,7 @@ export default function SpeakingInviteForm() {
       // Posts to the eryeza-speaking Worker (ENDPOINTS.speaking in site-content.ts;
       // NEXT_PUBLIC_SPEAKING_ENDPOINT overrides it at build time).
       const endpoint = ENDPOINTS.speaking;
-      const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, website: hpRef.current?.value || "" }) });
       const r = await res.json();
       if (res.ok && r.ok) setStatus("success");
       else { setError(r.error || "Something went wrong. Please try again."); setStatus("error"); }
@@ -129,6 +131,11 @@ export default function SpeakingInviteForm() {
 
   return (
     <form className="speaking-form" onSubmit={submit} style={{ gap: 0 }}>
+      {/* Honeypot: hidden from people, filled by bots. */}
+      <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
+        <label htmlFor="speaking-website">Website</label>
+        <input id="speaking-website" ref={hpRef} name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       {/* Progress */}
       <div className="invite-progress">
         <span className="invite-progress__label">Step {step + 1} of {total}</span>

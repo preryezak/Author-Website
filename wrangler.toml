@@ -22,8 +22,15 @@
 name = "ccndaily-books"
 compatibility_date = "2026-08-19"
 
+# Edge Worker (edge/worker.ts). It runs only for the paths in `run_worker_first`
+# below; every other request is served straight from static assets as before.
+main = "edge/worker.ts"
+
 [assets]
 directory = "./dist/public"
+binding = "ASSETS"
+# Only these paths invoke the Worker (HTTP Range for the film, visitor region).
+run_worker_first = ["/video/*", "/api/geo"]
 # Real 404s.
 #
 # This was "single-page-application", which returned HTTP 200 with the

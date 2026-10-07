@@ -1,6 +1,7 @@
 import { EDITIONS, DAY1_FULL } from "@/lib/site-content";
 import { OrnamentRule } from "@/components/site/ui-bits";
 import { LaunchOnly } from "@/components/site/price";
+import LaunchCountdown from "@/components/site/launch-countdown";
 import EditionsTiers from "@/components/site/books-editions-tiers";
 
 /**
@@ -27,7 +28,7 @@ export default function BooksEditions({ heading = true }: { heading?: boolean })
           ) : null}
           <OrnamentRule>§</OrnamentRule>
           <p className="caption" style={{ marginTop: 8 }}>
-            <LaunchOnly>{EDITIONS.launchLine} </LaunchOnly>
+            <LaunchOnly><LaunchCountdown />{EDITIONS.launchLine} </LaunchOnly>
             {EDITIONS.note}
           </p>
         </div>

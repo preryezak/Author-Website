@@ -232,6 +232,13 @@ export default function RootLayout({
         />
         {/* Self-hosted font files are the only font source; no Google Fonts request is made.
             No preconnects: the Beehiiv form and the iHeart player both load below the fold or on demand. */}
+        {/* Prefetch (never prerender) same-origin pages on hover/touch so navigation feels instant. */}
+        <script
+          type="speculationrules"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({ prefetch: [{ where: { and: [{ href_matches: "/*" }, { not: { href_matches: "/api/*" } }, { not: { href_matches: "/video/*" } }] }, eagerness: "moderate" }] }),
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

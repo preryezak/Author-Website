@@ -5,6 +5,7 @@ import { NAV } from "@/lib/site-content";
 export const metadata: Metadata = {
   title: "Page not found",
   description: "That page could not be found.",
+  robots: { index: false, follow: true },
 };
 
 /**

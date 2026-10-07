@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   title: "Letters · Eryeza Writes",
   description: "Personal letters and updates from Pastor Eryeza Kalalu.",
   alternates: { canonical: "/letter" },
+  openGraph: {
+    type: "website",
+    url: "/letter",
+    title: "Letters · Eryeza Kalalu",
+    description: "Personal letters and updates from Pastor Eryeza Kalalu.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Eryeza Kalalu" }],
+  },
+  twitter: { card: "summary_large_image", title: "Letters · Eryeza Kalalu", description: "Personal letters and updates from Pastor Eryeza Kalalu.", images: ["/og.png"] },
 };
 
 export const dynamic = "force-static";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EDITIONS } from "@/lib/site-content";
 import { Price } from "@/components/site/price";
 
@@ -11,6 +11,20 @@ import { Price } from "@/components/site/price";
  */
 export default function EditionsTiers() {
   const [region, setRegion] = useState<"usd" | "ugx" | null>("usd");
+
+  // Open the visitor's own currency first (UGX in Africa, USD elsewhere). A choice
+  // the visitor has already made is never overridden; failures keep USD.
+  useEffect(() => {
+    let touched = false;
+    const mark = () => { touched = true; };
+    const el = document.getElementById("editions");
+    el?.addEventListener("click", mark, { once: true });
+    fetch("/api/geo", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((g) => { if (!touched && g && g.region === "ugx") setRegion("ugx"); })
+      .catch(() => {});
+    return () => el?.removeEventListener("click", mark);
+  }, []);
 
   const groups = [
     { key: "usd" as const, label: EDITIONS.regionUSD, sub: EDITIONS.regionUSDSub, via: "Payhip", paper: false },

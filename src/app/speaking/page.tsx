@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   description:
     "Invite Eryeza Kalalu to speak at churches, conferences, retreats, universities and corporate gatherings.",
   alternates: { canonical: "/speaking" },
+  openGraph: {
+    type: "website",
+    url: "/speaking",
+    title: "Speaking · Eryeza Kalalu",
+    description: "Invite Eryeza Kalalu to speak at churches, conferences, retreats, universities and corporate gatherings.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Eryeza Kalalu" }],
+  },
+  twitter: { card: "summary_large_image", title: "Speaking · Eryeza Kalalu", description: "Invite Eryeza Kalalu to speak at churches, conferences, retreats, universities and corporate gatherings.", images: ["/og.png"] },
 };
 
 function OrnamentRule({ children }: { children?: React.ReactNode }) {

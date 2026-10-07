@@ -9,6 +9,14 @@ export const metadata: Metadata = {
   description:
     "Books and resources by Eryeza Kalalu, including The Influential Spirit. Choose an edition and buy securely.",
   alternates: { canonical: "/books" },
+  openGraph: {
+    type: "website",
+    url: "/books",
+    title: "Books · The Deep Encounter Library · Eryeza Kalalu",
+    description: "Books and resources by Eryeza Kalalu, including The Influential Spirit. Choose an edition and buy securely.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Eryeza Kalalu" }],
+  },
+  twitter: { card: "summary_large_image", title: "Books · The Deep Encounter Library · Eryeza Kalalu", description: "Books and resources by Eryeza Kalalu, including The Influential Spirit. Choose an edition and buy securely.", images: ["/og.png"] },
 };
 
 /**

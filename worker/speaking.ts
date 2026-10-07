@@ -40,7 +40,8 @@ interface Env {
   NOTIFY_EMAIL?: string;     // inbox that receives submissions. Must be a VERIFIED destination
                              // address in Email Routing (e.g. pastor.eryeza@gmail.com).
                              // SPEAKING_EMAIL is the public alias and is NOT a valid destination.
-  ALLOWED_ORIGIN?: string;   // default: https://eryezakalalu.com
+  ALLOWED_ORIGIN?: string;   // comma-separated; default: https://eryezakalalu.com,https://www.eryezakalalu.com
+  IP_SALT?: string;          // optional salt for the rate-limit IP hash
   DB?: D1Database;           // optional D1 binding (set in wrangler.toml). Storage fails quietly if absent.
 }
 
@@ -117,6 +118,38 @@ const ALLOWED_EVENTS = new Set(["give_click"]);
 /** Exported for the deploy notes: the exact DDL to run against D1. */
 export { SITE_EVENTS_DDL };
 
+
+/** Origins allowed to POST. CORS only stops browsers, so this is checked server-side too. */
+function allowedOrigins(env: Env): string[] {
+  return (env.ALLOWED_ORIGIN || "https://eryezakalalu.com,https://www.eryezakalalu.com").split(",").map((o) => o.trim()).filter(Boolean);
+}
+
+async function sha256Hex(text: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Per-IP hourly counter in D1 (salted hash, never the raw IP). Returns true when
+ * the caller is over `limit`. Fails open if the table cannot be reached, so a
+ * storage hiccup never blocks a real visitor.
+ */
+async function overRateLimit(request: Request, env: Env, bucket: string, limit: number): Promise<boolean> {
+  if (!env.DB) return false;
+  try {
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    const ipHash = await sha256Hex(`${env.IP_SALT || "eryeza-speaking"}:${bucket}:${ip}`);
+    const hour = new Date().toISOString().slice(0, 13);
+    await env.DB.prepare("CREATE TABLE IF NOT EXISTS speaking_rate (ipHash TEXT NOT NULL, hour TEXT NOT NULL, count INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (ipHash, hour))").run();
+    const row = await env.DB.prepare(
+      "INSERT INTO speaking_rate (ipHash, hour, count) VALUES (?, ?, 1) ON CONFLICT(ipHash, hour) DO UPDATE SET count = count + 1 RETURNING count"
+    ).bind(ipHash, hour).first<{ count: number }>();
+    return Boolean(row && row.count > limit);
+  } catch {
+    return false;
+  }
+}
+
 function shortString(v: unknown, max: number): string {
   return typeof v === "string" ? v.slice(0, max).trim() : "";
 }
@@ -128,6 +161,12 @@ async function handleSiteEvent(
 ): Promise<Response> {
   if (request.method !== "POST") {
     return jsonResponse({ ok: false, error: "Method not allowed." }, 405, cors);
+  }
+  if (!allowedOrigins(env).includes(request.headers.get("Origin") || "")) {
+    return jsonResponse({ ok: false, error: "Not allowed." }, 403, cors);
+  }
+  if (await overRateLimit(request, env, "events", 60)) {
+    return jsonResponse({ ok: false, error: "Too many requests." }, 429, cors);
   }
 
   let body: Record<string, unknown>;
@@ -170,15 +209,15 @@ async function handleSiteEvent(
     // so the endpoint works without a separate manual migration step.
     const message = e instanceof Error ? e.message : String(e);
     if (!/no such table/i.test(message)) {
-      return jsonResponse({ ok: false, error: "Could not record the event.", detail: message }, 500, cors);
+      return jsonResponse({ ok: false, error: "Could not record the event." }, 500, cors);
     }
     try {
       await env.DB.prepare(SITE_EVENTS_DDL).run();
       await env.DB.prepare("CREATE INDEX IF NOT EXISTS idx_site_events_event ON site_events(event, ts);").run();
       await insert();
     } catch (e2) {
-      const message2 = e2 instanceof Error ? e2.message : String(e2);
-      return jsonResponse({ ok: false, error: "Could not record the event.", detail: message2 }, 500, cors);
+      console.error("site_events retry failed", e2);
+      return jsonResponse({ ok: false, error: "Could not record the event." }, 500, cors);
     }
   }
 
@@ -194,9 +233,12 @@ function jsonResponse(data: unknown, status: number, cors: Record<string, string
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const origin = env.ALLOWED_ORIGIN || "https://eryezakalalu.com";
+    const allowed = allowedOrigins(env);
+    const reqOrigin = request.headers.get("Origin") || "";
+    const origin = allowed.includes(reqOrigin) ? reqOrigin : allowed[0];
     const cors: Record<string, string> = {
       "Access-Control-Allow-Origin": origin,
+      "Vary": "Origin",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Max-Age": "86400",
@@ -235,12 +277,24 @@ export default {
       return jsonResponse({ ok: false, error: "Method not allowed." }, 405, cors);
     }
 
+    if (!allowedOrigins(env).includes(reqOrigin)) {
+      return jsonResponse({ ok: false, error: "This form can only be sent from eryezakalalu.com." }, 403, cors);
+    }
+    if (await overRateLimit(request, env, "speaking", 5)) {
+      return jsonResponse({ ok: false, error: "Too many attempts from this connection. Please try again in an hour." }, 429, cors);
+    }
+
     // Parse + clean the body
     let body: Record<string, unknown>;
     try {
       body = await request.json() as Record<string, unknown>;
     } catch {
       return jsonResponse({ ok: false, error: "Invalid request body." }, 422, cors);
+    }
+
+    // Honeypot: answer like a success so bots learn nothing, store nothing.
+    if (clean(body.website, 200)) {
+      return jsonResponse({ ok: true, message: "Thank you. Your speaking invitation has been received." }, 201, cors);
     }
 
     const d: Record<string, string> = {};

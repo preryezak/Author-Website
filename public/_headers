@@ -50,6 +50,10 @@
 /logo.svg
   Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
 
+# Brand film: unhashed, so cache for 30 days; the browser still revalidates cheaply.
+/video/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
 # Crawler/discovery files can change at any time.
 /robots.txt
   Cache-Control: public, max-age=3600

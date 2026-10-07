@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   title: "Privacy",
   description: "How eryezakalalu.com collects and uses information from visitors, subscribers, readers and anyone who writes in.",
   alternates: { canonical: "/privacy" },
+  openGraph: {
+    type: "website",
+    url: "/privacy",
+    title: "Privacy · Eryeza Kalalu",
+    description: "How eryezakalalu.com collects and uses information from visitors, subscribers, readers and anyone who writes in.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Eryeza Kalalu" }],
+  },
+  twitter: { card: "summary_large_image", title: "Privacy · Eryeza Kalalu", description: "How eryezakalalu.com collects and uses information from visitors, subscribers, readers and anyone who writes in.", images: ["/og.png"] },
 };
 
 export default function PrivacyPage() {

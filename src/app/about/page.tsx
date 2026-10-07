@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   description:
     "Eryeza Kalalu is a pastor, author, speaker and communicator writing about faith, character, purpose and influence.",
   alternates: { canonical: "/about" },
+  openGraph: {
+    type: "website",
+    url: "/about",
+    title: "About Eryeza Kalalu",
+    description: "Eryeza Kalalu is a pastor, author, speaker and communicator writing about faith, character, purpose and influence.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Eryeza Kalalu" }],
+  },
+  twitter: { card: "summary_large_image", title: "About Eryeza Kalalu", description: "Eryeza Kalalu is a pastor, author, speaker and communicator writing about faith, character, purpose and influence.", images: ["/og.png"] },
 };
 
 /** Render **bold** and *italic* markers from the content file. */

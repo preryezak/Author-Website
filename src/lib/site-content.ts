@@ -406,7 +406,7 @@ export const EDITIONS = {
   regionUGXSub: "Selar, mobile money & card",
   note: "Instant digital delivery. No coupon needed.",
   /** Hidden automatically from 1 Nov 2026 00:00 EAT (see LAUNCH_PRICE_ENDS). */
-  launchLine: "Launch price until 31 October.",
+  launchLine: "Launch price until 31 October. Normal prices apply from 1 November.",
   // price/was = launch price with the struck-through full price; full = the price shown from 1 November.
   // Payhip and Selar URLs confirmed live by Eryeza on 1 Oct 2026.
   tiers: [

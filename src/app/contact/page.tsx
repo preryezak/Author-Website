@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   title: "Contact",
   description: "Contact Eryeza Kalalu for speaking invitations, press, or general enquiries.",
   alternates: { canonical: "/contact" },
+  openGraph: {
+    type: "website",
+    url: "/contact",
+    title: "Contact · Eryeza Kalalu",
+    description: "Contact Eryeza Kalalu for speaking invitations, press, or general enquiries.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Eryeza Kalalu" }],
+  },
+  twitter: { card: "summary_large_image", title: "Contact · Eryeza Kalalu", description: "Contact Eryeza Kalalu for speaking invitations, press, or general enquiries.", images: ["/og.png"] },
 };
 
 /**

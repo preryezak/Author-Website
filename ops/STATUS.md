@@ -114,3 +114,11 @@ measurement) and inlined CSS (doubled the HTML).
 - **Gutters stay at the site's 24 px** on mobile.
 - **UI labels written by Claude Code** (please review): footer "Resources", "Privacy"; menu "Resources"; `/resources/` error "That did not go through. Please try again in a moment." and the Worker's validation messages; success CTA "Get the book"; `/podcast/` "The current series", "The Influential Spirit, in eight weeks", "This week's study guide", "Get the free guide", "Latest episode", "Study guide for week N"; player button "Load the player" / "Plays the latest episode here, via iHeart"; "Buy via Payhip/Selar →"; sticky bar "Out now"; Day 1 CTA "Get the book".
 - **Existing copy left for P1-3** although it breaks house rules: weekday-as-work "Monday" (`THIRTY_DAYS`, `THE_DAYS`, `FAQ`, `SPEAKING.howParas`); "Sit with" (`THIRTY_DAYS.eyebrow`); figurative "carry" (`SPEAKING.howParas`); fragment "No schedule, no noise." (`/letter/`).
+
+## 7 Oct 2026 — praise, sneak peek, parallax, film, edge Worker
+- Merged PR #1 (praise groups, sneak-peek gallery, parallax, brand film). Deployed `ccndaily-books` and `eryeza-speaking`.
+- `edge/worker.ts` (free plan) runs only for `/video/*` (HTTP Range, so iPhone plays the film) and `/api/geo` (opens UGX first for visitors in Africa). Everything else is still plain static assets.
+- Speaking Worker: server-side Origin check, honeypot, 5/hour and 60/hour per-IP D1 counters, no internal error text returned.
+- Per-page OG/Twitter tags, 404 noindex, `/.well-known/security.txt`, `/video/*` cache rule, launch-price countdown, speculation-rules prefetch.
+- books@eryezakalalu.com: Email Routing rule to the verified destination; Cloudflare MX accepts it and rejects unknown addresses.
+- **1 Nov 2026 checklist:** change Payhip + Selar prices; redeploy so JSON-LD offers (priceValidUntil 2026-10-31) and llms.txt show the normal prices ($15/$29/$49, UGX 45,000/90,000/150,000).
