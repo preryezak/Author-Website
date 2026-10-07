@@ -48,10 +48,14 @@ const KIT_FORM_BASE = "https://app.kit.com/forms";
 const RATE_LIMIT_PER_HOUR = 5;
 const API_TIMEOUT_MS = 8000;
 
-/** Cloudflare Turnstile. When TURNSTILE_SECRET is set a valid token is required. */
-async function turnstileOk(env: Env, token: unknown, request: Request): Promise<boolean> {
-  if (!env.TURNSTILE_SECRET) return true;
-  if (typeof token !== "string" || token.length < 10 || token.length > 4096) return false;
+/**
+ * Cloudflare Turnstile. "ok" = verified. "degraded" = the visitor's browser could not run the check at all
+ * (blockers, odd networks); we still accept the message, under a much tighter limit and tagged, because losing a
+ * real invitation costs more than one extra spam message. "fail" = a token was sent and did not verify.
+ */
+async function turnstileOk(env: Env, token: unknown, request: Request, clientFailed: boolean): Promise<"ok" | "degraded" | "fail"> {
+  if (!env.TURNSTILE_SECRET) return "ok";
+  if (typeof token !== "string" || token.length < 10 || token.length > 4096) return clientFailed ? "degraded" : "fail";
   try {
     const form = new FormData();
     form.append("secret", env.TURNSTILE_SECRET);
@@ -60,9 +64,9 @@ async function turnstileOk(env: Env, token: unknown, request: Request): Promise<
     if (ip) form.append("remoteip", ip);
     const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: form });
     const out = (await res.json()) as { success?: boolean };
-    return out.success === true;
+    return out.success === true ? "ok" : "fail";
   } catch {
-    return true; // Cloudflare's verifier unreachable: do not block a real visitor
+    return "ok"; // Cloudflare's verifier unreachable: do not block a real visitor
   }
 }
 
@@ -279,7 +283,8 @@ export default {
     // Honeypot: answer like a success so bots learn nothing, store nothing.
     if (clean(body.website, 200)) return json({ ok: true });
 
-    if (!(await turnstileOk(env, body.turnstileToken, request))) {
+    const human = await turnstileOk(env, body.turnstileToken, request, body.turnstileFailed === true);
+    if (human === "fail") {
       return json({ ok: false, error: "The security check did not pass. Please reload the page and try again." }, 403);
     }
 
@@ -304,7 +309,7 @@ export default {
         const row = await env.DB.prepare(
           "INSERT INTO study_rate (ipHash, hour, count) VALUES (?, ?, 1) ON CONFLICT(ipHash, hour) DO UPDATE SET count = count + 1 RETURNING count"
         ).bind(ipHash, hour).first<{ count: number }>();
-        if (row && row.count > RATE_LIMIT_PER_HOUR) {
+        if (row && row.count > (human === "ok" ? RATE_LIMIT_PER_HOUR : 2)) {
           return json({ ok: false, error: "Too many attempts from this connection. Please try again in an hour." }, 429);
         }
       } catch { /* table missing: fail open rather than block real readers */ }

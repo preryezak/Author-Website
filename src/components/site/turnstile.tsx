@@ -38,6 +38,7 @@ export default function Turnstile({ onToken, onFail, resetKey = 0 }: { onToken: 
   const id = useRef<string | undefined>(undefined);
   const cb = useRef(onToken);
   cb.current = onToken;
+  const tries = useRef(0);
   const fail = useRef(onFail);
   fail.current = onFail;
 
@@ -50,9 +51,19 @@ export default function Turnstile({ onToken, onFail, resetKey = 0 }: { onToken: 
         size: "flexible",
         theme: "auto",
         appearance: "interaction-only",
-        callback: (t: string) => cb.current(t),
+        callback: (t: string) => { tries.current = 0; cb.current(t); },
         "expired-callback": () => cb.current(""),
-        "error-callback": () => { cb.current(""); fail.current?.(); return true; },
+        "error-callback": () => {
+          cb.current("");
+          // Transient errors are common (slow networks, a challenge that timed out): retry quietly three times
+          // before telling the form that the check cannot run here.
+          tries.current += 1;
+          if (tries.current <= 3 && id.current && window.turnstile) {
+            const wid = id.current;
+            window.setTimeout(() => { if (id.current === wid) window.turnstile?.reset(wid); }, 1500 * tries.current);
+          } else fail.current?.();
+          return true;
+        },
       });
     }).catch(() => { cb.current(""); fail.current?.(); });
     return () => { cancelled = true; if (id.current && window.turnstile) window.turnstile.remove(id.current); id.current = undefined; };

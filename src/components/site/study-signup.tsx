@@ -29,6 +29,7 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
   const [iso, setIso] = useState("");
   const [tsToken, setTsToken] = useState("");
   const [tsReset, setTsReset] = useState(0);
+  const [tsFailed, setTsFailed] = useState(false);
 
   useEffect(() => { setEpisode(currentEpisode()); }, []);
 
@@ -48,7 +49,7 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
     const fd = new FormData(e.currentTarget);
     const rawPhone = String(fd.get("phone") || "").replace(/[^0-9]/g, "").replace(/^0+/, "");
     if (rawPhone && (rawPhone.length < 5 || rawPhone.length > 12 || !iso)) { setError("Please check the phone number and pick its country code, or leave the phone box empty."); setStatus("error"); return; }
-    if (!tsToken) { setError("One moment while the security check finishes, then press the button again."); setStatus("error"); return; }
+    if (!tsToken && !tsFailed) { setError("One moment while the security check finishes, then press the button again."); setStatus("error"); return; }
     setStatus("sending"); setError("");
     try {
       const res = await fetch(ENDPOINT, {
@@ -62,6 +63,7 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
           week: episode.n,
           website: String(fd.get("website") || ""),
           turnstileToken: tsToken,
+          turnstileFailed: !tsToken && tsFailed,
           phone: rawPhone ? `+${dialFor(iso)}${rawPhone}` : "",
           phoneCountry: rawPhone ? iso : "",
         }),
@@ -170,7 +172,7 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
                 <span>{STUDY.letterOptIn}</span>
               </label>
             </div>
-            <Turnstile onToken={setTsToken} onFail={() => { setError("The security check could not run in this browser. Try another browser or turn off content blockers for this site, or write to hello@eryezakalalu.com instead."); setStatus("error"); }} resetKey={tsReset} />
+            <Turnstile onToken={(v) => { setTsToken(v); if (v) setTsFailed(false); }} onFail={() => setTsFailed(true)} resetKey={tsReset} />
             <div style={{ marginTop: 22 }}>
               <button className="btn btn-accent sg-submit" type="submit" disabled={status === "sending"} aria-busy={status === "sending"}>
                 {status === "sending" ? "Sending…" : STUDY.submit}<ArrowRight />

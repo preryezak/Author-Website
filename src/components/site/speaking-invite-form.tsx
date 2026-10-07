@@ -24,7 +24,7 @@ interface Section {
 }
 
 /** Phone / WhatsApp with a country-code picker, pre-selected from the visitor's location. Stores "+<code><number>". */
-function PhoneField({ field, value, onChange }: { field: Field; value: string; onChange: (v: string) => void }) {
+function PhoneField({ field, value, onChange, onIso }: { field: Field; value: string; onChange: (v: string) => void; onIso?: (iso: string) => void }) {
   const id = `if-${field.key}`;
   const [iso, setIso] = useState("");
   const [digits, setDigits] = useState(() => (value.startsWith("+") ? "" : value));
@@ -37,6 +37,8 @@ function PhoneField({ field, value, onChange }: { field: Field; value: string; o
       .catch(() => { if (live) setIso((cur) => cur || (dialFor(fromLang()) ? fromLang() : "")); });
     return () => { live = false; };
   }, []);
+  useEffect(() => { onIso?.(iso); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [iso]);
   useEffect(() => {
     const d = digits.replace(/[^0-9]/g, "").replace(/^0+/, "");
     onChange(d && iso ? `+${dialFor(iso)}${d}` : d ? d : "");
@@ -57,7 +59,7 @@ function PhoneField({ field, value, onChange }: { field: Field; value: string; o
   );
 }
 
-function FieldInput({ field, value, onChange }: { field: Field; value: string; onChange: (v: string) => void }) {
+function FieldInput({ field, value, onChange, onIso }: { field: Field; value: string; onChange: (v: string) => void; onIso?: (iso: string) => void }) {
   const id = `if-${field.key}`;
   const label = (
     <label className="invite-field__label" htmlFor={id}>
@@ -98,7 +100,7 @@ function FieldInput({ field, value, onChange }: { field: Field; value: string; o
       </div>
     );
   }
-  if (field.type === "tel") return <PhoneField field={field} value={value} onChange={onChange} />;
+  if (field.type === "tel") return <PhoneField field={field} value={value} onChange={onChange} onIso={onIso} />;
   // text / email / date / country
   const inputType = field.type === "country" ? "text" : field.type;
   const autoComplete =
@@ -125,6 +127,12 @@ export default function SpeakingInviteForm() {
   const total = sections.length;
   const isLast = step === total - 1;
 
+  // The country follows the phone code (detected or chosen) until the visitor edits it themselves.
+  const countryEdited = useRef(false);
+  const onPhoneIso = (iso: string) => {
+    const name = COUNTRIES.find((c) => c.iso === iso)?.name;
+    if (name && !countryEdited.current) setData((d) => ({ ...d, country: name }));
+  };
   const setField = (k: string, v: string) => setData((d) => ({ ...d, [k]: v }));
   const visible = (f: Field) => (f.showIf ? f.showIf.anyOf.includes(data[f.showIf.field] || "") : true);
   const stepValid = () => current.fields.filter((f) => f.required && visible(f)).every((f) => (data[f.key] || "").trim().length > 0);
@@ -142,6 +150,7 @@ export default function SpeakingInviteForm() {
   const hpRef = useRef<HTMLInputElement>(null);
   const [tsToken, setTsToken] = useState("");
   const [tsReset, setTsReset] = useState(0);
+  const [tsFailed, setTsFailed] = useState(false);
 
   // The server needs a little more than "not empty". Check everything here and jump to the step that needs fixing,
   // so a problem on an earlier step is never reported on the last one.
@@ -163,13 +172,13 @@ export default function SpeakingInviteForm() {
     e.preventDefault();
     const problem = findProblem();
     if (problem) { setStep(problem.step); setError(problem.msg); setStatus("error"); return; }
-    if (!tsToken) { setError("One moment while the security check finishes, then send again."); setStatus("error"); return; }
+    if (!tsToken && !tsFailed) { setError("One moment while the security check finishes, then send again."); setStatus("error"); return; }
     setStatus("submitting"); setError("");
     try {
       // Posts to the eryeza-speaking Worker (ENDPOINTS.speaking in site-content.ts;
       // NEXT_PUBLIC_SPEAKING_ENDPOINT overrides it at build time).
       const endpoint = ENDPOINTS.speaking;
-      const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, website: hpRef.current?.value || "", turnstileToken: tsToken }) });
+      const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, website: hpRef.current?.value || "", turnstileToken: tsToken, turnstileFailed: !tsToken && tsFailed }) });
       const r = await res.json();
       if (res.ok && r.ok) setStatus("success");
       else { setError(r.error || "Something went wrong. Please try again."); setStatus("error"); }
@@ -207,14 +216,14 @@ export default function SpeakingInviteForm() {
 
       <div className="invite-fields">
         {current.fields.filter(visible).map((f) => (
-          <FieldInput key={f.key} field={f} value={data[f.key] || ""} onChange={(v) => setField(f.key, v)} />
+          <FieldInput key={f.key} field={f} value={data[f.key] || ""} onChange={(v) => { if (f.key === "country") countryEdited.current = true; setField(f.key, v); }} onIso={f.key === "phone" ? onPhoneIso : undefined} />
         ))}
         {current.fields.some((f) => f.help && visible(f)) ? null : null}
       </div>
 
       {error ? <div className="form-error" style={{ marginTop: 16 }}>{error}</div> : null}
 
-      <Turnstile onToken={setTsToken} onFail={() => { setError("The security check could not run in this browser. Try another browser or turn off content blockers for this site, or write to speaking@eryezakalalu.com instead."); setStatus("error"); }} resetKey={tsReset} />
+      <Turnstile onToken={(v) => { setTsToken(v); if (v) setTsFailed(false); }} onFail={() => setTsFailed(true)} resetKey={tsReset} />
       {isLast ? <p className="invite-submit-note">{SPEAKING.invite.preSubmit}</p> : null}
 
       <div className="invite-nav">

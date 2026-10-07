@@ -174,10 +174,14 @@ async function overRateLimit(request: Request, env: Env, bucket: string, limit: 
   }
 }
 
-/** Cloudflare Turnstile. When TURNSTILE_SECRET is set a valid token is required. */
-async function turnstileOk(env: Env, token: unknown, request: Request): Promise<boolean> {
-  if (!env.TURNSTILE_SECRET) return true;
-  if (typeof token !== "string" || token.length < 10 || token.length > 4096) return false;
+/**
+ * Cloudflare Turnstile. "ok" = verified. "degraded" = the visitor's browser could not run the check at all
+ * (blockers, odd networks); we still accept the message, under a much tighter limit and tagged, because losing a
+ * real invitation costs more than one extra spam message. "fail" = a token was sent and did not verify.
+ */
+async function turnstileOk(env: Env, token: unknown, request: Request, clientFailed: boolean): Promise<"ok" | "degraded" | "fail"> {
+  if (!env.TURNSTILE_SECRET) return "ok";
+  if (typeof token !== "string" || token.length < 10 || token.length > 4096) return clientFailed ? "degraded" : "fail";
   try {
     const form = new FormData();
     form.append("secret", env.TURNSTILE_SECRET);
@@ -186,9 +190,9 @@ async function turnstileOk(env: Env, token: unknown, request: Request): Promise<
     if (ip) form.append("remoteip", ip);
     const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: form });
     const out = (await res.json()) as { success?: boolean };
-    return out.success === true;
+    return out.success === true ? "ok" : "fail";
   } catch {
-    return true; // Cloudflare's verifier unreachable: do not block a real visitor
+    return "ok"; // Cloudflare's verifier unreachable: do not block a real visitor
   }
 }
 
@@ -322,10 +326,6 @@ export default {
     if (!allowedOrigins(env).includes(reqOrigin)) {
       return jsonResponse({ ok: false, error: "This form can only be sent from eryezakalalu.com." }, 403, cors);
     }
-    if (await overRateLimit(request, env, "speaking", 5)) {
-      return jsonResponse({ ok: false, error: "Too many attempts from this connection. Please try again in an hour." }, 429, cors);
-    }
-
     // Parse + clean the body
     let body: Record<string, unknown>;
     try {
@@ -339,7 +339,8 @@ export default {
       return jsonResponse({ ok: true, message: "Thank you. Your speaking invitation has been received." }, 201, cors);
     }
 
-    if (!(await turnstileOk(env, body.turnstileToken, request))) {
+    const human = await turnstileOk(env, body.turnstileToken, request, body.turnstileFailed === true);
+    if (human === "fail") {
       return jsonResponse({ ok: false, error: "The security check did not pass. Please reload the page and try again." }, 403, cors);
     }
 
@@ -354,13 +355,19 @@ export default {
     if (!d.eventName || d.eventName.length < 2) return jsonResponse({ ok: false, error: "Please share the name of your event or gathering." }, 422, cors);
     if (!d.speakAbout || d.speakAbout.length < 10) return jsonResponse({ ok: false, error: "Please share what you would like Eryeza to speak about." }, 422, cors);
 
+    // Only complete, verified submissions count towards the hourly limit (typing mistakes and
+    // validation errors never lock anyone out).
+    if (await overRateLimit(request, env, human === "ok" ? "speaking" : "speaking-unverified", human === "ok" ? 6 : 2)) {
+      return jsonResponse({ ok: false, error: "Too many invitations from this connection in the last hour. Please try again later, or write to hello@eryezakalalu.com." }, 429, cors);
+    }
+
     const receivedAt = new Date().toISOString();
     const speakingEmail = env.SPEAKING_EMAIL || "speaking@eryezakalalu.com";
     // Where submissions are actually delivered. The Cloudflare send_email binding
     // only accepts a VERIFIED destination address, so this cannot be the public
     // alias speaking@eryezakalalu.com (that is a routing rule, not a destination).
     const notifyEmail = env.NOTIFY_EMAIL || speakingEmail;
-    const subject = `Speaking invitation from ${name}${d.organisation ? ", " + d.organisation : ""}`;
+    const subject = `${human === "ok" ? "" : "[security check unavailable] "}Speaking invitation from ${name}${d.organisation ? ", " + d.organisation : ""}`;
     const html = buildEmailHtml(d, receivedAt);
     const text = buildEmailText(d, receivedAt);
 
