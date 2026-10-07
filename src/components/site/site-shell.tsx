@@ -43,7 +43,7 @@ export default function SiteShell({
     <div className="min-h-screen flex flex-col">
       <header className="masthead" id="masthead" ref={mastheadRef}>
         <div className="container row">
-          <Link className="brand" href="/">
+          <Link prefetch={false} className="brand" href="/">
             <img src="/brand/logo-monogram.svg" alt="" width={40} height={40} />
             <span className="wordmark">
               <span className="name">Eryeza Kalalu</span>
@@ -166,16 +166,16 @@ export default function SiteShell({
               </div>
               <ul className="footer-list">
                 <li>
-                  <Link href="/letter">Letters</Link>
+                  <Link prefetch={false} href="/letter">Letters</Link>
                 </li>
                 <li>
-                  <Link href="/influential-spirit">The Influential Spirit</Link>
+                  <Link prefetch={false} href="/influential-spirit">The Influential Spirit</Link>
                 </li>
                 <li>
-                  <Link href="/books">The library</Link>
+                  <Link prefetch={false} href="/books">The library</Link>
                 </li>
                 <li>
-                  <Link href="/resources">Resources</Link>
+                  <Link prefetch={false} href="/resources">Resources</Link>
                 </li>
               </ul>
             </div>
@@ -185,7 +185,7 @@ export default function SiteShell({
               </div>
               <ul className="footer-list">
                 <li>
-                  <Link href="/podcast">Devotion In Season</Link>
+                  <Link prefetch={false} href="/podcast">Devotion In Season</Link>
                 </li>
                 <li>
                   <a href={PODCAST.platforms[0].url} target="_blank" rel="noopener noreferrer">
@@ -208,16 +208,16 @@ export default function SiteShell({
                   <GiveButton source="footer" variant="footer" />
                 </li>
                 <li>
-                  <Link href="/speaking">Invite to speak</Link>
+                  <Link prefetch={false} href="/speaking">Invite to speak</Link>
                 </li>
                 <li>
-                  <Link href="/contact">Contact</Link>
+                  <Link prefetch={false} href="/contact">Contact</Link>
                 </li>
                 <li>
                   <a href={`mailto:${SITE.speakingEmail}`}>{SITE.speakingEmail}</a>
                 </li>
                 <li>
-                  <Link href="/privacy">Privacy</Link>
+                  <Link prefetch={false} href="/privacy">Privacy</Link>
                 </li>
               </ul>
             </div>
