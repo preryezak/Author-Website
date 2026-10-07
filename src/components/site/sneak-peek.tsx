@@ -2,11 +2,10 @@ import { SNEAK_PEEK } from "@/lib/site-content";
 import { OrnamentRule } from "@/components/site/ui-bits";
 import { Parallax, BrandFilm } from "@/components/site/parallax";
 
-/** Sneak peek into each edition, with a gentle parallax on the product scenes. Mostly server-rendered. */
-export default function SneakPeek({ withFilm = true, editionsHref = "#editions" }: { withFilm?: boolean; editionsHref?: string }) {
+
+/** The brand film, full width, right under the first screen. */
+export function FilmSection() {
   return (
-    <>
-      {withFilm && (
         <section id="film" className="section surface-ink" data-reveal>
           <div className="container">
             <div className="mx-auto text-center" style={{ maxWidth: 640 }}>
@@ -19,7 +18,15 @@ export default function SneakPeek({ withFilm = true, editionsHref = "#editions" 
             </div>
           </div>
         </section>
-      )}
+      
+  );
+}
+
+/** Sneak peek into each edition, with a gentle parallax on the product scenes. Mostly server-rendered. */
+export default function SneakPeek({ withFilm = true, editionsHref = "#editions" }: { withFilm?: boolean; editionsHref?: string }) {
+  return (
+    <>
+      {withFilm && <FilmSection />}
       <section id="inside" className="section surface-100 sneak" data-reveal>
         <div className="container">
           <div className="text-center mx-auto" style={{ maxWidth: 640, marginBottom: 40 }}>

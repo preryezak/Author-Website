@@ -14,6 +14,7 @@
 import { useEffect, useState } from "react";
 import { STUDY, STUDY_COVER, ENDPOINTS, currentEpisode, type StudyEpisode } from "@/lib/site-content";
 import { ArrowRight } from "@/components/site/ui-bits";
+import Turnstile from "@/components/site/turnstile";
 
 const ENDPOINT = ENDPOINTS.study;
 const FALLBACK_ERROR = "That did not go through. Please try again in a moment.";
@@ -22,12 +23,15 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
   const [episode, setEpisode] = useState<StudyEpisode>(initialEpisode);
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [error, setError] = useState("");
+  const [tsToken, setTsToken] = useState("");
+  const [tsReset, setTsReset] = useState(0);
 
   useEffect(() => { setEpisode(currentEpisode()); }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    if (!tsToken) { setError("One moment while the security check finishes, then press the button again."); setStatus("error"); return; }
     setStatus("sending"); setError("");
     try {
       const res = await fetch(ENDPOINT, {
@@ -40,6 +44,7 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
           // The Worker and D1 call this `week`; it is the episode number within the theme.
           week: episode.n,
           website: String(fd.get("website") || ""),
+          turnstileToken: tsToken,
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; id?: string; kitFormId?: string };
@@ -64,6 +69,8 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
       setError(data.error || FALLBACK_ERROR); setStatus("error");
     } catch {
       setError(FALLBACK_ERROR); setStatus("error");
+    } finally {
+      setTsReset((n) => n + 1);
     }
   }
 
@@ -122,6 +129,7 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
                 <span>{STUDY.letterOptIn}</span>
               </label>
             </div>
+            <Turnstile onToken={setTsToken} onFail={() => { setError("The security check could not run in this browser. Try another browser or turn off content blockers for this site, or write to hello@eryezakalalu.com instead."); setStatus("error"); }} resetKey={tsReset} />
             <div style={{ marginTop: 24 }}>
               <button className="btn btn-accent" type="submit" disabled={status === "sending"} aria-busy={status === "sending"}>
                 {STUDY.submit}<ArrowRight />

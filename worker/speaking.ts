@@ -41,6 +41,7 @@ interface Env {
                              // address in Email Routing (e.g. pastor.eryeza@gmail.com).
                              // SPEAKING_EMAIL is the public alias and is NOT a valid destination.
   ALLOWED_ORIGIN?: string;   // comma-separated; default: https://eryezakalalu.com,https://www.eryezakalalu.com
+  TURNSTILE_SECRET?: string; // secret: wrangler secret put TURNSTILE_SECRET
   IP_SALT?: string;          // optional salt for the rate-limit IP hash
   DB?: D1Database;           // optional D1 binding (set in wrangler.toml). Storage fails quietly if absent.
 }
@@ -147,6 +148,24 @@ async function overRateLimit(request: Request, env: Env, bucket: string, limit: 
     return Boolean(row && row.count > limit);
   } catch {
     return false;
+  }
+}
+
+/** Cloudflare Turnstile. When TURNSTILE_SECRET is set a valid token is required. */
+async function turnstileOk(env: Env, token: unknown, request: Request): Promise<boolean> {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (typeof token !== "string" || token.length < 10 || token.length > 4096) return false;
+  try {
+    const form = new FormData();
+    form.append("secret", env.TURNSTILE_SECRET);
+    form.append("response", token);
+    const ip = request.headers.get("CF-Connecting-IP");
+    if (ip) form.append("remoteip", ip);
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: form });
+    const out = (await res.json()) as { success?: boolean };
+    return out.success === true;
+  } catch {
+    return true; // Cloudflare's verifier unreachable: do not block a real visitor
   }
 }
 
@@ -295,6 +314,10 @@ export default {
     // Honeypot: answer like a success so bots learn nothing, store nothing.
     if (clean(body.website, 200)) {
       return jsonResponse({ ok: true, message: "Thank you. Your speaking invitation has been received." }, 201, cors);
+    }
+
+    if (!(await turnstileOk(env, body.turnstileToken, request))) {
+      return jsonResponse({ ok: false, error: "The security check did not pass. Please reload the page and try again." }, 403, cors);
     }
 
     const d: Record<string, string> = {};

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { SPEAKING, ENDPOINTS } from "@/lib/site-content";
+import Turnstile from "@/components/site/turnstile";
 
 type FieldType = "text" | "email" | "tel" | "date" | "country" | "select" | "radio" | "textarea";
 interface Field {
@@ -103,20 +104,25 @@ export default function SpeakingInviteForm() {
   const back = () => setStep((s) => Math.max(0, s - 1));
 
   const hpRef = useRef<HTMLInputElement>(null);
+  const [tsToken, setTsToken] = useState("");
+  const [tsReset, setTsReset] = useState(0);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!tsToken) { setError("One moment while the security check finishes, then send again."); setStatus("error"); return; }
     setStatus("submitting"); setError("");
     try {
       // Posts to the eryeza-speaking Worker (ENDPOINTS.speaking in site-content.ts;
       // NEXT_PUBLIC_SPEAKING_ENDPOINT overrides it at build time).
       const endpoint = ENDPOINTS.speaking;
-      const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, website: hpRef.current?.value || "" }) });
+      const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...data, website: hpRef.current?.value || "", turnstileToken: tsToken }) });
       const r = await res.json();
       if (res.ok && r.ok) setStatus("success");
       else { setError(r.error || "Something went wrong. Please try again."); setStatus("error"); }
     } catch {
       setError("Network error. Please try again."); setStatus("error");
+    } finally {
+      setTsReset((n) => n + 1);
     }
   };
 
@@ -154,6 +160,7 @@ export default function SpeakingInviteForm() {
 
       {error ? <div className="form-error" style={{ marginTop: 16 }}>{error}</div> : null}
 
+      {isLast ? <Turnstile onToken={setTsToken} onFail={() => { setError("The security check could not run in this browser. Try another browser or turn off content blockers for this site, or write to speaking@eryezakalalu.com instead."); setStatus("error"); }} resetKey={tsReset} /> : null}
       {isLast ? <p className="invite-submit-note">{SPEAKING.invite.preSubmit}</p> : null}
 
       <div className="invite-nav">

@@ -7,7 +7,10 @@ import { getLetters, getEpisodes } from "@/lib/rss";
 import SiteShell from "@/components/site/site-shell";
 import BooksEditions from "@/components/site/books-editions";
 import ReviewGroups from "@/components/site/review-groups";
-import SneakPeek from "@/components/site/sneak-peek";
+import SneakPeek, { FilmSection } from "@/components/site/sneak-peek";
+import BookHero from "@/components/site/book-hero";
+import LaunchBanner from "@/components/site/launch-banner";
+import BundleMarquee from "@/components/site/bundle-marquee";
 import BookCard from "@/components/site/book-card";
 import EngagementsGrid from "@/components/site/engagements";
 import ServeIcon from "@/components/site/serve-icon";
@@ -46,17 +49,30 @@ export default async function Home() {
     <SiteShell active="/">
       <RevealInit />
 
+      {/* ============ BOOK FIRST: hero, banner, film, bundle strip, buy ============ */}
+      <div id="top" />
+      <BookHero id="influential-spirit" />
+      <LaunchBanner />
+      <FilmSection />
+      <BundleMarquee />
+
+      {/* ============ EDITIONS (shared with /books and /influential-spirit) ============ */}
+      <BooksEditions heading={false} />
+
+      {/* ============ REVIEWS ============ */}
+      <ReviewGroups />
+
       {/* ============ HERO (not data-reveal: it is the first paint) ============ */}
-      <section className="section surface-100" id="top">
+      <section className="section surface-100" id="welcome">
         <div className="container">
           <div className="grid-12" style={{ alignItems: "center", gap: 64 }}>
             <div className="col-7 stack-lg">
               <span className="eyebrow">{HERO.eyebrow}</span>
-              <h1 className="display" style={{ fontSize: "clamp(40px, 5vw, 68px)", lineHeight: 1.05, fontWeight: 400, letterSpacing: "-0.02em" }}>{HERO.headline}</h1>
+              <h2 className="display" style={{ fontSize: "clamp(40px, 5vw, 68px)", lineHeight: 1.05, fontWeight: 400, letterSpacing: "-0.02em" }}>{HERO.headline}</h2>
               <p className="body body-lg" style={{ maxWidth: "54ch" }}>{HERO.body}</p>
               <div className="flex-wrap-gap gap-4" style={{ paddingTop: 8 }}>
-                <a className="btn btn-primary" href={HERO.ctaPrimaryHref}>{HERO.ctaPrimary}<ArrowRight /></a>
-                <a className="btn btn-ghost" href={HERO.ctaSecondaryHref}>{HERO.ctaSecondary}</a>
+                <a className="btn btn-primary" href="#about">About Eryeza<ArrowRight /></a>
+                <a className="btn btn-ghost" href="#speaking">Invite him to speak</a>
               </div>
             </div>
             <div className="col-5">
@@ -69,7 +85,7 @@ export default async function Home() {
                     width={640}
                     height={960}
                     alt="Pastor Eryeza Kalalu"
-                    fetchPriority="high"
+                    loading="lazy"
                     decoding="async"
                   />
                 </figure>
@@ -77,45 +93,6 @@ export default async function Home() {
                   <div className="name">{HERO.portraitName}</div>
                   <div className="loc">{HERO.portraitLoc}</div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ FEATURED BOOK ============ */}
-      <section id="influential-spirit" className="section surface-200 loose" data-reveal>
-        <div className="container">
-          <div className="featured-book">
-            <div className="featured-book__media">
-              <div className="device">
-                <span className="device__bezel-mark" aria-hidden="true" />
-                <div className="device__screen">
-                  <img
-                    src="/images/cover-640.webp"
-                    srcSet="/images/cover-640.webp 640w, /images/cover-1200.webp 1200w"
-                    sizes="(max-width: 1024px) 70vw, 460px"
-                    width={1200}
-                    height={1800}
-                    alt="The Influential Spirit, the actual book front cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <div className="device__chrome"><span>Digital edition</span><span className="device__battery" aria-hidden="true" /></div>
-              </div>
-              <div className="cover-stamp"><span className="orn">§</span>{FLAGSHIP.stampMeta}<strong>{FLAGSHIP.stampTitle}</strong></div>
-            </div>
-            <div>
-              <span className="eyebrow">{FEATURED_BOOK.eyebrow}</span>
-              <h2 className="featured-book__title">{FEATURED_BOOK.title}</h2>
-              <p className="featured-book__subtitle">{FEATURED_BOOK.subtitle}</p>
-              <p className="featured-book__headline">{FEATURED_BOOK.headline}</p>
-              {FEATURED_BOOK.paras.map((p, i) => (<p key={i} className="body body-lg" style={{ maxWidth: "60ch", marginTop: i === 0 ? 0 : 16 }}>{p}</p>))}
-              <p className="featured-book__audience">{FEATURED_BOOK.audience}</p>
-              <div className="flex-wrap-gap gap-4" style={{ marginTop: 24 }}>
-                <a className="btn btn-primary" href={FEATURED_BOOK.ctaPrimaryHref}>{FEATURED_BOOK.ctaPrimary}<ArrowRight /></a>
-                <a className="btn btn-ghost" href={FEATURED_BOOK.ctaSecondaryHref}>{FEATURED_BOOK.ctaSecondary}</a>
               </div>
             </div>
           </div>
@@ -303,13 +280,7 @@ export default async function Home() {
       </section>
 
       {/* ============ SNEAK PEEK + FILM ============ */}
-      <SneakPeek />
-
-      {/* ============ EDITIONS (shared with /books and /influential-spirit) ============ */}
-      <BooksEditions heading={false} />
-
-      {/* ============ REVIEWS ============ */}
-      <ReviewGroups />
+      <SneakPeek withFilm={false} />
 
       {/* ============ FAQ ============ */}
       <section id="questions" className="section surface-100" data-reveal>

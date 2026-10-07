@@ -26,6 +26,7 @@
  */
 
 interface Env {
+  TURNSTILE_SECRET?: string; // secret: wrangler secret put TURNSTILE_SECRET
   DB?: D1Database;
   KIT_API_KEY?: string;      // secret; paid Kit plans only. Without it the public form address is used.
   KIT_FORM_ID?: string;      // the Kit form whose confirmation email delivers the guide
@@ -44,6 +45,24 @@ const KIT = "https://api.kit.com/v4";
 const KIT_FORM_BASE = "https://app.kit.com/forms";
 const RATE_LIMIT_PER_HOUR = 5;
 const API_TIMEOUT_MS = 8000;
+
+/** Cloudflare Turnstile. When TURNSTILE_SECRET is set a valid token is required. */
+async function turnstileOk(env: Env, token: unknown, request: Request): Promise<boolean> {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (typeof token !== "string" || token.length < 10 || token.length > 4096) return false;
+  try {
+    const form = new FormData();
+    form.append("secret", env.TURNSTILE_SECRET);
+    form.append("response", token);
+    const ip = request.headers.get("CF-Connecting-IP");
+    if (ip) form.append("remoteip", ip);
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: form });
+    const out = (await res.json()) as { success?: boolean };
+    return out.success === true;
+  } catch {
+    return true; // Cloudflare's verifier unreachable: do not block a real visitor
+  }
+}
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -236,6 +255,10 @@ export default {
 
     // Honeypot: answer like a success so bots learn nothing, store nothing.
     if (clean(body.website, 200)) return json({ ok: true });
+
+    if (!(await turnstileOk(env, body.turnstileToken, request))) {
+      return json({ ok: false, error: "The security check did not pass. Please reload the page and try again." }, 403);
+    }
 
     const firstName = clean(body.firstName, 80);
     const email = clean(body.email, 200).toLowerCase();

@@ -36,17 +36,9 @@ export default function BooksEditions({ heading = true }: { heading?: boolean })
         <div className="bundle-band">
           <div className="bundle-digital">
             <div className="bundle-digital__device">
-              <div className="mini-device">
-                <img
-                  src="/images/cover-640.webp"
-                  srcSet="/images/cover-640.webp 640w"
-                  sizes="(max-width: 1024px) 50vw, 260px"
-                  width={640}
-                  height={960}
-                  alt="The Influential Spirit cover on a tablet screen"
-                  loading="lazy"
-                  decoding="async"
-                />
+              <div className="bundle-pair">
+                <img className="bundle-pair__page" src="/images/stage/reader.webp" width={560} height={840} alt="A page from the Reader Edition" loading="lazy" decoding="async" />
+                <img className="bundle-pair__tablet" src="/images/stage/epub.webp" width={600} height={914} alt="The EPUB edition open on a tablet" loading="lazy" decoding="async" />
               </div>
             </div>
             <div className="bundle-digital__text">
@@ -59,20 +51,15 @@ export default function BooksEditions({ heading = true }: { heading?: boolean })
               <div className="bundle-meta">Day 1 in full, plus the 30-day reading plan inside every edition.</div>
             </div>
           </div>
-          <figure>
-            <img
-              src="/images/mockups/book-audiogram-640.webp"
-              srcSet="/images/mockups/book-audiogram-640.webp 640w"
-              sizes="(max-width: 1024px) 88vw, 520px"
-              width={640}
-              height={640}
-              alt="Author-narrated audiobook with headphones"
-              loading="lazy"
-              decoding="async"
-            />
+          <figure className="bundle-audio">
+            <div className="bundle-audio__stack">
+              <img className="bundle-audio__back bundle-audio__back--l" src="/images/stage/group.webp" width={520} height={924} alt="" loading="lazy" decoding="async" />
+              <img className="bundle-audio__back bundle-audio__back--r" src="/images/stage/decl.webp" width={520} height={924} alt="" loading="lazy" decoding="async" />
+              <img className="bundle-audio__card" src="/images/stage/audio.webp" width={560} height={560} alt="Author-narrated audiobook" loading="lazy" decoding="async" />
+            </div>
             <figcaption>
               <strong>Author-narrated audiobook</strong>
-              Included in the Formation Bundle
+              Included in the Formation Bundle, with the Group Study Guide and Declarations
             </figcaption>
           </figure>
         </div>

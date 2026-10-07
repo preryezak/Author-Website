@@ -1,0 +1,27 @@
+name = "eryeza-healthcheck"
+main = "worker.ts"
+compatibility_date = "2026-08-19"
+workers_dev = true
+
+[vars]
+SITE = "https://eryezakalalu.com"
+NOTIFY_EMAIL = "pastor.eryeza@gmail.com"
+FROM_EMAIL = "speaking@eryezakalalu.com"
+
+# Free plan: 6-hourly check (4 runs/day) and a one-off reminder on 1 Nov 08:00 EAT (05:00 UTC).
+[triggers]
+crons = ["0 */6 * * *", "0 5 1 11 *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "eryeza-speaking-db"
+database_id = "d1ba4007-adb8-4965-8213-3af2c475c321"
+
+[[send_email]]
+name = "EMAIL"
+allowed_sender_addresses = ["speaking@eryezakalalu.com"]
+allowed_destination_addresses = ["pastor.eryeza@gmail.com"]
+
+[[services]]
+binding = "SPEAKING"
+service = "eryeza-speaking"
