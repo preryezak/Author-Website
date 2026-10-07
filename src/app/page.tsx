@@ -1,11 +1,13 @@
 import {
   SITE, HERO, FLAGSHIP, FEATURED_BOOK, WHY_THIS_BOOK, AUTHOR_LETTER,
   DISCOVER, LIBRARY, PODCAST, NEWSLETTER, THIRTY_DAYS, DAY1_FULL, PILLARS,
-  THE_DAYS, REVIEWS, FAQ, WHATS_NEXT, ABOUT, SPEAKING,
+  THE_DAYS, FAQ, WHATS_NEXT, ABOUT, SPEAKING,
 } from "@/lib/site-content";
 import { getLetters, getEpisodes } from "@/lib/rss";
 import SiteShell from "@/components/site/site-shell";
 import BooksEditions from "@/components/site/books-editions";
+import ReviewGroups from "@/components/site/review-groups";
+import SneakPeek from "@/components/site/sneak-peek";
 import BookCard from "@/components/site/book-card";
 import EngagementsGrid from "@/components/site/engagements";
 import ServeIcon from "@/components/site/serve-icon";
@@ -300,29 +302,14 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ============ SNEAK PEEK + FILM ============ */}
+      <SneakPeek />
+
       {/* ============ EDITIONS (shared with /books and /influential-spirit) ============ */}
       <BooksEditions heading={false} />
 
       {/* ============ REVIEWS ============ */}
-      <section id="reviews" className="section surface-50" data-reveal>
-        <div className="container">
-          <div className="text-center mx-auto" style={{ maxWidth: 640, marginBottom: 48 }}>
-            <span className="eyebrow">{REVIEWS.eyebrow}</span>
-            <h2 className="display" style={{ fontSize: "clamp(28px, 3.4vw, 40px)", marginTop: 8, letterSpacing: "-0.01em" }}>{REVIEWS.heading}</h2>
-            <p className="caption mt-3">{REVIEWS.subhead}</p>
-          </div>
-          <OrnamentRule>§</OrnamentRule>
-          <div className="grid-12" style={{ gap: 24, marginTop: 32 }} data-reveal-stagger>
-            {REVIEWS.items.map((r, i) => (
-              <figure className={`col-6 review-card review-card--${i % 2 === 0 ? "a" : "b"}`} key={i}>
-                <div className="orn" aria-hidden="true">“</div>
-                <blockquote>{r.quote}</blockquote>
-                <figcaption><span className="reviewer-name">{r.name}</span><span className="reviewer-role">{r.role}</span></figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ReviewGroups />
 
       {/* ============ FAQ ============ */}
       <section id="questions" className="section surface-100" data-reveal>

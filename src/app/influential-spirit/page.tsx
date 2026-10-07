@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import SiteShell from "@/components/site/site-shell";
 import BooksEditions from "@/components/site/books-editions";
-import { LIBRARY, FAQ, REVIEWS, FEATURED_BOOK, FLAGSHIP } from "@/lib/site-content";
+import ReviewGroups from "@/components/site/review-groups";
+import SneakPeek from "@/components/site/sneak-peek";
+import { LIBRARY, FAQ, FEATURED_BOOK, FLAGSHIP } from "@/lib/site-content";
 
 const BOOK = LIBRARY.books[0];
 
@@ -108,41 +110,14 @@ export default function InfluentialSpiritPage() {
         </div>
       </section>
 
+      {/* ---------- SNEAK PEEK ---------- */}
+      <SneakPeek withFilm={false} />
+
       {/* ---------- EDITIONS (shared with /books) ---------- */}
       <BooksEditions />
 
-      {/* ---------- READER RESPONSES ---------- */}
-      {REVIEWS.items.length > 0 && (
-        <section className="section surface-50">
-          <div className="container">
-            <div className="text-center mx-auto" style={{ maxWidth: 640, marginBottom: 48 }}>
-              <span className="eyebrow">{REVIEWS.eyebrow}</span>
-              <h2
-                className="display"
-                style={{ fontSize: "clamp(28px, 3.4vw, 40px)", marginTop: 8, letterSpacing: "-0.01em" }}
-              >
-                {REVIEWS.heading}
-              </h2>
-              <p className="caption mt-3">{REVIEWS.subhead}</p>
-            </div>
-            <div className="ornament-rule" aria-hidden="true">
-              <span>§</span>
-            </div>
-            <div className="grid-12" style={{ gap: 24, marginTop: 32 }}>
-              {REVIEWS.items.map((r, i) => (
-                <figure className={`col-6 review-card review-card--${i % 2 === 0 ? "a" : "b"}`} key={i}>
-                  <div className="orn">“</div>
-                  <blockquote>{r.quote}</blockquote>
-                  <figcaption>
-                    <span className="reviewer-name">{r.name}</span>
-                    <span className="reviewer-role">{r.role}</span>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* ---------- PRAISE ---------- */}
+      <ReviewGroups />
 
       {/* ---------- QUESTIONS ---------- */}
       <section className="section surface-100" id="questions">
