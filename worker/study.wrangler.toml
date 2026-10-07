@@ -46,3 +46,9 @@ BEEHIIV_STUDY_PUB_ID = ""
 binding = "DB"
 database_name = "eryeza-study-db"
 database_id = "d9e54ccd-4e43-4949-adae-58a82e6f1a4c"
+
+# Owner notification for each new sign-up: native Cloudflare send, free for verified inboxes.
+[[send_email]]
+name = "EMAIL"
+allowed_sender_addresses = ["speaking@eryezakalalu.com"]
+allowed_destination_addresses = ["pastor.eryeza@gmail.com"]

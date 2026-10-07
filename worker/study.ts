@@ -26,6 +26,8 @@
  */
 
 interface Env {
+  EMAIL?: { send(m: { to: string; from: string; subject: string; text: string; replyTo?: string }): Promise<unknown> }; // send_email binding (free: verified inboxes only)
+  NOTIFY_EMAIL?: string;     // owner inbox, default pastor.eryeza@gmail.com
   TURNSTILE_SECRET?: string; // secret: wrangler secret put TURNSTILE_SECRET
   DB?: D1Database;
   KIT_API_KEY?: string;      // secret; paid Kit plans only. Without it the public form address is used.
@@ -209,6 +211,27 @@ async function runApis(env: Env, id: string | null, s: { email: string; firstNam
   return { guideStatus, beehiivStatus };
 }
 
+/** Owner notification for each new study sign-up. Native Cloudflare send (free, verified inbox). Never blocks the sign-up. */
+async function notifyOwner(env: Env, request: Request, d: { firstName: string; email: string; phone: string; phoneCountry: string; letterOptIn: boolean; week: number }): Promise<void> {
+  if (!env.EMAIL) return;
+  const cf = (request as unknown as { cf?: { country?: string; city?: string } }).cf;
+  const text = [
+    `New study-guide sign-up (${new Date().toISOString()})`,
+    "",
+    `Name: ${d.firstName}`,
+    `Email: ${d.email}`,
+    `Phone: ${d.phone ? d.phone + (d.phoneCountry ? " (" + d.phoneCountry + ")" : "") : "not given"}`,
+    `Also wants the letter: ${d.letterOptIn ? "yes" : "no"}`,
+    `Signed up on: episode ${d.week} page`,
+    `Seen from: ${[cf?.city, cf?.country].filter(Boolean).join(", ") || "unknown"}`,
+    "",
+    "Kit sends them the confirmation email and the study library link. Their details are also stored in the study database.",
+  ].join("\n");
+  try {
+    await env.EMAIL.send({ to: env.NOTIFY_EMAIL || "pastor.eryeza@gmail.com", from: "speaking@eryezakalalu.com", subject: `New study sign-up: ${d.firstName}`, text, replyTo: d.email });
+  } catch { /* the sign-up is already stored; a mail hiccup must not matter */ }
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     if (request.method === "GET") {
@@ -300,6 +323,7 @@ export default {
     }
 
     const sub = { email, firstName, week, letterOptIn };
+    ctx.waitUntil(notifyOwner(env, request, { firstName, email, phone, phoneCountry, letterOptIn, week }));
     if (stored) {
       // Safe in D1: finish the provider calls after replying, so the reader is not kept waiting.
       ctx.waitUntil(runApis(env, id, sub));
