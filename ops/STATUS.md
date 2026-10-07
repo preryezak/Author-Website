@@ -122,3 +122,10 @@ measurement) and inlined CSS (doubled the HTML).
 - Per-page OG/Twitter tags, 404 noindex, `/.well-known/security.txt`, `/video/*` cache rule, launch-price countdown, speculation-rules prefetch.
 - books@eryezakalalu.com: Email Routing rule to the verified destination; Cloudflare MX accepts it and rejects unknown addresses.
 - **1 Nov 2026 checklist:** change Payhip + Selar prices; redeploy so JSON-LD offers (priceValidUntil 2026-10-31) and llms.txt show the normal prices ($15/$29/$49, UGX 45,000/90,000/150,000).
+
+## 7 Oct 2026 (later): book-first redesign, Turnstile, health check
+- Home and /influential-spirit open with the book: layered BookStage (cover + reader pages, study guide, plan, journal, declarations, EPUB, audiobook), launch banner with buy button, film, scrolling bundle strip, then editions and praise.
+- Turnstile (widget "Eryeza Kalalu forms") on the speaking and study forms; secret stored on both Workers as TURNSTILE_SECRET.
+- `healthcheck/` Worker (eryeza-healthcheck): 6-hourly checks, emails only on change plus a Monday all-green note, and a one-off 1 Nov reminder. Manual run: /run?t=<RUN_TOKEN secret>.
+- Cloudflare Web Analytics beacon allowed in the CSP.
+- Payhip and Selar handle their own launch pricing and discounts.
