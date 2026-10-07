@@ -36,7 +36,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["healthcheck", 
+  "exclude": ["healthcheck", "edge", 
     "node_modules",
     "worker",
     "examples"

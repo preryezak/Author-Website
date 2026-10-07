@@ -263,6 +263,10 @@ export default {
     const firstName = clean(body.firstName, 80);
     const email = clean(body.email, 200).toLowerCase();
     const letterOptIn = body.letterOptIn === true;
+    // Optional phone: kept only when it looks like a real international number. Never sent to Kit or Beehiiv.
+    const phoneRaw = clean(body.phone, 24);
+    const phone = /^\+[1-9][0-9]{6,14}$/.test(phoneRaw) ? phoneRaw : "";
+    const phoneCountry = phone ? clean(body.phoneCountry, 2).toUpperCase().replace(/[^A-Z]/g, "") : "";
     const week = Number(body.week);
     if (!firstName) return json({ ok: false, error: "Please add your first name." }, 422);
     if (!isEmail(email)) return json({ ok: false, error: "Please check your email address." }, 422);
@@ -289,8 +293,8 @@ export default {
     if (env.DB) {
       try {
         await env.DB.prepare(
-          "INSERT INTO study_signups (id, createdAt, email, firstName, week, letterOptIn, guideStatus, beehiivStatus, ipHash) VALUES (?, ?, ?, ?, ?, ?, 'pending', 'pending', ?)"
-        ).bind(id, new Date().toISOString(), email, firstName, week, letterOptIn ? 1 : 0, ipHash).run();
+          "INSERT INTO study_signups (id, createdAt, email, firstName, week, letterOptIn, guideStatus, beehiivStatus, ipHash, phone, phoneCountry) VALUES (?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?, ?)"
+        ).bind(id, new Date().toISOString(), email, firstName, week, letterOptIn ? 1 : 0, ipHash, phone, phoneCountry).run();
         stored = true;
       } catch { /* fall through to the synchronous path below */ }
     }

@@ -5,14 +5,24 @@
  * (src/lib/rss.ts); this island only handles "All N episodes" in place.
  * Used on the home page and on /podcast/, so both lists behave the same.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { EpisodeItem } from "@/lib/rss";
 import { fmtDate } from "@/components/site/ui-bits";
 
 const EPISODE_PREVIEW = 3;
 
-export default function EpisodeList({ episodes, listId = "podcast-episodes", labelAs = "span" }: { episodes: EpisodeItem[]; listId?: string; /** "h2" where the list sits directly under the page h1. */ labelAs?: "span" | "h2" }) {
+export default function EpisodeList({ episodes: initial, listId = "podcast-episodes", labelAs = "span" }: { episodes: EpisodeItem[]; listId?: string; /** "h2" where the list sits directly under the page h1. */ labelAs?: "span" | "h2" }) {
+  const [episodes, setEpisodes] = useState<EpisodeItem[]>(initial);
   const [open, setOpen] = useState(false);
+  // The build bakes in the feed as it was; the edge Worker serves it live (10-minute cache), so a new episode appears without a rebuild.
+  useEffect(() => {
+    let live = true;
+    fetch("/api/episodes")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { episodes?: EpisodeItem[] } | null) => { if (live && d?.episodes?.length) setEpisodes(d.episodes); })
+      .catch(() => {});
+    return () => { live = false; };
+  }, []);
   const H = "h3";
   const Label = labelAs;
   return (

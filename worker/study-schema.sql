@@ -11,8 +11,11 @@ CREATE TABLE IF NOT EXISTS study_signups (
   letterOptIn   INTEGER NOT NULL DEFAULT 0,   -- 1 = ticked "Also send me Eryeza's letter"
   guideStatus   TEXT NOT NULL DEFAULT 'pending',  -- beehiiv:ok (study publication) | beehiiv:error:<status> | Kit fallback: form:ok | ok | partial:... | skipped:...
   beehiivStatus TEXT NOT NULL DEFAULT 'pending',  -- the LETTER (Eryeza Writes): ok | n/a (box not ticked) | skipped:manual-import | error:<status>
-  ipHash        TEXT                            -- salted SHA-256, never the raw IP
+  ipHash        TEXT,                           -- salted SHA-256, never the raw IP
+  phone         TEXT DEFAULT '',                -- optional, E.164 (+256...). Owner use only, never shared
+  phoneCountry  TEXT DEFAULT ''
 );
+-- Existing databases: ALTER TABLE study_signups ADD COLUMN phone TEXT DEFAULT ''; ALTER TABLE study_signups ADD COLUMN phoneCountry TEXT DEFAULT '';
 
 CREATE INDEX IF NOT EXISTS idx_study_createdAt ON study_signups(createdAt DESC);
 CREATE INDEX IF NOT EXISTS idx_study_email ON study_signups(email);

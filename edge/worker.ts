@@ -8,10 +8,17 @@
  *   /video/*   Static assets do not answer HTTP Range requests, and iPhone Safari
  *              will not play an mp4 that cannot return 206. This adds byte-range
  *              support (and Accept-Ranges) for the brand film.
+ *   /resources/guides/*  Study-guide PDFs stay unavailable (404) until their episode airs
+ *              (Sunday 8 PM EAT), so a guide cannot be opened early by guessing its address.
+ *   /api/episodes  The podcast feed, read live (cached 10 minutes at the edge) so new episodes
+ *              appear on the site without a rebuild.
  *   /api/geo   Tells the page which region the visitor is in, so the editions
  *              block can open the right currency first (UGX in Africa, USD
  *              elsewhere). It stores nothing and sets no cookie.
  */
+
+import { STUDY_THEMES, airsAt } from "../src/lib/site-content";
+import { getEpisodes } from "../src/lib/rss";
 
 interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> };
@@ -77,10 +84,41 @@ function geo(request: Request): Response {
   });
 }
 
+/** /resources/guides/<theme>/<NN>-<slug>.pdf: 404 until that episode's air time. Unknown files pass through. */
+async function serveGuide(request: Request, env: Env): Promise<Response> {
+  const m = /^\/resources\/guides\/([^/]+)\/(\d{2})-[^/]+\.pdf$/i.exec(new URL(request.url).pathname);
+  if (m) {
+    const theme = STUDY_THEMES.find((t) => t.slug === m[1]);
+    const ep = theme?.episodes.find((e) => e.n === Number(m[2]));
+    if (ep && airsAt(ep) > Date.now()) {
+      return new Response("Not found", { status: 404, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } });
+    }
+  }
+  const res = await env.ASSETS.fetch(request);
+  // Open guides must never be cached past their opening moment by an intermediary, and early 404s are never cached.
+  return res;
+}
+
+async function episodes(request: Request, ctx: ExecutionContext): Promise<Response> {
+  const cache = (caches as unknown as { default: Cache }).default;
+  const key = new Request(new URL("/api/episodes", request.url).toString());
+  const hit = await cache.match(key);
+  if (hit) return hit;
+  const list = await getEpisodes(30);
+  if (!list.length) return new Response(JSON.stringify({ episodes: [] }), { status: 503, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+  const res = new Response(JSON.stringify({ episodes: list }), {
+    headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=600", "X-Content-Type-Options": "nosniff" },
+  });
+  ctx.waitUntil(cache.put(key, res.clone()));
+  return res;
+}
+
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const { pathname } = new URL(request.url);
     if (pathname === "/api/geo") return geo(request);
+    if (pathname === "/api/episodes") return episodes(request, ctx);
+    if (pathname.startsWith("/resources/guides/")) return serveGuide(request, env);
     if (pathname.startsWith("/video/")) return serveVideo(request, env);
     return env.ASSETS.fetch(request);
   },

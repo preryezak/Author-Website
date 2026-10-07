@@ -12,6 +12,8 @@
  * Manual run: GET https://<worker>/run  (returns the report as JSON, sends nothing).
  */
 
+import { CURRENT_THEME, airsAt, guidePath } from "../src/lib/site-content";
+
 interface EmailBinding { send(m: { to: string; from: string; subject: string; text: string }): Promise<unknown> }
 interface Env { RUN_TOKEN?: string; SPEAKING: { fetch(r: Request): Promise<Response> }; EMAIL: EmailBinding; DB: D1Database; SITE?: string; NOTIFY_EMAIL?: string; FROM_EMAIL?: string }
 
@@ -78,6 +80,24 @@ async function runChecks(site: string, env: Env): Promise<Check[]> {
   out.push({ name: "speaking Worker", ok: spStatus === 200 && spBody.ok === true && spBody.storageConfigured === true, detail: `${spStatus}${spBody.storageConfigured ? ", storage ok" : ""}` });
   const st = await timed(site + "/api/study");
   out.push({ name: "study Worker", ok: st.res?.status === 200, detail: st.res ? String(st.res.status) : st.err || "no response" });
+
+  // Study guides: every aired episode's PDF must be served; every unaired one must be held back (404).
+  const nowMs = Date.now();
+  const guideChecks = await Promise.all(CURRENT_THEME.episodes.map(async (ep) => {
+    const aired = airsAt(ep) <= nowMs;
+    const r = await timed(site + guidePath(CURRENT_THEME, ep));
+    const st = r.res?.status ?? 0;
+    const ok = aired ? st === 200 : st === 404;
+    const detail = aired ? (st === 200 ? "open and served" : `AIRED but not served (${st}): the PDF is missing or broken`) : (st === 404 ? "held back until it airs" : `reachable BEFORE it airs (${st})`);
+    return { name: `study guide ${ep.n}`, ok, detail };
+  }));
+  out.push(...guideChecks);
+  const lib = await timed(site + "/resources/library/");
+  out.push({ name: "study library page", ok: lib.res?.status === 200, detail: lib.res ? String(lib.res.status) : lib.err || "no response" });
+  const eps = await timed(site + "/api/episodes");
+  let epsOk = false;
+  try { epsOk = eps.res?.status === 200 && (((await eps.res.json()) as { episodes?: unknown[] }).episodes?.length ?? 0) > 0; } catch { /* keep false */ }
+  out.push({ name: "/api/episodes (live podcast feed)", ok: epsOk, detail: eps.res ? String(eps.res.status) : eps.err || "no response" });
 
   // Mail DNS, via Cloudflare's DNS-over-HTTPS.
   const doh = async (name: string, type: string): Promise<string[]> => {

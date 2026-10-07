@@ -28,14 +28,21 @@ export default function StudyLibraryPage() {
   }));
   return (
     <SiteShell active="/resources">
-      <section className="section surface-100 loose">
+      <section className="section study-hero" style={{ paddingBottom: 56 }}>
         <div className="container">
-          <div style={{ maxWidth: 720 }}>
-            <span className="eyebrow">{STUDY.eyebrow}</span>
-            <h1 className="display" style={{ fontSize: "clamp(36px, 5vw, 60px)", lineHeight: 1.08, fontWeight: 400, letterSpacing: "-0.02em", marginTop: 12 }}>{STUDY.libraryHeading}</h1>
-            <p className="body body-lg" style={{ marginTop: 20, maxWidth: "60ch" }}>{STUDY.libraryLede}</p>
+          <div className="lib-hero">
+            <div>
+              <span className="eyebrow">{STUDY.eyebrow}</span>
+              <h1 className="study-hero__title">{STUDY.libraryHeading}</h1>
+              <p className="study-hero__lede">{STUDY.libraryLede}</p>
+            </div>
+            <img className="lib-hero__cover" src="/images/study/cover-600.webp" alt="" width={600} height={800} decoding="async" />
           </div>
-          <div style={{ marginTop: 48, maxWidth: 820 }}>
+        </div>
+      </section>
+      <section className="section surface-100 loose" style={{ paddingTop: 48 }}>
+        <div className="container">
+          <div style={{ maxWidth: 860, margin: "0 auto" }}>
             <StudyLibrary themes={themes} buildTime={Date.now()} />
           </div>
         </div>
