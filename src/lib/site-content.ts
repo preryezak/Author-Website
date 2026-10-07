@@ -434,6 +434,41 @@ export const REVIEWS = {
   ],
 } as const;
 
+/** Reviews, grouped the way the book presents them (Praise pages, front matter). */
+export const REVIEW_GROUPS = {
+  work: {
+    eyebrow: "Praise for the work",
+    heading: "Words from readers & friends.",
+    subhead: "On Pastor Eryeza’s writing and ministry.",
+    items: REVIEWS.items.slice(0, 2),
+  },
+  first: {
+    eyebrow: "Praise for the first edition",
+    heading: "What readers said about Becoming an Influence.",
+    subhead: "The first edition of this book. The Influential Spirit is its second, expanded edition.",
+    items: REVIEWS.items.slice(2),
+  },
+  invite: {
+    eyebrow: "Add your voice",
+    title: "Leave a word for the next reader",
+    body: "When you have lived with these thirty days, consider sharing what the book meant to you. It does not have to be polished or long. A few honest words can help someone who has not started yet decide to begin.",
+    emailLead: "Send yours to",
+    email: "books@eryezakalalu.com",
+  },
+} as const;
+
+/** "Inside each edition": the sneak-peek section. Images live in /images/bundles. */
+export const SNEAK_PEEK = {
+  eyebrow: "Inside each edition",
+  heading: "See what you are getting.",
+  subhead: "The real pages, laid out for phone, tablet and desk.",
+  bundles: [
+    { key: "reader", name: "Reader Edition", line: "Read it on any screen.", points: ["The Reader Edition PDF, magazine-style, built for phone, tablet and computer", "EPUB for Apple Books, Kindle (Send to Kindle) and Google Play Books", "A two-page Start Here guide"] },
+    { key: "formation", name: "Formation Bundle", line: "Read, listen, study, practise.", points: ["Everything in the Reader Edition", "The author-narrated audiobook", "A six-session Group Study Guide", "The 30-Day Reading Plan and Challenge, with a tick-off tracker"] },
+    { key: "complete", name: "Complete Formation Edition", line: "The whole journey, in your hands.", points: ["Everything in the Formation Bundle", "The Companion Journal: a fillable page for every day, plus inventories", "Declarations and Prayers, written and spoken", "Notion templates for the journal, plan and study guide"] },
+  ],
+} as const;
+
 /** FAQ */
 export const FAQ = {
   eyebrow: "Questions readers are already asking.",
