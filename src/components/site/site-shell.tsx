@@ -214,7 +214,7 @@ export default function SiteShell({
                   <Link prefetch={false} href="/contact">Contact</Link>
                 </li>
                 <li>
-                  <a href={`mailto:${SITE.speakingEmail}`}>{SITE.speakingEmail}</a>
+                  <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
                 </li>
                 <li>
                   <Link prefetch={false} href="/privacy">Privacy</Link>
