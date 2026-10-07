@@ -2,10 +2,9 @@
  * Site health check for eryezakalalu.com (Cloudflare free plan).
  *
  * Cron: every 6 hours (4 runs a day, ~20 requests each: far under the free
- * limits of 100,000 requests/day and 50 subrequests per run). It emails
- * pastor.eryeza@gmail.com only when something CHANGES (a check starts failing,
- * or recovers), repeats a still-failing alert once a day, and sends one short
- * "all green" note each Monday morning so silence never means "broken".
+ * limits of 100,000 requests/day and 50 subrequests per run). It records the
+ * result in D1 and stays silent. A scheduled Claude task reads /run, repairs
+ * anything broken, and emails what it corrected through /notify.
  *
  * A second cron fires once, on 1 Nov 08:00 EAT, with the end-of-launch-pricing reminder.
  *
@@ -137,18 +136,10 @@ async function scheduled(controller: ScheduledController, env: Env): Promise<voi
   const d = new Date();
   const mondayMorning = d.getUTCDay() === 1 && d.getUTCHours() >= 4 && d.getUTCHours() < 10;
 
-  if (status === "fail" && (!prev || prev.status !== "fail" || hoursSince >= 24)) {
-    await mail(env, `eryezakalalu.com: ${failed.length} check(s) failing`, `${new Date().toISOString()}\n\n${report(checks)}\n\nThis alert repeats once a day while anything is failing.`);
-    await setState(env, "fail", failed.map((f) => f.name).join(", "));
-  } else if (status === "ok" && prev?.status === "fail") {
-    await mail(env, "eryezakalalu.com: recovered", `${new Date().toISOString()}\n\nAll checks pass again.\n\n${report(checks)}`);
-    await setState(env, "ok");
-  } else if (status === "ok" && mondayMorning && hoursSince >= 24) {
-    await mail(env, "eryezakalalu.com: weekly check, all green", `${new Date().toISOString()}\n\n${report(checks)}`);
-    await setState(env, "ok", "weekly");
-  } else if (!prev) {
-    await setState(env, status);
-  }
+  // Silent by design: the Claude monitor (scheduled task) reads /run, fixes what it can, and sends the
+  // report through /notify. This run only records the latest state.
+  await setState(env, status, failed.map((f) => f.name).join(", "));
+  void prev; void hoursSince; void mondayMorning;
 }
 
 export default {
@@ -167,6 +158,17 @@ export default {
 ${report(checks)}`);
       }
       return new Response(JSON.stringify({ ok: checks.every((c) => c.ok), checks }, null, 2), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+    }
+    // POST /notify?t=TOKEN  {subject, text}: lets the Claude monitor email the site owner what it corrected.
+    if (url.pathname === "/notify" && request.method === "POST") {
+      if (!env.RUN_TOKEN || url.searchParams.get("t") !== env.RUN_TOKEN) return new Response("Not found", { status: 404 });
+      let body: { subject?: unknown; text?: unknown } = {};
+      try { body = await request.json(); } catch { return new Response("Bad request", { status: 400 }); }
+      const subject = typeof body.subject === "string" ? body.subject.slice(0, 160) : "";
+      const text = typeof body.text === "string" ? body.text.slice(0, 8000) : "";
+      if (!subject || !text) return new Response("Bad request", { status: 400 });
+      await mail(env, subject, text);
+      return new Response("sent", { status: 200 });
     }
     return new Response("eryeza-healthcheck", { status: 200 });
   },
