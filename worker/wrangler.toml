@@ -15,7 +15,7 @@ EMAIL_FROM = "speaking@eryezakalalu.com"
 NOTIFY_EMAIL = "pastor.eryeza@gmail.com"
 # Used only on the Resend fallback path. Until eryezakalalu.com is verified
 # on Resend, mail sends from Resend's shared onboarding address.
-RESEND_FROM = "onboarding@resend.dev"
+RESEND_FROM = "Eryeza Kalalu <speaking@eryezakalalu.com>"
 ALLOWED_ORIGIN = "https://eryezakalalu.com"
 
 # ── D1 storage (LIVE) ───────────────────────────────────────────────

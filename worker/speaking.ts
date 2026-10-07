@@ -93,6 +93,29 @@ function buildEmailText(d: Record<string, string>, receivedAt: string): string {
   return lines.join("\n");
 }
 
+function buildConfirmHtml(d: Record<string, string>): string {
+  const rows = SECTIONS.map((sec) => {
+    const filled = sec.fields.filter(([k]) => d[k]);
+    if (!filled.length) return "";
+    return `<tr><td style="padding:16px 28px 4px;font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#7B3F2E;">${esc(sec.heading)}</td></tr>` +
+      filled.map(([k, label]) => `<tr><td style="padding:3px 28px;font-family:Georgia,serif;font-size:15px;color:#3A322C;line-height:1.5;"><span style="color:#97754A;font-size:12px;">${esc(label)}</span><br>${esc(d[k])}</td></tr>`).join("");
+  }).join("");
+  return `<!doctype html><html><body style="margin:0;background:#F5F0E8;padding:24px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;margin:0 auto;background:#FBF8F2;border:1px solid rgba(30,26,22,0.12);border-top:3px solid #7B3F2E;">
+    <tr><td style="padding:28px 28px 8px;font-family:Georgia,serif;font-size:24px;color:#1E1A16;line-height:1.3;">Thank you, ${esc(d.name || "friend")}.</td></tr>
+    <tr><td style="padding:0 28px 18px;font-family:Georgia,serif;font-size:16px;color:#3A322C;line-height:1.6;">We have received your speaking invitation${d.eventName ? " for <b>" + esc(d.eventName) + "</b>" : ""}. Eryeza or someone on the team will get in touch with you soon.<br><br>Below is a copy of what you sent, for your records. If anything needs correcting, just reply to this email.</td></tr>
+    ${rows}
+    <tr><td style="padding:22px 28px 26px;font-family:Georgia,serif;font-size:15px;color:#3A322C;line-height:1.6;border-top:1px solid rgba(30,26,22,0.1);">Grace and peace,<br><i>Eryeza Kalalu</i><br><span style="font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:12px;color:#97754A;">eryezakalalu.com</span></td></tr>
+  </table></body></html>`;
+}
+
+function buildConfirmText(d: Record<string, string>): string {
+  const lines = [`Thank you, ${d.name || "friend"}.`, "", `We have received your speaking invitation${d.eventName ? " for " + d.eventName : ""}. Eryeza or someone on the team will get in touch with you soon.`, "", "A copy of what you sent:", ""];
+  for (const sec of SECTIONS) for (const [k, label] of sec.fields) if (d[k]) lines.push(`${label}: ${d[k]}`);
+  lines.push("", "If anything needs correcting, just reply to this email.", "", "Grace and peace,", "Eryeza Kalalu", "eryezakalalu.com");
+  return lines.join("\n");
+}
+
 /**
  * Site event logging — `POST /events`.
  *
@@ -385,11 +408,12 @@ export default {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: env.RESEND_FROM || "onboarding@resend.dev",
+            from: env.RESEND_FROM || "Eryeza Kalalu <speaking@eryezakalalu.com>",
             to: [notifyEmail],
-            replyTo: email,
+            reply_to: email,
             subject,
             html,
+            text,
           }),
         });
         if (res.ok) {
@@ -403,12 +427,35 @@ export default {
       }
     }
 
+    // 3) Confirmation to the sender, with a copy of what they submitted. Cloudflare's free send binding
+    //    can only reach verified inboxes, so this goes through Resend (eryezakalalu.com is verified there).
+    //    Never blocks or fails the submission.
+    let confirmed = false;
+    if (env.RESEND_API_KEY) {
+      try {
+        const res = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: "Eryeza Kalalu <hello@eryezakalalu.com>",
+            to: [email],
+            reply_to: "hello@eryezakalalu.com",
+            subject: "We have received your speaking invitation",
+            html: buildConfirmHtml(d),
+            text: buildConfirmText(d),
+          }),
+        });
+        confirmed = res.ok;
+      } catch { /* the owner copy is already sent and stored */ }
+    }
+
     // The submission is safe in D1 even when mail could not be sent; the site
     // reports success so the visitor is not asked to resubmit.
     return jsonResponse(
       {
         ok: true,
         emailed,
+        confirmed,
         stored,
         via,
         sendError: emailed ? undefined : sendError || "no email binding configured",
