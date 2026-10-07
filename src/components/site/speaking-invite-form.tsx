@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SPEAKING, ENDPOINTS } from "@/lib/site-content";
 import Turnstile from "@/components/site/turnstile";
+import { COUNTRIES, dialFor } from "@/lib/countries";
 
 type FieldType = "text" | "email" | "tel" | "date" | "country" | "select" | "radio" | "textarea";
 interface Field {
@@ -20,6 +21,40 @@ interface Section {
   title: string;
   intro?: string;
   fields: readonly Field[];
+}
+
+/** Phone / WhatsApp with a country-code picker, pre-selected from the visitor's location. Stores "+<code><number>". */
+function PhoneField({ field, value, onChange }: { field: Field; value: string; onChange: (v: string) => void }) {
+  const id = `if-${field.key}`;
+  const [iso, setIso] = useState("");
+  const [digits, setDigits] = useState(() => (value.startsWith("+") ? "" : value));
+  useEffect(() => {
+    let live = true;
+    const fromLang = () => (navigator.language.split("-")[1] || "").toUpperCase();
+    fetch("/api/geo", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((g) => { if (live) setIso((cur) => cur || (g?.country && dialFor(g.country) ? g.country : dialFor(fromLang()) ? fromLang() : "")); })
+      .catch(() => { if (live) setIso((cur) => cur || (dialFor(fromLang()) ? fromLang() : "")); });
+    return () => { live = false; };
+  }, []);
+  useEffect(() => {
+    const d = digits.replace(/[^0-9]/g, "").replace(/^0+/, "");
+    onChange(d && iso ? `+${dialFor(iso)}${d}` : d ? d : "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [iso, digits]);
+  return (
+    <div className="invite-field">
+      <label className="invite-field__label" htmlFor={id}>{field.label}{field.required ? <span className="req">*</span> : null}</label>
+      <div className="sg-phone">
+        <select aria-label="Country code" value={iso} onChange={(e) => setIso(e.target.value)} autoComplete="tel-country-code">
+          <option value="">Code</option>
+          {COUNTRIES.map((c) => <option key={c.iso} value={c.iso}>{c.iso} +{c.dial} {c.name}</option>)}
+        </select>
+        <input id={id} name={field.key} type="tel" inputMode="tel" autoComplete="tel-national" value={digits} placeholder="700 000 000" maxLength={20} onChange={(e) => setDigits(e.target.value)} />
+      </div>
+      <p className="sg-note">Used only so Eryeza's team can reach you about this invitation. We will never spam you or share your number.</p>
+    </div>
+  );
 }
 
 function FieldInput({ field, value, onChange }: { field: Field; value: string; onChange: (v: string) => void }) {
@@ -63,7 +98,8 @@ function FieldInput({ field, value, onChange }: { field: Field; value: string; o
       </div>
     );
   }
-  // text / email / tel / date / country
+  if (field.type === "tel") return <PhoneField field={field} value={value} onChange={onChange} />;
+  // text / email / date / country
   const inputType = field.type === "country" ? "text" : field.type;
   const autoComplete =
     field.key === "name" ? "name" :
@@ -95,7 +131,7 @@ export default function SpeakingInviteForm() {
   // Clicking Next with a required field empty used to do nothing at all, with no
   // explanation. Now it names what is missing so the visitor is never stuck.
   const next = () => {
-    if (stepValid()) { setError(""); setStep((s) => Math.min(total - 1, s + 1)); return; }
+    if (stepValid()) { setError(""); setStatus("idle"); setStep((s) => Math.min(total - 1, s + 1)); return; }
     const missing = current.fields
       .filter((f) => f.required && visible(f) && !(data[f.key] || "").trim())
       .map((f) => f.label);
@@ -107,8 +143,26 @@ export default function SpeakingInviteForm() {
   const [tsToken, setTsToken] = useState("");
   const [tsReset, setTsReset] = useState(0);
 
+  // The server needs a little more than "not empty". Check everything here and jump to the step that needs fixing,
+  // so a problem on an earlier step is never reported on the last one.
+  const MIN: Record<string, number> = { name: 2, eventName: 2, speakAbout: 10 };
+  const findProblem = (): { step: number; msg: string } | null => {
+    for (let i = 0; i < sections.length; i++) {
+      for (const f of sections[i].fields) {
+        if (!visible(f)) continue;
+        const v = (data[f.key] || "").trim();
+        if (f.required && !v) return { step: i, msg: `Please complete: ${f.label}.` };
+        if (MIN[f.key] && v && v.length < MIN[f.key]) return { step: i, msg: `${f.label}: please write a little more (at least ${MIN[f.key]} characters).` };
+        if (f.key === "email" && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return { step: i, msg: "Please check your email address, so we can reply." };
+      }
+    }
+    return null;
+  };
+
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const problem = findProblem();
+    if (problem) { setStep(problem.step); setError(problem.msg); setStatus("error"); return; }
     if (!tsToken) { setError("One moment while the security check finishes, then send again."); setStatus("error"); return; }
     setStatus("submitting"); setError("");
     try {
@@ -160,7 +214,7 @@ export default function SpeakingInviteForm() {
 
       {error ? <div className="form-error" style={{ marginTop: 16 }}>{error}</div> : null}
 
-      {isLast ? <Turnstile onToken={setTsToken} onFail={() => { setError("The security check could not run in this browser. Try another browser or turn off content blockers for this site, or write to speaking@eryezakalalu.com instead."); setStatus("error"); }} resetKey={tsReset} /> : null}
+      <Turnstile onToken={setTsToken} onFail={() => { setError("The security check could not run in this browser. Try another browser or turn off content blockers for this site, or write to speaking@eryezakalalu.com instead."); setStatus("error"); }} resetKey={tsReset} />
       {isLast ? <p className="invite-submit-note">{SPEAKING.invite.preSubmit}</p> : null}
 
       <div className="invite-nav">
