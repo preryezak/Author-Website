@@ -270,7 +270,7 @@ export const AUTHOR_LETTER = {
     "The Influential Spirit grew out of those conversations, and out of my own experiences, when God seemed more interested in straightening me than in promoting me. Thirty days is long enough to stop performing and start listening.",
     "Walk through it honestly, and you will come out of it steadier, more rooted, in the good sense. That depth is the point.",
   ],
-  pullquote: "Formation before platform. The person is being shaped for the platform, not the other way around.",
+  pullquote: "Depth you can experience. God forms the person long before He gives the platform.",
 } as const;
 
 /** === WHAT YOU WILL DISCOVER === */

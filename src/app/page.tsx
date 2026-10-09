@@ -52,7 +52,7 @@ export default async function Home() {
 
       {/* ============ BOOK FIRST: hero, banner, film, bundle strip, buy ============ */}
       <div id="top" />
-      <LaunchBanner />
+      <LaunchBanner variant="home" />
       <FilmHero />
       <BookHero id="influential-spirit" />
       <HearSection />

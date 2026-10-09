@@ -9,7 +9,7 @@ export function FilmSection() {
         <section id="film" className="section surface-ink" data-reveal>
           <div className="container">
             <div className="mx-auto text-center" style={{ maxWidth: 640 }}>
-              <span className="eyebrow">Formation before platform</span>
+              <span className="eyebrow">The Deep Encounter Library</span>
               <h2 className="display" style={{ fontSize: "clamp(30px, 3.8vw, 44px)", marginTop: 8, fontWeight: 400, color: "var(--paper-50)", letterSpacing: "-0.015em" }}>Thirty days, in under a minute.</h2>
             </div>
             <OrnamentRule>§</OrnamentRule>
