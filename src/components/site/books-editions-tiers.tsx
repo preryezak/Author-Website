@@ -59,7 +59,7 @@ export default function EditionsTiers() {
                     <div className="price"><Price launch={t.price} was={t.was} full={t.full} /></div>
                     {"ngn" in t ? <div className="price price--alt" aria-label="Price in Nigerian naira"><Price launch={t.ngn as string} was={t.ngnWas as string} full={t.ngnFull as string} /></div> : null}
                     <p className="tier-desc">{t.desc}</p>
-                    <span className="tier-cta">Buy via {g.via} →</span>
+                    <span className="tier-cta">Buy now →</span>
                   </a>
                 ))}
               </div>

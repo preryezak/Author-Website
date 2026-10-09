@@ -403,9 +403,9 @@ export const THE_DAYS = {
 export const EDITIONS = {
   eyebrow: "Choose how you want to buy.",
   regionUSD: "Rest of the world",
-  regionUSDSub: "Payhip, card & PayPal",
+  regionUSDSub: "Pay by card, instant delivery",
   regionUGX: "Africa",
-  regionUGXSub: "Selar, mobile money & card",
+  regionUGXSub: "Mobile money or card, instant delivery",
   note: "Instant digital delivery. No coupon needed.",
   /** Hidden automatically from 1 Nov 2026 00:00 EAT (see LAUNCH_PRICE_ENDS). */
   launchLine: "Launch price until 31 October. Normal prices apply from 1 November.",
