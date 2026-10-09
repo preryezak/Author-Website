@@ -129,3 +129,11 @@ measurement) and inlined CSS (doubled the HTML).
 - `healthcheck/` Worker (eryeza-healthcheck): 6-hourly checks, emails only on change plus a Monday all-green note, and a one-off 1 Nov reminder. Manual run: /run?t=<RUN_TOKEN secret>.
 - Cloudflare Web Analytics beacon allowed in the CSP.
 - Payhip and Selar handle their own launch pricing and discounts.
+
+## 9 Oct 2026: schedule shift, audio samples, listings
+- Study guide schedule: episode 1 airs Sunday 11 Oct (guide 1 stays open); episodes 2 to 8 follow weekly (18 Oct to 29 Nov). `opens` override on episode 1 in site-content.ts.
+- "Hear it" section (home and /influential-spirit): sample film plus three audio samples from the author-narrated audiobook (public/audio, public/video). The edge Worker serves /audio/* with byte ranges.
+- Naira shown beside UGX (Reader N14,400, Formation N28,800, Complete N48,000; originals N18,000, N36,000, N60,000), matching Selar.
+- Payhip product CidbX and Selar product 8818840887: pre-order wording removed, new description, tier text, SEO text, Selar button changed to "Order now", Selar buyers sent to /resources/, Payhip delivery message rewritten, three bundle images added to Payhip.
+- Payhip buyers are added to the mailing list "Influence Circle" (id 9839050), not the study-guide list (id 9991957).
+- Launch assets: 7 carousels, outreach scripts and week-1 captions in Launch_Assets/Social_Content.
