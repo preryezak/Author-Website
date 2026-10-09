@@ -11,6 +11,7 @@ import SneakPeek, { FilmSection } from "@/components/site/sneak-peek";
 import BookHero from "@/components/site/book-hero";
 import LaunchBanner from "@/components/site/launch-banner";
 import BundleMarquee from "@/components/site/bundle-marquee";
+import HearSection from "@/components/site/hear-section";
 import BookCard from "@/components/site/book-card";
 import EngagementsGrid from "@/components/site/engagements";
 import ServeIcon from "@/components/site/serve-icon";
@@ -54,6 +55,7 @@ export default async function Home() {
       <BookHero id="influential-spirit" />
       <LaunchBanner />
       <FilmSection />
+      <HearSection />
       <BundleMarquee />
 
       {/* ============ EDITIONS (shared with /books and /influential-spirit) ============ */}
@@ -512,7 +514,7 @@ export default async function Home() {
       <StickyBuyBar>
         <div className="meta">
           <div className="eyebrow">Out now</div>
-          <div className="caption">The Influential Spirit · from <Price launch="$12" full="$15" /> / <Price launch="UGX 36,000" full="UGX 45,000" /></div>
+          <div className="caption">The Influential Spirit · from <Price launch="$12" full="$15" /> / <Price launch="UGX 36,000" full="UGX 45,000" /> / <Price launch="₦14,400" full="₦18,000" /></div>
         </div>
         <a className="btn btn-gold btn-sm" href="#editions">Choose edition</a>
       </StickyBuyBar>

@@ -57,6 +57,7 @@ export default function EditionsTiers() {
                   <a className={`col-4 tier-card${g.paper ? " on-paper" : ""}${t.popular ? " popular" : ""}`} key={`${g.key}-${i}`} href={t.href} target="_blank" rel="noopener noreferrer external">
                     <span className="tier-name">{t.name}</span>
                     <div className="price"><Price launch={t.price} was={t.was} full={t.full} /></div>
+                    {"ngn" in t ? <div className="price price--alt" aria-label="Price in Nigerian naira"><Price launch={t.ngn as string} was={t.ngnWas as string} full={t.ngnFull as string} /></div> : null}
                     <p className="tier-desc">{t.desc}</p>
                     <span className="tier-cta">Buy via {g.via} →</span>
                   </a>

@@ -6,6 +6,7 @@ import SneakPeek, { FilmSection } from "@/components/site/sneak-peek";
 import BookHero from "@/components/site/book-hero";
 import LaunchBanner from "@/components/site/launch-banner";
 import BundleMarquee from "@/components/site/bundle-marquee";
+import HearSection from "@/components/site/hear-section";
 import { LIBRARY, FAQ } from "@/lib/site-content";
 
 const BOOK = LIBRARY.books[0];
@@ -34,6 +35,7 @@ export default function InfluentialSpiritPage() {
       <BookHero dayOneHref="/#day-one" />
       <LaunchBanner />
       <FilmSection />
+      <HearSection />
       <BundleMarquee />
 
       {/* ---------- WHAT THE BOOK ASKS ---------- */}

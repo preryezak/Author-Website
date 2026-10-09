@@ -30,7 +30,7 @@ main = "edge/worker.ts"
 directory = "./dist/public"
 binding = "ASSETS"
 # Only these paths invoke the Worker (HTTP Range for the film, visitor region).
-run_worker_first = ["/video/*", "/api/geo", "/api/episodes", "/resources/guides/*"]
+run_worker_first = ["/video/*", "/audio/*", "/api/geo", "/api/episodes", "/resources/guides/*"]
 # Real 404s.
 #
 # This was "single-page-application", which returned HTTP 200 with the

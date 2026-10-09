@@ -5,7 +5,7 @@
  * This script runs ONLY for the two paths listed in `run_worker_first`
  * (wrangler.toml), so every page, image and script stays free and untouched:
  *
- *   /video/*   Static assets do not answer HTTP Range requests, and iPhone Safari
+ *   /video/* and /audio/*   Static assets do not answer HTTP Range requests, and iPhone Safari
  *              will not play an mp4 that cannot return 206. This adds byte-range
  *              support (and Accept-Ranges) for the brand film.
  *   /resources/guides/*  Study-guide PDFs stay unavailable (404) until their episode airs
@@ -119,7 +119,7 @@ export default {
     if (pathname === "/api/geo") return geo(request);
     if (pathname === "/api/episodes") return episodes(request, ctx);
     if (pathname.startsWith("/resources/guides/")) return serveGuide(request, env);
-    if (pathname.startsWith("/video/")) return serveVideo(request, env);
+    if (pathname.startsWith("/video/") || pathname.startsWith("/audio/")) return serveVideo(request, env);
     return env.ASSETS.fetch(request);
   },
 };

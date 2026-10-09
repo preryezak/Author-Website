@@ -54,6 +54,9 @@
 /video/*
   Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
 
+/audio/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
 # Crawler/discovery files can change at any time.
 /robots.txt
   Cache-Control: public, max-age=3600
