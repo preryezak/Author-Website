@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SiteShell from "@/components/site/site-shell";
 import BooksEditions from "@/components/site/books-editions";
 import ReviewGroups from "@/components/site/review-groups";
-import SneakPeek, { FilmSection } from "@/components/site/sneak-peek";
+import SneakPeek, { FilmHero } from "@/components/site/sneak-peek";
 import BookHero from "@/components/site/book-hero";
 import LaunchBanner from "@/components/site/launch-banner";
 import BundleMarquee from "@/components/site/bundle-marquee";
@@ -32,9 +32,9 @@ export default function InfluentialSpiritPage() {
   return (
     <SiteShell active="/influential-spirit">
       {/* ---------- FIRST SCREEN: the book and everything that comes with it ---------- */}
-      <BookHero dayOneHref="/#day-one" />
       <LaunchBanner />
-      <FilmSection />
+      <FilmHero />
+      <BookHero dayOneHref="/#day-one" />
       <HearSection />
       <BundleMarquee />
 

@@ -7,7 +7,7 @@ import { getLetters, getEpisodes } from "@/lib/rss";
 import SiteShell from "@/components/site/site-shell";
 import BooksEditions from "@/components/site/books-editions";
 import ReviewGroups from "@/components/site/review-groups";
-import SneakPeek, { FilmSection } from "@/components/site/sneak-peek";
+import SneakPeek, { FilmHero } from "@/components/site/sneak-peek";
 import BookHero from "@/components/site/book-hero";
 import LaunchBanner from "@/components/site/launch-banner";
 import BundleMarquee from "@/components/site/bundle-marquee";
@@ -52,9 +52,9 @@ export default async function Home() {
 
       {/* ============ BOOK FIRST: hero, banner, film, bundle strip, buy ============ */}
       <div id="top" />
-      <BookHero id="influential-spirit" />
       <LaunchBanner />
-      <FilmSection />
+      <FilmHero />
+      <BookHero id="influential-spirit" />
       <HearSection />
       <BundleMarquee />
 

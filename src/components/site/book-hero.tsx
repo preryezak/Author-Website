@@ -31,7 +31,7 @@ export default function BookHero({ asH1 = true, id, dayOneHref = "#day-one" }: {
               </div>
               <div className="flex-wrap-gap gap-4">
                 <a className="btn btn-primary" href="#editions">Get the book<ArrowRight /></a>
-                <a className="btn btn-ghost" href="#film">Watch the film</a>
+                <a className="btn btn-ghost" href="#hear">A taste of The Influential Spirit</a>
                 <a className="btn btn-link" href={dayOneHref}>Read Day 1 free</a>
               </div>
               <p className="lhero__note">

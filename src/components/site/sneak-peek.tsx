@@ -22,6 +22,20 @@ export function FilmSection() {
   );
 }
 
+/** The film as the opening of the page: autoplays muted when in view, with a Sound on button. */
+export function FilmHero() {
+  return (
+    <section id="film" className="section surface-ink film-hero">
+      <div className="container">
+        <div className="mx-auto" style={{ maxWidth: 1040 }}>
+          <BrandFilm src="/video/influential-spirit-film.mp4" poster="/images/film/poster.webp" eager />
+          <p className="film-hero__note">Playing without sound. Press Sound on to hear it.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /** Sneak peek into each edition, with a gentle parallax on the product scenes. Mostly server-rendered. */
 export default function SneakPeek({ withFilm = true, editionsHref = "#editions" }: { withFilm?: boolean; editionsHref?: string }) {
   return (

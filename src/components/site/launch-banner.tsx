@@ -17,7 +17,8 @@ export default function LaunchBanner({ href = "#editions" }: { href?: string }) 
             width={1920}
             height={600}
             alt="Eryeza Kalalu, pastor and author. The Influential Spirit is out now, with Unedited Christmas next and four more books in 2027."
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
             decoding="async"
           />
         </picture>

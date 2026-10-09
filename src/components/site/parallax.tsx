@@ -18,7 +18,7 @@ export function Parallax({ children, distance = 40, className, style }: { childr
   return <motion.div ref={ref} className={className} style={{ ...style, y }}>{children}</motion.div>;
 }
 
-export function BrandFilm({ src, poster }: { src: string; poster: string }) {
+export function BrandFilm({ src, poster, eager = false }: { src: string; poster: string; eager?: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
   const reduce = useReducedMotion();
   const [muted, setMuted] = useState(true);
@@ -43,7 +43,7 @@ export function BrandFilm({ src, poster }: { src: string; poster: string }) {
 
   return (
     <div className="film-frame">
-      <video ref={ref} muted={muted} loop playsInline preload="none" poster={poster} controls={reduce ? true : undefined} aria-label="The Influential Spirit, a short film">
+      <video ref={ref} muted={muted} loop playsInline preload={eager ? "auto" : "none"} poster={poster} controls={reduce ? true : undefined} aria-label="The Influential Spirit, a short film">
         <source src={src} type="video/mp4" />
       </video>
       {!reduce && (
