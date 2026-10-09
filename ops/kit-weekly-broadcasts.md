@@ -8,11 +8,11 @@ Schedule all eight once, and every Sunday's email goes out by itself with no wee
 **Link in every email:** https://eryezakalalu.com/resources/library/
 **Sender:** Eryeza Kalalu, reply-to hello@eryezakalalu.com. Keep Kit's unsubscribe link in the footer.
 
-Dates follow STUDY_THEMES in src/lib/site-content.ts. If a Sunday moves, move the broadcast with it.
+Dates follow STUDY_THEMES in src/lib/site-content.ts (episode 1 airs Sunday 11 October 2026; its guide has been open since 4 October and stays open). If a Sunday moves, move the broadcast with it.
 
 ---
 
-## Episode 1, Sunday 4 October (already open; send as a catch-up to late sign-ups if you like)
+## Episode 1, Sunday 11 October (the guide is already open on the site; send this one as the launch email)
 **Subject:** Integrity at Work: your study guide is open
 **Preview text:** Five questions, one practice, one prayer.
 
@@ -31,7 +31,7 @@ Eryeza
 
 ---
 
-## Episode 2, Sunday 11 October
+## Episode 2, Sunday 18 October
 **Subject:** Pressure at Work: this week's study guide
 **Preview text:** How to handle pressure without compromising your faith.
 
@@ -48,7 +48,7 @@ Eryeza
 
 ---
 
-## Episode 3, Sunday 18 October
+## Episode 3, Sunday 25 October
 **Subject:** Your Work Is the Sermon: this week's study guide
 **Preview text:** How to glorify God at an ordinary job.
 
@@ -63,7 +63,7 @@ Eryeza
 
 ---
 
-## Episode 4, Sunday 25 October
+## Episode 4, Sunday 1 November
 **Subject:** Would Outsiders Vouch for You? This week's study guide
 **Preview text:** Running a business with a good name.
 
@@ -78,7 +78,7 @@ Eryeza
 
 ---
 
-## Episode 5, Sunday 1 November
+## Episode 5, Sunday 8 November
 **Subject:** Visibility Is Not Credibility: this week's study guide
 **Preview text:** Halfway through The Witness Test.
 
@@ -93,7 +93,7 @@ Eryeza
 
 ---
 
-## Episode 6, Sunday 8 November
+## Episode 6, Sunday 15 November
 **Subject:** The Message and the Messenger: this week's study guide
 **Preview text:** Your guide is open.
 
@@ -108,7 +108,7 @@ Eryeza
 
 ---
 
-## Episode 7, Sunday 15 November
+## Episode 7, Sunday 22 November
 **Subject:** The Grace That Doesn't Excuse: this week's study guide
 **Preview text:** Your guide is open.
 
@@ -123,7 +123,7 @@ Eryeza
 
 ---
 
-## Episode 8, Sunday 22 November
+## Episode 8, Sunday 29 November
 **Subject:** Restoration Without Amnesia: the final study guide
 **Preview text:** The last guide in The Witness Test.
 

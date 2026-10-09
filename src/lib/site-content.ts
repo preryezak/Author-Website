@@ -105,6 +105,8 @@ export type StudyEpisode = {
   title: string;
   /** Sunday the episode airs (YYYY-MM-DD); it airs and its guide opens at 8 PM EAT. */
   sunday: string;
+  /** Optional ISO moment the guide opens, when it differs from `sunday` 8 PM EAT (e.g. a guide that was already published). */
+  opens?: string;
   /** One-line summary under the title on /podcast/. FROM-COWORK; empty lines are not rendered. */
   line: string;
 };
@@ -115,14 +117,14 @@ export const STUDY_THEMES: StudyTheme[] = [
     slug: "the-witness-test",
     title: "The Witness Test: The Influential Spirit",
     episodes: [
-      { n: 1, sunday: "2026-10-04", title: "Integrity at Work", line: "When the world keeps a standard the church dropped" },
-      { n: 2, sunday: "2026-10-11", title: "Pressure at Work", line: "How to handle pressure without compromising your faith" },
-      { n: 3, sunday: "2026-10-18", title: "Your Work Is the Sermon", line: "How to glorify God at an ordinary job" },
-      { n: 4, sunday: "2026-10-25", title: "Would Outsiders Vouch for You?", line: "Running a Christian business with a good name" },
-      { n: 5, sunday: "2026-11-01", title: "Visibility Is Not Credibility", line: "" },
-      { n: 6, sunday: "2026-11-08", title: "The Message and the Messenger", line: "" },
-      { n: 7, sunday: "2026-11-15", title: "The Grace That Doesn't Excuse", line: "" },
-      { n: 8, sunday: "2026-11-22", title: "Restoration Without Amnesia", line: "" },
+      { n: 1, sunday: "2026-10-11", opens: "2026-10-04T20:00:00+03:00", title: "Integrity at Work", line: "When the world keeps a standard the church dropped" },
+      { n: 2, sunday: "2026-10-18", title: "Pressure at Work", line: "How to handle pressure without compromising your faith" },
+      { n: 3, sunday: "2026-10-25", title: "Your Work Is the Sermon", line: "How to glorify God at an ordinary job" },
+      { n: 4, sunday: "2026-11-01", title: "Would Outsiders Vouch for You?", line: "Running a Christian business with a good name" },
+      { n: 5, sunday: "2026-11-08", title: "Visibility Is Not Credibility", line: "" },
+      { n: 6, sunday: "2026-11-15", title: "The Message and the Messenger", line: "" },
+      { n: 7, sunday: "2026-11-22", title: "The Grace That Doesn't Excuse", line: "" },
+      { n: 8, sunday: "2026-11-29", title: "Restoration Without Amnesia", line: "" },
     ],
   },
 ];
@@ -138,7 +140,7 @@ export const STUDY_LIBRARY = "/resources/library/";
 
 /** 8 PM EAT on the episode's Sunday, in ms. */
 export function airsAt(ep: StudyEpisode): number {
-  return Date.parse(`${ep.sunday}T20:00:00+03:00`);
+  return Date.parse(ep.opens ?? `${ep.sunday}T20:00:00+03:00`);
 }
 
 /** "integrity-at-work" from "Integrity at Work"; "would-outsiders-vouch-for-you" from "Would Outsiders Vouch for You?". */

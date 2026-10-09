@@ -33,7 +33,7 @@ Thank you for asking for the Devotion in Season study guides. Please tap the but
 
 Each guide goes with a Sunday episode of the podcast. It gives you the passages, five questions for personal or group study, one practice for the week, and a prayer. On your own it takes about twenty minutes. With a small group or a team at work, allow about forty-five.
 
-A new guide opens every Sunday at 8 PM East Africa Time, when its episode airs. The first one, "Integrity at Work", opens on Sunday 4 October. *(Delete this sentence after 4 October.)*
+A new guide opens every Sunday at 8 PM East Africa Time, when its episode airs. The first one, "Integrity at Work", opens on Sunday 11 October. *(Delete this sentence after 4 October.)*
 
 Save this link so you can return to the library at any time: eryezakalalu.com/resources/library
 
