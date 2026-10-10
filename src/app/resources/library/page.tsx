@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function StudyLibraryPage() {
   // Every guide whose PDF is in public/, newest theme first. Unaired ones are
-  // hidden in the browser until 8 PM EAT on their Sunday.
+  // hidden in the browser until 6 PM EAT on their Sunday.
   const themes: LibraryTheme[] = [...STUDY_THEMES].reverse().map((t) => ({
     slug: t.slug,
     title: t.title,

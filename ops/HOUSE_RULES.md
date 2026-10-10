@@ -61,7 +61,7 @@ Compiled from the full vidIQ chat history (the file you shared), the Eden week n
 
 | | Devotion in Season (weekly) | Devotion in Season Daily |
 | --- | --- | --- |
-| Release | Sunday 8:00 PM EAT (a test slot for four weeks) | Mon to Fri 6:00 AM EAT |
+| Release | Sunday 6:00 PM EAT | Mon to Fri 6:00 AM EAT |
 | Length | about 30 minutes | 5 to 8 minutes (target about 7) |
 | Role | Professional, marketplace: work and business | Pastoral, personal: "What is God saying to me today?" |
 | Ends with | One practical action for the week | Prayer |

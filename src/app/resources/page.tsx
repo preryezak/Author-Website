@@ -36,7 +36,7 @@ const STEPS = [
 
 const FAQ = [
   { q: "Is it really free?", a: "Yes. The guides are free, every week of the series, and you can print them and share them with your group." },
-  { q: "How do I get each new guide?", a: "Sign up once and confirm your email. The study library opens, and every guide that has aired is there. A new one opens every Sunday at 8 PM East Africa Time, when its episode airs." },
+  { q: "How do I get each new guide?", a: "Sign up once and confirm your email. The study library opens, and every guide that has aired is there. A new one opens every Sunday at 6 PM East Africa Time, when its episode airs." },
   { q: "Why ask for a phone number?", a: "It is optional. It lets Eryeza's team reach you directly if it matters, for example about a gathering you asked about. We will never spam you or share your number." },
   { q: "Can I use it with a group?", a: "That is what it is built for. The five questions work for a small group, a team at work or a family, and a session takes about forty-five minutes." },
 ];
@@ -103,7 +103,7 @@ export default function StudyPage() {
           <div className="text-center mx-auto" style={{ maxWidth: 680 }}>
             <span className="eyebrow">{CURRENT_THEME.title}</span>
             <h2 className="display" style={{ fontSize: "clamp(28px, 3.6vw, 42px)", marginTop: 8, letterSpacing: "-0.01em" }}>Eight Sundays, one guide each.</h2>
-            <p className="caption" style={{ marginTop: 12 }}>Every guide opens when its episode airs, Sunday at 8 PM East Africa Time.</p>
+            <p className="caption" style={{ marginTop: 12 }}>Every guide opens when its episode airs, Sunday at 6 PM East Africa Time.</p>
           </div>
           <OrnamentRule>§</OrnamentRule>
           <SeriesGrid buildTime={buildTime} />

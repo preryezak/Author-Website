@@ -94,7 +94,7 @@ export const NAV = [
  * build and deploy. `guidePath()` derives that path from the data below and
  * the pages check the file exists at build time, so nothing else is edited.
  * Guides are never removed: old videos keep linking to the library, and every
- * guide stays there. A guide shows from its episode's air time (8 PM EAT).
+ * guide stays there. A guide shows from its episode's air time (6 PM EAT).
  *
  * A new theme: add an entry at the END of STUDY_THEMES (the last one is the
  * current theme) with its episode titles and Sunday dates.
@@ -103,9 +103,9 @@ export type StudyEpisode = {
   /** Episode number within the theme: 1, 2, 3 ... (files use 01, 02, 03). */
   n: number;
   title: string;
-  /** Sunday the episode airs (YYYY-MM-DD); it airs and its guide opens at 8 PM EAT. */
+  /** Sunday the episode airs (YYYY-MM-DD); it airs and its guide opens at 6 PM EAT. */
   sunday: string;
-  /** Optional ISO moment the guide opens, when it differs from `sunday` 8 PM EAT (e.g. a guide that was already published). */
+  /** Optional ISO moment the guide opens, when it differs from `sunday` 6 PM EAT (e.g. a guide that was already published). */
   opens?: string;
   /** One-line summary under the title on /podcast/. FROM-COWORK; empty lines are not rendered. */
   line: string;
@@ -138,9 +138,9 @@ export const STUDY_COVER = "/resources/cover.webp";
 /** The library every confirmed subscriber lands on (Kit's redirect after confirming). */
 export const STUDY_LIBRARY = "/resources/library/";
 
-/** 8 PM EAT on the episode's Sunday, in ms. */
+/** 6 PM EAT on the episode's Sunday, in ms. */
 export function airsAt(ep: StudyEpisode): number {
-  return Date.parse(ep.opens ?? `${ep.sunday}T20:00:00+03:00`);
+  return Date.parse(ep.opens ?? `${ep.sunday}T18:00:00+03:00`);
 }
 
 /** "integrity-at-work" from "Integrity at Work"; "would-outsiders-vouch-for-you" from "Would Outsiders Vouch for You?". */
@@ -177,13 +177,13 @@ export const STUDY = {
   // /resources/library/ (reached from Kit's confirmation email)
   libraryHeading: "Study Library",
   libraryLede: "Every guide, newest first. Keep this page; the guide for any episode, past or present, is always here.",
-  libraryEmpty: "The first guide opens when its episode airs, Sunday at 8 PM East Africa Time. Come back then.",
+  libraryEmpty: "The first guide opens when its episode airs, Sunday at 6 PM East Africa Time. Come back then.",
 } as const;
 
 /** === /podcast/ (handoff P0-3 copy) === */
 export const PODCAST_PAGE = {
   heading: "Devotion in Season",
-  lede: "A weekly conversation for believers at work and in business, every Sunday at 8 PM East Africa Time, and a short daily devotional every weekday morning at 6 AM. The current series walks through the themes of The Influential Spirit.",
+  lede: "A weekly conversation for believers at work and in business, every Sunday at 6 PM East Africa Time, and a short daily devotional every weekday morning at 6 AM. The current series walks through the themes of The Influential Spirit.",
 } as const;
 
 /**

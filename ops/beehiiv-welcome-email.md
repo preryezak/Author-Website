@@ -26,7 +26,7 @@ This letter is where I share new books and resources first, along with news abou
 
 So that my letters reach you, please move this email to your main inbox, or add my address to your contacts.
 
-While you wait for the next letter, you are welcome to use the free Devotion in Season study guides. A new guide opens every Sunday at 8 PM East Africa Time, when its podcast episode airs: eryezakalalu.com/study
+While you wait for the next letter, you are welcome to use the free Devotion in Season study guides. A new guide opens every Sunday at 6 PM East Africa Time, when its podcast episode airs: eryezakalalu.com/study
 
 My book, The Influential Spirit, is a 30-day journey into kingdom authority, character and meaningful influence, and into how the Holy Spirit shapes who we are becoming. You can read more about it at eryezakalalu.com.
 

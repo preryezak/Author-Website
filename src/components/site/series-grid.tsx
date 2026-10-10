@@ -19,7 +19,7 @@ export default function SeriesGrid({ buildTime }: { buildTime: number }) {
             <span className="series-grid__n" aria-hidden="true">{e.n}</span>
             <div>
               <h3 className="series-grid__title">{e.title}</h3>
-              <p className="series-grid__when">{open ? "Open now" : `Opens ${fmt(e.sunday)}, 8 PM EAT`}</p>
+              <p className="series-grid__when">{open ? "Open now" : `Opens ${fmt(e.sunday)}, 6 PM EAT`}</p>
             </div>
           </li>
         );

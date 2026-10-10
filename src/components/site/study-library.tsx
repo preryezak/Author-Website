@@ -3,7 +3,7 @@
 /**
  * /resources/library/ list. The page passes every guide whose PDF exists at
  * build time; this hides any whose episode has not aired yet, re-checked in
- * the browser so a guide added ahead of time appears at 8 PM EAT on its Sunday
+ * the browser so a guide added ahead of time appears at 6 PM EAT on its Sunday
  * without a rebuild.
  */
 

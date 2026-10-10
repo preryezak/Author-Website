@@ -4,7 +4,7 @@ Kit's free plan has no automations, but it does let you write a broadcast now an
 Schedule all eight once, and every Sunday's email goes out by itself with no weekly work.
 
 **Where:** Kit, Send, Broadcasts, New broadcast. Audience: everyone who signed up through the study-guide form.
-**When:** each Sunday at 8:05 PM East Africa Time (5:05 PM UTC), five minutes after the guide opens on the site.
+**When:** each Sunday at 6:05 PM East Africa Time (3:05 PM UTC), five minutes after the guide opens on the site.
 **Link in every email:** https://eryezakalalu.com/resources/library/
 **Sender:** Eryeza Kalalu, reply-to hello@eryezakalalu.com. Keep Kit's unsubscribe link in the footer.
 

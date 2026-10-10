@@ -98,7 +98,7 @@ export default function StudySignup({ themeTitle, initialEpisode, hasCover }: { 
   const total = 8;
   const opensNext = (() => {
     const next = CURRENT_THEME_EPISODES.find((e) => e.n === episode.n + 1);
-    return next ? `Episode ${next.n} opens Sunday ${new Date(next.sunday + "T12:00:00+03:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", timeZone: "Africa/Kampala" })}, 8 PM East Africa Time.` : "";
+    return next ? `Episode ${next.n} opens Sunday ${new Date(next.sunday + "T12:00:00+03:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", timeZone: "Africa/Kampala" })}, 6 PM East Africa Time.` : "";
   })();
 
   return (

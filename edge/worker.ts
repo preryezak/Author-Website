@@ -9,7 +9,7 @@
  *              will not play an mp4 that cannot return 206. This adds byte-range
  *              support (and Accept-Ranges) for the brand film.
  *   /resources/guides/*  Study-guide PDFs stay unavailable (404) until their episode airs
- *              (Sunday 8 PM EAT), so a guide cannot be opened early by guessing its address.
+ *              (Sunday 6 PM EAT), so a guide cannot be opened early by guessing its address.
  *   /api/episodes  The podcast feed, read live (cached 10 minutes at the edge) so new episodes
  *              appear on the site without a rebuild.
  *   /api/geo   Tells the page which region the visitor is in, so the editions
