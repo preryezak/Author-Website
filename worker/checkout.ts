@@ -33,10 +33,13 @@ import {
   currencyFor, formatMoney, priceOf,
   type Currency, type EditionId,
 } from "../src/lib/editions";
+import { SEQUENCE } from "./sequence";
+import { DAYS } from "../src/lib/days";
 import { FEE_COVER_RATE, GIFT_MAX, GIFT_MIN, MONTHLY_PAYMENT_OPTIONS, roundGift } from "../src/lib/giving";
 
 interface Env {
   DB: D1Database;
+  AI?: Ai;                  // Workers AI (embeddings for Find your day)
   BOOKS: R2Bucket;
   EMAIL?: { send(m: { to: string; from: string; subject: string; text: string }): Promise<unknown> };
   FLW_PUBLIC_KEY: string;
@@ -870,6 +873,177 @@ async function adminPartners(env: Env, url: URL): Promise<Response> {
   return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": 'attachment; filename="partners.csv"', "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } });
 }
 
+/* ------------------------------------------------------------ Day 1 sign-ups and follow-up letters */
+
+interface Lead { email: string; firstName: string; token: string; createdAt: string; step: number; status: string; letterOptIn: number; source: string }
+
+function fillLetter(env: Env, text: string, l: Lead): string {
+  return text
+    .replace(/\{first\}/g, l.firstName || "friend")
+    .replace(/\{site\}/g, env.SITE)
+    .replace(/\{buy\}/g, `${env.SITE}/influential-spirit/?utm_source=email&utm_medium=sequence&utm_campaign=day1#editions`)
+    .replace(/\{unsub\}/g, `${env.SITE}/api/lead/unsub?t=${encodeURIComponent(l.token)}`);
+}
+
+async function sendLetter(env: Env, l: Lead, step: number): Promise<string> {
+  const letter = SEQUENCE[step];
+  const unsub = `${env.SITE}/api/lead/unsub?t=${encodeURIComponent(l.token)}`;
+  const text = `${fillLetter(env, letter.body, l)}\n\n--\nYou asked for Day 1 of The Influential Spirit at eryezakalalu.com. Stop these letters: ${unsub}`;
+  const htmlBody = `<div style="font:17px/1.65 Georgia,serif;color:#2a2420;max-width:560px">${fillLetter(env, letter.body, l)
+    .split(/\n{2,}/).map((p) => `<p>${esc(p).replace(/\n/g, "<br>").replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#7B3F2E">$1</a>')}</p>`).join("")}
+<p style="font:12px/1.5 system-ui,sans-serif;color:#8a7e70;margin-top:28px">You asked for Day 1 of The Influential Spirit at eryezakalalu.com. <a href="${esc(unsub)}" style="color:#8a7e70">Stop these letters</a>.</p></div>`;
+  if (!env.RESEND_API_KEY) return "skipped:no-key";
+  const res = await fetch("https://api.resend.com/emails", timed({
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY.trim()}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: env.MAIL_FROM, to: [l.email], reply_to: env.REPLY_TO, subject: letter.subject, text, html: htmlBody,
+      headers: { "List-Unsubscribe": `<${unsub}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
+    }),
+  }));
+  return res.ok ? "ok" : `error:${res.status}`;
+}
+
+async function leadCapi(env: Env, l: Lead, request: Request, fbp: string, fbc: string): Promise<void> {
+  if (!env.META_PIXEL_ID || !env.META_CAPI_TOKEN) return;
+  const v = env.META_GRAPH_VERSION || "v24.0";
+  const user: Record<string, unknown> = { em: [await sha256Hex(l.email)], client_user_agent: request.headers.get("User-Agent") || "" };
+  if (fbp) user.fbp = fbp;
+  if (fbc) user.fbc = fbc;
+  await fetch(`https://graph.facebook.com/${v}/${env.META_PIXEL_ID}/events?access_token=${encodeURIComponent(env.META_CAPI_TOKEN)}`, timed({
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data: [{ event_name: "Lead", event_time: Math.floor(Date.now() / 1000), event_id: `lead-${l.token.slice(0, 16)}`, action_source: "website", event_source_url: `${env.SITE}/influential-spirit/`, user_data: user, custom_data: { content_name: "day1" } }] }),
+  })).catch(() => undefined);
+}
+
+async function leadStart(env: Env, ctx: ExecutionContext, request: Request): Promise<Response> {
+  if (!sameOrigin(env, request)) return json({ ok: false }, 403);
+  const ip = await ipHash(env, request);
+  if (!(await rateOk(env, ip, "lead", 6))) return json({ ok: false, error: "Please wait a little and try again." }, 429);
+  let b: Record<string, unknown>;
+  try { b = (await request.json()) as Record<string, unknown>; } catch { return json({ ok: false, error: "Please fill in the form." }, 422); }
+  if (clean(b.website, 100)) return json({ ok: true, eventId: "" }); // honeypot
+  const email = clean(b.email, 200).toLowerCase();
+  const firstName = clean(b.firstName, 60);
+  if (!isEmail(email)) return json({ ok: false, error: "Please check your email address." }, 422);
+  const letterOptIn = b.letterOptIn === true ? 1 : 0;
+  const existing = await env.DB.prepare("SELECT * FROM leads WHERE email = ?").bind(email).first<Lead>();
+  let lead: Lead;
+  if (existing) {
+    lead = existing;
+    if (existing.status === "unsubscribed") await env.DB.prepare("UPDATE leads SET status = 'active' WHERE email = ?").bind(email).run();
+  } else {
+    lead = { email, firstName, token: token(), createdAt: new Date().toISOString(), step: 0, status: "active", letterOptIn, source: clean(b.source, 200) };
+    await env.DB.prepare("INSERT INTO leads (email, firstName, token, createdAt, step, status, letterOptIn, source, ipHash) VALUES (?, ?, ?, ?, 0, 'active', ?, ?, ?)")
+      .bind(email, firstName, lead.token, lead.createdAt, letterOptIn, lead.source, ip).run();
+  }
+  // The first letter (Day 1) goes now; the rest follow on the cron schedule.
+  ctx.waitUntil((async () => {
+    if (lead.step === 0) {
+      const r = await sendLetter(env, lead, 0);
+      if (r === "ok") await env.DB.prepare("UPDATE leads SET step = 1, lastSentAt = ? WHERE email = ? AND step = 0").bind(new Date().toISOString(), email).run();
+      else await env.DB.prepare("UPDATE leads SET note = ? WHERE email = ?").bind(r, email).run();
+    }
+    await leadCapi(env, lead, request, clean(b.fbp, 120), clean(b.fbc, 200));
+    if (letterOptIn) await addToList(env, { email, name: firstName, letterOptIn: 1 } as unknown as Order).catch(() => "");
+  })());
+  return json({ ok: true, eventId: `lead-${lead.token.slice(0, 16)}` });
+}
+
+/** GET shows a button (email scanners open links and must not unsubscribe anyone); POST unsubscribes (also RFC 8058 one-click). */
+async function leadUnsub(env: Env, request: Request, url: URL): Promise<Response> {
+  const t = clean(url.searchParams.get("t"), 64);
+  if (request.method === "POST") {
+    if (t) await env.DB.prepare("UPDATE leads SET status = 'unsubscribed' WHERE token = ?").bind(t).run();
+    return html("<h2>Done</h2><p>You will not receive more of these letters. Thank you for reading. If you change your mind, ask for Day 1 again on the book page.</p>");
+  }
+  return html(`<h2>Stop these letters?</h2><p>You will receive no more of the Day 1 follow-up letters.</p><form method="post"><button>Yes, stop them</button></form>`);
+}
+
+/** Cron: sends the letters that are due. Buyers stop receiving the sales letters once they have bought. */
+async function sendDueLetters(env: Env): Promise<void> {
+  const rows = await env.DB.prepare("SELECT * FROM leads WHERE status = 'active' AND step >= 1 AND step < ? ORDER BY createdAt LIMIT 60").bind(SEQUENCE.length).all<Lead>();
+  for (const l of rows.results) {
+    const due = Date.parse(l.createdAt) + SEQUENCE[l.step].day * 86400000;
+    if (Date.now() < due) continue;
+    const bought = await env.DB.prepare("SELECT 1 AS x FROM orders WHERE email = ? AND status IN ('paid','refund_requested')").bind(l.email).first();
+    if (bought) { await env.DB.prepare("UPDATE leads SET status = 'customer' WHERE email = ?").bind(l.email).run(); continue; }
+    const r = await sendLetter(env, l, l.step);
+    if (r === "ok") await env.DB.prepare("UPDATE leads SET step = step + 1, lastSentAt = ? WHERE email = ? AND step = ?").bind(new Date().toISOString(), l.email, l.step).run();
+    else { await env.DB.prepare("UPDATE leads SET note = ? WHERE email = ?").bind(r, l.email).run(); if (r.startsWith("error:429")) break; }
+  }
+}
+
+/** Free files (Day 1 PDF) from the R2 prefix free/. Public, cached. */
+async function serveFree(env: Env, request: Request, name: string): Promise<Response> {
+  if (!/^[A-Za-z0-9_.-]+$/.test(name)) return new Response("Not found", { status: 404 });
+  const obj = await env.BOOKS.get(`free/${name}`, { range: request.headers });
+  const res = await serveR2(request, obj, name, true);
+  res.headers.set("Cache-Control", "public, max-age=86400");
+  return res;
+}
+
+/* ------------------------------------------------------------ Find your day (Workers AI) */
+
+/**
+ * The visitor writes what they are facing; we return the two closest days of the book.
+ * Uses text embeddings only (similarity), so nothing new is written or invented: every
+ * word shown comes from src/lib/days.ts. The visitor's sentence is not stored.
+ */
+const EMBED_MODEL = "@cf/baai/bge-base-en-v1.5";
+let dayVectors: { day: number; v: number[] }[] | null = null;
+
+/** Each day is represented by its title, its question and each sentence of `need`; a query scores a day by its best sentence. */
+function dayParts(): { day: number; t: string }[] {
+  const parts: { day: number; t: string }[] = [];
+  for (const d of DAYS) {
+    parts.push({ day: d.day, t: d.title }, { day: d.day, t: d.question });
+    for (const x of d.need.split(/(?<=[.?])\s+/)) if (x.trim()) parts.push({ day: d.day, t: x.trim() });
+  }
+  return parts;
+}
+
+const CRISIS = /\b(suicid\w*|kill (my ?self|myself)|end (my|it all|my life)|take my (own )?life|don'?t want to (live|be alive)|self[- ]?harm|hurt myself)\b/i;
+
+function cosine(a: number[], b: number[]): number {
+  let dot = 0, na = 0, nb = 0;
+  for (let i = 0; i < a.length; i++) { dot += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i]; }
+  return dot / (Math.sqrt(na) * Math.sqrt(nb) || 1);
+}
+
+async function embed(env: Env, texts: string[]): Promise<number[][]> {
+  if (!env.AI) throw new Error("no ai");
+  const out = (await env.AI.run(EMBED_MODEL, { text: texts })) as { data: number[][] };
+  return out.data;
+}
+
+async function findDay(env: Env, request: Request): Promise<Response> {
+  if (!sameOrigin(env, request)) return json({ ok: false }, 403);
+  const ip = await ipHash(env, request);
+  if (!(await rateOk(env, ip, "findday", 30))) return json({ ok: false, error: "Please try again in a little while." }, 429);
+  let b: Record<string, unknown>;
+  try { b = (await request.json()) as Record<string, unknown>; } catch { return json({ ok: false }, 422); }
+  const q = clean(b.q, 300);
+  if (q.length < 3) return json({ ok: false, error: "Write a few words about what you are facing." }, 422);
+  const crisis = CRISIS.test(q);
+  try {
+    if (!dayVectors) {
+      const parts = dayParts();
+      const vs = await embed(env, parts.map((p) => p.t));
+      dayVectors = parts.map((p, i) => ({ day: p.day, v: vs[i] }));
+    }
+    const [qv] = await embed(env, [q]);
+    const best = new Map<number, number>();
+    for (const p of dayVectors) best.set(p.day, Math.max(best.get(p.day) ?? -1, cosine(qv, p.v)));
+    const ranked = DAYS.map((d) => ({ d, s: best.get(d.day) ?? -1 })).sort((x, y) => y.s - x.s);
+    let picks = ranked.slice(0, 2).map((r) => r.d);
+    if (crisis) picks = [DAYS[26], DAYS[24]]; // Resilience in the Valley, Past the Wall
+    return json({ ok: true, crisis, days: picks.map((d) => ({ day: d.day, title: d.title, ref: d.ref, question: d.question })) });
+  } catch {
+    return json({ ok: false, error: "This is not available at the moment. Start with Day 1 below." }, 503);
+  }
+}
+
 /* ------------------------------------------------------------ router */
 
 export default {
@@ -897,6 +1071,10 @@ export default {
       if (p === "/api/give" && request.method === "GET") return giveStatus(env, ctx, url);
       if (p === "/api/give/confirm" && request.method === "POST") return giveConfirm(env, ctx, request);
       if (p === "/api/give/manage" && request.method === "POST") return giveManage(env, request);
+      if (p === "/api/find-day" && request.method === "POST") return findDay(env, request);
+      if (p === "/api/lead" && request.method === "POST") return leadStart(env, ctx, request);
+      if (p === "/api/lead/unsub") return leadUnsub(env, request, url);
+      if (p.startsWith("/free/") && (request.method === "GET" || request.method === "HEAD")) return serveFree(env, request, p.slice(6));
       if (p.startsWith("/dl/") && (request.method === "GET" || request.method === "HEAD")) {
         return download(env, request, ctx, p.slice(4).split("/"));
       }
@@ -914,6 +1092,7 @@ export default {
     for (const o of rows.results) {
       try { await settle(env, ctx, o, await flwVerify(env, { ref: o.id })); } catch { /* next run */ }
     }
+    ctx.waitUntil(sendDueLetters(env));
     const gifts = await env.DB.prepare("SELECT * FROM gifts WHERE status = 'pending' AND createdAt > ? LIMIT 50").bind(since).all<Gift>();
     for (const g of gifts.results) {
       try { await settleGift(env, ctx, g, await flwVerify(env, { ref: g.id })); } catch { /* next run */ }

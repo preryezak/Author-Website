@@ -26,21 +26,26 @@ function Group({ g }: { g: G }) {
 }
 
 /** Praise for the work, praise for the first edition, and an invitation to review. Server component. */
-export default function ReviewGroups({ id = "reviews" }: { id?: string }) {
+/**
+ * `invite={false}` hides the "send us your review" card (used on pages for new
+ * visitors, where asking for reviews reads as "there are few"). `verifiedFirst`
+ * puts the Amazon-verified first-edition reviews before the personal ones.
+ */
+export default function ReviewGroups({ id = "reviews", invite = true, verifiedFirst = false }: { id?: string; invite?: boolean; verifiedFirst?: boolean }) {
   const inv = REVIEW_GROUPS.invite;
   return (
     <section id={id} className="section surface-50" data-reveal>
       <div className="container">
-        <Group g={REVIEW_GROUPS.work as unknown as G} />
+        <Group g={(verifiedFirst ? REVIEW_GROUPS.first : REVIEW_GROUPS.work) as unknown as G} />
         <OrnamentRule>§</OrnamentRule>
         <div style={{ height: 24 }} />
-        <Group g={REVIEW_GROUPS.first as unknown as G} />
-        <div className="invite-card mx-auto">
+        <Group g={(verifiedFirst ? REVIEW_GROUPS.work : REVIEW_GROUPS.first) as unknown as G} />
+        {invite ? <div className="invite-card mx-auto">
           <span className="eyebrow">{inv.eyebrow}</span>
           <h3 className="display">{inv.title}</h3>
           <p>{inv.body}</p>
           <p>{inv.emailLead} <a href={`mailto:${inv.email}?subject=My%20review%20of%20The%20Influential%20Spirit`}>{inv.email}</a>.</p>
-        </div>
+        </div> : null}
       </div>
     </section>
   );

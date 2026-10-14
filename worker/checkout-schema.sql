@@ -110,3 +110,19 @@ CREATE TABLE IF NOT EXISTS plans (
   planId    TEXT NOT NULL,
   createdAt TEXT NOT NULL
 );
+
+-- Day 1 sign-ups and the follow-up letters (worker/sequence.ts).
+CREATE TABLE IF NOT EXISTS leads (
+  email       TEXT PRIMARY KEY,
+  firstName   TEXT NOT NULL DEFAULT '',
+  token       TEXT NOT NULL UNIQUE,          -- for the unsubscribe link
+  createdAt   TEXT NOT NULL,
+  step        INTEGER NOT NULL DEFAULT 0,    -- index of the next letter to send
+  status      TEXT NOT NULL DEFAULT 'active', -- active | unsubscribed | customer
+  letterOptIn INTEGER NOT NULL DEFAULT 0,
+  source      TEXT NOT NULL DEFAULT '',
+  ipHash      TEXT NOT NULL DEFAULT '',
+  lastSentAt  TEXT,
+  note        TEXT NOT NULL DEFAULT ''
+);
+CREATE INDEX IF NOT EXISTS idx_leads_due ON leads(status, step, createdAt);

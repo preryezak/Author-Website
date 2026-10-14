@@ -27,6 +27,10 @@ export function BrandFilm({ src, poster, eager = false }: { src: string; poster:
   useEffect(() => {
     const v = ref.current;
     if (!v || reduce) return;
+    // On slow or metered connections (common on African mobile data) the film waits
+    // for a tap instead of downloading 2 MB by itself.
+    const conn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    if (conn && (conn.saveData || /^(slow-2g|2g|3g)$/.test(conn.effectiveType || ""))) return;
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting && e.intersectionRatio >= 0.5) v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
@@ -43,7 +47,7 @@ export function BrandFilm({ src, poster, eager = false }: { src: string; poster:
 
   return (
     <div className="film-frame">
-      <video ref={ref} muted={muted} loop playsInline preload={eager ? "auto" : "none"} poster={poster} controls={reduce ? true : undefined} aria-label="The Influential Spirit, a short film">
+      <video ref={ref} muted={muted} loop playsInline preload={eager ? "metadata" : "none"} poster={poster} controls={reduce ? true : undefined} aria-label="The Influential Spirit, a short film">
         <source src={src} type="video/mp4" />
       </video>
       {!reduce && (

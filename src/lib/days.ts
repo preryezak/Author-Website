@@ -1,0 +1,42 @@
+/**
+ * The thirty days of The Influential Spirit: title, opening Scripture, the
+ * book's own reflection question, and plain words for what a reader might be
+ * facing. "Find your day" (worker/checkout.ts, Workers AI embeddings) matches a
+ * visitor's sentence against `need` and shows the closest days. It never writes
+ * new teaching: everything shown comes from this list.
+ */
+
+export interface Day { day: number; title: string; ref: string; question: string; need: string }
+
+export const DAYS: Day[] = [
+  { day: 1, title: "Following to Lead", ref: "Mark 1:17", question: "What traps keep you from following Jesus?", need: "I want to lead well but I am not sure I am following Christ closely. Busy with work, tired, distracted from God, starting again with Jesus." },
+  { day: 2, title: "Ordinary Is Not an Excuse", ref: "Acts 4:13", question: "Do you feel average?", need: "I feel ordinary, uneducated, not qualified, average, too small for God to use. Imposter feelings at work or in ministry." },
+  { day: 3, title: "Light for the Next Step", ref: "John 8:12", question: "Is your Christian life motivated by fear, a sense of obligation, or genuine faith?", need: "I do not know what to do next. Confused about direction, decisions, career choice, uncertain future, need guidance and clarity." },
+  { day: 4, title: "Significant in a Crowd", ref: "Luke 10:1", question: "Is church your refuge for escaping or preparing?", need: "I feel unseen and insignificant in a big church or a big company. Does my small role matter? Serving without recognition." },
+  { day: 5, title: "Bold Sheep", ref: "Matthew 10:16", question: "Where does your mind drift in your leadership?", need: "Hostile workplace, office politics, surrounded by people who do not share my faith. How do I stay wise, gentle and bold? People laugh at my faith and mock me at work. I am the only Christian in the office." },
+  { day: 6, title: "Imitate Me", ref: "1 Corinthians 11:1", question: "Are you a fair-weather follower?", need: "I start well and lose steam. Inconsistent faith, giving up on commitments, people are watching my example, mentoring others." },
+  { day: 7, title: "Bury My Father", ref: "Luke 9:59-60", question: "What condition have you placed on your obedience?", need: "I keep delaying obedience until money, family or timing is right. Putting conditions on God, procrastinating a calling." },
+  { day: 8, title: "The Departure", ref: "Luke 5:11", question: "Which damaging habit continues to control you?", need: "A bad habit or addiction controls me. Phone, social media, places that drain me spiritually. Need to leave something behind." },
+  { day: 9, title: "The Circle of Influence", ref: "1 Corinthians 15:33", question: "Do they strengthen or weaken your faith?", need: "Friends and colleagues are pulling me down. Bad company, peer pressure, choosing friends, who should be close to me." },
+  { day: 10, title: "Holy and Lonely", ref: "2 Corinthians 6:17", question: "In the effort to fit in, where have you compromised godly principles?", need: "Lonely because I will not compromise. Pressure to fit in, standing apart, isolated for my faith at work or school. Mocked and left out because I follow Jesus." },
+  { day: 11, title: "Death of the Selfie", ref: "Matthew 16:24", question: "Where are you still struggling to survive, to gain recognition, or to maintain control?", need: "I need people to see me, notice me and praise me. Ego, image, someone took the credit, wanting control and recognition. My boss or a colleague took credit for my work and I feel overlooked and unappreciated." },
+  { day: 12, title: "The Towel Strategy", ref: "John 13:14", question: "Do you give the cleaner the same respect you give the CEO?", need: "Pride in leadership, how I treat junior staff and house help, serving others, humility as a boss or manager." },
+  { day: 13, title: "The Hidden Engine", ref: "Mark 1:35", question: "Is prayer facilitating your public aspirations?", need: "I look fine in public and feel empty in private. Dry prayer life, praying only to perform, no quiet time, busy ministry." },
+  { day: 14, title: "Stormproof", ref: "Matthew 7:24", question: "Are you dismissing a biblical truth you understand and failing to apply it?", need: "Crisis is coming or has come. I know the Bible but I do not live it. Building a life that survives trouble. I lost my job, sudden crisis, retrenchment, sickness, business collapse, everything is shaking." },
+  { day: 15, title: "Wax Fruit", ref: "Matthew 7:16", question: "Is polishing your image taking more time than bearing fruit?", need: "Tired of faith that is only for show. Hypocrisy, performance, polished image, social media Christianity, real fruit." },
+  { day: 16, title: "Perfume, Not Poison", ref: "Proverbs 18:19", question: "Who comes to mind when you hear the word forgiveness?", need: "Someone hurt me, betrayed me or offended me and I cannot let it go. Bitterness, unforgiveness, conflict at church or work." },
+  { day: 17, title: "An Excellent Spirit", ref: "Daniel 6:3", question: "If Jesus were your direct supervisor, would the quality of your work satisfy Him?", need: "My work is average. Excellence at the job, diligence, doing my work as unto the Lord, promotion, a bad boss." },
+  { day: 18, title: "A Loose Rudder", ref: "James 3:4", question: "How in charge are you of your words?", need: "My words get me into trouble. Anger, gossip, harsh speech, regret what I said, controlling my tongue, social media comments." },
+  { day: 19, title: "Son of Encouragement", ref: "Acts 4:36", question: "Who had faith in you when you were at your lowest?", need: "I want to encourage and lift others. Discouraged people around me, mentoring, believing in someone, being a Barnabas." },
+  { day: 20, title: "In the Waiting Room", ref: "Psalm 27:14", question: "Which promise are you expecting to be fulfilled?", need: "Why is God taking so long? Waiting for marriage, a job, a child, a breakthrough, delayed promises, impatience." },
+  { day: 21, title: "The Golden Vessel", ref: "2 Timothy 2:20-21", question: "What prevents the flow of God's Spirit in your life?", need: "I want God to use me more. Purity, cleansing, being prepared for honour, sin blocking my usefulness to God." },
+  { day: 22, title: "Out of the Boat", ref: "Matthew 14:29", question: "What boat are you reluctant to leave?", need: "Afraid to take a step of faith. Starting a business, changing jobs, risk, fear of failure, leaving comfort." },
+  { day: 23, title: "The Invisible Foundation", ref: "Proverbs 10:9", question: "Are minor ethical lapses or dishonesty undermining your spiritual base?", need: "Pressure to cut corners, bribes, small lies, corruption at work, staying honest when it costs me, integrity." },
+  { day: 24, title: "The River and the Reservoir", ref: "Proverbs 11:24", question: "Which treasures do you need to share?", need: "Money worries, holding on too tightly, generosity, giving, scarcity mindset, providing for family." },
+  { day: 25, title: "Past the Wall", ref: "Galatians 6:9", question: "How have fatigue and exhaustion affected your influence?", need: "I am exhausted and want to quit. Burnout, tired of ministry, tired of work, giving up, no results, weary of doing good." },
+  { day: 26, title: "The Trap of Praise", ref: "Proverbs 27:21", question: "When flattery comes, will you pass the honour to the Father?", need: "Success is going to my head. Praise, fame, popularity, followers, flattery, staying humble when things go well." },
+  { day: 27, title: "Resilience in the Valley", ref: "1 Kings 19:4", question: "Do you feel drained at the moment?", need: "I feel low, drained and depressed. Valley season, discouragement, Elijah under the broom tree, wanting to give up on life." },
+  { day: 28, title: "God's Relay", ref: "2 Timothy 2:2", question: "If you cannot tomorrow, who continues the work?", need: "Succession, raising the next generation, training others, legacy, delegating, mentoring young leaders." },
+  { day: 29, title: "Fueled by the Spirit", ref: "Zechariah 4:6", question: "What obstacle poses the greatest challenge for you right now?", need: "The task is too big for me. Working in my own strength, need the Holy Spirit's power, impossible obstacle, a mountain." },
+  { day: 30, title: "The Eternal Perspective", ref: "Hebrews 11:4", question: "What is the one change you have made in these thirty days?", need: "What will outlast me? Legacy, purpose, eternity, finishing well, the meaning of my life and work." },
+];

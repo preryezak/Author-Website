@@ -17,6 +17,12 @@ routes = [
   { pattern = "eryezakalalu.com/dl/*", zone_name = "eryezakalalu.com" },
   { pattern = "eryezakalalu.com/api/give*", zone_name = "eryezakalalu.com" },
   { pattern = "www.eryezakalalu.com/api/give*", zone_name = "eryezakalalu.com" },
+  { pattern = "eryezakalalu.com/api/lead*", zone_name = "eryezakalalu.com" },
+  { pattern = "eryezakalalu.com/api/find-day", zone_name = "eryezakalalu.com" },
+  { pattern = "www.eryezakalalu.com/api/find-day", zone_name = "eryezakalalu.com" },
+  { pattern = "www.eryezakalalu.com/api/lead*", zone_name = "eryezakalalu.com" },
+  { pattern = "eryezakalalu.com/free/*", zone_name = "eryezakalalu.com" },
+  { pattern = "www.eryezakalalu.com/free/*", zone_name = "eryezakalalu.com" },
   { pattern = "www.eryezakalalu.com/api/checkout*", zone_name = "eryezakalalu.com" },
   { pattern = "www.eryezakalalu.com/api/order*", zone_name = "eryezakalalu.com" },
   { pattern = "www.eryezakalalu.com/dl/*", zone_name = "eryezakalalu.com" },
@@ -29,6 +35,10 @@ crons = ["*/30 * * * *"]
 # PDF stamping of a 200-page book can take a few seconds of CPU.
 [limits]
 cpu_ms = 60000
+
+# Workers AI: text embeddings for "Find your day" (no generated text).
+[ai]
+binding = "AI"
 
 [observability]
 enabled = true

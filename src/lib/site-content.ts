@@ -241,9 +241,9 @@ export const FEATURED_BOOK = {
   subtitle: "30 Days to a Life of Kingdom Authority, Character, and Marketplace Impact",
   headline: "Become the person behind the influence.",
   paras: [
-    "Influence is more than visibility, position, or reach. It begins with the person Christ is forming.",
-    "The Influential Spirit is a 30-day journey into kingdom authority, character, competence, and meaningful influence, helping believers understand how who they are becoming shapes the way they lead, work, serve, and affect the people around them.",
-    "If God has given you influence, the question is not only what you will do with it. It is who you will become as you live it.",
+    "Influence begins with the person Christ is forming, long before the platform, the position or the reach.",
+    "The Influential Spirit is a thirty-day devotional on kingdom authority, character, competence and influence. Day by day it shows how the person you are becoming shapes the way you lead, work, serve and affect the people around you.",
+    "If God has given you influence, there is a question underneath it. Who are you becoming while you become visible?",
   ],
   standout: "We are not called to whisper our faith in the corner while the world dictates the culture. When your inner life is anchored in Christ, your settled competence holds more authority than any title ever could.",
   audience: "For believers whose influence is growing in ministry, business, work, community, relationships, or everyday life.",
