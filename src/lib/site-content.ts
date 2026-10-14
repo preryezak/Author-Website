@@ -30,7 +30,9 @@ export const SITE = {
  * variable NEXT_PUBLIC_GIVING_URL. Set it to an empty string to switch the
  * button off entirely: the UI then falls back to a plain note instead of a link.
  */
-const GIVING_DEFAULT_URL = "https://flutterwave.com/donate/h2tj4bfhltce";
+// Giving is on the site since Oct 2026 (src/components/site/give-form.tsx). The old hosted page was
+// https://flutterwave.com/donate/h2tj4bfhltce; NEXT_PUBLIC_GIVING_URL can still point elsewhere.
+const GIVING_DEFAULT_URL = "/give/";
 
 /**
  * Resolution rules for the giving destination, and why they look like this.
@@ -61,10 +63,10 @@ export const GIVING = {
   heading: "Help this teaching reach one more person",
   lede: "Devotion in Season and the daily devotionals are free to everyone who listens. Your gift covers recording, editing, hosting and the hours of study behind every episode, and helps these messages reach working believers in Uganda and around the world.",
   pageCta: "Give through Flutterwave",
-  smallPrint: "Payments are processed securely by Flutterwave. You'll receive a receipt by email.",
+  smallPrint: "Payments are processed securely. Card details and mobile money PINs never reach this site. Your receipt arrives by email.",
   readHeading: "Prefer to support by reading?",
   readCta: "Get The Influential Spirit",
-  readHref: "/#editions",
+  readHref: "/influential-spirit/#editions",
   campaign: "site-give",
 } as const;
 
@@ -643,10 +645,11 @@ export const PRIVACY = {
     "**Information you provide directly.** When you subscribe to Eryeza Writes, you share your email address. When you request the free weekly study guide on the Resources page, you share your first name and email address, and you can choose to receive Eryeza's letter as well. When you submit a speaking invitation, you share the details you choose to provide on that form, which may include your name, email, phone, organisation, role, location, and the particulars of your gathering. This information is used to respond to your request and to consider the invitation.",
     "**Information collected automatically.** Like most websites, this site may collect basic technical data (browser type, pages visited, referring page) through the hosting platform and any analytics in use. No personal data is sold.",
     "**How your information is used.** Information you submit is used to respond to you, to consider invitations, and to send the updates you have asked for. Your email is never added to a list you did not request.",
-    "**Third-party services.** This site uses third-party services to deliver its work: a newsletter provider for Eryeza Writes (Beehiiv), an email service that sends the weekly study guide (Kit), a payment provider for book orders, and an email service that forwards speaking invitations to the team. Each operates under its own privacy terms. This site does not control and is not responsible for their separate practices.",
+    "**Book orders.** When you buy a book on this site, you give your name, email and, for mobile money, your phone number. These are stored in this site's order database and used to take your payment, deliver your books, send your receipt and order link, and answer you if you need help. Payment is handled by a licensed payment provider; card and mobile money details go to them directly and never reach this site. Your PDFs are marked with your name, email and order number as your personal copy. If you tick the box at checkout, your email is also passed to Beehiiv for Eryeza's letter.",
+    "**Third-party services.** This site uses third-party services to deliver its work: a newsletter provider for Eryeza Writes (Beehiiv), an email service that sends the weekly study guide (Kit), a payment provider for book orders (Flutterwave), an email service for receipts and messages (Resend), and Meta's measurement pixel and Conversions API, which tell us which posts and adverts lead to a visit or an order. For orders, Meta receives the order value and a one-way coded form of your email and phone, never the details themselves. Each service operates under its own privacy terms. This site does not control and is not responsible for their separate practices.",
     "**Email and storage.** Speaking invitations are stored in this site's database and, when email delivery is configured, forwarded to speaking@eryezakalalu.com. Study-guide requests are stored in this site's database and passed to Kit, which sends the guide. If you ask for Eryeza's letter, your email address is also passed to Beehiiv for Eryeza Writes. To limit abuse of the study-guide form, a one-way code derived from your internet address is stored with each request; the address itself is not stored. Submissions are retained until no longer needed and then removed.",
     "**Your choices.** You may unsubscribe from the study guide or from Eryeza Writes at any time using the link in any email. You may request access to, correction of, or deletion of information you have submitted by writing to hello@eryezakalalu.com.",
-    "**Cookies.** This site uses only essential cookies and those required by the third-party services above, such as the newsletter embed and the podcast players. No advertising cookies are used. You may decline non-essential cookies using the banner below and change your preference at any time.",
+    "**Cookies.** This site uses essential cookies, those required by the third-party services above, such as the newsletter embed, the podcast players and the payment window, and Meta's measurement pixel. In Europe and the United Kingdom the pixel loads only after you accept. Anywhere, choosing Decline non-essential on the banner keeps it off. You can change your choice at any time by clearing this site's data in your browser.",
   ],
   contactLine: "Questions about privacy can be sent to hello@eryezakalalu.com.",
 } as const;

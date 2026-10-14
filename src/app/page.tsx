@@ -1,3 +1,4 @@
+import { LocalPrice } from "@/components/site/checkout";
 import {
   SITE, HERO, FLAGSHIP, FEATURED_BOOK, WHY_THIS_BOOK, AUTHOR_LETTER,
   DISCOVER, LIBRARY, PODCAST, NEWSLETTER, THIRTY_DAYS, DAY1_FULL, PILLARS,
@@ -514,7 +515,7 @@ export default async function Home() {
       <StickyBuyBar>
         <div className="meta">
           <div className="eyebrow">Out now</div>
-          <div className="caption">The Influential Spirit · from <Price launch="$12" full="$15" /> / <Price launch="UGX 36,000" full="UGX 45,000" /> / <Price launch="₦14,400" full="₦18,000" /></div>
+          <div className="caption">The Influential Spirit · from <LocalPrice edition="reader" was={false} /></div>
         </div>
         <a className="btn btn-gold btn-sm" href="#editions">Choose edition</a>
       </StickyBuyBar>

@@ -48,7 +48,7 @@ export default function BooksEditions({ heading = true }: { heading?: boolean })
                 {DAY1_FULL.scripture}
                 <cite>{DAY1_FULL.scriptureRef}</cite>
               </div>
-              <div className="bundle-meta">Day 1 in full, plus the 30-day reading plan inside every edition.</div>
+              <div className="bundle-meta">Day 1 in full. The Formation Bundle adds the audiobook, the study guide and the 30-day reading plan.</div>
             </div>
           </div>
           <figure className="bundle-audio">

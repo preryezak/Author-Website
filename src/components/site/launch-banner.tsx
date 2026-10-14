@@ -1,3 +1,4 @@
+import { LocalPrice } from "@/components/site/checkout";
 import { Price } from "@/components/site/price";
 
 /**
@@ -25,7 +26,7 @@ export default function LaunchBanner({ href = "#editions", variant = "book" }: {
         </picture>
         <div className="launch-banner__bar">
           <a className="btn btn-primary launch-banner__cta" href={href}>
-            Get the book <span className="launch-banner__from">from <Price launch="$12" full="$15" /></span>
+            Get the book <span className="launch-banner__from">from <LocalPrice edition="reader" was={false} /></span>
           </a>
         </div>
       </div>

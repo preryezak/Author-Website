@@ -17,13 +17,14 @@ export default function CookieBanner() {
   const choose = (ok: boolean) => {
     try { localStorage.setItem("ek-cookie-choice", ok ? "accepted" : "declined"); } catch { /* storage blocked */ }
     document.documentElement.classList.add("ek-cookie-set");
+    window.dispatchEvent(new CustomEvent("ek:cookie", { detail: ok ? "accepted" : "declined" }));
     setDismissed(true);
   };
 
   if (dismissed) return null;
   return (
     <div className="cookie-banner is-visible" role="region" aria-label="Cookie preferences">
-      <p className="cookie-banner__text">This site uses only essential cookies and those required by the newsletter, podcast, and payment services. No advertising cookies are used. See the <a href="/privacy">privacy page</a> for details.</p>
+      <p className="cookie-banner__text">This site uses essential cookies, those needed by the newsletter, podcast and payment services, and Meta&rsquo;s measurement pixel, which tells us which posts and adverts help readers find the book. Decline and the pixel stays off. See the <a href="/privacy">privacy page</a> for details.</p>
       <div className="cookie-banner__actions">
         <button type="button" className="cookie-banner__btn cookie-banner__btn--decline" onClick={() => choose(false)}>Decline non-essential</button>
         <button type="button" className="cookie-banner__btn cookie-banner__btn--accept" onClick={() => choose(true)}>Accept</button>

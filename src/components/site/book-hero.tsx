@@ -1,3 +1,4 @@
+import { LocalPrice } from "@/components/site/checkout";
 import BookStage from "@/components/site/book-stage";
 import { ArrowRight } from "@/components/site/ui-bits";
 import { Price, LaunchOnly } from "@/components/site/price";
@@ -23,11 +24,7 @@ export default function BookHero({ asH1 = true, id, dayOneHref = "#day-one" }: {
             <div className="lhero__buy">
               <div className="lhero__price" aria-label="Price">
                 <span className="lhero__from">From</span>
-                <Price launch="$12" was="$15" full="$15" />
-                <span className="lhero__or">or</span>
-                <Price launch="UGX 36,000" was="45,000" full="UGX 45,000" />
-                <span className="book-hero__or">or</span>
-                <Price launch="₦14,400" was="18,000" full="₦18,000" />
+                <LocalPrice edition="reader" />
               </div>
               <div className="flex-wrap-gap gap-4">
                 <a className="btn btn-primary" href="#editions">Get the book<ArrowRight /></a>

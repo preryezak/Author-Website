@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import SiteShell from "@/components/site/site-shell";
-import GiveButton from "@/components/site/give-button";
+import GiveForm from "@/components/site/give-form";
 import { OrnamentRule } from "@/components/site/ui-bits";
 import { GIVING } from "@/lib/site-content";
 
 /**
  * The Giving page (handoff P0-1, copy used exactly).
  *
- * Link-only. There is no payment code in this application: GiveButton opens
- * the hosted Flutterwave donation page (GIVING.url) in a new tab and records a
- * non-personal click event, and Flutterwave holds the transaction, the receipt
- * and the payout.
+ * Giving happens on this page (GiveForm): once or monthly, in the giver's
+ * currency, checked on the server by the eryeza-checkout Worker. Every giver
+ * joins the partners list.
  */
 export const metadata: Metadata = {
   title: GIVING.eyebrow,
@@ -35,10 +34,22 @@ export default function GivePage() {
             <span className="eyebrow">{GIVING.eyebrow}</span>
             <h1 className="page-head__title">{GIVING.heading}</h1>
             <p className="page-head__lede">{GIVING.lede}</p>
-            <div className="page-head__actions">
-              <GiveButton source="give-page" variant="button" className="btn btn-gold" label={GIVING.pageCta} />
+          </div>
+          <div className="give-grid">
+            <div className="give-why">
+              <h2 className="give-h">What your gift does</h2>
+              <ul className="give-list">
+                <li>Keeps Devotion in Season and the daily devotionals free for every listener.</li>
+                <li>Covers recording, editing and hosting each week.</li>
+                <li>Supports the writing and publishing of new books and free study guides.</li>
+              </ul>
+              <h2 className="give-h">Partners</h2>
+              <p className="give-p">Everyone who gives joins our partners list. Partners receive early access and special offers on new books and resources, beginning with Unedited Christmas.</p>
+              <p className="caption" style={{ marginTop: 12, color: "var(--ink-300)" }}>{GIVING.smallPrint}</p>
             </div>
-            <p className="caption" style={{ marginTop: 12, color: "var(--ink-300)" }}>{GIVING.smallPrint}</p>
+            <div className="give-box">
+              <GiveForm />
+            </div>
           </div>
         </div>
       </section>

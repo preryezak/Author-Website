@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Newsreader, Source_Serif_4, DM_Sans } from "next/font/google";
 import "./globals.css";
+import "./checkout.css";
 import { LAUNCH_PRICE_ENDS, GIVING } from "@/lib/site-content";
+import CheckoutSheet from "@/components/site/checkout";
+import { EDITIONS as EDITION_INFO, isLaunch, priceOf } from "@/lib/editions";
+import MetaPixel from "@/components/site/meta-pixel";
 
 /*
  * Fonts: variable files (no `weight` list), so each style is ONE file covering
@@ -161,28 +165,18 @@ const jsonLd = {
       inLanguage: "en",
       datePublished: "2026-09-30",
       imageUrl: `${SITE_URL}/images/cover.jpg`,
-      // Launch prices run until 31 Oct 2026 (priceValidUntil). From 1 Nov the
-      // full prices apply ($15 / UGX 45,000): update these on the next rebuild.
-      offers: [
-        {
+      // Built from src/lib/editions.ts at build time. Rebuild on 1 Nov 2026 so full prices replace launch prices.
+      offers: (["reader", "formation", "complete"] as const).flatMap((ed) =>
+        (["USD", "UGX", "KES", "NGN"] as const).map((cur) => ({
           "@type": "Offer",
-          name: "Reader Edition",
-          price: "12",
-          priceCurrency: "USD",
-          priceValidUntil: "2026-10-31",
+          name: EDITION_INFO[ed].name,
+          price: String(priceOf(ed, cur)),
+          priceCurrency: cur,
+          ...(isLaunch() ? { priceValidUntil: "2026-10-31" } : {}),
           availability: "https://schema.org/InStock",
-          url: "https://payhip.com/b/CidbX",
-        },
-        {
-          "@type": "Offer",
-          name: "Reader Edition",
-          price: "36000",
-          priceCurrency: "UGX",
-          priceValidUntil: "2026-10-31",
-          availability: "https://schema.org/InStock",
-          url: "https://selar.com/8818840887",
-        },
-      ],
+          url: `${SITE_URL}/influential-spirit/#editions`,
+        })),
+      ),
     },
     {
       "@type": "PodcastSeries",
@@ -246,6 +240,8 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {children}
+        <CheckoutSheet />
+        <MetaPixel />
       </body>
     </html>
   );

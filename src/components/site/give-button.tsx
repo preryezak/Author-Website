@@ -65,17 +65,19 @@ export default function GiveButton({
   }
 
   const shortLabel = url.replace(/^https?:\/\//, "").slice(0, 40);
+  // Giving now happens on the site (/give/). An external URL still opens in a new tab.
+  const external = /^https?:/i.test(url);
+  const ext = external ? { target: "_blank", rel: "noopener noreferrer external" } : {};
 
   if (variant === "button") {
     return (
       <a
         className={className ?? "btn btn-gold btn-sm"}
         href={url}
-        target="_blank"
-        rel="noopener noreferrer external"
+        {...ext}
         onClick={handleClick}
         aria-busy={busy || undefined}
-        aria-label={`${text}. Opens the secure giving page at ${shortLabel} in a new tab.`}
+        aria-label={external ? `${text}. Opens the secure giving page at ${shortLabel} in a new tab.` : text}
         data-give-source={source}
       >
         {text}
@@ -87,11 +89,10 @@ export default function GiveButton({
     return (
       <a
         href={url}
-        target="_blank"
-        rel="noopener noreferrer external"
+        {...ext}
         onClick={handleClick}
         aria-busy={busy || undefined}
-        aria-label={`${text}. Opens the secure giving page in a new tab.`}
+        aria-label={external ? `${text}. Opens the secure giving page in a new tab.` : text}
         data-give-source={source}
         style={{
           fontFamily: "var(--font-serif)",
@@ -109,11 +110,10 @@ export default function GiveButton({
   return (
     <a
       href={url}
-      target="_blank"
-      rel="noopener noreferrer external"
+      {...ext}
       onClick={handleClick}
       aria-busy={busy || undefined}
-      aria-label={`${text}. Opens the secure giving page in a new tab.`}
+      aria-label={external ? `${text}. Opens the secure giving page in a new tab.` : text}
       data-give-source={source}
       className={className}
     >
