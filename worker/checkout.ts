@@ -35,7 +35,7 @@ import {
 } from "../src/lib/editions";
 import { SEQUENCE } from "./sequence";
 import { DAYS } from "../src/lib/days";
-import { FEE_COVER_RATE, GIFT_MAX, GIFT_MIN, MONTHLY_PAYMENT_OPTIONS, roundGift } from "../src/lib/giving";
+import { FEE_COVER_RATE, GIFT_MAX, GIFT_MIN, GIFT_PRESETS, MONTHLY_PAYMENT_OPTIONS, roundGift } from "../src/lib/giving";
 
 interface Env {
   DB: D1Database;
@@ -60,7 +60,8 @@ interface Env {
   NOTIFY_FROM: string;       // verified sender for the binding
   REFUND_DAYS?: string;      // default 14
   GUARANTEE?: string;        // "1" once Eryeza approves the 7-day/14-day guarantee; shows it in receipts and on the order page
-  TEST_MODE?: string;        // "1" while using Flutterwave test keys
+  TEST_MODE?: string;
+  LEAD_DAILY_CAP?: string;   // max new Day 1 sign-ups a day, keeps email quota for receipts (default 60)        // "1" while using Flutterwave test keys
 }
 
 const FLW = "https://api.flutterwave.com/v3";
@@ -79,7 +80,7 @@ function json(data: unknown, status = 200): Response {
 function html(body: string, status = 200): Response {
   return new Response(
     `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Orders</title><style>body{font:16px/1.6 system-ui,sans-serif;max-width:640px;margin:40px auto;padding:0 16px;color:#2a2420;background:#faf7f2}button{font:inherit;padding:10px 18px;border-radius:8px;border:0;background:#7B3F2E;color:#fff;cursor:pointer}table{border-collapse:collapse;width:100%;font-size:14px}td,th{border-bottom:1px solid #e5dccf;padding:6px 4px;text-align:left}</style></head><body>${body}</body></html>`,
-    { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } },
+    { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Robots-Tag": "noindex", "X-Frame-Options": "DENY", "Content-Security-Policy": "frame-ancestors 'none'" } },
   );
 }
 
@@ -89,6 +90,12 @@ function esc(s: string): string {
 
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.trim().replace(/[\u0000-\u001f]/g, "").slice(0, max) : "";
+}
+
+/** A person's name: letters, spaces and common punctuation only (no links or markup, which would turn emails into phishing). */
+function cleanName(v: unknown, max: number): string {
+  const n = clean(v, max);
+  return /(:\/\/|www\.|@|<|>|\.(com|net|org|xyz|io)\b)/i.test(n) ? "" : n;
 }
 
 function isEmail(v: string): boolean {
@@ -129,7 +136,8 @@ function safeEqual(a: string, b: string): boolean {
 }
 
 async function ipHash(env: Env, request: Request): Promise<string> {
-  const ip = request.headers.get("CF-Connecting-IP") || "";
+  const raw = request.headers.get("CF-Connecting-IP") || "";
+  const ip = raw.includes(":") ? raw.split(":").slice(0, 4).join(":") : raw; // IPv6 counted per /64
   return ip ? (await sha256Hex(`${env.IP_SALT || "eryeza"}:${ip}`)).slice(0, 32) : "";
 }
 
@@ -140,7 +148,7 @@ function sameOrigin(env: Env, request: Request): boolean {
 }
 
 /** Allows `limit` actions of `kind` per salted IP per UTC hour. */
-async function rateOk(env: Env, ip: string, kind: string, limit: number): Promise<boolean> {
+async function rateOk(env: Env, ip: string, kind: string, limit: number, strict = false): Promise<boolean> {
   if (!ip) return true;
   const hour = new Date().toISOString().slice(0, 13);
   try {
@@ -149,7 +157,7 @@ async function rateOk(env: Env, ip: string, kind: string, limit: number): Promis
     ).bind(ip, hour, kind).first<{ count: number }>();
     return (row?.count ?? 0) <= limit;
   } catch {
-    return true;
+    return !strict;
   }
 }
 
@@ -201,9 +209,9 @@ async function settle(env: Env, ctx: ExecutionContext, order: Order, tx: FlwTx |
     return order;
   }
   if (tx.currency !== order.currency || Number(tx.amount) < order.amount) {
-    await env.DB.prepare("UPDATE orders SET note = ? WHERE id = ?")
+    const m = await env.DB.prepare("UPDATE orders SET status = 'mismatch', note = ? WHERE id = ? AND status = 'pending'")
       .bind(`mismatch: paid ${tx.amount} ${tx.currency}, expected ${order.amount} ${order.currency}, flw ${tx.id}`, order.id).run();
-    await notifyOwner(env, `Payment mismatch on ${order.id}`, `Flutterwave transaction ${tx.id} paid ${tx.amount} ${tx.currency}; the order expected ${order.amount} ${order.currency}. Files were NOT released. Check the Flutterwave dashboard.`);
+    if (m.meta.changes === 1) await notifyOwner(env, `Payment mismatch on ${order.id}`, `Flutterwave transaction ${tx.id} paid ${tx.amount} ${tx.currency}; the order expected ${order.amount} ${order.currency}. Files were NOT released. Check the Flutterwave dashboard.`);
     return order;
   }
   const now = new Date().toISOString();
@@ -355,7 +363,9 @@ async function stamp(env: Env, o: Order, fileId: string, sourceKey: string): Pro
   const pdf = await PDFDocument.load(await src.arrayBuffer(), { updateMetadata: false });
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const date = (o.paidAt || o.createdAt).slice(0, 10);
-  const line = `Licensed to ${o.name} (${o.email}), order ${o.id}, ${date}. For personal use. Please do not share this file.`;
+  // Helvetica covers only Western characters: strip accents (ọ to o) and replace anything else, so every name can be stamped.
+  const safe = (v: string) => v.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x20-\x7E]/g, "?");
+  const line = safe(`Licensed to ${o.name} (${o.email}), order ${o.id}, ${date}. For personal use. Please do not share this file.`);
   for (const page of pdf.getPages()) {
     const { width } = page.getSize();
     const size = 6.5;
@@ -371,14 +381,27 @@ async function stamp(env: Env, o: Order, fileId: string, sourceKey: string): Pro
 
 /** Prepares the stamped PDFs straight after payment, so the first download is instant. */
 async function prestamp(env: Env, o: Order): Promise<string> {
-  for (const f of FILES[o.edition]) if (f.stamp) await stamp(env, o, f.id, f.key);
+  for (const f of FILES[o.edition]) if (f.stamp) { try { await stamp(env, o, f.id, f.key); } catch { /* stamped on first download, or served plain */ } }
   return "ok";
 }
 
 /* ------------------------------------------------------------ handlers */
 
+/** While TEST_MODE is "1" only a browser holding the owner's test cookie may start a payment, so test keys can never release real files to the public. */
+async function testGate(env: Env, request: Request): Promise<Response | null> {
+  const live = (env.FLW_SECRET_KEY || "").startsWith("FLWSECK-") && !(env.FLW_SECRET_KEY || "").includes("_TEST");
+  if (env.TEST_MODE === "1" && live) return json({ ok: false, error: "Checkout is being set up. Please try again shortly." }, 503);
+  if (env.TEST_MODE !== "1") return null;
+  const cookie = request.headers.get("Cookie") || "";
+  const want = env.ADMIN_KEY ? await hmac(env.ADMIN_KEY, "tester") : "";
+  const got = /(?:^|; )ek_tester=([a-f0-9]{64})/.exec(cookie)?.[1] || "";
+  return want && safeEqual(got, want) ? null : json({ ok: false, error: "Checkout opens soon. Please try again shortly." }, 503);
+}
+
 async function start(env: Env, request: Request): Promise<Response> {
   if (!sameOrigin(env, request)) return json({ ok: false, error: "Please buy from eryezakalalu.com." }, 403);
+  const gate = await testGate(env, request);
+  if (gate) return gate;
   const ip = await ipHash(env, request);
   if (!(await rateOk(env, ip, "start", 20))) return json({ ok: false, error: "Too many attempts. Please wait a few minutes and try again." }, 429);
   let b: Record<string, unknown>;
@@ -386,10 +409,14 @@ async function start(env: Env, request: Request): Promise<Response> {
 
   const edition = clean(b.edition, 20) as EditionId;
   if (!EDITION_IDS.includes(edition)) return json({ ok: false, error: "Please choose an edition." }, 422);
-  const country = ((request as unknown as { cf?: { country?: string } }).cf?.country || "").toUpperCase();
+  const cf = (request as unknown as { cf?: { country?: string; continent?: string } }).cf || {};
+  const country = (cf.country || "").toUpperCase();
   const asked = clean(b.currency, 3).toUpperCase() as Currency;
   const currency: Currency = CURRENCIES.includes(asked) ? asked : currencyFor(country);
-  const name = clean(b.name, 80);
+  if (currency !== "USD" && cf.continent && cf.continent !== "AF") {
+    return json({ ok: false, error: "Local African prices are for buyers in Africa. Please choose Rest of the world (USD)." }, 422);
+  }
+  const name = cleanName(b.name, 80);
   const email = clean(b.email, 200).toLowerCase();
   const phoneRaw = clean(b.phone, 24).replace(/[\s()-]/g, "");
   const phone = /^\+?[0-9]{7,15}$/.test(phoneRaw) ? phoneRaw : "";
@@ -491,6 +518,7 @@ async function webhook(env: Env, ctx: ExecutionContext, request: Request): Promi
     if (ref.startsWith("GV-")) {
       const g = await giftById(env, ref);
       if (g && g.status === "pending") await settleGift(env, ctx, g, await flwVerify(env, b.data?.id ? { id: String(b.data.id) } : { ref }));
+      else if (!g && b.data?.id) await recordRenewal(env, ctx, String(b.data.id)); // e.g. GV-XXXX_PMCKDU_1
       return new Response("ok");
     }
     if (!ref.startsWith("IS-") && b.event === "charge.completed" && b.data?.id) {
@@ -498,13 +526,15 @@ async function webhook(env: Env, ctx: ExecutionContext, request: Request): Promi
       return new Response("ok");
     }
   } catch (e) {
-    return new Response(`retry: ${(e as Error).message}`, { status: 500 });
+    console.error("webhook", (e as Error).message);
+    return new Response("retry", { status: 500 });
   }
   const o = ref ? await getById(env, ref) : null;
   if (o && o.status === "pending") {
     // Never trust the webhook body: ask Flutterwave again with the secret key.
     try { await settle(env, ctx, o, await flwVerify(env, b.data?.id ? { id: String(b.data.id) } : { ref })); } catch (e) {
-      return new Response(`retry: ${(e as Error).message}`, { status: 500 }); // Flutterwave retries
+      console.error("webhook", (e as Error).message);
+    return new Response("retry", { status: 500 }); // Flutterwave retries
     }
   }
   return new Response("ok");
@@ -538,7 +568,8 @@ async function refundRequest(env: Env, request: Request): Promise<Response> {
   const prior = await env.DB.prepare("SELECT COUNT(*) AS n FROM orders WHERE email = ? AND status IN ('refunded','refund_manual')").bind(o.email).first<{ n: number }>();
   if ((prior?.n ?? 0) > 0) return json({ ok: false, error: "A refund was already given to this email address. Please write to books@eryezakalalu.com." }, 409);
   const reason = clean(b.reason, 500);
-  await env.DB.prepare("UPDATE orders SET status = 'refund_requested', refundReason = ? WHERE id = ? AND status = 'paid'").bind(reason, o.id).run();
+  const req = await env.DB.prepare("UPDATE orders SET status = 'refund_requested', refundReason = ? WHERE id = ? AND status = 'paid'").bind(reason, o.id).run();
+  if (req.meta.changes !== 1) return json({ ok: true, message: "Your request is already with us." });
   const sig = env.ADMIN_KEY ? await hmac(env.ADMIN_KEY, `refund:${o.id}`) : "";
   const dl = await env.DB.prepare("SELECT COUNT(*) AS n FROM downloads WHERE orderId = ?").bind(o.id).first<{ n: number }>();
   await notifyOwner(env, `Refund request: ${o.id}, ${formatMoney(o.amount, o.currency)}`,
@@ -569,6 +600,8 @@ async function adminRefund(env: Env, request: Request, url: URL): Promise<Respon
     await env.DB.prepare("UPDATE orders SET status = 'paid' WHERE id = ? AND status = 'refund_requested'").bind(o.id).run();
     return html("<p>Declined. The buyer keeps access. Please write to them personally.</p>");
   }
+  const claim = await env.DB.prepare("UPDATE orders SET status = 'refund_processing' WHERE id = ? AND status = 'refund_requested'").bind(o.id).run();
+  if (claim.meta.changes !== 1) return html("<p>This refund is already being processed.</p>");
   let status = "refund_manual";
   let note = "";
   if (env.FLW_SECRET_KEY && o.flwTxId) {
@@ -581,7 +614,7 @@ async function adminRefund(env: Env, request: Request, url: URL): Promise<Respon
     if (res.ok && body.status === "success") status = "refunded";
     else note = `flw refund ${res.status}: ${body.message || ""}`.slice(0, 200);
   }
-  await env.DB.prepare("UPDATE orders SET status = ?, refundAt = ?, note = ? WHERE id = ?").bind(status, new Date().toISOString(), note, o.id).run();
+  await env.DB.prepare("UPDATE orders SET status = ?, refundAt = ?, note = ? WHERE id = ? AND status = 'refund_processing'").bind(status, new Date().toISOString(), note, o.id).run();
   await resend(env, o.email, "Your refund",
     `Dear ${o.name.split(" ")[0]},\n\nYour refund for order ${o.id} has been ${status === "refunded" ? "sent. Card refunds can take 5 to 10 working days to appear" : "approved. We will send it to you shortly"}. Your download links are now closed.\n\nThank you for reading. May the Lord keep you.\nEryeza Kalalu`,
     `<p>Dear ${esc(o.name.split(" ")[0])},</p><p>Your refund for order ${esc(o.id)} has been ${status === "refunded" ? "sent. Card refunds can take 5 to 10 working days to appear" : "approved. We will send it to you shortly"}. Your download links are now closed.</p><p>Thank you for reading. May the Lord keep you.<br>Eryeza Kalalu</p>`);
@@ -600,14 +633,16 @@ async function serveR2(request: Request, obj: R2ObjectBody | R2Object | null, fi
   headers.set("Accept-Ranges", "bytes");
   headers.set("Cache-Control", "private, no-store");
   headers.set("X-Robots-Tag", "noindex");
-  headers.set("Content-Disposition", `${inline ? "inline" : "attachment"}; filename="${filename.replace(/"/g, "")}"`);
+  const ascii = filename.replace(/[^\x20-\x7E]/g, "_").replace(/"/g, "");
+  headers.set("Content-Disposition", `${inline ? "inline" : "attachment"}; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(filename)}`);
   if (!("body" in obj)) return new Response(null, { status: 412, headers });
-  const range = (obj as R2ObjectBody & { range?: { offset: number; length?: number } }).range;
-  if (range && request.headers.has("Range")) {
+  const r = (obj as R2ObjectBody & { range?: { offset?: number; length?: number; suffix?: number } }).range;
+  if (r && request.headers.has("Range")) {
+    const range = { offset: r.suffix !== undefined ? obj.size - r.suffix : (r.offset ?? 0), length: r.suffix ?? r.length };
     const end = range.offset + (range.length ?? obj.size - range.offset) - 1;
     headers.set("Content-Range", `bytes ${range.offset}-${end}/${obj.size}`);
     headers.set("Content-Length", String(end - range.offset + 1));
-    return new Response(obj.body, { status: 206, headers });
+    return new Response(request.method === "HEAD" ? null : obj.body, { status: 206, headers });
   }
   headers.set("Content-Length", String(obj.size));
   return new Response(request.method === "HEAD" ? null : obj.body, { status: 200, headers });
@@ -628,7 +663,8 @@ async function download(env: Env, request: Request, ctx: ExecutionContext, parts
   if (fileId === "audio") {
     const c = AUDIO[o.edition].find((x) => x.id === coll);
     if (!c || !name) return new Response("Not found", { status: 404 });
-    const file = decodeURIComponent(name);
+    let file = "";
+    try { file = decodeURIComponent(name); } catch { return new Response("Not found", { status: 404 }); }
     if (file.includes("/") || file.includes("..")) return new Response("Not found", { status: 404 });
     const key = file === "all.zip" ? `${c.prefix.replace(/\/$/, "")}.zip` : `${c.prefix}${file}`;
     if (!request.headers.has("Range") || request.headers.get("Range")?.startsWith("bytes=0-")) log(`${coll}/${file}`);
@@ -641,7 +677,16 @@ async function download(env: Env, request: Request, ctx: ExecutionContext, parts
   if (!f) return new Response("Not found", { status: 404 });
   log(f.id);
   const filename = f.key.split("/").pop()!;
-  if (f.stamp) return serveR2(request, await stamp(env, o, f.id, f.key), filename, false);
+  if (f.stamp) {
+    try {
+      if (!(await stamp(env, o, f.id, f.key))) return new Response("Not found", { status: 404 });
+      return await serveR2(request, await env.BOOKS.get(stampedKey(o, f.id), { range: request.headers }), filename, false);
+    } catch (e) {
+      // A PDF that cannot be stamped is still delivered; the owner is told.
+      ctx.waitUntil(notifyOwner(env, `Stamping failed for ${o.id}`, `${f.key}: ${(e as Error).message}`).then(() => undefined));
+      return serveR2(request, await env.BOOKS.get(f.key, { range: request.headers }), filename, false);
+    }
+  }
   return serveR2(request, await env.BOOKS.get(f.key, { range: request.headers }), filename, false);
 }
 
@@ -676,6 +721,8 @@ async function planFor(env: Env, currency: Currency, amount: number): Promise<st
 
 async function giveStart(env: Env, request: Request): Promise<Response> {
   if (!sameOrigin(env, request)) return json({ ok: false, error: "Please give from eryezakalalu.com." }, 403);
+  const gate = await testGate(env, request);
+  if (gate) return gate;
   const ip = await ipHash(env, request);
   if (!(await rateOk(env, ip, "give", 20))) return json({ ok: false, error: "Too many attempts. Please wait a few minutes and try again." }, 429);
   let b: Record<string, unknown>;
@@ -690,7 +737,7 @@ async function giveStart(env: Env, request: Request): Promise<Response> {
   if (base > GIFT_MAX[currency]) return json({ ok: false, error: "For a gift of this size, please write to hello@eryezakalalu.com and we will arrange it with you." }, 422);
   const coverFee = b.coverFee === true;
   const amount = coverFee ? roundGift(base * (1 + FEE_COVER_RATE), currency) : base;
-  const name = clean(b.name, 80);
+  const name = cleanName(b.name, 80);
   const email = clean(b.email, 200).toLowerCase();
   const phoneRaw = clean(b.phone, 24).replace(/[\s()-]/g, "");
   const phone = /^\+?[0-9]{7,15}$/.test(phoneRaw) ? phoneRaw : "";
@@ -698,6 +745,9 @@ async function giveStart(env: Env, request: Request): Promise<Response> {
   if (!isEmail(email)) return json({ ok: false, error: "Please check your email address. Your receipt is sent there." }, 422);
 
   let planId: string | null = null;
+  if (frequency === "monthly" && !GIFT_PRESETS[currency].includes(base)) {
+    return json({ ok: false, error: "Monthly gifts use the suggested amounts. Please choose one, or give your own amount once." }, 422);
+  }
   if (frequency === "monthly") {
     try { planId = await planFor(env, currency, amount); } catch {
       return json({ ok: false, error: "Monthly giving is not available at this moment. Please give once, or try again later." }, 503);
@@ -733,7 +783,8 @@ async function settleGift(env: Env, ctx: ExecutionContext, g: Gift, tx: FlwTx | 
   if (g.status !== "pending" || !tx || tx.tx_ref !== g.id) return g;
   if (tx.status !== "successful") return g;
   if (tx.currency !== g.currency || Number(tx.amount) < g.amount) {
-    await notifyOwner(env, `Gift mismatch on ${g.id}`, `Flutterwave ${tx.id} paid ${tx.amount} ${tx.currency}; expected ${g.amount} ${g.currency}.`);
+    const m = await env.DB.prepare("UPDATE gifts SET status = 'mismatch' WHERE id = ? AND status = 'pending'").bind(g.id).run();
+    if (m.meta.changes === 1) await notifyOwner(env, `Gift mismatch on ${g.id}`, `Flutterwave ${tx.id} paid ${tx.amount} ${tx.currency}; expected ${g.amount} ${g.currency}.`);
     return g;
   }
   const res = await env.DB.prepare("UPDATE gifts SET status = 'paid', flwTxId = ?, paidAt = ?, channel = ? WHERE id = ? AND status = 'pending'")
@@ -803,17 +854,22 @@ async function thankGiver(env: Env, g: Gift): Promise<void> {
 
 /** A monthly renewal arrives only as a webhook with Flutterwave's own tx_ref. Verified, recorded, owner told. */
 async function recordRenewal(env: Env, ctx: ExecutionContext, txId: string): Promise<void> {
-  const tx = await flwVerify(env, { id: txId });
+  const tx = await flwVerify(env, { id: txId }) as (FlwTx & { plan?: number | string; payment_plan?: number | string }) | null;
   if (!tx || tx.status !== "successful") return;
+  // Only charges made under one of our monthly plans count as renewals.
+  const planOf = String(tx.plan ?? tx.payment_plan ?? "");
+  const known = planOf ? await env.DB.prepare("SELECT 1 AS x FROM plans WHERE planId = ?").bind(planOf).first() : null;
+  if (!known) return;
   const done = await env.DB.prepare("SELECT 1 AS x FROM gifts WHERE flwTxId = ?").bind(String(tx.id)).first();
   if (done) return;
   const email = (tx.customer?.email || "").toLowerCase();
   const partner = email ? await env.DB.prepare("SELECT name, phone, country FROM partners WHERE email = ? AND monthly = 1").bind(email).first<{ name: string; phone: string; country: string }>() : null;
   if (!partner) return;
   const now = new Date().toISOString();
-  await env.DB.prepare(
+  const ins = await env.DB.prepare(
     "INSERT OR IGNORE INTO gifts (id, token, createdAt, kind, frequency, currency, amount, name, email, phone, country, status, flwTxId, paidAt, channel) VALUES (?, ?, ?, 'renewal', 'monthly', ?, ?, ?, ?, ?, ?, 'paid', ?, ?, ?)",
   ).bind(`GVR-${tx.id}`, token(), now, tx.currency, Math.round(tx.amount), partner.name, email, partner.phone, partner.country, String(tx.id), now, tx.payment_type || "").run();
+  if (ins.meta.changes !== 1) return;
   await env.DB.prepare("UPDATE partners SET lastGiftAt = ?, gifts = gifts + 1 WHERE email = ?").bind(now, email).run();
   ctx.waitUntil(notifyOwner(env, `Monthly gift renewed: ${tx.currency} ${Math.round(tx.amount)}`, `${partner.name} <${email}>, Flutterwave ${tx.id}`).then(() => undefined));
 }
@@ -849,17 +905,19 @@ async function giveManage(env: Env, request: Request): Promise<Response> {
   if (b.action === "cancel" && p.monthly && env.FLW_SECRET_KEY) {
     const list = await fetch(`${FLW}/subscriptions?email=${encodeURIComponent(p.email)}&status=active`, timed({ headers: { Authorization: `Bearer ${env.FLW_SECRET_KEY}` } }));
     const subs = ((await list.json().catch(() => ({}))) as { data?: { id: number }[] }).data || [];
-    let ok = list.ok && subs.length === 0;
+    let ok = list.ok;
     for (const s of subs) {
       const r = await fetch(`${FLW}/subscriptions/${s.id}/cancel`, timed({ method: "PUT", headers: { Authorization: `Bearer ${env.FLW_SECRET_KEY}` } }));
-      ok = ok || r.ok;
+      const rb = (await r.json().catch(() => ({}))) as { status?: string };
+      ok = ok && r.ok && rb.status === "success";
     }
     if (ok) {
       await env.DB.prepare("UPDATE partners SET monthly = 0 WHERE email = ?").bind(p.email).run();
       await notifyOwner(env, `Monthly gift stopped: ${p.name}`, `${p.name} <${p.email}> stopped their monthly gift from the manage page.`);
       return json({ ok: true, monthly: false, message: "Your monthly gift has been stopped. Thank you for every month you gave." });
     }
-    return json({ ok: false, error: "We could not stop it automatically. Please write to hello@eryezakalalu.com and we will do it for you today." }, 502);
+    await notifyOwner(env, `Please stop a monthly gift: ${p.name}`, `${p.name} <${p.email}> asked to stop their monthly gift, and Flutterwave did not confirm every cancellation. Please cancel it in the Flutterwave dashboard (Subscriptions).`);
+    return json({ ok: false, error: "We could not stop it automatically. We have been told and will stop it for you today." }, 502);
   }
   return json({ ok: true, name: p.name.split(" ")[0], monthly: Boolean(p.monthly), gifts: p.gifts, since: p.firstGiftAt.slice(0, 10) });
 }
@@ -869,7 +927,7 @@ async function adminPartners(env: Env, url: URL): Promise<Response> {
   if (!env.ADMIN_KEY || !safeEqual(clean(url.searchParams.get("s"), 64), await hmac(env.ADMIN_KEY, "partners"))) return new Response("Forbidden", { status: 403 });
   const rows = await env.DB.prepare("SELECT email, name, phone, country, firstGiftAt, lastGiftAt, gifts, monthly FROM partners ORDER BY firstGiftAt").all<Record<string, string | number>>();
   const cols = ["email", "name", "phone", "country", "firstGiftAt", "lastGiftAt", "gifts", "monthly"];
-  const csv = [cols.join(","), ...rows.results.map((r) => cols.map((c) => `"${String(r[c] ?? "").replace(/"/g, '""')}"`).join(","))].join("\n");
+  const csv = [cols.join(","), ...rows.results.map((r) => cols.map((c) => { const v = String(r[c] ?? ""); return `"${(/^[=+\-@]/.test(v) ? `'${v}` : v).replace(/"/g, '""')}"`; }).join(","))].join("\n");
   return new Response(csv, { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": 'attachment; filename="partners.csv"', "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } });
 }
 
@@ -904,7 +962,7 @@ async function sendLetter(env: Env, l: Lead, step: number): Promise<string> {
   return res.ok ? "ok" : `error:${res.status}`;
 }
 
-async function leadCapi(env: Env, l: Lead, request: Request, fbp: string, fbc: string): Promise<void> {
+async function leadCapi(env: Env, l: Lead, request: Request, fbp: string, fbc: string, eventId: string): Promise<void> {
   if (!env.META_PIXEL_ID || !env.META_CAPI_TOKEN) return;
   const v = env.META_GRAPH_VERSION || "v24.0";
   const user: Record<string, unknown> = { em: [await sha256Hex(l.email)], client_user_agent: request.headers.get("User-Agent") || "" };
@@ -912,27 +970,31 @@ async function leadCapi(env: Env, l: Lead, request: Request, fbp: string, fbc: s
   if (fbc) user.fbc = fbc;
   await fetch(`https://graph.facebook.com/${v}/${env.META_PIXEL_ID}/events?access_token=${encodeURIComponent(env.META_CAPI_TOKEN)}`, timed({
     method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data: [{ event_name: "Lead", event_time: Math.floor(Date.now() / 1000), event_id: `lead-${l.token.slice(0, 16)}`, action_source: "website", event_source_url: `${env.SITE}/influential-spirit/`, user_data: user, custom_data: { content_name: "day1" } }] }),
+    body: JSON.stringify({ data: [{ event_name: "Lead", event_time: Math.floor(Date.now() / 1000), event_id: eventId, action_source: "website", event_source_url: `${env.SITE}/influential-spirit/`, user_data: user, custom_data: { content_name: "day1" } }] }),
   })).catch(() => undefined);
 }
 
 async function leadStart(env: Env, ctx: ExecutionContext, request: Request): Promise<Response> {
   if (!sameOrigin(env, request)) return json({ ok: false }, 403);
   const ip = await ipHash(env, request);
-  if (!(await rateOk(env, ip, "lead", 6))) return json({ ok: false, error: "Please wait a little and try again." }, 429);
+  if (!(await rateOk(env, ip, "lead", 6, true))) return json({ ok: false, error: "Please wait a little and try again." }, 429);
   let b: Record<string, unknown>;
   try { b = (await request.json()) as Record<string, unknown>; } catch { return json({ ok: false, error: "Please fill in the form." }, 422); }
   if (clean(b.website, 100)) return json({ ok: true, eventId: "" }); // honeypot
   const email = clean(b.email, 200).toLowerCase();
-  const firstName = clean(b.firstName, 60);
+  const firstName = cleanName(b.firstName, 60);
   if (!isEmail(email)) return json({ ok: false, error: "Please check your email address." }, 422);
   const letterOptIn = b.letterOptIn === true ? 1 : 0;
+  const eventId = `lead-${randomId(12)}`;
   const existing = await env.DB.prepare("SELECT * FROM leads WHERE email = ?").bind(email).first<Lead>();
   let lead: Lead;
   if (existing) {
-    lead = existing;
-    if (existing.status === "unsubscribed") await env.DB.prepare("UPDATE leads SET status = 'active' WHERE email = ?").bind(email).run();
+    // Already signed up (or unsubscribed): send nothing again, so this form cannot be used to mail someone repeatedly.
+    return json({ ok: true, eventId });
   } else {
+    const today = new Date().toISOString().slice(0, 10);
+    const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM leads WHERE substr(createdAt, 1, 10) = ?").bind(today).first<{ n: number }>();
+    if ((n?.n ?? 0) >= Number(env.LEAD_DAILY_CAP || "60")) return json({ ok: false, error: "We have had many requests today. Please try again tomorrow, or read Day 1 on this page." }, 429);
     lead = { email, firstName, token: token(), createdAt: new Date().toISOString(), step: 0, status: "active", letterOptIn, source: clean(b.source, 200) };
     await env.DB.prepare("INSERT INTO leads (email, firstName, token, createdAt, step, status, letterOptIn, source, ipHash) VALUES (?, ?, ?, ?, 0, 'active', ?, ?, ?)")
       .bind(email, firstName, lead.token, lead.createdAt, letterOptIn, lead.source, ip).run();
@@ -941,13 +1003,13 @@ async function leadStart(env: Env, ctx: ExecutionContext, request: Request): Pro
   ctx.waitUntil((async () => {
     if (lead.step === 0) {
       const r = await sendLetter(env, lead, 0);
-      if (r === "ok") await env.DB.prepare("UPDATE leads SET step = 1, lastSentAt = ? WHERE email = ? AND step = 0").bind(new Date().toISOString(), email).run();
+      if (r === "ok") await env.DB.prepare("UPDATE leads SET step = 1, lastSentAt = ?, nextDueAt = ? WHERE email = ? AND step = 0").bind(new Date().toISOString(), new Date(Date.parse(lead.createdAt) + SEQUENCE[1].day * 86400000).toISOString(), email).run();
       else await env.DB.prepare("UPDATE leads SET note = ? WHERE email = ?").bind(r, email).run();
     }
-    await leadCapi(env, lead, request, clean(b.fbp, 120), clean(b.fbc, 200));
+    await leadCapi(env, lead, request, clean(b.fbp, 120), clean(b.fbc, 200), eventId);
     if (letterOptIn) await addToList(env, { email, name: firstName, letterOptIn: 1 } as unknown as Order).catch(() => "");
   })());
-  return json({ ok: true, eventId: `lead-${lead.token.slice(0, 16)}` });
+  return json({ ok: true, eventId });
 }
 
 /** GET shows a button (email scanners open links and must not unsubscribe anyone); POST unsubscribes (also RFC 8058 one-click). */
@@ -962,14 +1024,17 @@ async function leadUnsub(env: Env, request: Request, url: URL): Promise<Response
 
 /** Cron: sends the letters that are due. Buyers stop receiving the sales letters once they have bought. */
 async function sendDueLetters(env: Env): Promise<void> {
-  const rows = await env.DB.prepare("SELECT * FROM leads WHERE status = 'active' AND step >= 1 AND step < ? ORDER BY createdAt LIMIT 60").bind(SEQUENCE.length).all<Lead>();
+  const rows = await env.DB.prepare("SELECT * FROM leads WHERE status = 'active' AND step >= 1 AND step < ? AND (nextDueAt IS NULL OR nextDueAt <= ?) ORDER BY nextDueAt LIMIT 40")
+    .bind(SEQUENCE.length, new Date().toISOString()).all<Lead>();
   for (const l of rows.results) {
     const due = Date.parse(l.createdAt) + SEQUENCE[l.step].day * 86400000;
-    if (Date.now() < due) continue;
+    if (Date.now() < due) { await env.DB.prepare("UPDATE leads SET nextDueAt = ? WHERE email = ?").bind(new Date(due).toISOString(), l.email).run(); continue; }
+    await new Promise((r) => setTimeout(r, 600)); // Resend allows 2 requests a second
     const bought = await env.DB.prepare("SELECT 1 AS x FROM orders WHERE email = ? AND status IN ('paid','refund_requested')").bind(l.email).first();
     if (bought) { await env.DB.prepare("UPDATE leads SET status = 'customer' WHERE email = ?").bind(l.email).run(); continue; }
     const r = await sendLetter(env, l, l.step);
-    if (r === "ok") await env.DB.prepare("UPDATE leads SET step = step + 1, lastSentAt = ? WHERE email = ? AND step = ?").bind(new Date().toISOString(), l.email, l.step).run();
+    const next = SEQUENCE[l.step + 1] ? new Date(Date.parse(l.createdAt) + SEQUENCE[l.step + 1].day * 86400000).toISOString() : null;
+    if (r === "ok") await env.DB.prepare("UPDATE leads SET step = step + 1, lastSentAt = ?, nextDueAt = ? WHERE email = ? AND step = ?").bind(new Date().toISOString(), next, l.email, l.step).run();
     else { await env.DB.prepare("UPDATE leads SET note = ? WHERE email = ?").bind(r, l.email).run(); if (r.startsWith("error:429")) break; }
   }
 }
@@ -1013,8 +1078,12 @@ function cosine(a: number[], b: number[]): number {
 
 async function embed(env: Env, texts: string[]): Promise<number[][]> {
   if (!env.AI) throw new Error("no ai");
-  const out = (await env.AI.run(EMBED_MODEL, { text: texts })) as { data: number[][] };
-  return out.data;
+  const all: number[][] = [];
+  for (let i = 0; i < texts.length; i += 50) {
+    const out = (await env.AI.run(EMBED_MODEL, { text: texts.slice(i, i + 50) })) as { data: number[][] };
+    all.push(...out.data);
+  }
+  return all;
 }
 
 async function findDay(env: Env, request: Request): Promise<Response> {
@@ -1059,22 +1128,30 @@ export default {
           letter: Boolean(env.BEEHIIV_API_KEY && env.BEEHIIV_PUB_ID), admin: Boolean(env.ADMIN_KEY),
         });
       }
-      if (p === "/api/checkout/start" && request.method === "POST") return start(env, request);
-      if (p === "/api/order" && request.method === "GET") return orderStatus(env, ctx, url);
-      if (p === "/api/order/confirm" && request.method === "POST") return confirm(env, ctx, request);
-      if (p === "/api/order/resend" && request.method === "POST") return resendLinks(env, request);
-      if (p === "/api/order/refund" && request.method === "POST") return refundRequest(env, request);
-      if (p === "/api/flw/webhook" && request.method === "POST") return webhook(env, ctx, request);
-      if (p === "/api/admin/refund") return adminRefund(env, request, url);
-      if (p === "/api/admin/partners" && request.method === "GET") return adminPartners(env, url);
-      if (p === "/api/give/start" && request.method === "POST") return giveStart(env, request);
-      if (p === "/api/give" && request.method === "GET") return giveStatus(env, ctx, url);
-      if (p === "/api/give/confirm" && request.method === "POST") return giveConfirm(env, ctx, request);
-      if (p === "/api/give/manage" && request.method === "POST") return giveManage(env, request);
-      if (p === "/api/find-day" && request.method === "POST") return findDay(env, request);
-      if (p === "/api/lead" && request.method === "POST") return leadStart(env, ctx, request);
-      if (p === "/api/lead/unsub") return leadUnsub(env, request, url);
-      if (p.startsWith("/free/") && (request.method === "GET" || request.method === "HEAD")) return serveFree(env, request, p.slice(6));
+      if (p === "/api/checkout/start" && request.method === "POST") return await start(env, request);
+      if (p === "/api/order" && request.method === "GET") return await orderStatus(env, ctx, url);
+      if (p === "/api/order/confirm" && request.method === "POST") return await confirm(env, ctx, request);
+      if (p === "/api/order/resend" && request.method === "POST") return await resendLinks(env, request);
+      if (p === "/api/order/refund" && request.method === "POST") return await refundRequest(env, request);
+      if (p === "/api/flw/webhook" && request.method === "POST") return await webhook(env, ctx, request);
+      if (p === "/api/admin/refund") return await adminRefund(env, request, url);
+      if (p === "/api/admin/partners" && request.method === "GET") return await adminPartners(env, url);
+      if (p === "/api/admin/tester" && request.method === "GET") {
+        // Owner-only: /api/admin/tester?s=<HMAC of "tester"> marks this browser as a tester while TEST_MODE is on.
+        const want = env.ADMIN_KEY ? await hmac(env.ADMIN_KEY, "tester") : "";
+        if (!want || !safeEqual(clean(url.searchParams.get("s"), 64), want)) return html("<p>This link is not valid.</p>", 403);
+        const res = html("<p>This browser can now make test purchases. Open the book page.</p>");
+        res.headers.append("Set-Cookie", `ek_tester=${want}; Path=/; Max-Age=1209600; Secure; HttpOnly; SameSite=Lax`);
+        return res;
+      }
+      if (p === "/api/give/start" && request.method === "POST") return await giveStart(env, request);
+      if (p === "/api/give" && request.method === "GET") return await giveStatus(env, ctx, url);
+      if (p === "/api/give/confirm" && request.method === "POST") return await giveConfirm(env, ctx, request);
+      if (p === "/api/give/manage" && request.method === "POST") return await giveManage(env, request);
+      if (p === "/api/find-day" && request.method === "POST") return await findDay(env, request);
+      if (p === "/api/lead" && request.method === "POST") return await leadStart(env, ctx, request);
+      if (p === "/api/lead/unsub") return await leadUnsub(env, request, url);
+      if (p.startsWith("/free/") && (request.method === "GET" || request.method === "HEAD")) return await serveFree(env, request, p.slice(6));
       if (p.startsWith("/dl/") && (request.method === "GET" || request.method === "HEAD")) {
         return download(env, request, ctx, p.slice(4).split("/"));
       }
@@ -1093,6 +1170,12 @@ export default {
       try { await settle(env, ctx, o, await flwVerify(env, { ref: o.id })); } catch { /* next run */ }
     }
     ctx.waitUntil(sendDueLetters(env));
+    const failed = await env.DB.prepare("SELECT * FROM orders WHERE status = 'paid' AND emailStatus LIKE 'error%' AND paidAt > ? LIMIT 20").bind(since).all<Order>();
+    for (const o of failed.results) {
+      const r = await sendReceipt(env, o);
+      await env.DB.prepare("UPDATE orders SET emailStatus = ? WHERE id = ?").bind(r, o.id).run();
+    }
+    await env.DB.prepare("DELETE FROM checkout_rate WHERE hour < ?").bind(new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 13)).run();
     const gifts = await env.DB.prepare("SELECT * FROM gifts WHERE status = 'pending' AND createdAt > ? LIMIT 50").bind(since).all<Gift>();
     for (const g of gifts.results) {
       try { await settleGift(env, ctx, g, await flwVerify(env, { ref: g.id })); } catch { /* next run */ }

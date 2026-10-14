@@ -50,6 +50,7 @@ export default function GiveForm() {
     } catch { /* ignore */ }
   }, []);
 
+  useEffect(() => { if (frequency === "monthly") setCustom(""); }, [frequency]);
   const base = custom ? Math.floor(Number(custom.replace(/[^\d]/g, ""))) : preset ?? 0;
   const total = cover ? roundGift(base * (1 + FEE_COVER_RATE), currency) : base;
   const tooSmall = base > 0 && base < GIFT_MIN[currency];
@@ -115,11 +116,11 @@ export default function GiveForm() {
           </button>
         ))}
       </div>
-      <label className="co-field">
+      {frequency === "monthly" ? null : <label className="co-field">
         <span>Or enter your own amount</span>
         <input inputMode="numeric" placeholder={`${currency} amount`} value={custom} onChange={(e) => setCustom(e.target.value.replace(/[^\d,]/g, ""))} />
         {tooSmall ? <small>The smallest gift online is {formatMoney(GIFT_MIN[currency], currency)}.</small> : null}
-      </label>
+      </label>}
 
       <label className="co-check">
         <input type="checkbox" checked={cover} onChange={(e) => setCover(e.target.checked)} />

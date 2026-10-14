@@ -57,8 +57,8 @@ export default function InfluentialSpiritPage() {
               </p>
               <p>
                 Each morning you meet Christ in one passage of Scripture, answer one honest question and take one
-                practical step. The Holy Spirit does the forming. Thirty days is long enough to stop performing and
-                start listening.
+                named step you can practise at work that day, such as the Ten-Second Pause or the Coffee Invite. The
+                Holy Spirit does the forming. Thirty days is long enough to stop performing and start listening.
               </p>
             </div>
             <div className="flex-wrap-gap gap-4" style={{ justifyContent: "center", marginTop: 28 }}>

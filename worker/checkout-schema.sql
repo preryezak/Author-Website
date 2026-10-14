@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS leads (
   source      TEXT NOT NULL DEFAULT '',
   ipHash      TEXT NOT NULL DEFAULT '',
   lastSentAt  TEXT,
+  nextDueAt   TEXT,                          -- when the next letter is due (cron reads this)
   note        TEXT NOT NULL DEFAULT ''
 );
-CREATE INDEX IF NOT EXISTS idx_leads_due ON leads(status, step, createdAt);
+CREATE INDEX IF NOT EXISTS idx_leads_due ON leads(status, nextDueAt);

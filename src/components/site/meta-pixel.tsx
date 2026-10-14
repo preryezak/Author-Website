@@ -15,6 +15,8 @@ declare global { interface Window { fbq?: (...a: unknown[]) => void; _fbq?: unkn
 
 function load(id: string) {
   if (window.fbq) return;
+  // Private pages: the partner page never loads the Pixel, and no page loads it while a token is in the address.
+  if (location.pathname.startsWith("/give/manage") || /[?&]t=/.test(location.search)) return;
   /* Meta's standard base code, unrolled. */
   const q: unknown[] = [];
   const f = function (...args: unknown[]) {

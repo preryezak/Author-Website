@@ -13,7 +13,11 @@ export function GiveThanks() {
   const sent = useRef(false);
 
   useEffect(() => {
-    const t = new URLSearchParams(location.search).get("t") || "";
+    let t = new URLSearchParams(location.search).get("t") || "";
+    try {
+      if (t) { sessionStorage.setItem("ek-gift", t); history.replaceState(null, "", location.pathname); }
+      else t = sessionStorage.getItem("ek-gift") || "";
+    } catch { /* storage blocked */ }
     if (!t) { setMissing(true); return; }
     let n = 0;
     let stop = false;
@@ -73,7 +77,11 @@ export function GiveManage() {
     return r.json().catch(() => ({ ok: false }));
   }
   useEffect(() => {
-    const t = new URLSearchParams(location.search).get("t") || "";
+    let t = new URLSearchParams(location.search).get("t") || "";
+    try {
+      if (t) { sessionStorage.setItem("ek-partner", t); history.replaceState(null, "", location.pathname); }
+      else t = sessionStorage.getItem("ek-partner") || "";
+    } catch { /* storage blocked */ }
     setTok(t);
     if (!t) { setMsg("This link is missing its code. Please use the link in your receipt email."); return; }
     call(undefined, t).then((out) => (out.ok ? setState(out) : setMsg(out.error || "This link is not valid.")));

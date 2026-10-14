@@ -30,7 +30,13 @@ export default function OrderView() {
   const purchaseSent = useRef(false);
 
   useEffect(() => {
-    const t = new URLSearchParams(location.search).get("t") || (() => { try { return localStorage.getItem("ek-last-order") || ""; } catch { return ""; } })();
+    // The token is a key to this order: keep it in this tab only and remove it from the address bar
+    // (so it is not shared with analytics or in a screenshot of the URL).
+    let t = new URLSearchParams(location.search).get("t") || "";
+    try {
+      if (t) { sessionStorage.setItem("ek-order", t); history.replaceState(null, "", location.pathname); }
+      else t = sessionStorage.getItem("ek-order") || "";
+    } catch { /* storage blocked */ }
     setTok(t);
     if (!t) { setErr("missing"); return; }
     let stop = false;

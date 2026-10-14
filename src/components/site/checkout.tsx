@@ -149,7 +149,6 @@ export default function CheckoutSheet() {
       const out = await res.json().catch(() => ({ ok: false }));
       if (!out.ok) { setError(out.error || "We could not start the payment. Please try again."); setBusy(false); return; }
       const { order, flutterwave } = out as { order: { id: string; token: string; amount: number; currency: string }; flutterwave: FlwConfig };
-      try { localStorage.setItem("ek-last-order", order.token); } catch { /* ignore */ }
       track("InitiateCheckout", { value: order.amount, currency: order.currency, content_ids: [edition], content_type: "product" }, `ic-${order.id}`);
       const goToOrder = () => { window.location.href = `/order/?t=${encodeURIComponent(order.token)}`; };
       let finished = false;

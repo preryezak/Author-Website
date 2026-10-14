@@ -187,7 +187,9 @@ export interface BookFile { id: string; label: string; key: string; type: "pdf" 
 const F = {
   book: { id: "book-pdf", label: "The Influential Spirit (PDF)", key: "is/The_Influential_Spirit.pdf", type: "pdf", stamp: true },
   epub: { id: "book-epub", label: "The Influential Spirit (EPUB, for phones and e-readers)", key: "is/The_Influential_Spirit.epub", type: "epub" },
-  start: { id: "start", label: "Start Here", key: "is/Start_Here.pdf", type: "pdf" },
+  startR: { id: "start", label: "Start Here", key: "is/Start_Here_Reader.pdf", type: "pdf" },
+  startF: { id: "start", label: "Start Here", key: "is/Start_Here_Formation.pdf", type: "pdf" },
+  startC: { id: "start", label: "Start Here", key: "is/Start_Here_Complete.pdf", type: "pdf" },
   church: { id: "church", label: "Using it with your church or team", key: "is/Use_it_with_your_church_or_team.pdf", type: "pdf" },
   study: { id: "study", label: "Group Study Guide", key: "is/Group_Study_Guide.pdf", type: "pdf", stamp: true },
   plan: { id: "plan", label: "30-Day Reading Plan and Challenge", key: "is/Reading_Plan_and_Challenge.pdf", type: "pdf" },
@@ -198,9 +200,9 @@ const F = {
 } satisfies Record<string, BookFile>;
 
 export const FILES: Record<EditionId, BookFile[]> = {
-  reader: [F.book, F.epub, F.start, F.church],
-  formation: [F.book, F.epub, F.start, F.church, F.study, F.plan, F.notionF],
-  complete: [F.book, F.epub, F.start, F.church, F.study, F.plan, F.journal, F.decl, F.notionC],
+  reader: [F.startR, F.book, F.epub, F.church],
+  formation: [F.startF, F.book, F.epub, F.church, F.study, F.plan, F.notionF],
+  complete: [F.startC, F.book, F.epub, F.church, F.study, F.plan, F.journal, F.decl, F.notionC],
 };
 
 /** Audio collections (R2 prefix + manifest object listing the chapters). */
