@@ -2,7 +2,8 @@
 
 /** Under Day 1: get it as a PDF by email, with a few short letters from Eryeza. */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { onSite } from "@/lib/editions";
 import { metaIds, source, track } from "@/lib/pixel";
 
 export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { heading?: string }) {
@@ -11,6 +12,8 @@ export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { head
   const [letter, setLetter] = useState(true);
   const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
   const [msg, setMsg] = useState("");
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => setEnabled(onSite()), []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,6 +34,7 @@ export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { head
     }
   }
 
+  if (!enabled) return null;
   if (state === "done") {
     return (
       <div className="d1-signup is-done" role="status">

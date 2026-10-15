@@ -52,7 +52,7 @@ NOTIFY_FROM = "speaking@eryezakalalu.com"
 REFUND_DAYS = "14"
 GUARANTEE = "0"
 # Public values (safe in code). Fill in before launch:
-FLW_PUBLIC_KEY = ""
+FLW_PUBLIC_KEY = "FLWPUBK-a26bb13d8888c5e65e81359aae2df53c-X"
 META_PIXEL_ID = ""
 META_GRAPH_VERSION = "v24.0"
 BEEHIIV_PUB_ID = "pub_c9f06833-61ef-4c33-a6ef-b571a5fd3304"
@@ -70,7 +70,7 @@ TEST_MODE = "1"
 [[d1_databases]]
 binding = "DB"
 database_name = "eryeza-orders"
-database_id = "REPLACE_AFTER_d1_create"
+database_id = "40b5cb25-ebc6-41ca-a24d-88c95c89f464"
 
 # Private bucket: book files, audio, and stamped copies under orders/. Never public.
 [[r2_buckets]]

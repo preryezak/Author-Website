@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from "react";
 import { useCurrency } from "@/components/site/checkout";
-import { CURRENCIES, CURRENCY_LABEL, PAY_LABEL, formatMoney, type Currency } from "@/lib/editions";
+import { CURRENCIES, CURRENCY_LABEL, FALLBACK_GIVE_URL, PAY_LABEL, formatMoney, onSite, type Currency } from "@/lib/editions";
 import { FEE_COVER_RATE, GIFT_MIN, GIFT_PRESETS, roundGift } from "@/lib/giving";
 import { metaIds, source, track } from "@/lib/pixel";
 
@@ -38,6 +38,8 @@ export default function GiveForm() {
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [enabled, setEnabled] = useState<boolean | null>(null);
+  useEffect(() => setEnabled(onSite()), []);
 
   const presets = GIFT_PRESETS[currency];
   useEffect(() => { setPreset(presets[1]); setCustom(""); }, [currency]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -91,6 +93,14 @@ export default function GiveForm() {
     }
   }
 
+  if (enabled === false) {
+    return (
+      <div className="give-form">
+        <a className="btn btn-primary co-pay" href={FALLBACK_GIVE_URL} target="_blank" rel="noopener noreferrer external">Give now</a>
+        <p className="co-fine">Opens our secure giving page in a new tab. Mobile money or card.</p>
+      </div>
+    );
+  }
   return (
     <form className="give-form" onSubmit={give}>
       <div className="give-freq" role="radiogroup" aria-label="How often">

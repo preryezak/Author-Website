@@ -214,3 +214,23 @@ export const AUDIO: Record<EditionId, { id: string; label: string; prefix: strin
     { id: "prayers", label: "Declarations and Prayers (audio)", prefix: "is/audio/prayers/" },
   ],
 };
+
+/**
+ * Launch switch. While false, only a browser that opened the owner's private
+ * tester link (cookie ek_t=1) uses the on-site checkout, Day 1 sign-up and giving;
+ * everyone else is sent to FALLBACK_URL (the existing Selar page) to buy.
+ * Set to true (and deploy) once the test payments have passed.
+ */
+export const CHECKOUT_LIVE = false;
+export const FALLBACK_URL: Record<EditionId, string> = {
+  reader: "https://selar.com/8818840887",
+  formation: "https://selar.com/8818840887",
+  complete: "https://selar.com/8818840887",
+};
+export const FALLBACK_GIVE_URL = "https://flutterwave.com/donate/h2tj4bfhltce";
+
+/** True when this browser should use the on-site checkout (always after launch). */
+export function onSite(): boolean {
+  if (CHECKOUT_LIVE) return true;
+  try { return /(?:^|; )ek_t=1(?:;|$)/.test(document.cookie); } catch { return false; }
+}

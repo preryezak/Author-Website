@@ -388,9 +388,14 @@ async function prestamp(env: Env, o: Order): Promise<string> {
 /* ------------------------------------------------------------ handlers */
 
 /** While TEST_MODE is "1" only a browser holding the owner's test cookie may start a payment, so test keys can never release real files to the public. */
+/**
+ * TEST_MODE "1": checkout is open only to a browser holding the owner's tester cookie
+ * (set by /api/admin/tester), and every price becomes a token amount, so real
+ * mobile money and card payments can be tested cheaply before launch.
+ */
+const TEST_AMOUNT: Record<Currency, number> = { UGX: 1000, KES: 50, TZS: 1000, RWF: 500, ZMW: 10, GHS: 5, NGN: 500, XOF: 500, XAF: 500, ZAR: 10, USD: 1 };
+
 async function testGate(env: Env, request: Request): Promise<Response | null> {
-  const live = (env.FLW_SECRET_KEY || "").startsWith("FLWSECK-") && !(env.FLW_SECRET_KEY || "").includes("_TEST");
-  if (env.TEST_MODE === "1" && live) return json({ ok: false, error: "Checkout is being set up. Please try again shortly." }, 503);
   if (env.TEST_MODE !== "1") return null;
   const cookie = request.headers.get("Cookie") || "";
   const want = env.ADMIN_KEY ? await hmac(env.ADMIN_KEY, "tester") : "";
@@ -425,7 +430,7 @@ async function start(env: Env, request: Request): Promise<Response> {
 
   const addons = (Array.isArray(b.addons) ? b.addons : []).map((a) => clean(a, 20))
     .filter((a): a is keyof typeof ADDONS => a in ADDONS && ADDONS[a as keyof typeof ADDONS].enabled);
-  let amount = priceOf(edition, currency);
+  let amount = env.TEST_MODE === "1" ? TEST_AMOUNT[currency] : priceOf(edition, currency);
   for (const a of addons) amount += ADDONS[a].price[currency];
 
   const id = `IS-${randomId(8)}`;
@@ -976,6 +981,8 @@ async function leadCapi(env: Env, l: Lead, request: Request, fbp: string, fbc: s
 
 async function leadStart(env: Env, ctx: ExecutionContext, request: Request): Promise<Response> {
   if (!sameOrigin(env, request)) return json({ ok: false }, 403);
+  const gate = await testGate(env, request);
+  if (gate) return gate;
   const ip = await ipHash(env, request);
   if (!(await rateOk(env, ip, "lead", 6, true))) return json({ ok: false, error: "Please wait a little and try again." }, 429);
   let b: Record<string, unknown>;
@@ -1136,12 +1143,29 @@ export default {
       if (p === "/api/flw/webhook" && request.method === "POST") return await webhook(env, ctx, request);
       if (p === "/api/admin/refund") return await adminRefund(env, request, url);
       if (p === "/api/admin/partners" && request.method === "GET") return await adminPartners(env, url);
+      if (p === "/api/admin/send-links" && request.method === "GET") {
+        // Emails the owner's private links to the owner's inbox only (nobody else can receive them).
+        if (!env.ADMIN_KEY) return html("<p>Not configured.</p>", 503);
+        if (!(await rateOk(env, await ipHash(env, request), "sendlinks", 3, true))) return html("<p>Please wait an hour.</p>", 429);
+        const tester = await hmac(env.ADMIN_KEY, "tester");
+        const partners = await hmac(env.ADMIN_KEY, "partners");
+        await notifyOwner(env, "Your private website links",
+          `Test buying (opens checkout on this browser only, token prices while test mode is on):
+${env.SITE}/api/admin/tester?s=${tester}
+
+Partners list (CSV download):
+${env.SITE}/api/admin/partners?s=${partners}
+
+Do not forward these links.`);
+        return html("<p>Sent to the owner's email address.</p>");
+      }
       if (p === "/api/admin/tester" && request.method === "GET") {
         // Owner-only: /api/admin/tester?s=<HMAC of "tester"> marks this browser as a tester while TEST_MODE is on.
         const want = env.ADMIN_KEY ? await hmac(env.ADMIN_KEY, "tester") : "";
         if (!want || !safeEqual(clean(url.searchParams.get("s"), 64), want)) return html("<p>This link is not valid.</p>", 403);
         const res = html("<p>This browser can now make test purchases. Open the book page.</p>");
         res.headers.append("Set-Cookie", `ek_tester=${want}; Path=/; Max-Age=1209600; Secure; HttpOnly; SameSite=Lax`);
+        res.headers.append("Set-Cookie", "ek_t=1; Path=/; Max-Age=1209600; Secure; SameSite=Lax"); // lets the page show the on-site checkout
         return res;
       }
       if (p === "/api/give/start" && request.method === "POST") return await giveStart(env, request);

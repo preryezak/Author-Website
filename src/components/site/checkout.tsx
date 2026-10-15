@@ -17,7 +17,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ADDONS, CURRENCIES, CURRENCY_LABEL, EDITIONS, PAY_LABEL, PRICES,
-  currencyFor, formatMoney, isLaunch, priceOf,
+  FALLBACK_URL, currencyFor, formatMoney, isLaunch, onSite, priceOf,
   type Currency, type EditionId,
 } from "@/lib/editions";
 import { metaIds, source, track } from "@/lib/pixel";
@@ -26,6 +26,7 @@ const OPEN_EVENT = "ek:checkout";
 const CURRENCY_KEY = "ek-currency";
 
 export function openCheckout(edition: EditionId) {
+  if (!onSite()) { window.location.href = FALLBACK_URL[edition]; return; }
   window.dispatchEvent(new CustomEvent(OPEN_EVENT, { detail: { edition } }));
 }
 
