@@ -232,5 +232,5 @@ export const FALLBACK_GIVE_URL = "https://flutterwave.com/donate/h2tj4bfhltce";
 /** True when this browser should use the on-site checkout (always after launch). */
 export function onSite(): boolean {
   if (CHECKOUT_LIVE) return true;
-  try { return /(?:^|; )ek_t=1(?:;|$)/.test(document.cookie); } catch { return false; }
+  try { return /(?:^|; )ek_t=1(?:;|$)/.test((globalThis as { document?: { cookie: string } }).document?.cookie ?? ""); } catch { return false; }
 }
