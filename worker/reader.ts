@@ -13,10 +13,12 @@
  *   GET  /api/admin/tester      Owner-only: lets the owner's browser try the Day 1 sign-up before launch.
  *   GET  /api/reader            Health: which parts are configured, never the values.
  *
- * Secrets: RESEND_API_KEY, ADMIN_KEY, optional IP_SALT, META_CAPI_TOKEN, BEEHIIV_API_KEY.
+ * Secrets: RESEND_API_KEY, ADMIN_KEY, optional IP_SALT, META_CAPI_TOKEN, BEEHIIV_API_KEY, KIT_API_KEY.
+ * Buyers: worker/kit.ts reads the Kit tags Selar adds and sends worker/buyer-sequence.ts.
  */
 
 import { SEQUENCE } from "./sequence";
+import { kitAddLead, sendBuyerLetters, syncBuyers } from "./kit";
 import { DAYS } from "../src/lib/days";
 
 interface Env {
@@ -32,6 +34,10 @@ interface Env {
   META_GRAPH_VERSION?: string;
   BEEHIIV_API_KEY?: string;
   BEEHIIV_PUB_ID?: string;
+  KIT_API_KEY?: string;
+  KIT_BUYER_TAGS?: string;   // "tagId:edition,..." for the tags Selar adds to buyers
+  KIT_LEAD_TAG?: string;     // Kit tag id for Day 1 sign-ups who ticked the letters box
+  CHRISTMAS_URL?: string;
   SITE: string;
   MAIL_FROM: string;
   REPLY_TO: string;
@@ -286,6 +292,7 @@ async function leadStart(env: Env, ctx: ExecutionContext, request: Request): Pro
     }
     await leadCapi(env, lead, request, clean(b.fbp, 120), clean(b.fbc, 200), eventId);
     if (letterOptIn) await addToList(env, email, firstName).catch(() => "");
+    if (letterOptIn) await kitAddLead(env, email, firstName).catch(() => "");
   })());
   return json({ ok: true, eventId });
 }
@@ -295,6 +302,7 @@ async function leadUnsub(env: Env, request: Request, url: URL): Promise<Response
   const t = clean(url.searchParams.get("t"), 64);
   if (request.method === "POST") {
     if (t) await env.DB.prepare("UPDATE leads SET status = 'unsubscribed' WHERE token = ?").bind(t).run();
+    if (t) await env.DB.prepare("UPDATE buyers SET status = 'unsubscribed' WHERE token = ?").bind(t).run();
     return html("<h2>Done</h2><p>You will not receive more of these letters. Thank you for reading. If you change your mind, ask for Day 1 again on the book page.</p>");
   }
   return html(`<h2>Stop these letters?</h2><p>You will receive no more of the Day 1 follow-up letters.</p><form method="post"><button>Yes, stop them</button></form>`);
@@ -417,7 +425,7 @@ export default {
         return res;
       }
       if (p === "/api/reader" && request.method === "GET") {
-        return json({ ok: true, service: "reader", leadsLive: env.LEADS_LIVE === "1", db: Boolean(env.DB), files: Boolean(env.BOOKS), ai: Boolean(env.AI), email: Boolean(env.RESEND_API_KEY), admin: Boolean(env.ADMIN_KEY) });
+        return json({ ok: true, service: "reader", leadsLive: env.LEADS_LIVE === "1", db: Boolean(env.DB), files: Boolean(env.BOOKS), ai: Boolean(env.AI), email: Boolean(env.RESEND_API_KEY), kit: Boolean(env.KIT_API_KEY && env.KIT_BUYER_TAGS), admin: Boolean(env.ADMIN_KEY) });
       }
       return json({ ok: false, error: "Not found" }, 404);
     } catch (e) {
@@ -428,7 +436,11 @@ export default {
 
   /** Every 30 minutes: send the Day 1 letters that are due; prune the rate-limit table. */
   async scheduled(_e: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
-    ctx.waitUntil(sendDueLetters(env));
+    ctx.waitUntil((async () => {
+      await syncBuyers(env).catch((e) => console.error("kit sync", (e as Error).message));
+      await sendDueLetters(env);
+      await sendBuyerLetters(env).catch((e) => console.error("buyer letters", (e as Error).message));
+    })());
     await env.DB.prepare("DELETE FROM checkout_rate WHERE hour < ?").bind(new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 13)).run();
   },
 };
