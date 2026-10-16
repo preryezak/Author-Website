@@ -52,7 +52,7 @@ NOTIFY_FROM = "speaking@eryezakalalu.com"
 REFUND_DAYS = "14"
 GUARANTEE = "0"
 # Public values (safe in code). Fill in before launch:
-FLW_PUBLIC_KEY = "FLWPUBK-a26bb13d8888c5e65e81359aae2df53c-X"
+FLW_PUBLIC_KEY = "FLWPUBK-8f67beba67b88fbf2e4ba09e0ee27dcb-X"
 META_PIXEL_ID = ""
 META_GRAPH_VERSION = "v24.0"
 BEEHIIV_PUB_ID = "pub_c9f06833-61ef-4c33-a6ef-b571a5fd3304"
