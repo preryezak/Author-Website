@@ -87,7 +87,7 @@ The Formation Bundle adds the full audiobook in my voice, the six-session Group 
 
 The Complete Formation Edition adds the Companion Journal, the Declarations and Prayers in audio, and the full Notion workspace. Choose it if you write as you pray and want everything.
 
-You can pay by mobile money in most African countries, or by card from anywhere. The files open on your screen straight away and arrive by email.
+You can pay by mobile money in most African countries, or by card from anywhere. Your copy is ready the moment you pay: you read the book online on your phone or computer, and the audiobook and study guides download to keep.
 
 See the editions: {buy}
 

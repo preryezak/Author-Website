@@ -3,8 +3,7 @@ import { Newsreader, Source_Serif_4, DM_Sans } from "next/font/google";
 import "./globals.css";
 import "./checkout.css";
 import { LAUNCH_PRICE_ENDS, GIVING } from "@/lib/site-content";
-import CheckoutSheet from "@/components/site/checkout";
-import { EDITIONS as EDITION_INFO, isLaunch, priceOf } from "@/lib/editions";
+import { EDITIONS as EDITION_INFO, SELAR_URL, isLaunch, priceOf } from "@/lib/editions";
 import MetaPixel from "@/components/site/meta-pixel";
 
 /*
@@ -167,14 +166,14 @@ const jsonLd = {
       imageUrl: `${SITE_URL}/images/cover.jpg`,
       // Built from src/lib/editions.ts at build time. Rebuild on 1 Nov 2026 so full prices replace launch prices.
       offers: (["reader", "formation", "complete"] as const).flatMap((ed) =>
-        (["USD", "UGX", "KES", "NGN"] as const).map((cur) => ({
+        (["USD", "UGX"] as const).map((cur) => ({
           "@type": "Offer",
           name: EDITION_INFO[ed].name,
           price: String(priceOf(ed, cur)),
           priceCurrency: cur,
           ...(isLaunch() ? { priceValidUntil: "2026-10-31" } : {}),
           availability: "https://schema.org/InStock",
-          url: `${SITE_URL}/influential-spirit/#editions`,
+          url: SELAR_URL[ed],
         })),
       ),
     },
@@ -240,7 +239,6 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {children}
-        <CheckoutSheet />
         <MetaPixel />
       </body>
     </html>

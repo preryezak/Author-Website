@@ -16,9 +16,9 @@
 # in new tabs via <a target="_blank" rel="noopener noreferrer"> - top-level
 # navigations, not resource loads, so CSP does not need to list them.
 
-# Checkout (Oct 2026): the Flutterwave payment window (script, iframe, API calls, bank/3-D Secure
-# pop-ups, hence COOP same-origin-allow-popups) and the Meta Pixel (connect.facebook.net script,
-# facebook.com beacon). /api/checkout, /api/order and /dl/ are answered by the eryeza-checkout Worker.
+# Oct 2026: the Meta Pixel (connect.facebook.net script, facebook.com beacon). Books are bought on
+# Selar (a link, not a resource load). /api/lead, /api/find-day and /free/ are answered by the
+# eryeza-reader Worker (worker/reader.ts).
 
 # Phase 0 (1 Oct 2026):
 #  - frame-src += youtube-nocookie.com: the /podcast/ latest-episode player,
@@ -28,13 +28,13 @@
 #    being blocked. The /study/ form posts same-origin (/api/study Worker route).
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://challenges.cloudflare.com https://static.cloudflareinsights.com https://checkout.flutterwave.com https://*.flutterwave.com https://*.f4b-flutterwave.com https://connect.facebook.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; frame-src 'self' https://challenges.cloudflare.com https://subscribe-forms.beehiiv.com https://www.iheart.com https://www.youtube-nocookie.com https://checkout.flutterwave.com https://*.flutterwave.com https://*.f4b-flutterwave.com; connect-src 'self' https://cloudflareinsights.com https://challenges.cloudflare.com https://eryeza-speaking.preryezakalalu.workers.dev https://app.kit.com https://*.flutterwave.com https://*.f4b-flutterwave.com https://connect.facebook.net https://www.facebook.com; media-src 'self' https://*.iheart.com https://anchor.fm https://*.cloudfront.net; object-src 'none'; base-uri 'self'; form-action 'self' https://*.flutterwave.com https://*.f4b-flutterwave.com; frame-ancestors 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://challenges.cloudflare.com https://static.cloudflareinsights.com https://connect.facebook.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; frame-src 'self' https://challenges.cloudflare.com https://subscribe-forms.beehiiv.com https://www.iheart.com https://www.youtube-nocookie.com; connect-src 'self' https://cloudflareinsights.com https://challenges.cloudflare.com https://eryeza-speaking.preryezakalalu.workers.dev https://app.kit.com https://connect.facebook.net https://www.facebook.com; media-src 'self' https://*.iheart.com https://anchor.fm https://*.cloudfront.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=(), payment=(self "https://checkout.flutterwave.com" "https://checkout-v3-ui-prod.f4b-flutterwave.com"), usb=(), serial=(), midi=()
-  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=(), payment=(), usb=(), serial=(), midi=()
+  Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
   X-Permitted-Cross-Domain-Policies: none
   X-DNS-Prefetch-Control: off

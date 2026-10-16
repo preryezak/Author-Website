@@ -52,7 +52,7 @@ export default function FindYourDay() {
           <div className="fyd-examples" aria-label="Examples">
             {EXAMPLES.map((x) => <button key={x} type="button" onClick={() => { setQ(x); ask(x); }}>{x}</button>)}
           </div>
-          {err ? <p className="order-note" role="alert">{err}</p> : null}
+          {err ? <p className="fyd-note" role="alert">{err}</p> : null}
           {crisis ? (
             <p className="fyd-care" role="note">
               If you are thinking of ending your life or are in danger, please speak today to someone you trust nearby, your pastor, or a local emergency number. You matter to God and to the people around you.

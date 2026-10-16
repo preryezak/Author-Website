@@ -1,0 +1,63 @@
+# Worker for the Day 1 sign-up and letters, "Find your day" and free files.
+# Books are sold on Selar. The Cloudflare name stays `eryeza-checkout` so its saved
+# settings (RESEND_API_KEY, ADMIN_KEY) carry over.
+# Deploy from the repo root:  npx wrangler deploy -c worker/reader.wrangler.toml
+
+name = "eryeza-checkout"
+main = "reader.ts"
+compatibility_date = "2026-08-19"
+
+routes = [
+  { pattern = "eryezakalalu.com/api/lead*", zone_name = "eryezakalalu.com" },
+  { pattern = "www.eryezakalalu.com/api/lead*", zone_name = "eryezakalalu.com" },
+  { pattern = "eryezakalalu.com/api/find-day", zone_name = "eryezakalalu.com" },
+  { pattern = "www.eryezakalalu.com/api/find-day", zone_name = "eryezakalalu.com" },
+  { pattern = "eryezakalalu.com/free/*", zone_name = "eryezakalalu.com" },
+  { pattern = "www.eryezakalalu.com/free/*", zone_name = "eryezakalalu.com" },
+  { pattern = "eryezakalalu.com/api/admin/*", zone_name = "eryezakalalu.com" },
+  { pattern = "eryezakalalu.com/api/reader", zone_name = "eryezakalalu.com" },
+]
+
+# Send due Day 1 letters every 30 minutes.
+[triggers]
+crons = ["*/30 * * * *"]
+
+# Workers AI: text embeddings for "Find your day" (no generated text).
+[ai]
+binding = "AI"
+
+[observability]
+enabled = true
+
+[vars]
+SITE = "https://eryezakalalu.com"
+MAIL_FROM = "Eryeza Kalalu <books@eryezakalalu.com>"
+REPLY_TO = "books@eryezakalalu.com"
+NOTIFY_EMAIL = "pastor.eryeza@gmail.com"
+NOTIFY_FROM = "speaking@eryezakalalu.com"
+META_PIXEL_ID = ""
+META_GRAPH_VERSION = "v24.0"
+BEEHIIV_PUB_ID = "pub_c9f06833-61ef-4c33-a6ef-b571a5fd3304"
+# "1" once the Day 1 PDF is uploaded and the letters are approved (also set LEADS_LIVE in src/lib/editions.ts).
+LEADS_LIVE = "0"
+
+# Secrets (typed by Eryeza, never committed):
+#   npx wrangler secret put RESEND_API_KEY  -c worker/reader.wrangler.toml
+#   npx wrangler secret put ADMIN_KEY       -c worker/reader.wrangler.toml
+#   npx wrangler secret put META_CAPI_TOKEN -c worker/reader.wrangler.toml   (optional)
+#   npx wrangler secret put BEEHIIV_API_KEY -c worker/reader.wrangler.toml   (optional)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "eryeza-orders"
+database_id = "40b5cb25-ebc6-41ca-a24d-88c95c89f464"
+
+# Free files (free/Day_1_Following_to_Lead.pdf).
+[[r2_buckets]]
+binding = "BOOKS"
+bucket_name = "eryeza-books"
+
+[[send_email]]
+name = "EMAIL"
+allowed_sender_addresses = ["speaking@eryezakalalu.com"]
+allowed_destination_addresses = ["pastor.eryeza@gmail.com"]

@@ -1,10 +1,7 @@
 "use client";
 
 import { BuyButton, useCurrency } from "@/components/site/checkout";
-import {
-  CURRENCIES, CURRENCY_LABEL, EDITIONS, PAY_LABEL, PRICES, formatMoney,
-  type EditionId,
-} from "@/lib/editions";
+import { EDITIONS, PAY_NOTE, PRICES, formatMoney, type EditionId } from "@/lib/editions";
 import { Price } from "@/components/site/price";
 
 const ORDER: EditionId[] = ["reader", "formation", "complete"];
@@ -15,23 +12,15 @@ const CTA: Record<EditionId, string> = {
 };
 
 /**
- * The three editions in the visitor's currency (from their country, or their
- * own choice), each opening the on-site checkout for exactly that edition.
- * Launch and full prices are both in the HTML; layout.tsx flips them on 1 Nov.
+ * The three editions in UGX (Africa) or USD (elsewhere); each button opens that
+ * edition's own Selar checkout. Launch and full prices are both in the HTML;
+ * layout.tsx flips them on 1 Nov.
  */
 export default function EditionsTiers() {
-  const [currency, setCurrency] = useCurrency();
+  const currency = useCurrency();
   return (
     <div className="editions-tiers">
-      <div className="tiers-currency">
-        <label>
-          <span className="sr-only">Show prices for</span>
-          <select value={currency} onChange={(e) => setCurrency(e.target.value as typeof currency)} aria-label="Show prices for">
-            {CURRENCIES.map((c) => <option key={c} value={c}>{CURRENCY_LABEL[c]}</option>)}
-          </select>
-        </label>
-        <span className="tiers-pay">{PAY_LABEL[currency]}. Instant delivery.</span>
-      </div>
+      <p className="tiers-pay" style={{ textAlign: "center", marginTop: 8 }}>{PAY_NOTE} Prices convert to your currency at checkout.</p>
       <div className="grid-12" style={{ gap: 24, marginTop: 20 }}>
         {ORDER.map((id) => {
           const p = PRICES[id][currency];

@@ -3,7 +3,7 @@
 /** Under Day 1: get it as a PDF by email, with a few short letters from Eryeza. */
 
 import { useEffect, useState } from "react";
-import { onSite } from "@/lib/editions";
+import { LEADS_LIVE } from "@/lib/editions";
 import { metaIds, source, track } from "@/lib/pixel";
 
 export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { heading?: string }) {
@@ -13,7 +13,7 @@ export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { head
   const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
   const [msg, setMsg] = useState("");
   const [enabled, setEnabled] = useState(false);
-  useEffect(() => setEnabled(onSite()), []);
+  useEffect(() => setEnabled(LEADS_LIVE || /(?:^|; )ek_t=1(?:;|$)/.test(document.cookie)), []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

@@ -3,8 +3,8 @@
  * META_PIXEL_ID is set and, for visitors in Europe and the UK, only after they
  * accept cookies. Every call here is a no-op when the Pixel is not loaded.
  *
- * Purchase is also sent from the server (Conversions API) with the same
- * event_id (the order id), so Meta counts it once.
+ * Purchases happen on Selar, which sends Purchase to Meta itself (Selar >
+ * Integrations > Facebook Pixel + Conversions API, same Pixel id).
  */
 
 /** Public Pixel id (not a secret). Empty = Pixel off everywhere. */
