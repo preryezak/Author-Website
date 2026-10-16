@@ -14,7 +14,6 @@ export const SITE = {
   beehiivRss: "https://rss.beehiiv.com/feeds/m7Wi8T8MXS.xml",
   podcastRss: "https://anchor.fm/s/f7311ecc/podcast/rss",
   podcastIheart: "https://www.iheart.com/podcast/269-devotion-in-season-198850928",
-  excerptUrl: "https://payhip.com/b/D3nkl",
   year: "2026",
 } as const;
 
@@ -409,16 +408,6 @@ export const EDITIONS = {
   note: "Instant digital delivery. No coupon needed.",
   /** Hidden automatically from 1 Nov 2026 00:00 EAT (see LAUNCH_PRICE_ENDS). */
   launchLine: "Launch price until 31 October. Normal prices apply from 1 November.",
-  // price/was = launch price with the struck-through full price; full = the price shown from 1 November.
-  // Payhip and Selar URLs confirmed live by Eryeza on 1 Oct 2026.
-  tiers: [
-    { region: "usd", name: "Reader Edition", price: "$12", was: "$15", full: "$15", desc: "The complete 30-day devotional. Instant digital delivery.", href: "https://payhip.com/b/CidbX", popular: false },
-    { region: "usd", name: "Formation Bundle", price: "$23", was: "$29", full: "$29", desc: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and the 30-Day Reading Plan and Challenge.", href: "https://payhip.com/b/CidbX", popular: true },
-    { region: "usd", name: "Complete Formation Edition", price: "$39", was: "$49", full: "$49", desc: "Everything in the Formation Bundle, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", href: "https://payhip.com/b/CidbX", popular: false },
-    { region: "ugx", name: "Reader Edition", price: "UGX 36,000", was: "45,000", full: "UGX 45,000", desc: "The complete 30-day devotional. Instant digital delivery.", href: "https://selar.com/8818840887", ngn: "₦14,400", ngnWas: "18,000", ngnFull: "₦18,000", popular: false },
-    { region: "ugx", name: "Formation Bundle", price: "UGX 72,000", was: "90,000", full: "UGX 90,000", desc: "Digital edition, author-narrated audiobook, six-session Group Study Guide, and the 30-Day Reading Plan and Challenge.", href: "https://selar.com/8818840887", ngn: "₦28,800", ngnWas: "36,000", ngnFull: "₦36,000", popular: true },
-    { region: "ugx", name: "Complete Formation Edition", price: "UGX 120,000", was: "150,000", full: "UGX 150,000", desc: "Everything in the Formation Bundle, plus the Companion Journal, bonus audio declarations and prayers, and the digital resource library.", href: "https://selar.com/8818840887", ngn: "₦48,000", ngnWas: "60,000", ngnFull: "₦60,000", popular: false },
-  ],
 } as const;
 
 /** Reviews */

@@ -17,17 +17,18 @@ export type Currency = "UGX" | "USD";
 export interface Price { launch: number; full: number }
 
 export const PRICES: Record<EditionId, Record<Currency, Price>> = {
-  reader: { UGX: { launch: 36000, full: 45000 }, USD: { launch: 12, full: 15 } },
-  formation: { UGX: { launch: 72000, full: 90000 }, USD: { launch: 23, full: 29 } },
-  complete: { UGX: { launch: 120000, full: 150000 }, USD: { launch: 39, full: 49 } },
+  reader: { UGX: { launch: 36000, full: 45000 }, USD: { launch: 10, full: 12 } },
+  formation: { UGX: { launch: 72000, full: 90000 }, USD: { launch: 19, full: 24 } },
+  complete: { UGX: { launch: 120000, full: 150000 }, USD: { launch: 32, full: 40 } },
 };
 
 /**
- * Selar checkout link per edition. Replace with each product's own link once
- * the separate Selar products exist (until then all three open the current page).
+ * Selar checkout link per edition. The Reader Edition is its own product; the
+ * Formation Bundle and Complete Edition are the two tiers of one Selar bundle
+ * (the free plan needs at least two tiers per bundle), so both open that page.
  */
 export const SELAR_URL: Record<EditionId, string> = {
-  reader: "https://selar.com/8818840887",
+  reader: "https://selar.com/b3qpq7v917",
   formation: "https://selar.com/8818840887",
   complete: "https://selar.com/8818840887",
 };
