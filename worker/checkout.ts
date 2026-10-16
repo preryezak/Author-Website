@@ -264,7 +264,7 @@ function receiptBody(env: Env, o: Order): { text: string; html: string } {
   const text = [
     `Dear ${first},`,
     ``,
-    `Thank you for getting ${ed.name} of The Influential Spirit. Your files are ready.`,
+    `Thank you for getting the ${ed.name} of The Influential Spirit. Your files are ready.`,
     ``,
     `Open your books: ${link}`,
     ``,
@@ -280,7 +280,7 @@ function receiptBody(env: Env, o: Order): { text: string; html: string } {
   ].join("\n");
   const htmlBody = `<div style="font:16px/1.6 Georgia,serif;color:#2a2420;max-width:560px">
 <p>Dear ${esc(first)},</p>
-<p>Thank you for getting <strong>${esc(ed.name)}</strong> of <em>The Influential Spirit</em>. Your files are ready.</p>
+<p>Thank you for getting the <strong>${esc(ed.name)}</strong> of <em>The Influential Spirit</em>. Your files are ready.</p>
 <p><a href="${esc(link)}" style="display:inline-block;background:#7B3F2E;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-family:system-ui,sans-serif">Open your books</a></p>
 <p>That page is yours. You can return to it at any time to download again or to listen to the audio. Please keep this email.</p>
 <p>Begin with Start Here, then read Day 1 tomorrow morning. Ten to fifteen minutes is enough.</p>
