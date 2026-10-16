@@ -1,8 +1,7 @@
 /**
  * The three editions of The Influential Spirit: what each includes, its price,
  * and the Selar checkout link each buy button opens. Buying, payment and
- * delivery all happen on Selar (the book reads online in the Selar app; audio
- * and study files download).
+ * delivery all happen on Selar, and every file downloads to keep.
  *
  * Prices shown on the site: UGX for visitors in Africa, USD elsewhere. Selar
  * shows the buyer's own currency at checkout.
@@ -17,27 +16,27 @@ export type Currency = "UGX" | "USD";
 export interface Price { launch: number; full: number }
 
 export const PRICES: Record<EditionId, Record<Currency, Price>> = {
-  reader: { UGX: { launch: 36000, full: 45000 }, USD: { launch: 10, full: 12 } },
-  formation: { UGX: { launch: 72000, full: 90000 }, USD: { launch: 19, full: 24 } },
-  complete: { UGX: { launch: 120000, full: 150000 }, USD: { launch: 32, full: 40 } },
+  reader: { UGX: { launch: 36000, full: 45000 }, USD: { launch: 12, full: 15 } },
+  formation: { UGX: { launch: 72000, full: 90000 }, USD: { launch: 23, full: 29 } },
+  complete: { UGX: { launch: 120000, full: 150000 }, USD: { launch: 39, full: 49 } },
 };
 
 /**
- * Selar checkout link per edition. The Reader Edition is its own product; the
- * Formation Bundle and Complete Edition are the two tiers of one Selar bundle
- * (the free plan needs at least two tiers per bundle), so both open that page.
+ * Selar checkout link per edition, one product each. Selar bundles need two
+ * tiers, so each page also shows the next edition up (Reader and Formation offer
+ * an upgrade; Complete shows Formation as closed).
  */
 export const SELAR_URL: Record<EditionId, string> = {
-  reader: "https://selar.com/b3qpq7v917",
+  reader: "https://selar.com/57d5255765",
   formation: "https://selar.com/8818840887",
-  complete: "https://selar.com/8818840887",
+  complete: "https://selar.com/m5551cx601",
 };
 
 export const EDITIONS: Record<EditionId, { name: string; short: string; includes: string[] }> = {
   reader: {
     name: "Reader Edition",
     short: "The complete 30-day devotional",
-    includes: ["The complete devotional, read online on any device", "Start Here guide", "Using it with your church or team"],
+    includes: ["The complete devotional in PDF and EPUB", "Start Here guide", "Using it with your church or team"],
   },
   formation: {
     name: "Formation Bundle",
@@ -47,7 +46,6 @@ export const EDITIONS: Record<EditionId, { name: string; short: string; includes
       "The full audiobook, narrated by Eryeza Kalalu (download)",
       "Six-session Group Study Guide",
       "30-Day Reading Plan and Challenge",
-      "Notion templates",
     ],
   },
   complete: {
@@ -56,14 +54,13 @@ export const EDITIONS: Record<EditionId, { name: string; short: string; includes
     includes: [
       "Everything in the Formation Bundle",
       "Companion Journal",
-      "Declarations and Prayers (PDF and audio)",
-      "Complete Notion workspace",
+      "Declarations and Prayers (booklet and audio)",
     ],
   },
 };
 
 /** What the buyer is told about paying (the checkout service is never named). */
-export const PAY_NOTE = "Pay by mobile money or card. Instant delivery.";
+export const PAY_NOTE = "Pay by mobile money or card. Every file downloads to keep.";
 
 export function currencyForContinent(continent: string | null | undefined): Currency {
   return continent === "AF" ? "UGX" : "USD";

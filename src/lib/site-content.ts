@@ -456,7 +456,7 @@ export const SNEAK_PEEK = {
   bundles: [
     { key: "reader", name: "Reader Edition", line: "Read it on any screen.", points: ["The Reader Edition PDF, magazine-style, built for phone, tablet and computer", "EPUB for Apple Books, Kindle (Send to Kindle) and Google Play Books", "A two-page Start Here guide"] },
     { key: "formation", name: "Formation Bundle", line: "Read, listen, study, practise.", points: ["Everything in the Reader Edition", "The author-narrated audiobook", "A six-session Group Study Guide", "The 30-Day Reading Plan and Challenge, with a tick-off tracker"] },
-    { key: "complete", name: "Complete Formation Edition", line: "The whole journey, in your hands.", points: ["Everything in the Formation Bundle", "The Companion Journal: a fillable page for every day, plus inventories", "Declarations and Prayers, written and spoken", "Notion templates for the journal, plan and study guide"] },
+    { key: "complete", name: "Complete Formation Edition", line: "Everything made for this book.", points: ["Everything in the Formation Bundle", "The Companion Journal: a fillable page for every day, plus inventories", "The Declarations and Prayers booklet", "The Prayers and Declarations audio, about twenty minutes"] },
   ],
 } as const;
 

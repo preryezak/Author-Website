@@ -85,9 +85,9 @@ The Reader Edition is the complete thirty-day devotional as a PDF and EPUB. Choo
 
 The Formation Bundle adds the full audiobook in my voice, the six-session Group Study Guide and the 30-Day Reading Plan and Challenge. Choose it if you want to listen as well as read, or to go through the book with a small group, your spouse or a fellowship at work. This is the one I recommend for most people.
 
-The Complete Formation Edition adds the Companion Journal, the Declarations and Prayers in audio, and the full Notion workspace. Choose it if you write as you pray and want everything.
+The Complete Formation Edition adds the Companion Journal, the Declarations and Prayers booklet and audio. Choose it if you write as you pray and want everything.
 
-You can pay by mobile money in most African countries, or by card from anywhere. Your copy is ready the moment you pay: you read the book online on your phone or computer, and the audiobook and study guides download to keep.
+You can pay by mobile money in most African countries, or by card from anywhere. Your copy is ready the moment you pay, and every file downloads to keep: the book in PDF and EPUB, and in the bundles the audiobook and the study guides.
 
 See the editions: {buy}
 

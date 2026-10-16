@@ -39,7 +39,7 @@ export const dynamic = "force-static";
 /** "{usd}" / "{ugx}" placeholders in content become launch-or-full prices. */
 function withPrices(text: string) {
   return text.split(/(\{usd\}|\{ugx\})/).map((part, i) =>
-    part === "{usd}" ? <Price key={i} launch="$10" full="$12" />
+    part === "{usd}" ? <Price key={i} launch="$12" full="$15" />
       : part === "{ugx}" ? <Price key={i} launch="UGX 36,000" full="UGX 45,000" />
       : part,
   );
