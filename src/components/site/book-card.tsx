@@ -38,7 +38,20 @@ export default function BookCard({
 
   return (
       <article className="col-4 book-card book-card--dark" >
-                        {book.cover === "cover" ? (
+                        {book.cover === "christmas" ? (
+                          <a href={href} className="cover-slot" aria-label={`${book.title} book cover`}>
+                            <img
+                              src="/images/unscripted-christmas-400.webp"
+                              srcSet="/images/unscripted-christmas-400.webp 400w, /images/unscripted-christmas-640.webp 640w"
+                              sizes="(max-width: 1024px) 45vw, 300px"
+                              width={400}
+                              height={640}
+                              alt={`${book.title} book cover`}
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          </a>
+                        ) : book.cover === "cover" ? (
                           <a href={href} className="cover-slot" aria-label={`${book.title} book cover`}>
                             <img
                               src="/images/cover-640.webp"

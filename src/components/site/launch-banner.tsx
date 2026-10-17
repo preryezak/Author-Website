@@ -18,7 +18,7 @@ export default function LaunchBanner({ href = "#editions", variant = "book" }: {
             src={`/images/banner/${pre}-1920.webp`}
             width={1920}
             height={600}
-            alt={variant === "home" ? "Eryeza Kalalu, pastor, author and speaker. Depth you can experience: books, the Devotion In Season podcast, Eryeza Writes letters and speaking." : "Eryeza Kalalu, pastor and author. The Influential Spirit is out now, with Unedited Christmas next and four more books in 2027."}
+            alt={variant === "home" ? "Eryeza Kalalu, pastor, author and speaker. Depth you can experience: books, the Devotion In Season podcast, Eryeza Writes letters and speaking." : "Eryeza Kalalu, pastor and author. The Influential Spirit is out now, Unscripted Christmas is on pre-order for Advent, and four more books follow in 2027."}
             loading="eager"
             fetchPriority="high"
             decoding="async"

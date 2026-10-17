@@ -10,6 +10,7 @@ const SITE_URL = "https://eryezakalalu.com";
 const ROUTES: { path: string; changeFrequency: "weekly" | "monthly" | "yearly"; priority: number }[] = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
   { path: "/influential-spirit/", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/christmas/", changeFrequency: "weekly", priority: 0.9 },
   { path: "/podcast/", changeFrequency: "weekly", priority: 0.8 },
   { path: "/resources/", changeFrequency: "weekly", priority: 0.8 },
   { path: "/books/", changeFrequency: "monthly", priority: 0.7 },
