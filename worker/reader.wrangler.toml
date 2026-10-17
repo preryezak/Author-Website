@@ -35,7 +35,7 @@ MAIL_FROM = "Eryeza Kalalu <books@eryezakalalu.com>"
 REPLY_TO = "books@eryezakalalu.com"
 NOTIFY_EMAIL = "pastor.eryeza@gmail.com"
 NOTIFY_FROM = "speaking@eryezakalalu.com"
-META_PIXEL_ID = ""
+META_PIXEL_ID = "28698939883079618"
 META_GRAPH_VERSION = "v24.0"
 BEEHIIV_PUB_ID = "pub_c9f06833-61ef-4c33-a6ef-b571a5fd3304"
 # "1" once the Day 1 PDF is uploaded and the letters are approved (also set LEADS_LIVE in src/lib/editions.ts).

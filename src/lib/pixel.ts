@@ -8,7 +8,7 @@
  */
 
 /** Public Pixel id (not a secret). Empty = Pixel off everywhere. */
-export const META_PIXEL_ID = "";
+export const META_PIXEL_ID = "28698939883079618";
 
 type Fbq = (...args: unknown[]) => void;
 
