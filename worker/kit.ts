@@ -8,7 +8,7 @@
  *
  * Config:
  *   KIT_API_KEY      secret, Kit > Settings > Developer > API key (v4)
- *   KIT_BUYER_TAGS   var, "tagId:edition,tagId:edition", edition = reader | formation | complete | christmas
+ *   KIT_BUYER_TAGS   var, "tagId:edition,tagId:edition", edition = influential (any tier) | reader | formation | complete | christmas
  *   KIT_LEAD_TAG     var, optional Kit tag id added to Day 1 sign-ups who ticked the letters box
  *   CHRISTMAS_URL    var, the Unscripted Christmas page, used in the last buyer letter
  */
@@ -28,9 +28,9 @@ export interface KitEnv {
 }
 
 const KIT = "https://api.kit.com/v4";
-const EDITIONS: Edition[] = ["reader", "formation", "complete", "christmas"];
+const EDITIONS: Edition[] = ["influential", "reader", "formation", "complete", "christmas"];
 /** Higher rank wins when one person owns several editions. */
-const RANK: Record<Edition, number> = { christmas: 0, reader: 1, formation: 2, complete: 3 };
+const RANK: Record<Edition, number> = { christmas: 0, influential: 1, reader: 1, formation: 2, complete: 3 };
 
 interface Buyer { email: string; firstName: string; edition: string; token: string; boughtAt: string; step: number; status: string }
 

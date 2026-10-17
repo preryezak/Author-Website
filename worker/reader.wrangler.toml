@@ -41,7 +41,7 @@ BEEHIIV_PUB_ID = "pub_c9f06833-61ef-4c33-a6ef-b571a5fd3304"
 # "1" once the Day 1 PDF is uploaded and the letters are approved (also set LEADS_LIVE in src/lib/editions.ts).
 LEADS_LIVE = "0"
 # Kit tags Selar adds to buyers, "tagId:edition,..." (fill in once the tags exist in Kit).
-KIT_BUYER_TAGS = ""
+KIT_BUYER_TAGS = "24737375:influential,24737394:christmas"
 # Kit tag for Day 1 sign-ups who ticked the letters box (optional).
 KIT_LEAD_TAG = ""
 # Unscripted Christmas page, named in the last buyer letter.

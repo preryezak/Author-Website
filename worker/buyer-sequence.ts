@@ -5,9 +5,10 @@
  * {site} and {unsub} are filled in per buyer.
  */
 
-export type Edition = "reader" | "formation" | "complete" | "christmas";
+export type Edition = "influential" | "reader" | "formation" | "complete" | "christmas";
 
 export const EDITION_NAME: Record<Edition, string> = {
+  influential: "your edition",
   reader: "the Reader Edition",
   formation: "the Formation Bundle",
   complete: "the Complete Formation Edition",
@@ -16,6 +17,7 @@ export const EDITION_NAME: Record<Edition, string> = {
 
 /** One line per edition about the files beyond the book. */
 export const EXTRAS: Record<Edition, string> = {
+  influential: "If your edition includes the audiobook, you can listen to the day in my voice on the mornings you travel.",
   reader: "Keep the Start Here guide close for the first few days; it shows a simple rhythm for each morning.",
   formation: "The audiobook is in your library too, so on the mornings you travel you can listen to the day in my voice.",
   complete: "The audiobook, the Prayers and Declarations audio and the Companion Journal are in your library too, so on the mornings you travel you can listen, and in the evening you can write.",
@@ -24,6 +26,7 @@ export const EXTRAS: Record<Edition, string> = {
 
 /** One line per edition about reading with others. */
 export const GROUP: Record<Edition, string> = {
+  influential: "Your Start Here guide and the guide for using the book with your church or team show how to do this in one short meeting a week, and the bundles include a six-session Group Study Guide.",
   reader: "The guide for using the book with your church or team, which came with your copy, shows how to do this in one short meeting a week.",
   formation: "Your Group Study Guide has six sessions ready for a small group, a staff team or a fellowship at work.",
   complete: "Your Group Study Guide has six sessions ready for a small group, a staff team or a fellowship at work.",
