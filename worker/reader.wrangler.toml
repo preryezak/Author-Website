@@ -45,7 +45,7 @@ KIT_BUYER_TAGS = ""
 # Kit tag for Day 1 sign-ups who ticked the letters box (optional).
 KIT_LEAD_TAG = ""
 # Unscripted Christmas page, named in the last buyer letter.
-CHRISTMAS_URL = "https://eryezakalalu.com/christmas"
+CHRISTMAS_URL = "https://selar.com/izxm12og2p"
 
 # Secrets (typed by Eryeza, never committed):
 #   npx wrangler secret put RESEND_API_KEY  -c worker/reader.wrangler.toml
