@@ -22,14 +22,13 @@ export const PRICES: Record<EditionId, Record<Currency, Price>> = {
 };
 
 /**
- * Selar checkout link per edition, one product each. Selar bundles need two
- * tiers, so each page also shows the next edition up (Reader and Formation offer
- * an upgrade; Complete shows Formation as closed).
+ * Selar checkout link per edition. All three editions are tiers of one Selar
+ * product, so the buyer compares them on one page and picks once.
  */
 export const SELAR_URL: Record<EditionId, string> = {
-  reader: "https://selar.com/57d5255765",
+  reader: "https://selar.com/8818840887",
   formation: "https://selar.com/8818840887",
-  complete: "https://selar.com/m5551cx601",
+  complete: "https://selar.com/8818840887",
 };
 
 export const EDITIONS: Record<EditionId, { name: string; short: string; includes: string[] }> = {
