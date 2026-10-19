@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from "react";
 import { LEADS_LIVE } from "@/lib/editions";
-import { metaIds, source, track } from "@/lib/pixel";
+import { metaIds, source, identify, track } from "@/lib/pixel";
 
 export default function DayOneSignup({ heading = "Two mornings from the book, free" }: { heading?: string }) {
   const [firstName, setFirstName] = useState("");
@@ -26,6 +26,7 @@ export default function DayOneSignup({ heading = "Two mornings from the book, fr
       });
       const out = await r.json().catch(() => ({ ok: false }));
       if (!out.ok) { setState("error"); setMsg(out.error || "Please try again."); return; }
+      identify(email, firstName);
       track("Lead", { content_name: "day1" }, out.eventId || undefined);
       setState("done");
     } catch {

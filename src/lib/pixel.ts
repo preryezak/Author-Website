@@ -21,6 +21,17 @@ export function track(event: string, params: Record<string, unknown> = {}, event
   } catch { /* tracking must never break the page */ }
 }
 
+/** Manual advanced matching: hand the Pixel the sign-up's email and first name (the Pixel hashes them) so Meta can match the visitor. */
+export function identify(email: string, firstName = ""): void {
+  try {
+    const fbq = (window as unknown as { fbq?: Fbq }).fbq;
+    if (!fbq || !META_PIXEL_ID) return;
+    const data: Record<string, string> = { em: email.trim().toLowerCase() };
+    if (firstName.trim()) data.fn = firstName.trim().toLowerCase();
+    fbq("init", META_PIXEL_ID, data);
+  } catch { /* tracking must never break the page */ }
+}
+
 function cookie(name: string): string {
   const m = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
   return m ? decodeURIComponent(m[1]) : "";
