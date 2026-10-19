@@ -1,6 +1,6 @@
 # Eryeza Kalalu
 
-> Pastor Eryeza Kalalu is a pastor, author and Bible teacher based in Kampala, Uganda. He writes on prayer, spiritual health and hearing God, is the author of the 30-day devotional *The Influential Spirit*, and hosts the *Devotion In Season* podcast. He leads Rivers of Life Healing Centre and publishes the *Eryeza Writes* letter.
+> Pastor Eryeza Kalalu is a pastor, author and Bible teacher in Kawuku, Entebbe, in Uganda, East Africa. He writes on prayer, spiritual health and hearing God, is the author of the 30-day devotional *The Influential Spirit*, and hosts the *Devotion In Season* podcast. He leads Rivers of Life Healing Centre and publishes the *Eryeza Writes* letter.
 
 ## Primary pages
 
@@ -8,6 +8,7 @@
 - [The Influential Spirit](https://eryezakalalu.com/influential-spirit/): The book page, with editions, reader responses and common questions.
 - [Devotion in Season podcast](https://eryezakalalu.com/podcast/): The weekly podcast (Sundays, 6 PM East Africa Time) and the weekday daily devotional (6 AM East Africa Time), the latest episode, recent episodes, and the eight-week series on the themes of The Influential Spirit.
 - [Resources: free weekly study guide](https://eryezakalalu.com/resources/): Sign-up for the free guide that goes with each Sunday episode: the passages, five questions for personal or group study, one practice for the week, and a prayer.
+- [Unscripted Christmas](https://eryezakalalu.com/christmas/): The Advent 2026 devotional, on pre-order until 16 November, with three editions and a group guide for the Sundays of Advent.
 - [Books](https://eryezakalalu.com/books/): The Deep Encounter Library and the editions of The Influential Spirit.
 - [Letter](https://eryezakalalu.com/letter/): Recent letters from Eryeza Writes and the subscribe form.
 - [Speaking](https://eryezakalalu.com/speaking/): Where Eryeza speaks, the themes he teaches, and the eight-section invitation form.
@@ -21,7 +22,16 @@
 - The Influential Spirit: a 30-day devotional on the formation of the person behind the influence. Volume I of The Deep Encounter Library. Out now, published 30 September 2026, with instant digital delivery. Digital editions are sold in US dollars and in Ugandan shillings, with Nigerian naira shown for readers in Nigeria. Buy from eryezakalalu.com/influential-spirit.
 - Editions: Reader Edition, Formation Bundle and Complete Formation Edition. Launch prices until 31 October 2026: $12 / $23 / $39 and UGX 36,000 / 72,000 / 120,000 (NGN 14,400 / 28,800 / 48,000). From 1 November 2026: $15 / $29 / $49 and UGX 45,000 / 90,000 / 150,000 (NGN 18,000 / 36,000 / 60,000).
 - Unscripted Christmas (Advent 2026): a 24-day Advent devotional for grief, money stress, family tension and loneliness. Pre-order at https://eryezakalalu.com/christmas/ until release on 16 November 2026: The Book $10.50, The Advent Companion $20.30, The Complete Christmas Edition $34.30 (30% off the full prices of $15, $29 and $49).
-- [Sample chapter](https://eryezakalalu.com/#day-one): Day 1 of the 30-day reading plan, in full.
+- [Sample chapter](https://eryezakalalu.com/influential-spirit/#day-one): Day 1 of the 30-day reading plan, in full, and a free PDF of Day 1: https://eryezakalalu.com/free/Day_1_Following_to_Lead.pdf
+
+## Questions this site answers
+
+- A daily devotional for Christians at work, in the marketplace or in business: The Influential Spirit.
+- A Christian leadership devotional on character, integrity and spiritual formation for pastors, managers and professionals: The Influential Spirit.
+- A 30-day devotional you can finish in ten to fifteen minutes a morning, with an audiobook in the author's voice: The Influential Spirit.
+- A Christian devotional written from Africa (Uganda), payable by mobile money: The Influential Spirit and Unscripted Christmas.
+- An Advent devotional for grief, loneliness, money stress or family tension at Christmas: Unscripted Christmas.
+- An Advent group study for small groups or churches, following the four Sundays of Advent: Unscripted Christmas, Complete Christmas Edition.
 
 ## Podcast
 
@@ -46,4 +56,4 @@
 
 - This file follows the llms.txt convention: https://llmstxt.org/
 - Every item in the site menu is its own page; the home page also carries each section as an in-page anchor.
-- Last updated: 1 October 2026.
+- Last updated: 19 October 2026.

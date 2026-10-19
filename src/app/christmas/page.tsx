@@ -72,6 +72,11 @@ export default function ChristmasPage() {
   return (
     <SiteShell active="/books">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }) }} />
 
       {/* 1. The promise, the price and the button on the first screen of a phone. */}
       <section className="section surface-100">

@@ -15,11 +15,11 @@ import { BuyButton, LocalPrice } from "@/components/site/checkout";
 const BOOK = LIBRARY.books[0];
 
 export const metadata: Metadata = {
-  title: "The Influential Spirit",
+  title: "The Influential Spirit: a 30-day devotional for Christians at work",
   description:
-    "The Influential Spirit is a thirty-day devotional about the person behind the influence: character, formation and the life Christ is forming in us.",
+    "A 30-day Christian devotional by Pastor Eryeza Kalalu on character, leadership and influence at work. Ten to fifteen minutes a day, with an audiobook and a group study guide. Pay by mobile money or card.",
   alternates: { canonical: "/influential-spirit" },
-  openGraph: { type: "website", url: "/influential-spirit", title: "The Influential Spirit · Eryeza Kalalu", images: [{ url: "/og.png", width: 1200, height: 630, alt: "The Influential Spirit" }] },
+  openGraph: { type: "website", url: "/influential-spirit", title: "The Influential Spirit · Eryeza Kalalu", description: "A 30-day Christian devotional on character, leadership and influence at work.", images: [{ url: "/og.png", width: 1200, height: 630, alt: "The Influential Spirit" }] },
 };
 
 
@@ -34,6 +34,11 @@ export const metadata: Metadata = {
 export default function InfluentialSpiritPage() {
   return (
     <SiteShell active="/influential-spirit">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: FAQ.items.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }) }} />
       {/* 1. The promise, the price and the buy button, on the first screen of a phone. */}
       <BookHero variant="book" dayOneHref="#day-one" />
 
