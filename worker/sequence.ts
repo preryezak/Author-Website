@@ -10,13 +10,15 @@ export interface Letter { day: number; subject: string; body: string }
 export const SEQUENCE: Letter[] = [
   {
     day: 0,
-    subject: "Day 1: Following to Lead",
+    subject: "Your two mornings from The Influential Spirit",
     body: `Dear {first},
 
-Thank you for asking for Day 1 of The Influential Spirit. Here it is:
+Thank you for asking for two mornings from The Influential Spirit. Here they are:
 
-Read Day 1: {site}/influential-spirit/#day-one
-Download Day 1 as a PDF: {site}/free/Day_1_Following_to_Lead.pdf
+Day 1 and Day 25 as a PDF: {site}/free/Two_Mornings_Day1_Day25.pdf
+Day 25, "Past the Wall", read in my own voice: {site}/free/Day_25_Past_the_Wall_audio.mp3
+
+Start with Day 1. Keep Day 25 for the morning you feel like quitting, and listen to it on the way to work.
 
 Simon and Andrew were washing their nets when Jesus stepped onto their shore. They had bills to pay and a business to keep afloat. He called them in the middle of an ordinary working day, and He still calls people there.
 

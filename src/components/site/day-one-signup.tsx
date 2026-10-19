@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { LEADS_LIVE } from "@/lib/editions";
 import { metaIds, source, track } from "@/lib/pixel";
 
-export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { heading?: string }) {
+export default function DayOneSignup({ heading = "Two mornings from the book, free" }: { heading?: string }) {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [letter, setLetter] = useState(true);
@@ -38,7 +38,7 @@ export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { head
   if (state === "done") {
     return (
       <div className="d1-signup is-done" role="status">
-        <p className="d1-h">Day 1 is on its way to {email}.</p>
+        <p className="d1-h">Your two mornings are on their way to {email}.</p>
         <p className="d1-p">If you do not see it in a few minutes, check your spam or promotions folder.</p>
       </div>
     );
@@ -46,7 +46,7 @@ export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { head
   return (
     <form className="d1-signup" onSubmit={submit}>
       <p className="d1-h">{heading}</p>
-      <p className="d1-p">Get Day 1 as a PDF in your inbox, with a few short letters from Eryeza over the next two weeks. Free.</p>
+      <p className="d1-p">Get Day 1 and Day 25 as a PDF, and hear Day 25 read by Eryeza as audio. A few short letters follow over the next two weeks.</p>
       <div className="d1-row">
         <label className="co-field"><span>First name</span><input autoComplete="given-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} maxLength={60} /></label>
         <label className="co-field"><span>Email</span><input required type="email" inputMode="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={200} /></label>
@@ -57,7 +57,7 @@ export default function DayOneSignup({ heading = "Keep Day 1 with you" }: { head
         <span>Also send me Eryeza&rsquo;s letter (new books and resources).</span>
       </label>
       {state === "error" ? <p className="co-error" role="alert">{msg}</p> : null}
-      <button className="btn btn-primary" type="submit" disabled={state === "busy"}>{state === "busy" ? "Sending" : "Send me Day 1"}</button>
+      <button className="btn btn-primary" type="submit" disabled={state === "busy"}>{state === "busy" ? "Sending" : "Send me both mornings"}</button>
     </form>
   );
 }
