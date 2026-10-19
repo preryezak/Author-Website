@@ -18,7 +18,7 @@
  */
 
 import { SEQUENCE } from "./sequence";
-import { kitAddLead, sendBuyerLetters, syncBuyers } from "./kit";
+import { kitAddLead, kitAdmin, sendBuyerLetters, syncBuyers } from "./kit";
 import { DAYS } from "../src/lib/days";
 
 interface Env {
@@ -37,6 +37,7 @@ interface Env {
   KIT_API_KEY?: string;
   KIT_BUYER_TAGS?: string;   // "tagId:edition,..." for the tags Selar adds to buyers
   KIT_LEAD_TAG?: string;     // Kit tag id for Day 1 sign-ups who ticked the letters box
+  KIT_ADMIN_TOKEN?: string;  // one-off token for /api/admin/kit (set only with --var at deploy, never committed)
   CHRISTMAS_URL?: string;
   SITE: string;
   MAIL_FROM: string;
@@ -415,6 +416,13 @@ export default {
         await notifyOwner(env, "Your private website link",
           `Try the Day 1 sign-up before launch (this browser only):\n${env.SITE}/api/admin/tester?s=${tester}\n\nDo not forward this link.`);
         return html("<p>Sent to the owner's email address.</p>");
+      }
+      if (p === "/api/admin/kit" && request.method === "POST") {
+        const want = env.KIT_ADMIN_TOKEN || "";
+        const body = JSON.parse(await request.text()) as Record<string, unknown>; // text/plain allowed, so a browser tab can post without a preflight
+        const got = request.headers.get("X-Admin-Token") || String(body.token || "");
+        if (want.length < 32 || !safeEqual(got, want)) return json({ ok: false }, 403);
+        return json(await kitAdmin(env, body));
       }
       if (p === "/api/admin/tester" && request.method === "GET") {
         const want = env.ADMIN_KEY ? await hmac(env.ADMIN_KEY, "tester") : "";

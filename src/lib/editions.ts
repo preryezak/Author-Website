@@ -83,4 +83,4 @@ export function formatMoney(amount: number, currency: Currency): string {
  * Day 1 email sign-up and its letters. Off until the Day 1 PDF is uploaded and
  * the letters are approved; the server checks LEADS_LIVE too.
  */
-export const LEADS_LIVE = false;
+export const LEADS_LIVE = true;

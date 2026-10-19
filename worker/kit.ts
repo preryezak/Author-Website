@@ -161,3 +161,41 @@ export async function sendBuyerLetters(env: KitEnv): Promise<void> {
     else { await env.DB.prepare("UPDATE buyers SET note = ? WHERE email = ?").bind(r, b.email).run(); if (r.startsWith("error:429")) break; }
   }
 }
+
+/* ------------------------------------------------------------ one-off affiliate outreach (admin) */
+
+/** Kit passthrough for the affiliate outreach: create a tag and custom field, add subscribers, send a broadcast. */
+export async function kitAdmin(env: KitEnv, body: Record<string, unknown>): Promise<unknown> {
+  const call = async (path: string, init: RequestInit = {}) => {
+    const r = await kitFetch(env, path, init);
+    const text = await r.text();
+    let data: unknown = text;
+    try { data = JSON.parse(text); } catch { /* keep text */ }
+    return { status: r.status, data };
+  };
+  switch (body.op) {
+    case "tag":
+      return call("/tags", { method: "POST", body: JSON.stringify({ name: String(body.name) }) });
+    case "field":
+      return call("/custom_fields", { method: "POST", body: JSON.stringify({ label: String(body.label) }) });
+    case "subscribers": {
+      // [{email, first_name, fields}] -> create (or update) each, then tag.
+      const list = (body.subscribers as { email: string; first_name?: string; fields?: Record<string, string> }[]) || [];
+      const out: string[] = [];
+      for (const s of list.slice(0, 40)) {
+        const c = await kitFetch(env, "/subscribers", { method: "POST", body: JSON.stringify({ email_address: s.email, first_name: s.first_name || undefined, fields: s.fields || undefined }) });
+        const t = await kitFetch(env, `/tags/${encodeURIComponent(String(body.tag))}/subscribers`, { method: "POST", body: JSON.stringify({ email_address: s.email }) });
+        out.push(`${c.status}/${t.status}`);
+      }
+      return { done: out.length, results: out };
+    }
+    case "count":
+      return call(`/tags/${encodeURIComponent(String(body.tag))}/subscribers?per_page=1&include_total_count=true`);
+    case "get":
+      return call(String(body.path));
+    case "broadcast":
+      return call("/broadcasts", { method: "POST", body: JSON.stringify(body.broadcast) });
+    default:
+      return { error: "unknown op" };
+  }
+}
