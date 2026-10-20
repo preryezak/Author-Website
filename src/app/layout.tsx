@@ -55,6 +55,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Pastor Eryeza Kalalu" }],
   creator: "Pastor Eryeza Kalalu",
   publisher: "Eryeza Kalalu",
+  verification: { other: { "facebook-domain-verification": "wlsg3whda7gtvstyg046vsoxqad956" } },
   keywords: [
     "Eryeza Kalalu",
     "The Influential Spirit",
