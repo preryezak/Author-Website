@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * Loads the Meta Pixel after the page is interactive, never before content.
+ * Loads the Meta Pixel as soon as the page mounts (it used to wait for idle, which
+ * delayed PageView by up to 14 s on phones and lost landing page views).
  *
  * Consent: a visitor who chose "Decline non-essential" never loads it. In Europe
  * and the UK (where consent must come first) it loads only after "Accept".
@@ -10,6 +11,7 @@
 
 import { useEffect } from "react";
 import { META_PIXEL_ID, source } from "@/lib/pixel";
+import { geo } from "@/lib/geo";
 
 declare global { interface Window { fbq?: (...a: unknown[]) => void; _fbq?: unknown } }
 
@@ -43,15 +45,11 @@ export default function MetaPixel() {
     if (choice === "declined") return;
     const start = () => {
       if (choice === "accepted") { load(META_PIXEL_ID); return; }
-      fetch("/api/geo", { cache: "no-store" })
-        .then((r) => (r.ok ? r.json() : null))
-        .then((g: { continent?: string } | null) => { if (g && g.continent !== "EU") load(META_PIXEL_ID); })
-        .catch(() => {});
+      geo().then((g) => { if (g && g.continent !== "EU") load(META_PIXEL_ID); });
     };
     const onChoice = (e: Event) => { if ((e as CustomEvent<string>).detail === "accepted") load(META_PIXEL_ID); };
     window.addEventListener("ek:cookie", onChoice);
-    const idle = (window as unknown as { requestIdleCallback?: (cb: () => void) => void }).requestIdleCallback;
-    if (idle) idle(start); else setTimeout(start, 1500);
+    start();
     return () => window.removeEventListener("ek:cookie", onChoice);
   }, []);
   return null;

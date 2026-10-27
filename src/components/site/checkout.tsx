@@ -10,11 +10,7 @@ import { useEffect, useState } from "react";
 import { PRICES, SELAR_URL, currencyForContinent, formatMoney, type Currency, type EditionId } from "@/lib/editions";
 import { source, trackCustom } from "@/lib/pixel";
 
-let geoOnce: Promise<{ continent?: string } | null> | null = null;
-function geo() {
-  geoOnce ??= fetch("/api/geo", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-  return geoOnce;
-}
+import { geo } from "@/lib/geo";
 
 /** UGX in Africa, USD elsewhere (USD until the visitor's region is known). */
 export function useCurrency(): Currency {
