@@ -115,7 +115,7 @@ export default function InfluentialSpiritPage() {
       <StickyBuyBar>
         <div className="meta">
           <div className="eyebrow">The Influential Spirit</div>
-          <div className="caption">From <LocalPrice edition="reader" was={false} /></div>
+          <div className="caption">Formation Bundle with audiobook · <LocalPrice edition="formation" was={false} /></div>
         </div>
         <BuyButton edition="formation" className="btn btn-gold btn-sm">Get the book</BuyButton>
       </StickyBuyBar>

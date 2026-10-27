@@ -57,7 +57,7 @@ export default function ListiclePage({ l }: { l: Listicle }) {
                     {l.ctaAfter.includes(i + 1) ? (
                       <div className="lp-mid-cta">
                         <BuyButton edition="formation" className="btn btn-primary">Get the Formation Bundle</BuyButton>
-                        <span className="lp-from">From <LocalPrice edition="reader" was={false} /> · Pay by mobile money or card</span>
+                        <span className="lp-from">With the audiobook: <LocalPrice edition="formation" was={false} /> · Pay by mobile money or card</span>
                       </div>
                     ) : null}
                   </div>
@@ -114,7 +114,7 @@ export default function ListiclePage({ l }: { l: Listicle }) {
       <StickyBuyBar>
         <div className="meta">
           <div className="eyebrow">The Influential Spirit</div>
-          <div className="caption">From <LocalPrice edition="reader" was={false} /></div>
+          <div className="caption">Formation Bundle with audiobook · <LocalPrice edition="formation" was={false} /></div>
         </div>
         <BuyButton edition="formation" className="btn btn-gold btn-sm">Get the book</BuyButton>
       </StickyBuyBar>
