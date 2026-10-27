@@ -21,6 +21,14 @@ export function track(event: string, params: Record<string, unknown> = {}, event
   } catch { /* tracking must never break the page */ }
 }
 
+/** Custom event (not a Meta standard event), e.g. a tap that leaves for Selar; keeps checkout figures for Selar alone. */
+export function trackCustom(event: string, params: Record<string, unknown> = {}): void {
+  try {
+    const fbq = (window as unknown as { fbq?: Fbq }).fbq;
+    if (fbq) fbq("trackCustom", event, params);
+  } catch { /* tracking must never break the page */ }
+}
+
 /** Manual advanced matching: hand the Pixel the sign-up's email and first name (the Pixel hashes them) so Meta can match the visitor. */
 export function identify(email: string, firstName = ""): void {
   try {

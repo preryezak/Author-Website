@@ -10,7 +10,7 @@
 
 import { useEffect, useState } from "react";
 import { useCurrency } from "@/components/site/checkout";
-import { source, track } from "@/lib/pixel";
+import { source, trackCustom } from "@/lib/pixel";
 import { XMAS_EDITIONS, XMAS_PRICES, XMAS_SELAR_URL, isPreorder, xmasMoney, type XmasEditionId } from "@/lib/christmas";
 
 const ORDER: XmasEditionId[] = ["book", "companion", "complete"];
@@ -37,7 +37,7 @@ export function XmasBuyButton({ edition, children, className = "btn btn-primary"
       onClick={(e) => {
         e.preventDefault();
         source();
-        track("InitiateCheckout", { content_ids: [`christmas-${edition}`], content_type: "product", content_name: "Unscripted Christmas" });
+        trackCustom("ClickToSelar", { content_ids: [`christmas-${edition}`], content_type: "product", content_name: "Unscripted Christmas" });
         window.location.href = href(edition);
       }}
     >

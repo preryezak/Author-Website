@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from "react";
 import { PRICES, SELAR_URL, currencyForContinent, formatMoney, type Currency, type EditionId } from "@/lib/editions";
-import { source, track } from "@/lib/pixel";
+import { source, trackCustom } from "@/lib/pixel";
 
 let geoOnce: Promise<{ continent?: string } | null> | null = null;
 function geo() {
@@ -47,7 +47,7 @@ export function BuyButton({ edition, children, className = "btn btn-primary" }: 
       onClick={(e) => {
         e.preventDefault();
         source();
-        track("InitiateCheckout", { content_ids: [edition], content_type: "product" });
+        trackCustom("ClickToSelar", { content_ids: [edition], content_type: "product" });
         window.location.href = selarHref(edition);
       }}
     >
