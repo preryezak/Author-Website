@@ -42,8 +42,8 @@ export default function BookHero({
             )}
             <div className="lhero__buy">
               <div className="lhero__price" aria-label="Price">
-                <span className="lhero__from">From</span>
-                <LocalPrice edition="reader" />
+                <span className="lhero__from">{book ? "Formation Bundle with audiobook" : "From"}</span>
+                <LocalPrice edition={book ? "formation" : "reader"} />
               </div>
               <div className="flex-wrap-gap gap-4">
                 {book ? (

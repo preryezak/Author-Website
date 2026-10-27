@@ -292,6 +292,17 @@ async function leadStart(env: Env, ctx: ExecutionContext, request: Request): Pro
       else await env.DB.prepare("UPDATE leads SET note = ? WHERE email = ?").bind(r, email).run();
     }
     await leadCapi(env, lead, request, clean(b.fbp, 120), clean(b.fbc, 200), eventId);
+    // Tell Eryeza about each new sign-up (to NOTIFY_EMAIL).
+    const total = await env.DB.prepare("SELECT COUNT(*) AS n FROM leads").first<{ n: number }>().catch(() => null);
+    await notifyOwner(env, `New free sign-up: ${firstName || email}`, `A reader asked for the free Day 1 and Day 25.
+
+Name: ${firstName || "(not given)"}
+Email: ${email}
+Came from: ${lead.source || "unknown"}
+Letters: ${letterOptIn ? "yes" : "no"}
+Total sign-ups so far: ${total?.n ?? "?"}
+
+Their welcome email with both mornings has been sent.`).catch(() => "");
     if (letterOptIn) await addToList(env, email, firstName).catch(() => "");
     if (letterOptIn) await kitAddLead(env, email, firstName).catch(() => "");
   })());

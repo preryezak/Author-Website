@@ -45,9 +45,6 @@ export default function InfluentialSpiritPage() {
       {/* 2. Hear the author before buying (audio loads only on tap). */}
       <HearSection />
 
-      {/* 3. The visitor's own situation, matched to a day of the book (Workers AI). */}
-      <FindYourDay />
-
       {/* 4. Who it is for. */}
       <section className="section surface-50 ask-band" id="for-you">
         <div className="container">
@@ -86,6 +83,9 @@ export default function InfluentialSpiritPage() {
           </div>
         </div>
       </section>
+
+      {/* 6b. The visitor's own situation, matched to a day of the book (Workers AI); below the offer so cold ad traffic sees the editions first. */}
+      <FindYourDay />
 
       {/* 7. What readers said. */}
       <ReviewGroups invite={false} verifiedFirst />
