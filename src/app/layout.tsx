@@ -5,6 +5,7 @@ import "./checkout.css";
 import { LAUNCH_PRICE_ENDS, GIVING } from "@/lib/site-content";
 import { EDITIONS as EDITION_INFO, SELAR_URL, isLaunch, priceOf } from "@/lib/editions";
 import MetaPixel from "@/components/site/meta-pixel";
+import { META_PIXEL_ID } from "@/lib/pixel";
 
 /*
  * Fonts: variable files (no `weight` list), so each style is ONE file covering
@@ -224,6 +225,14 @@ export default function RootLayout({
             __html: `try{var d=document.documentElement;if(Date.now()>=${Date.parse(LAUNCH_PRICE_ENDS)})d.setAttribute("data-price-phase","full");if(localStorage.getItem("ek-cookie-choice"))d.classList.add("ek-cookie-set")}catch(e){}`,
           }}
         />
+        {/* Meta Pixel from the head (Meta's standard placement) so PageView fires before the app hydrates; consent rules as in components/site/meta-pixel.tsx. */}
+        {META_PIXEL_ID ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `try{var c=null;try{c=localStorage.getItem("ek-cookie-choice")}catch(e){}if(c!=="declined"){window.__ekGeo=fetch("/api/geo",{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).catch(function(){return null});var L=function(){if(window.fbq)return;!function(f,b,e,v,n,t,s){n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","${META_PIXEL_ID}");fbq("track","PageView");if(/^\/(influential-spirit|desk|signs|hear)/.test(location.pathname))fbq("track","ViewContent",{content_ids:["influential-spirit"],content_type:"product"})};if(c==="accepted")L();else window.__ekGeo.then(function(g){if(g&&g.continent!=="EU")L()})}}catch(e){}`,
+            }}
+          />
+        ) : null}
         {/* Self-hosted font files are the only font source; no Google Fonts request is made.
             No preconnects: the Beehiiv form and the iHeart player both load below the fold or on demand. */}
         {/* Prefetch (never prerender) same-origin pages on hover/touch so navigation feels instant. */}
