@@ -16,9 +16,9 @@ export type Currency = "UGX" | "USD";
 export interface Price { launch: number; full: number }
 
 export const PRICES: Record<EditionId, Record<Currency, Price>> = {
-  reader: { UGX: { launch: 36000, full: 45000 }, USD: { launch: 12, full: 15 } },
-  formation: { UGX: { launch: 72000, full: 90000 }, USD: { launch: 23, full: 29 } },
-  complete: { UGX: { launch: 120000, full: 150000 }, USD: { launch: 39, full: 49 } },
+  reader: { UGX: { launch: 36000, full: 45000 }, USD: { launch: 8, full: 10 } },
+  formation: { UGX: { launch: 72000, full: 90000 }, USD: { launch: 16, full: 21 } },
+  complete: { UGX: { launch: 120000, full: 150000 }, USD: { launch: 27, full: 34 } },
 };
 
 /**
