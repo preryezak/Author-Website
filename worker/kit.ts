@@ -195,6 +195,8 @@ export async function kitAdmin(env: KitEnv, body: Record<string, unknown>): Prom
       return call(String(body.path));
     case "broadcast":
       return call("/broadcasts", { method: "POST", body: JSON.stringify(body.broadcast) });
+    case "broadcast_update":
+      return call(`/broadcasts/${encodeURIComponent(String(body.id))}`, { method: "PUT", body: JSON.stringify(body.broadcast) });
     default:
       return { error: "unknown op" };
   }
