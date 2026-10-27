@@ -291,7 +291,7 @@ export const LIBRARY = {
   heading: "The library.",
   books: [
     { status: "Out now", caption: "Volume I", title: "The Influential Spirit", role: "Volume I · The Deep Encounter Library", excerpt: "The book that anchors the library. Thirty days inside the person behind the influence.", cta: "Open the book page", href: "#influential-spirit", cover: "cover" },
-    { status: "Pre-order now", caption: "Advent 2026", title: "Unscripted Christmas", role: "24 Days with Christ for the Christmas You Are Actually Having", excerpt: "An Advent devotional for grief, money stress, family tension and loneliness. Released on 16 November; 30% off until then.", cta: "Pre-order the book", href: "/christmas/", cover: "christmas" },
+    { status: "Pre-order now", caption: "Advent 2026", title: "Unscripted Christmas", role: "24 Days with Christ for the Christmas You Are Actually Having", excerpt: "An Advent devotional for grief, money stress, family tension and loneliness. Released on 16 November; 20% off until then.", cta: "Pre-order the book", href: "/christmas/", cover: "christmas" },
     { status: "In preparation", caption: "2027", title: "Forthcoming volumes", role: "Holy Week Every Week · Prayer Craft · Discerning God’s Whisper · Spiritual Health Solution", excerpt: "Ongoing volumes on prayer, spiritual health, and hearing God.", cta: "Get notice by letter", href: "#letter", cover: "forest" },
   ],
 } as const;

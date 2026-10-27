@@ -1,7 +1,7 @@
 /**
  * Unscripted Christmas: the three editions, prices and the Selar checkout.
  * One Selar product holds all three tiers (selar.com/izxm12og2p); the buyer picks
- * the edition there. Pre-order prices are the full prices less 30% until release.
+ * the edition there. Pre-order prices are the full prices less 20% until release.
  * Full prices match The Influential Spirit's full prices.
  */
 
@@ -17,9 +17,9 @@ export type XmasEditionId = "book" | "companion" | "complete";
 export interface XmasPrice { preorder: number; full: number }
 
 export const XMAS_PRICES: Record<XmasEditionId, Record<Currency, XmasPrice>> = {
-  book: { UGX: { preorder: 31500, full: 45000 }, USD: { preorder: 10.5, full: 15 } },
-  companion: { UGX: { preorder: 63000, full: 90000 }, USD: { preorder: 20.3, full: 29 } },
-  complete: { UGX: { preorder: 105000, full: 150000 }, USD: { preorder: 34.3, full: 49 } },
+  book: { UGX: { preorder: 36000, full: 45000 }, USD: { preorder: 8, full: 10 } },
+  companion: { UGX: { preorder: 72000, full: 90000 }, USD: { preorder: 16, full: 21 } },
+  complete: { UGX: { preorder: 120000, full: 150000 }, USD: { preorder: 27, full: 34 } },
 };
 
 export const XMAS_EDITIONS: Record<XmasEditionId, { name: string; short: string; includes: string[] }> = {

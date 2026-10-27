@@ -52,13 +52,13 @@ function usePreorder(): boolean {
   return pre;
 }
 
-/** "From $10.50 (pre-order)" line for the hero. */
+/** "From $8 (pre-order)" line for the hero. */
 export function XmasFromPrice() {
   const currency = useCurrency();
   const pre = usePreorder();
   const p = XMAS_PRICES.book[currency];
   return pre
-    ? <span>From {xmasMoney(p.preorder, currency)} <s>{xmasMoney(p.full, currency)}</s>, 30% off until 16 November</span>
+    ? <span>From {xmasMoney(p.preorder, currency)} <s>{xmasMoney(p.full, currency)}</s>, 20% off until 16 November</span>
     : <span>From {xmasMoney(p.full, currency)}</span>;
 }
 

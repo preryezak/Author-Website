@@ -11,7 +11,7 @@ import { XMAS_PRICES, XMAS_SELAR_URL } from "@/lib/christmas";
  */
 
 const TITLE = "Unscripted Christmas";
-const DESC = "A 24-day Advent devotional for grief, money stress, family tension and loneliness at Christmas. Pre-order now at 30% off; it arrives on 16 November.";
+const DESC = "A 24-day Advent devotional for grief, money stress, family tension and loneliness at Christmas. Pre-order now at 20% off; it arrives on 16 November.";
 
 export const metadata: Metadata = {
   title: "Unscripted Christmas: an Advent devotional",
@@ -48,7 +48,7 @@ const FAQS = [
   { q: "Can I read it on my phone?", a: "Yes. Every file downloads to keep, so you can read and listen on your phone, tablet or computer, with or without data." },
   { q: "How do I pay?", a: "By mobile money or card. Prices show in Ugandan shillings or US dollars here and convert to your own currency at checkout." },
   { q: "Can my small group or church use it?", a: "Yes. The Complete Christmas Edition includes a four-session group guide for the Sundays of Advent: 29 November and 6, 13 and 20 December. For copies for a whole church, write to hello@eryezakalalu.com." },
-  { q: "When does the pre-order price end?", a: "On 16 November, when the book is released. Until then every edition is 30% off." },
+  { q: "When does the pre-order price end?", a: "On 16 November, when the book is released. Until then every edition is 20% off." },
 ];
 
 export default function ChristmasPage() {
@@ -175,7 +175,7 @@ export default function ChristmasPage() {
         <div className="container">
           <div className="mx-auto" style={{ maxWidth: 760, textAlign: "center" }}>
             <span className="eyebrow">Choose your edition</span>
-            <h2 className="page-head__title" style={{ fontSize: 34 }}>Pre-order at 30% off until 16 November.</h2>
+            <h2 className="page-head__title" style={{ fontSize: 34 }}>Pre-order at 20% off until 16 November.</h2>
           </div>
           <ChristmasEditions />
         </div>
