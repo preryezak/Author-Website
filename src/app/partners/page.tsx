@@ -51,11 +51,11 @@ export default function PartnersPage() {
               made through it, of either book, is credited to you. Your link is also in the email we sent you.
             </p>
 
-            <h2 className="display" style={{ fontSize: 26, fontWeight: 500, marginTop: 28 }}>2. The launch challenge, 22 to 31 October (now closed)</h2>
+            <h2 className="display" style={{ fontSize: 26, fontWeight: 500, marginTop: 28 }}>2. The First Sale Challenge, 3 to 16 November</h2>
             <p>
-              The challenge has closed. The prizes for the five affiliates with the most sales between 22 and 31 October are: 1st, ₦31,656 (UGX 100,000) and the Complete
-              Formation Edition; 2nd, ₦15,828 (UGX 50,000); 3rd, ₦7,914 (UGX 25,000); 4th and 5th, the Complete Formation Edition. Sales of both
-              books count, and you keep your 30% commission on each one.
+              The first three affiliates to make one sale each win UGX 10,000 (about ₦3,166) and a free copy of The Complete
+              Christmas Edition. Sales of both books count, and you keep your 30% commission on each one. The launch challenge
+              closed on 31 October with no sales recorded, so no prizes were won.
             </p>
 
             <h2 className="display" style={{ fontSize: 26, fontWeight: 500, marginTop: 28 }}>3. Images to share</h2>
