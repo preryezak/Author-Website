@@ -433,6 +433,15 @@ export default {
         const body = JSON.parse(await request.text()) as Record<string, unknown>; // text/plain allowed, so a browser tab can post without a preflight
         const got = request.headers.get("X-Admin-Token") || String(body.token || "");
         if (want.length < 32 || !safeEqual(got, want)) return json({ ok: false }, 403);
+        if (body.op === "send_one") {
+          // One personal email as books@ (abandoned-cart follow-up), with a copy to the owner. Removed with this route.
+          const r = await fetch("https://api.resend.com/emails", timed({
+            method: "POST",
+            headers: { Authorization: `Bearer ${String(env.RESEND_API_KEY).trim()}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ from: env.MAIL_FROM, to: [String(body.to)], bcc: [env.NOTIFY_EMAIL], reply_to: env.REPLY_TO, subject: String(body.subject), text: String(body.text), html: String(body.html), ...(body.scheduled_at ? { scheduled_at: String(body.scheduled_at) } : {}) }),
+          }));
+          return json({ status: r.status, data: await r.json().catch(() => null) });
+        }
         return json(await kitAdmin(env, body));
       }
       if (p === "/api/admin/tester" && request.method === "GET") {
