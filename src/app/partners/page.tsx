@@ -24,10 +24,10 @@ const IMAGES = [
 ];
 
 const POSTS = [
-  { title: "WhatsApp status", text: "The Influential Spirit is a 30-day devotional for Christians whose influence is growing at work. It takes ten minutes each morning and gives you one practical step for the day. The launch price ends on 31 October: [your link]" },
+  { title: "WhatsApp status", text: "The Influential Spirit is a 30-day devotional for Christians whose influence is growing at work. It takes ten minutes each morning and gives you one practical step for the day: [your link]" },
   { title: "For leaders and pastors", text: "If you lead people, at church, at work or at home, The Influential Spirit is thirty mornings on the character Christ forms in a leader. The Formation Bundle has the audiobook and a six-session group guide for your team. [your link]" },
   { title: "For the workplace", text: "Someone took the credit for your work. Your manager is unfair. You are tired of being the only believer in the office. The Influential Spirit has a day for each of these, with one step to take at work that same day. [your link]" },
-  { title: "Deadline (29 to 31 October)", text: "Launch prices for The Influential Spirit end on 31 October. The Formation Bundle with the audiobook is ₦22,792 (UGX 72,000, KSh 2,137, GH₵192) and the Reader Edition is ₦11,396 (UGX 36,000) until then. [your link]" },
+  { title: "The Formation Bundle", text: "The Formation Bundle of The Influential Spirit gives you the thirty mornings with the whole audiobook read by the author, for ₦28,490 (UGX 90,000, KSh 2,671, GH₵239). [your link]" },
   { title: "Christmas pre-order", text: "Unscripted Christmas is a 24-day Advent devotional for grief, money stress, family tension and loneliness at Christmas. Pre-order it at 20% off before it is released on 16 November. [your link]" },
 ];
 
@@ -51,9 +51,9 @@ export default function PartnersPage() {
               made through it, of either book, is credited to you. Your link is also in the email we sent you.
             </p>
 
-            <h2 className="display" style={{ fontSize: 26, fontWeight: 500, marginTop: 28 }}>2. The launch challenge, 22 to 31 October</h2>
+            <h2 className="display" style={{ fontSize: 26, fontWeight: 500, marginTop: 28 }}>2. The launch challenge, 22 to 31 October (now closed)</h2>
             <p>
-              The five affiliates with the most sales between 22 and 31 October win: 1st, ₦31,656 (UGX 100,000) and the Complete
+              The challenge has closed. The prizes for the five affiliates with the most sales between 22 and 31 October are: 1st, ₦31,656 (UGX 100,000) and the Complete
               Formation Edition; 2nd, ₦15,828 (UGX 50,000); 3rd, ₦7,914 (UGX 25,000); 4th and 5th, the Complete Formation Edition. Sales of both
               books count, and you keep your 30% commission on each one.
             </p>
@@ -83,8 +83,7 @@ export default function PartnersPage() {
             <h2 className="display" style={{ fontSize: 26, fontWeight: 500, marginTop: 28 }}>5. The facts</h2>
             <ul>
               <li>The Influential Spirit: a 30-day devotional by Pastor Eryeza Kalalu, ten to fifteen minutes a morning.</li>
-              <li>Until 31 October: Reader Edition ₦11,396 (UGX 36,000, KSh 1,069, GH₵96, $8), Formation Bundle with the audiobook and Group Study Guide ₦22,792 (UGX 72,000, KSh 2,137, GH₵192, $16), Complete Formation Edition ₦37,987 (UGX 120,000, KSh 3,562, GH₵319, $27).</li>
-              <li>From 1 November: ₦14,245, ₦28,490 and ₦47,483 (UGX 45,000, 90,000 and 150,000; $10, $21 and $34).</li>
+              <li>Reader Edition ₦14,245 (UGX 45,000, KSh 1,336, GH₵120, $10), Formation Bundle with the audiobook and Group Study Guide ₦28,490 (UGX 90,000, KSh 2,671, GH₵239, $21), Complete Formation Edition ₦47,483 (UGX 150,000, KSh 4,452, GH₵399, $34).</li>
               <li>Selar shows each buyer the price in their own currency, worked out from the Uganda shilling price.</li>
               <li>Unscripted Christmas: pre-order at 20% off until 16 November, from ₦11,396 (UGX 36,000, $8).</li>
               <li>Buyers pay by mobile money or card, and every file downloads to keep.</li>
