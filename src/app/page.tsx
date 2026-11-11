@@ -39,7 +39,7 @@ export const dynamic = "force-static";
 function withPrices(text: string) {
   return text.split(/(\{usd\}|\{ugx\})/).map((part, i) =>
     part === "{usd}" ? <span key={i}>$9.99</span>
-      : part === "{ugx}" ? <span key={i}>KSh 1,299</span>
+      : part === "{ugx}" ? <span key={i}>KSh 1,300</span>
       : part,
   );
 }

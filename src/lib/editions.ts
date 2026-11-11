@@ -4,7 +4,8 @@
  * delivery all happen on Selar, and every file downloads to keep.
  *
  * Prices (from 11 Nov 2026) are set in US dollars, $9.99 / $19.99 / $29.99, and every
- * other currency is converted from the dollar at the day's Wise rate, to whole numbers.
+ * other currency is converted from the dollar at the day's Wise rate and rounded down to a
+ * clean step (1,000 for UGX and NGN; KES to the nearest 100), so no one pays above the dollar price.
  * The site shows UGX in Uganda, KES in Kenya, NGN in Nigeria and USD elsewhere, and the
  * buy buttons open Selar in that same currency, so mobile money is offered at checkout.
  * The launch pricing ended on 31 Oct 2026 (LAUNCH_ENDS is kept for the date logic).
@@ -16,9 +17,9 @@ export type EditionId = "reader" | "formation" | "complete";
 export type Currency = "USD" | "UGX" | "KES" | "NGN";
 
 export const PRICES: Record<EditionId, Record<Currency, number>> = {
-  reader: { USD: 9.99, UGX: 40949, KES: 1299, NGN: 13826 },
-  formation: { USD: 19.99, UGX: 81939, KES: 2599, NGN: 27666 },
-  complete: { USD: 29.99, UGX: 122929, KES: 3899, NGN: 41506 },
+  reader: { USD: 9.99, UGX: 40000, KES: 1300, NGN: 13000 },
+  formation: { USD: 19.99, UGX: 81000, KES: 2600, NGN: 27000 },
+  complete: { USD: 29.99, UGX: 122000, KES: 3900, NGN: 41000 },
 };
 
 /**
