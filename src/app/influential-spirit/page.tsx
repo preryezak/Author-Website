@@ -43,7 +43,7 @@ export default function InfluentialSpiritPage() {
       <BookHero variant="book" dayOneHref="#day-one" />
 
       {/* 2. Hear the author before buying (audio loads only on tap). */}
-      <HearSection />
+      <HearSection bridge />
 
       {/* 4. Who it is for. */}
       <section className="section surface-50 ask-band" id="for-you">

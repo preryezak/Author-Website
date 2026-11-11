@@ -3,22 +3,22 @@
  * and the Selar checkout link each buy button opens. Buying, payment and
  * delivery all happen on Selar, and every file downloads to keep.
  *
- * Prices shown on the site: UGX for visitors in Africa, USD elsewhere. Selar
- * shows the buyer's own currency at checkout.
- * Launch prices apply until LAUNCH_ENDS; full prices after.
+ * Prices (from 11 Nov 2026) are set in US dollars, $9.99 / $19.99 / $29.99, and every
+ * other currency is converted from the dollar at the day's Wise rate, to whole numbers.
+ * The site shows UGX in Uganda, KES in Kenya, NGN in Nigeria and USD elsewhere, and the
+ * buy buttons open Selar in that same currency, so mobile money is offered at checkout.
+ * The launch pricing ended on 31 Oct 2026 (LAUNCH_ENDS is kept for the date logic).
  */
 
 export const LAUNCH_ENDS = "2026-11-01T00:00:00+03:00";
 
 export type EditionId = "reader" | "formation" | "complete";
-export type Currency = "UGX" | "USD";
+export type Currency = "USD" | "UGX" | "KES" | "NGN";
 
-export interface Price { launch: number; full: number }
-
-export const PRICES: Record<EditionId, Record<Currency, Price>> = {
-  reader: { UGX: { launch: 36000, full: 45000 }, USD: { launch: 8, full: 10 } },
-  formation: { UGX: { launch: 72000, full: 90000 }, USD: { launch: 16, full: 21 } },
-  complete: { UGX: { launch: 120000, full: 150000 }, USD: { launch: 27, full: 34 } },
+export const PRICES: Record<EditionId, Record<Currency, number>> = {
+  reader: { USD: 9.99, UGX: 40949, KES: 1299, NGN: 13826 },
+  formation: { USD: 19.99, UGX: 81939, KES: 2599, NGN: 27666 },
+  complete: { USD: 29.99, UGX: 122929, KES: 3899, NGN: 41506 },
 };
 
 /**
@@ -61,22 +61,22 @@ export const EDITIONS: Record<EditionId, { name: string; short: string; includes
 /** What the buyer is told about paying (the checkout service is never named). */
 export const PAY_NOTE = "Pay by mobile money or card. Every file downloads to keep.";
 
-export function currencyForContinent(continent: string | null | undefined): Currency {
-  return continent === "AF" ? "UGX" : "USD";
+export function currencyForCountry(country: string | null | undefined): Currency {
+  return country === "UG" ? "UGX" : country === "KE" ? "KES" : country === "NG" ? "NGN" : "USD";
 }
 
 export function isLaunch(now = Date.now()): boolean {
   return now < Date.parse(LAUNCH_ENDS);
 }
 
-export function priceOf(edition: EditionId, currency: Currency, now = Date.now()): number {
-  const p = PRICES[edition][currency];
-  return isLaunch(now) ? p.launch : p.full;
+export function priceOf(edition: EditionId, currency: Currency): number {
+  return PRICES[edition][currency];
 }
 
 export function formatMoney(amount: number, currency: Currency): string {
+  if (currency === "USD") return `$${amount % 1 ? amount.toFixed(2) : amount}`;
   const n = amount.toLocaleString("en-GB");
-  return currency === "USD" ? `$${n}` : `UGX ${n}`;
+  return currency === "KES" ? `KSh ${n}` : currency === "NGN" ? `₦${n}` : `UGX ${n}`;
 }
 
 /**

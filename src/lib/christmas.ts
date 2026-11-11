@@ -5,7 +5,13 @@
  * Full prices match The Influential Spirit's full prices.
  */
 
-import type { Currency } from "@/lib/editions";
+import type { Currency as SiteCurrency } from "@/lib/editions";
+
+/** Christmas prices show in UGX for Uganda and USD everywhere else; Selar converts at checkout. */
+export type Currency = "UGX" | "USD";
+export function xmasCurrency(c: SiteCurrency): Currency {
+  return c === "UGX" ? "UGX" : "USD";
+}
 
 export const XMAS_SELAR_URL = "https://selar.com/izxm12og2p";
 

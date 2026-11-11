@@ -1,8 +1,6 @@
 import { BuyButton, LocalPrice } from "@/components/site/checkout";
 import BookStage from "@/components/site/book-stage";
 import { ArrowRight } from "@/components/site/ui-bits";
-import { LaunchOnly } from "@/components/site/price";
-import LaunchCountdown from "@/components/site/launch-countdown";
 import { FEATURED_BOOK } from "@/lib/site-content";
 
 /**
@@ -61,7 +59,6 @@ export default function BookHero({
                 )}
               </div>
               <p className="lhero__note">
-                <LaunchOnly><LaunchCountdown /></LaunchOnly>
                 {book
                   ? "Pay by mobile money or card. Your books open straight away and arrive by email."
                   : "Instant digital delivery: PDF + EPUB, with audiobook and study editions."}

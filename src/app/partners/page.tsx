@@ -27,7 +27,7 @@ const POSTS = [
   { title: "WhatsApp status", text: "The Influential Spirit is a 30-day devotional for Christians whose influence is growing at work. It takes ten minutes each morning and gives you one practical step for the day: [your link]" },
   { title: "For leaders and pastors", text: "If you lead people, at church, at work or at home, The Influential Spirit is thirty mornings on the character Christ forms in a leader. The Formation Bundle has the audiobook and a six-session group guide for your team. [your link]" },
   { title: "For the workplace", text: "Someone took the credit for your work. Your manager is unfair. You are tired of being the only believer in the office. The Influential Spirit has a day for each of these, with one step to take at work that same day. [your link]" },
-  { title: "The Formation Bundle", text: "The Formation Bundle of The Influential Spirit gives you the thirty mornings with the whole audiobook read by the author, for ₦28,490 (UGX 90,000, KSh 2,671, GH₵239). [your link]" },
+  { title: "The Formation Bundle", text: "The Formation Bundle of The Influential Spirit gives you the thirty mornings with the whole audiobook read by the author, for ₦27,666 (KSh 2,599, $19.99). [your link]" },
   { title: "Christmas pre-order", text: "Unscripted Christmas is a 24-day Advent devotional for grief, money stress, family tension and loneliness at Christmas. Pre-order it at 20% off before it is released on 16 November. [your link]" },
 ];
 
@@ -83,8 +83,8 @@ export default function PartnersPage() {
             <h2 className="display" style={{ fontSize: 26, fontWeight: 500, marginTop: 28 }}>5. The facts</h2>
             <ul>
               <li>The Influential Spirit: a 30-day devotional by Pastor Eryeza Kalalu, ten to fifteen minutes a morning.</li>
-              <li>Reader Edition ₦14,245 (UGX 45,000, KSh 1,336, GH₵120, $10), Formation Bundle with the audiobook and Group Study Guide ₦28,490 (UGX 90,000, KSh 2,671, GH₵239, $21), Complete Formation Edition ₦47,483 (UGX 150,000, KSh 4,452, GH₵399, $34).</li>
-              <li>Selar shows each buyer the price in their own currency, worked out from the Uganda shilling price.</li>
+              <li>Reader Edition ₦13,826 (KSh 1,299, $9.99), Formation Bundle with the audiobook and Group Study Guide ₦27,666 (KSh 2,599, $19.99), Complete Formation Edition ₦41,506 (KSh 3,899, $29.99).</li>
+              <li>Prices are set in US dollars and shown to each buyer in their own currency.</li>
               <li>Unscripted Christmas: pre-order at 20% off until 16 November, from ₦11,396 (UGX 36,000, $8).</li>
               <li>Buyers pay by mobile money or card, and every file downloads to keep.</li>
               <li>Anyone can read Day 1 free at eryezakalalu.com/influential-spirit.</li>

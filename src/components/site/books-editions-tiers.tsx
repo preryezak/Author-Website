@@ -2,7 +2,6 @@
 
 import { BuyButton, useCurrency } from "@/components/site/checkout";
 import { EDITIONS, PAY_NOTE, PRICES, formatMoney, type EditionId } from "@/lib/editions";
-import { Price } from "@/components/site/price";
 
 const ORDER: EditionId[] = ["reader", "formation", "complete"];
 const CTA: Record<EditionId, string> = {
@@ -12,15 +11,14 @@ const CTA: Record<EditionId, string> = {
 };
 
 /**
- * The three editions in UGX (Africa) or USD (elsewhere); each button opens that
- * edition's own Selar checkout. Launch and full prices are both in the HTML;
- * layout.tsx flips them on 1 Nov.
+ * The three editions in the visitor's currency (UGX, KES, NGN or USD); each button
+ * opens Selar in that currency.
  */
 export default function EditionsTiers() {
   const currency = useCurrency();
   return (
     <div className="editions-tiers">
-      <p className="tiers-pay" style={{ textAlign: "center", marginTop: 8 }}>{PAY_NOTE} Prices convert to your currency at checkout.</p>
+      <p className="tiers-pay" style={{ textAlign: "center", marginTop: 8 }}>{PAY_NOTE} Prices show in your currency.</p>
       <div className="grid-12" style={{ gap: 24, marginTop: 20 }}>
         {ORDER.map((id) => {
           const p = PRICES[id][currency];
@@ -30,7 +28,7 @@ export default function EditionsTiers() {
               {popular ? <span className="tier-flag">Recommended</span> : null}
               <span className="tier-name">{EDITIONS[id].name}</span>
               <div className="price">
-                <Price launch={formatMoney(p.launch, currency)} was={formatMoney(p.full, currency)} full={formatMoney(p.full, currency)} />
+                {formatMoney(p, currency)}
               </div>
               <ul className="tier-includes">
                 {EDITIONS[id].includes.map((i) => <li key={i}>{i}</li>)}

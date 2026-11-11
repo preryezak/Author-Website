@@ -19,7 +19,6 @@ import EngagementsGrid from "@/components/site/engagements";
 import ServeIcon from "@/components/site/serve-icon";
 import InvitePanel from "@/components/site/invite-panel";
 import EpisodeList from "@/components/site/episode-list";
-import { Price } from "@/components/site/price";
 import { OrnamentRule, ArrowRight, fmtDate, renderRich, PlatformGrid } from "@/components/site/ui-bits";
 import { RevealInit, DayOneEnhancer, StickyBuyBar, IheartPlayer } from "@/components/site/home-islands";
 
@@ -39,8 +38,8 @@ export const dynamic = "force-static";
 /** "{usd}" / "{ugx}" placeholders in content become launch-or-full prices. */
 function withPrices(text: string) {
   return text.split(/(\{usd\}|\{ugx\})/).map((part, i) =>
-    part === "{usd}" ? <Price key={i} launch="$8" full="$10" />
-      : part === "{ugx}" ? <Price key={i} launch="UGX 36,000" full="UGX 45,000" />
+    part === "{usd}" ? <span key={i}>$9.99</span>
+      : part === "{ugx}" ? <span key={i}>KSh 1,299</span>
       : part,
   );
 }

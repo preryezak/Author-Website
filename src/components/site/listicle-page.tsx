@@ -5,8 +5,6 @@ import DayOneReader from "@/components/site/day-one-reader";
 import BookStage from "@/components/site/book-stage";
 import { StickyBuyBar } from "@/components/site/home-islands";
 import { BuyButton, LocalPrice } from "@/components/site/checkout";
-import { LaunchOnly } from "@/components/site/price";
-import LaunchCountdown from "@/components/site/launch-countdown";
 import type { Listicle } from "@/lib/listicles";
 
 /**
@@ -73,7 +71,7 @@ export default function ListiclePage({ l }: { l: Listicle }) {
             <div>
               <h2 className="lp-h2">The Influential Spirit</h2>
               <p className="lp-p">{l.closing}</p>
-              <p className="lp-p lp-small"><LaunchOnly><LaunchCountdown /></LaunchOnly> Your books open straight away and arrive by email.</p>
+              <p className="lp-p lp-small">Your books open straight away and arrive by email. Read and listen on any phone, tablet or computer.</p>
             </div>
           </div>
         </section>

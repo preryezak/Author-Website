@@ -11,7 +11,7 @@
 import { useEffect, useState } from "react";
 import { useCurrency } from "@/components/site/checkout";
 import { source, trackCustom } from "@/lib/pixel";
-import { XMAS_EDITIONS, XMAS_PRICES, XMAS_SELAR_URL, isPreorder, xmasMoney, type XmasEditionId } from "@/lib/christmas";
+import { XMAS_EDITIONS, XMAS_PRICES, XMAS_SELAR_URL, isPreorder, xmasCurrency, xmasMoney, type XmasEditionId } from "@/lib/christmas";
 
 const ORDER: XmasEditionId[] = ["book", "companion", "complete"];
 
@@ -54,7 +54,7 @@ function usePreorder(): boolean {
 
 /** "From $8 (pre-order)" line for the hero. */
 export function XmasFromPrice() {
-  const currency = useCurrency();
+  const currency = xmasCurrency(useCurrency());
   const pre = usePreorder();
   const p = XMAS_PRICES.book[currency];
   return pre
@@ -63,7 +63,7 @@ export function XmasFromPrice() {
 }
 
 export default function ChristmasEditions() {
-  const currency = useCurrency();
+  const currency = xmasCurrency(useCurrency());
   const pre = usePreorder();
   return (
     <div className="editions-tiers">

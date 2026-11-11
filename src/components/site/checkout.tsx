@@ -2,26 +2,28 @@
 
 /**
  * Buy buttons and local prices. Each edition's button opens its own Selar
- * checkout in the same tab (in-app browsers lose new tabs). Prices show in UGX
- * for visitors in Africa and USD elsewhere; Selar converts at checkout.
+ * checkout in the same tab (in-app browsers lose new tabs). Prices show in UGX,
+ * KES or NGN for visitors in Uganda, Kenya or Nigeria and USD elsewhere, and the
+ * button opens Selar in that currency so mobile money is offered.
  */
 
 import { useEffect, useState } from "react";
-import { PRICES, SELAR_URL, currencyForContinent, formatMoney, type Currency, type EditionId } from "@/lib/editions";
+import { PRICES, SELAR_URL, currencyForCountry, formatMoney, type Currency, type EditionId } from "@/lib/editions";
 import { source, trackCustom } from "@/lib/pixel";
 
 import { geo } from "@/lib/geo";
 
-/** UGX in Africa, USD elsewhere (USD until the visitor's region is known). */
+/** The visitor's local currency in Uganda, Kenya and Nigeria, USD elsewhere (USD until the country is known). */
 export function useCurrency(): Currency {
   const [cur, setCur] = useState<Currency>("USD");
-  useEffect(() => { geo().then((g) => setCur(currencyForContinent(g?.continent))); }, []);
+  useEffect(() => { geo().then((g) => setCur(currencyForCountry(g?.country))); }, []);
   return cur;
 }
 
 /** Selar link with campaign tags carried over, so Selar's reports show which page and ad sold. */
-function selarHref(edition: EditionId): string {
+function selarHref(edition: EditionId, currency: Currency): string {
   const url = new URL(SELAR_URL[edition]);
+  url.searchParams.set("currency", currency);
   try {
     const q = new URLSearchParams(location.search);
     for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_content"]) {
@@ -35,6 +37,7 @@ function selarHref(edition: EditionId): string {
 }
 
 export function BuyButton({ edition, children, className = "btn btn-primary" }: { edition: EditionId; children: React.ReactNode; className?: string }) {
+  const currency = useCurrency();
   return (
     <a
       className={className}
@@ -44,7 +47,7 @@ export function BuyButton({ edition, children, className = "btn btn-primary" }: 
         e.preventDefault();
         source();
         trackCustom("ClickToSelar", { content_ids: [edition], content_type: "product" });
-        window.location.href = selarHref(edition);
+        window.location.href = selarHref(edition, currency);
       }}
     >
       {children}
@@ -52,14 +55,8 @@ export function BuyButton({ edition, children, className = "btn btn-primary" }: 
   );
 }
 
-/** Launch and full price in the visitor's currency; layout.tsx switches launch/full on 1 Nov. */
-export function LocalPrice({ edition = "reader", was = true }: { edition?: EditionId; was?: boolean }) {
+/** The edition's price in the visitor's currency. */
+export function LocalPrice({ edition = "reader" }: { edition?: EditionId; was?: boolean }) {
   const currency = useCurrency();
-  const p = PRICES[edition][currency];
-  return (
-    <>
-      <span className="price-launch">{formatMoney(p.launch, currency)}{was ? <> <s>{formatMoney(p.full, currency)}</s></> : null}</span>
-      <span className="price-full">{formatMoney(p.full, currency)}</span>
-    </>
-  );
+  return <span>{formatMoney(PRICES[edition][currency], currency)}</span>;
 }
