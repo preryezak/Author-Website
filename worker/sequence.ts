@@ -5,7 +5,7 @@
  * Edit the words here; the schedule follows the order and `day` values.
  */
 
-export interface Letter { day: number; subject: string; body: string }
+export interface Letter { day: number; subject: string; body: string; optInOnly?: boolean } // optInOnly: sent only to readers who ticked the letters box
 
 export const SEQUENCE: Letter[] = [
   {
@@ -100,8 +100,6 @@ Eryeza`,
     subject: "Thirty mornings",
     body: `Dear {first},
 
-This is my last letter in this short series.
-
 Thirty mornings is long enough to stop performing and start listening. Each day is one passage of Scripture, a short teaching, an honest question, one practical step, a prayer and a declaration. It takes ten to fifteen minutes, and then you go to work with it.
 
 If you have been waiting for the right moment, begin on the first day of next month and let the book walk with you through that month.
@@ -109,6 +107,28 @@ If you have been waiting for the right moment, begin on the first day of next mo
 Get the book: {buy}
 
 Thank you for reading these letters. May the Lord form Christ in you, by His Holy Spirit, in the place where He has planted you.
+
+Eryeza Kalalu`,
+  },
+  {
+    day: 21,
+    optInOnly: true,
+    subject: "A clearer way to get the book",
+    body: `Dear {first},
+
+You read the first and the twenty-fifth mornings of The Influential Spirit some weeks ago. I hope at least one of them stayed with you at work.
+
+I have made getting the whole book simpler. Each edition now has one clear price, shown in your own currency, and you can pay by M-Pesa, mobile money or card.
+
+The Reader Edition is the full thirty mornings to read. The Formation Bundle adds the whole audiobook in my own voice, with the group study guide and reading plan. The Complete Formation Edition adds the companion journal and the declarations and prayers.
+
+In Kenya that is KSh 1,300, 2,600 and 3,900. In Nigeria it is ₦13,000, 27,000 and 41,000. In Uganda it is UGX 40,000, 81,000 and 122,000. Elsewhere it is $9.99, $19.99 and $29.99.
+
+If the two mornings you read meant something to you, the other twenty-eight are waiting: {buy}
+
+If now is not the time, I understand, and you will keep the two mornings either way.
+
+Grace to you.
 
 Eryeza Kalalu`,
   },

@@ -328,7 +328,7 @@ async function sendDueLetters(env: Env): Promise<void> {
     const due = Date.parse(l.createdAt) + SEQUENCE[l.step].day * 86400000;
     if (Date.now() < due) { await env.DB.prepare("UPDATE leads SET nextDueAt = ? WHERE email = ?").bind(new Date(due).toISOString(), l.email).run(); continue; }
     await new Promise((r) => setTimeout(r, 600)); // Resend allows 2 requests a second
-    const r = await sendLetter(env, l, l.step);
+    const r = SEQUENCE[l.step].optInOnly && !l.letterOptIn ? "ok" : await sendLetter(env, l, l.step); // skipped letters still advance the step
     const next = SEQUENCE[l.step + 1] ? new Date(Date.parse(l.createdAt) + SEQUENCE[l.step + 1].day * 86400000).toISOString() : null;
     if (r === "ok") await env.DB.prepare("UPDATE leads SET step = step + 1, lastSentAt = ?, nextDueAt = ? WHERE email = ? AND step = ?").bind(new Date().toISOString(), next, l.email, l.step).run();
     else { await env.DB.prepare("UPDATE leads SET note = ? WHERE email = ?").bind(r, l.email).run(); if (r.startsWith("error:429")) break; }
