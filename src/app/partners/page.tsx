@@ -28,7 +28,7 @@ const POSTS = [
   { title: "For leaders and pastors", text: "If you lead people, at church, at work or at home, The Influential Spirit is thirty mornings on the character Christ forms in a leader. The Formation Bundle has the audiobook and a six-session group guide for your team. [your link]" },
   { title: "For the workplace", text: "Someone took the credit for your work. Your manager is unfair. You are tired of being the only believer in the office. The Influential Spirit has a day for each of these, with one step to take at work that same day. [your link]" },
   { title: "The Formation Bundle", text: "The Formation Bundle of The Influential Spirit gives you the thirty mornings with the whole audiobook read by the author, for ₦27,000 (KSh 2,600, $19.99). [your link]" },
-  { title: "Christmas pre-order", text: "Unscripted Christmas is a 24-day Advent devotional for grief, money stress, family tension and loneliness at Christmas. Pre-order it at 20% off before it is released on 16 November. [your link]" },
+  { title: "Christmas pre-order", text: "Unscripted Christmas is a 24-day Advent devotional for grief, money stress, family tension and loneliness at Christmas. Pre-order it at 20% off before it is released on 28 November. [your link]" },
 ];
 
 export default function PartnersPage() {
@@ -85,7 +85,7 @@ export default function PartnersPage() {
               <li>The Influential Spirit: a 30-day devotional by Pastor Eryeza Kalalu, ten to fifteen minutes a morning.</li>
               <li>Reader Edition ₦13,000 (KSh 1,300, $9.99), Formation Bundle with the audiobook and Group Study Guide ₦27,000 (KSh 2,600, $19.99), Complete Formation Edition ₦41,000 (KSh 3,900, $29.99).</li>
               <li>Prices are set in US dollars and shown to each buyer in their own currency.</li>
-              <li>Unscripted Christmas: pre-order at 20% off until 16 November, from ₦11,396 (UGX 36,000, $8).</li>
+              <li>Unscripted Christmas: pre-order at 20% off until 28 November, from ₦11,396 (UGX 36,000, $8).</li>
               <li>Buyers pay by mobile money or card, and every file downloads to keep.</li>
               <li>Anyone can read Day 1 free at eryezakalalu.com/influential-spirit.</li>
             </ul>

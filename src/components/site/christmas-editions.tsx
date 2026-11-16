@@ -3,7 +3,7 @@
 /**
  * Unscripted Christmas editions in UGX (Africa) or USD (elsewhere). Every button
  * opens the one Selar product (the buyer picks the tier there), with campaign
- * tags passed on. Before 16 Nov the pre-order price shows with the full price
+ * tags passed on. Before 28 Nov the pre-order price shows with the full price
  * struck through; from release the full price shows. The switch is client-side,
  * so no rebuild is needed.
  */
@@ -58,7 +58,7 @@ export function XmasFromPrice() {
   const pre = usePreorder();
   const p = XMAS_PRICES.book[currency];
   return pre
-    ? <span>From {xmasMoney(p.preorder, currency)} <s>{xmasMoney(p.full, currency)}</s>, 20% off until 16 November</span>
+    ? <span>From {xmasMoney(p.preorder, currency)} <s>{xmasMoney(p.full, currency)}</s>, 20% off until 28 November</span>
     : <span>From {xmasMoney(p.full, currency)}</span>;
 }
 
@@ -68,7 +68,7 @@ export default function ChristmasEditions() {
   return (
     <div className="editions-tiers">
       <p className="tiers-pay" style={{ textAlign: "center", marginTop: 8 }}>
-        Pay by mobile money or card. {pre ? "You receive your pre-order confirmation at once, and your edition arrives on 16 November." : "Every file downloads to keep."} Prices convert to your currency at checkout.
+        Pay by mobile money or card. {pre ? "You receive your pre-order confirmation at once, and your edition arrives on 28 November." : "Every file downloads to keep."} Prices convert to your currency at checkout.
       </p>
       <div className="grid-12" style={{ gap: 24, marginTop: 20 }}>
         {ORDER.map((id) => {

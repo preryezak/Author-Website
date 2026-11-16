@@ -5,13 +5,13 @@ import ChristmasEditions, { XmasBuyButton, XmasFromPrice } from "@/components/si
 import { XMAS_PRICES, XMAS_SELAR_URL } from "@/lib/christmas";
 
 /**
- * Unscripted Christmas landing page: pre-order until 16 November, then the book
+ * Unscripted Christmas landing page: pre-order until 28 November, then the book
  * page. Problem first (the four December worries), then what each day gives,
  * then the three editions with buy buttons to the one Selar product.
  */
 
 const TITLE = "Unscripted Christmas";
-const DESC = "A 24-day Advent devotional for grief, money stress, family tension and loneliness at Christmas. Pre-order now at 20% off; it arrives on 16 November.";
+const DESC = "A 24-day Advent devotional for grief, money stress, family tension and loneliness at Christmas. Pre-order now at 20% off; it arrives on 28 November.";
 
 export const metadata: Metadata = {
   title: "Unscripted Christmas: an Advent devotional",
@@ -44,11 +44,11 @@ const MOVEMENTS = [
 ];
 
 const FAQS = [
-  { q: "When will I receive the book?", a: "On 16 November 2026. Your pre-order confirmation arrives the moment you pay, and Selar emails you when your edition is ready in your library." },
+  { q: "When will I receive the book?", a: "On 28 November 2026. Your pre-order confirmation arrives the moment you pay, and Selar emails you when your edition is ready in your library." },
   { q: "Can I read it on my phone?", a: "Yes. Every file downloads to keep, so you can read and listen on your phone, tablet or computer, with or without data." },
   { q: "How do I pay?", a: "By mobile money or card. Prices show in Ugandan shillings or US dollars here and convert to your own currency at checkout." },
   { q: "Can my small group or church use it?", a: "Yes. The Complete Christmas Edition includes a four-session group guide for the Sundays of Advent: 29 November and 6, 13 and 20 December. For copies for a whole church, write to hello@eryezakalalu.com." },
-  { q: "When does the pre-order price end?", a: "On 16 November, when the book is released. Until then every edition is 20% off." },
+  { q: "When does the pre-order price end?", a: "On 28 November, when the book is released. Until then every edition is 20% off." },
 ];
 
 export default function ChristmasPage() {
@@ -60,12 +60,12 @@ export default function ChristmasPage() {
     author: { "@type": "Person", name: "Eryeza Kalalu", url: "https://eryezakalalu.com/about/" },
     bookFormat: "https://schema.org/EBook",
     inLanguage: "en-GB",
-    datePublished: "2026-11-16",
+    datePublished: "2026-11-28",
     image: "https://eryezakalalu.com/images/unscripted-christmas-640.webp",
     description: DESC,
     offers: (["book", "companion", "complete"] as const).flatMap((id) => [
-      { "@type": "Offer", name: id, price: XMAS_PRICES[id].USD.preorder, priceCurrency: "USD", availability: "https://schema.org/PreOrder", url: XMAS_SELAR_URL, priceValidUntil: "2026-11-15" },
-      { "@type": "Offer", name: id, price: XMAS_PRICES[id].UGX.preorder, priceCurrency: "UGX", availability: "https://schema.org/PreOrder", url: XMAS_SELAR_URL, priceValidUntil: "2026-11-15" },
+      { "@type": "Offer", name: id, price: XMAS_PRICES[id].USD.preorder, priceCurrency: "USD", availability: "https://schema.org/PreOrder", url: XMAS_SELAR_URL, priceValidUntil: "2026-11-27" },
+      { "@type": "Offer", name: id, price: XMAS_PRICES[id].UGX.preorder, priceCurrency: "UGX", availability: "https://schema.org/PreOrder", url: XMAS_SELAR_URL, priceValidUntil: "2026-11-27" },
     ]),
   };
 
@@ -110,7 +110,7 @@ export default function ChristmasPage() {
                 <XmasBuyButton edition="book" className="btn btn-ghost">Pre-order The Book</XmasBuyButton>
               </div>
               <p className="caption" style={{ marginTop: 14, color: "var(--ink-300)" }}>
-                Released on 16 November, two weeks before the first Sunday of Advent. By Pastor Eryeza Kalalu.
+                Released on 28 November, the day before the first Sunday of Advent. By Pastor Eryeza Kalalu.
               </p>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function ChristmasPage() {
         <div className="container">
           <div className="mx-auto" style={{ maxWidth: 760, textAlign: "center" }}>
             <span className="eyebrow">Choose your edition</span>
-            <h2 className="page-head__title" style={{ fontSize: 34 }}>Pre-order at 20% off until 16 November.</h2>
+            <h2 className="page-head__title" style={{ fontSize: 34 }}>Pre-order at 20% off until 28 November.</h2>
           </div>
           <ChristmasEditions />
         </div>

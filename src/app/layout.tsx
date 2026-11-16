@@ -158,14 +158,38 @@ const jsonLd = {
       "@type": "Book",
       "@id": `${SITE_URL}/#book`,
       name: "The Influential Spirit",
+      alternativeHeadline: "30 Days to a Life of Kingdom Authority, Character, and Marketplace Impact",
       alternateName: "Becoming an Influence",
+      bookEdition: "Second Edition (the first edition was titled Becoming an Influence)",
       description:
-        "A 30-day devotional about the formation of the person behind the influence. Volume I of The Deep Encounter Library.",
+        "A 30-day Christian devotional by Pastor Eryeza Kalalu about the formation of the person behind the influence: character, integrity, leadership and faith at work, at home and in church. Each day takes ten to fifteen minutes and has a Scripture (NKJV), a reading, a reflection question, a practice for the day, a prayer and a declaration. Volume I of The Deep Encounter Library.",
       author: { "@id": `${SITE_URL}/#person` },
+      publisher: { "@id": `${SITE_URL}/#person` },
+      copyrightHolder: { "@id": `${SITE_URL}/#person` },
+      copyrightYear: 2026,
+      locationCreated: { "@type": "Place", name: "Kampala, Uganda" },
+      isPartOf: { "@type": "BookSeries", name: "The Deep Encounter Library" },
+      genre: ["Christian devotional", "Christian living", "Spiritual formation", "Christian leadership"],
+      about: ["Spiritual formation", "Christian character", "Integrity at work", "Faith in the workplace", "Christian leadership", "Influence", "Discipleship", "Perseverance"],
+      keywords: "30-day devotional, Christian devotional for work, marketplace ministry, Christian leadership devotional, spiritual formation, devotional with audiobook, African Christian author, Uganda",
+      audience: { "@type": "Audience", audienceType: "Christians at work, in business, ministry and leadership; small groups and churches" },
       bookFormat: "https://schema.org/EBook",
       inLanguage: "en",
       datePublished: "2026-09-30",
       imageUrl: `${SITE_URL}/images/cover.jpg`,
+      image: `${SITE_URL}/images/cover.jpg`,
+      url: `${SITE_URL}/influential-spirit/`,
+      workExample: [
+        { "@type": "Book", name: "The Influential Spirit (Reader Edition PDF)", bookFormat: "https://schema.org/EBook", numberOfPages: 142, inLanguage: "en" },
+        { "@type": "Book", name: "The Influential Spirit (EPUB for Apple Books, Kindle and Google Play Books)", bookFormat: "https://schema.org/EBook", inLanguage: "en" },
+        { "@type": "Audiobook", name: "The Influential Spirit (audiobook)", bookFormat: "https://schema.org/AudiobookFormat", readBy: { "@id": `${SITE_URL}/#person` }, duration: "PT4H48M", inLanguage: "en" },
+      ],
+      // Reviews of the first edition (Becoming an Influence), labelled as such; no rating is claimed.
+      review: [
+        { "@type": "Review", name: "Review of the first edition, Becoming an Influence (Amazon Verified)", author: { "@type": "Person", name: "The Rebecca Review" }, reviewBody: "Each devotional in this book is thoughtful and has a conclusion and a short prayer which is meaningful. I felt that the message of this book was encouraging and timely for our day and age." },
+        { "@type": "Review", name: "Review of the first edition, Becoming an Influence (Amazon Verified)", author: { "@type": "Person", name: "Jeff Mutenga" }, reviewBody: "This book is simple and practical and yet very instructive and inspiring." },
+        { "@type": "Review", name: "Review of the first edition, Becoming an Influence (Amazon Verified)", author: { "@type": "Person", name: "Chris Gould" }, reviewBody: "Practical and full of wisdom gained from experience. This is not a dry theological treatise but is a clear explanation of the steps needed to follow Christ and be a good influence in this world." },
+      ],
       // Built from src/lib/editions.ts at build time (dollar-based prices from 11 Nov 2026).
       offers: (["reader", "formation", "complete"] as const).flatMap((ed) =>
         (["USD", "KES", "NGN", "UGX"] as const).map((cur) => ({

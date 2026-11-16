@@ -2,13 +2,17 @@
 
 > Pastor Eryeza Kalalu is a pastor, author and Bible teacher in Kawuku, Entebbe, in Uganda, East Africa. He writes on prayer, spiritual health and hearing God, is the author of the 30-day devotional *The Influential Spirit*, and hosts the *Devotion In Season* podcast. He leads Rivers of Life Healing Centre and publishes the *Eryeza Writes* letter.
 
+## Full facts
+
+- [llms-full.txt](https://eryezakalalu.com/llms-full.txt): the book facts in one place: what The Influential Spirit is, who it is for, the shape of each day, all thirty day titles, the editions and prices, how to pay, the audiobook, the reviews and common questions.
+
 ## Primary pages
 
 - [Home](https://eryezakalalu.com/): The author site's overview: the featured book, an author biography, the book catalogue, the podcast, editions and pricing, a sample chapter reader, reviews, the speaking invitation and the newsletter signup.
 - [The Influential Spirit](https://eryezakalalu.com/influential-spirit/): The book page, with editions, reader responses and common questions.
 - [Devotion in Season podcast](https://eryezakalalu.com/podcast/): The weekly podcast (Sundays, 6 PM East Africa Time) and the weekday daily devotional (6 AM East Africa Time), the latest episode, recent episodes, and the eight-week series on the themes of The Influential Spirit.
 - [Resources: free weekly study guide](https://eryezakalalu.com/resources/): Sign-up for the free guide that goes with each Sunday episode: the passages, five questions for personal or group study, one practice for the week, and a prayer.
-- [Unscripted Christmas](https://eryezakalalu.com/christmas/): The Advent 2026 devotional, on pre-order until 16 November, with three editions and a group guide for the Sundays of Advent.
+- [Unscripted Christmas](https://eryezakalalu.com/christmas/): The Advent 2026 devotional, on pre-order until its release on 28 November 2026, with three editions and a group guide for the Sundays of Advent.
 - [Books](https://eryezakalalu.com/books/): The Deep Encounter Library and the editions of The Influential Spirit.
 - [Letter](https://eryezakalalu.com/letter/): Recent letters from Eryeza Writes and the subscribe form.
 - [Speaking](https://eryezakalalu.com/speaking/): Where Eryeza speaks, the themes he teaches, and the eight-section invitation form.
@@ -19,9 +23,9 @@
 
 ## Books
 
-- The Influential Spirit: a 30-day devotional on the formation of the person behind the influence. Volume I of The Deep Encounter Library. Out now, published 30 September 2026, with instant digital delivery. Digital editions are sold in US dollars and in Ugandan shillings, with Nigerian naira shown for readers in Nigeria. Buy from eryezakalalu.com/influential-spirit.
+- The Influential Spirit: a 30-day devotional on the formation of the person behind the influence. Volume I of The Deep Encounter Library. Out now, published 30 September 2026, with instant digital delivery. Prices are set in US dollars and shown in the buyer's currency; checkout accepts US dollars, Kenyan shillings, Nigerian naira, Ghanaian cedi, South African rand and Ugandan shillings, by mobile money (including M-Pesa) or card. Buy from eryezakalalu.com/influential-spirit.
 - Editions: Reader Edition, Formation Bundle and Complete Formation Edition. Prices are set in US dollars and converted for each buyer: USD 9.99 / 19.99 / 29.99 (KES 1,300 / 2,600 / 3,900; NGN 13,000 / 27,000 / 41,000; UGX 40,000 / 81,000 / 122,000).
-- Unscripted Christmas (Advent 2026): a 24-day Advent devotional for grief, money stress, family tension and loneliness. Pre-order at https://eryezakalalu.com/christmas/ until release on 16 November 2026: The Book UGX 36,000, The Advent Companion UGX 72,000, The Complete Christmas Edition UGX 120,000 (about USD 8 / 16 / 27; 20% off the full prices of UGX 45,000 / 90,000 / 150,000).
+- Unscripted Christmas (Advent 2026): a 24-day Advent devotional for grief, money stress, family tension and loneliness. Pre-order at https://eryezakalalu.com/christmas/ until release on 28 November 2026: The Book UGX 36,000, The Advent Companion UGX 72,000, The Complete Christmas Edition UGX 120,000 (about USD 8 / 16 / 27; 20% off the full prices of UGX 45,000 / 90,000 / 150,000).
 - [Sample chapter](https://eryezakalalu.com/influential-spirit/#day-one): Day 1 of the 30-day reading plan, in full, and a free sign-up gift of Day 1 and Day 25 (PDF) with Day 25 as audio read by the author
 
 ## Questions this site answers
@@ -56,4 +60,4 @@
 
 - This file follows the llms.txt convention: https://llmstxt.org/
 - Every item in the site menu is its own page; the home page also carries each section as an in-page anchor.
-- Last updated: 11 November 2026.
+- Last updated: 16 November 2026.

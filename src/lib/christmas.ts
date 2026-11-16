@@ -16,7 +16,7 @@ export function xmasCurrency(c: SiteCurrency): Currency {
 export const XMAS_SELAR_URL = "https://selar.com/izxm12og2p";
 
 /** Release day: files arrive in buyers' Selar libraries; pre-order prices end. */
-export const XMAS_RELEASE = "2026-11-16T00:00:00+03:00";
+export const XMAS_RELEASE = "2026-11-28T00:00:00+03:00";
 
 export type XmasEditionId = "book" | "companion" | "complete";
 
