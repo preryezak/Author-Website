@@ -121,9 +121,9 @@ export const STUDY_THEMES: StudyTheme[] = [
       { n: 3, sunday: "2026-10-25", title: "Your Work Is the Sermon", line: "How to glorify God at an ordinary job" },
       { n: 4, sunday: "2026-11-01", title: "Would Outsiders Vouch for You?", line: "Running a Christian business with a good name" },
       { n: 5, sunday: "2026-11-08", title: "Visibility Is Not Credibility", line: "" },
-      { n: 6, sunday: "2026-11-15", title: "The Message and the Messenger", line: "" },
-      { n: 7, sunday: "2026-11-22", title: "The Grace That Doesn't Excuse", line: "" },
-      { n: 8, sunday: "2026-11-29", title: "Restoration Without Amnesia", line: "" },
+      { n: 6, sunday: "2026-11-22", title: "The Message and the Messenger", line: "" },
+      { n: 7, sunday: "2026-11-29", title: "The Grace That Doesn't Excuse", line: "" },
+      { n: 8, sunday: "2026-12-06", title: "Restoration Without Amnesia", line: "" },
     ],
   },
 ];
