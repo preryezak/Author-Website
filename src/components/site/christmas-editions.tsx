@@ -2,7 +2,8 @@
 
 /**
  * Unscripted Christmas editions in UGX (Africa) or USD (elsewhere). Every button
- * opens the one Selar product (the buyer picks the tier there), with campaign
+ * opens the one Selar product (the buyer picks the tier there; Selar opens on The
+ * Book and no link setting picks another tier, so each card says what to tap), with campaign
  * tags passed on. Before 28 Nov the pre-order price shows with the full price
  * struck through; from release the full price shows. The switch is client-side,
  * so no rebuild is needed.
@@ -87,6 +88,11 @@ export default function ChristmasEditions() {
               <XmasBuyButton edition={id} className={`btn ${popular ? "btn-primary" : "btn-ghost"} tier-buy`}>
                 {pre ? `Pre-order ${XMAS_EDITIONS[id].name}` : `Get ${XMAS_EDITIONS[id].name}`}
               </XmasBuyButton>
+              <p className="tier-next">
+                {id === "book"
+                  ? "The Book is already selected on the next page."
+                  : `On the next page, tap ${XMAS_EDITIONS[id].name} before you pay.`}
+              </p>
             </div>
           );
         })}

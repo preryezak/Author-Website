@@ -11,6 +11,16 @@ const CTA: Record<EditionId, string> = {
 };
 
 /**
+ * Selar opens every link on its default tier (the Formation Bundle) and has no link
+ * setting that picks another tier (checked 21 Nov 2026), so each card says what to tap.
+ */
+const NEXT_STEP: Record<EditionId, string> = {
+  reader: "On the next page, tap Reader Edition before you pay.",
+  formation: "The Formation Bundle is already selected on the next page.",
+  complete: "On the next page, tap Complete Formation Edition before you pay.",
+};
+
+/**
  * The three editions in the visitor's currency (UGX, KES, NGN or USD); each button
  * opens Selar in that currency.
  */
@@ -34,6 +44,7 @@ export default function EditionsTiers() {
                 {EDITIONS[id].includes.map((i) => <li key={i}>{i}</li>)}
               </ul>
               <BuyButton edition={id} className={`btn ${popular ? "btn-primary" : "btn-ghost"} tier-buy`}>{CTA[id]}</BuyButton>
+              <p className="tier-next">{NEXT_STEP[id]}</p>
             </div>
           );
         })}
