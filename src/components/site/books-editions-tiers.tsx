@@ -11,12 +11,13 @@ const CTA: Record<EditionId, string> = {
 };
 
 /**
- * Selar opens every link on its default tier (the Formation Bundle) and has no link
- * setting that picks another tier (checked 21 Nov 2026), so each card says what to tap.
+ * The Formation button opens Selar's checkout directly (quickcheckout). Selar has no
+ * link setting that picks another tier (checked 21 Nov 2026), so Reader and Complete
+ * open the product page and their cards say what to tap.
  */
 const NEXT_STEP: Record<EditionId, string> = {
   reader: "On the next page, tap Reader Edition before you pay.",
-  formation: "The Formation Bundle is already selected on the next page.",
+  formation: "This button takes you straight to payment.",
   complete: "On the next page, tap Complete Formation Edition before you pay.",
 };
 

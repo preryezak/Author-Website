@@ -24,11 +24,13 @@ export const PRICES: Record<EditionId, Record<Currency, number>> = {
 
 /**
  * Selar checkout link per edition. All three editions are tiers of one Selar
- * product, so the buyer compares them on one page and picks once.
+ * product. quickcheckout=1 puts the product's default tier (the Formation Bundle)
+ * in the cart and opens the checkout at once (tested 25 Nov 2026). It only ever
+ * picks the default tier, so Reader and Complete open the product page instead.
  */
 export const SELAR_URL: Record<EditionId, string> = {
   reader: "https://selar.com/8818840887",
-  formation: "https://selar.com/8818840887",
+  formation: "https://selar.com/8818840887?quickcheckout=1",
   complete: "https://selar.com/8818840887",
 };
 
